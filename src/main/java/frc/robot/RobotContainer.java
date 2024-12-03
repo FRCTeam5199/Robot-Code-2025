@@ -45,7 +45,7 @@ public class RobotContainer {
   public RobotContainer() {
     configureBindings();
   }
-  
+
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-commandXboxController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
