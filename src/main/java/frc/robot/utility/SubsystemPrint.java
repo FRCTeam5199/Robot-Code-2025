@@ -1,7 +1,9 @@
 package frc.robot.utility;
 
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 public class SubsystemPrint {
-  public SubsystemPrint(Object messageOriginName, String message) {
-    System.out.println(messageOriginName.getClass().getName() + ": " + message);
+  public SubsystemPrint(SubsystemBase subsystem, String message) {
+    System.out.println(subsystem.getName() + ": " + message);
   }
 }
