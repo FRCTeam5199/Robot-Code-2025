@@ -1,8 +1,10 @@
-package frc.robot.parsers;
+package frc.robot.tagalong;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import frc.robot.parsers.json.utils.PivotConfJson;
+
 import frc.robot.tagalong.FileUtils;
+import frc.robot.tagalong.PivotConfJson;
+
 import java.io.File;
 
 public class PivotParser {

@@ -1,4 +1,4 @@
-package frc.robot.templateSubsystems;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -15,8 +15,9 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.utility.FeedForward;
-import frc.robot.utility.PID;
+import frc.robot.utils.FeedForward;
+import frc.robot.utils.PID;
+import frc.robot.utils.Type;
 
 public class TemplateSubsystem extends SubsystemBase {
     private TalonFX motor;
@@ -126,7 +127,7 @@ public class TemplateSubsystem extends SubsystemBase {
         encoder = new CANcoder(encoderId, canbus);
         encoderConfig = new CANcoderConfiguration();
 
-        encoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+        encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
         encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
         encoderConfig.MagnetSensor.MagnetOffset = magnetOffset;
 

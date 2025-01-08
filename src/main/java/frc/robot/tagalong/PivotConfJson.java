@@ -1,4 +1,4 @@
-package frc.robot.parsers.json.utils;
+package frc.robot.tagalong;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;

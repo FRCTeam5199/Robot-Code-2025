@@ -1,7 +1,6 @@
-package frc.robot.parsers.json.utils;
+package frc.robot.tagalong;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 public class AbsoluteEncoderConfigJson {
@@ -11,9 +10,11 @@ public class AbsoluteEncoderConfigJson {
   public CANcoderConfiguration cancoderConfiguration;
   public MagnetSensorConfigs magnetSensorConfigs;
 
-  public AbsoluteSensorRangeValue getAbsoluteSensorRange() {
-    return zeroToOne ? AbsoluteSensorRangeValue.Unsigned_0To1
-                     : AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+
+
+  public double getAbsoluteDiscontinuityPoint() {
+    return zeroToOne ? 1
+                     : 0;
   }
 
   public SensorDirectionValue getSensorDirection() {
@@ -25,7 +26,7 @@ public class AbsoluteEncoderConfigJson {
     if (cancoderConfiguration == null) {
       MagnetSensorConfigs magnetSensorConfigs =
           new MagnetSensorConfigs()
-              .withAbsoluteSensorRange(getAbsoluteSensorRange())
+              .withAbsoluteSensorDiscontinuityPoint(getAbsoluteDiscontinuityPoint())
               .withMagnetOffset(magnetOffset.getDistRotation().getRotations())
               .withSensorDirection(getSensorDirection());
       cancoderConfiguration = new CANcoderConfiguration().withMagnetSensor(magnetSensorConfigs);

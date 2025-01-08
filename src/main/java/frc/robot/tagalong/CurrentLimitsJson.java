@@ -1,4 +1,4 @@
-package frc.robot.parsers.json.utils;
+package frc.robot.tagalong;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 
 public class CurrentLimitsJson {
@@ -14,8 +14,6 @@ public class CurrentLimitsJson {
         .withStatorCurrentLimitEnable(statorEnableLimit)
         .withStatorCurrentLimit(statorPeakLimit)
         .withSupplyCurrentLimitEnable(supplyEnableLimit)
-        .withSupplyCurrentLimit(supplyPeakLimit)
-        .withSupplyCurrentThreshold(supplyContinuousLimit)
-        .withSupplyTimeThreshold(peakDuration);
+        .withSupplyCurrentLimit(supplyPeakLimit);
   }
 }

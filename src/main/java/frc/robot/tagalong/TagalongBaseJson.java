@@ -1,4 +1,4 @@
-package frc.robot.parsers.json.utils;
+package frc.robot.tagalong;
 
 public class TagalongBaseJson {
   protected double calculateRatio(int[][] gearPairs) {

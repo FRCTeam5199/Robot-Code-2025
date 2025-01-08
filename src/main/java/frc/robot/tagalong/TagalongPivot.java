@@ -1,4 +1,4 @@
-package frc.robot.subsystems.minor;
+package frc.robot.tagalong;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -20,17 +20,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.constants.Constants;
-import frc.robot.constants.RobotAltModes;
-import frc.robot.parsers.PivotParser;
-import frc.robot.parsers.json.utils.PivotConfJson;
-import frc.robot.subsystems.Controlboard;
-import frc.robot.tagalong.GeometricUtils;
-import frc.robot.tagalong.MathUtils;
-import frc.robot.tagalong.TagalongAngle;
-import frc.robot.tagalong.TagalongMinorSystemBase;
-import frc.robot.tagalong.TagalongMinorSystemInterface;
-import frc.robot.tagalong.TagalongTrapezoidProfile;
+import frc.robot.constants.Constants;;
 
 public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMinorSystemInterface {
     public final double _defaultPivotLowerToleranceRot;
@@ -183,10 +173,10 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
 
         if (RobotAltModes.isPivotTuningMode/* && _pivotConf.name.equalsIgnoreCase("Shooter Pivot")*/) {
             _pivotFF = new ArmFeedforward(
-                    _pivotKSEntry.getDouble(_pivotFF.ks),
-                    _pivotKGEntry.getDouble(_pivotFF.kg),
-                    _pivotKVEntry.getDouble(_pivotFF.kv),
-                    _pivotKAEntry.getDouble(_pivotFF.ka)
+                    _pivotKSEntry.getDouble(_pivotFF.getKs()),
+                    _pivotKGEntry.getDouble(_pivotFF.getKg()),
+                    _pivotKVEntry.getDouble(_pivotFF.getKv()),
+                    _pivotKAEntry.getDouble(_pivotFF.getKa())
             );
             setHoldPivotPosition(false);
             _pivotMotor.setNeutralMode(NeutralModeValue.Coast);
@@ -195,7 +185,7 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
                     Units.rotationsToRadians(0.0),
                     Units.rotationsToRadians((0.0))
             )));
-            _pivotMotor.setControl(_requestedPivotPositionVoltage.withFeedForward(_pivotFF.ks));
+            _pivotMotor.setControl(_requestedPivotPositionVoltage.withFeedForward(_pivotFF.getKs()));
         }
 
         _pivotMotor.setNeutralMode(NeutralModeValue.Coast);
@@ -485,8 +475,8 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
     }
 
 
-    public boolean isPivotAtAutoAngle() {
-        return getPivotAbsolutePositionRot() - _defaultPivotLowerToleranceRot < RobotContainer.armAutoAimAngle / 360d
-                && getPivotAbsolutePositionRot() + _defaultPivotUpperToleranceRot > RobotContainer.armAutoAimAngle / 360d;
-    }
+    // public boolean isPivotAtAutoAngle() {
+    //     return getPivotAbsolutePositionRot() - _defaultPivotLowerToleranceRot < RobotContainer.armAutoAimAngle / 360d
+    //             && getPivotAbsolutePositionRot() + _defaultPivotUpperToleranceRot > RobotContainer.armAutoAimAngle / 360d;
+    // }
 }

@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.tagalong;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Ports;
+import frc.robot.tagalong.Ports;
 import frc.robot.constants.Constants;
 
 public class Controlboard {
@@ -49,13 +49,7 @@ public class Controlboard {
     return _isRed;
   }
 
-  public Rotation2d allianceGyroAngle() {
-    return _isRed ? Constants.Sensors.GYRO_ZERO_RED : Constants.Sensors.GYRO_ZERO_BLUE;
-  }
 
-  public double POVZeroOffsetDeg() {
-    return _isRed ? Constants.Sensors.POV_ZERO_RED_DEG : Constants.Sensors.POV_ZERO_BLUE_DEG;
-  }
 
   // Left is positive X in terms of field, negative so our controller aligns
   public double getDriveX() {
