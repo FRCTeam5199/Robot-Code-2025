@@ -10,9 +10,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public final class Autos {
+  private static SendableChooser<Command> autoChooser;
   private Autos() {}
 
-  public static SendableChooser<Command> buildAutoChooser() {
-    return AutoBuilder.buildAutoChooser();
+  /**
+   * Gets or creates the AutoChooser (Singleton Method)
+   */
+  public static SendableChooser<Command> getAutoChooser() {
+    if (autoChooser == null) autoChooser = AutoBuilder.buildAutoChooser();
+    return autoChooser;
   }
 }
