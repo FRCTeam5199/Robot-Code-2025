@@ -4,8 +4,20 @@
 
 package frc.robot.commands;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
+
 public final class Autos {
-  private Autos() {
-    throw new UnsupportedOperationException("This is a utility class!");
+  private static SendableChooser<Command> autoChooser;
+  private Autos() {}
+
+  /**
+   * Gets or creates the AutoChooser (Singleton Method)
+   */
+  public static SendableChooser<Command> getAutoChooser() {
+    if (autoChooser == null) autoChooser = AutoBuilder.buildAutoChooser();
+    return autoChooser;
   }
 }
