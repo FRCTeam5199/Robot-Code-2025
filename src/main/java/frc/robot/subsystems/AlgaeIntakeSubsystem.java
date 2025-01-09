@@ -1,3 +1,5 @@
+package frc.robot.subsystems;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.TemplateSubsystem;
