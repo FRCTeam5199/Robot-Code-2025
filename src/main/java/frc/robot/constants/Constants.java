@@ -42,6 +42,18 @@ public final class Constants {
     public static final double STATOR_CURRENT_LIMIT = 100;
   }
 
+  public static class ArmConstants{
+    public static final int ARM_ID = 0;
+    public static final double GROUND = 0;
+    public static final double L1 = 0;
+    public static final double L2 = 0;
+    public static final double L3 = 0;
+    public static final double L4 = 0;
+    public static final double HP = 0;
+    public static final double GROUND_2 = 0;
+
+  }
+
   public static class ClawConstants {
     public static final Type CLAW_TYPE = Type.LINEAR;
     public static final int CLAW_ID = 0;
