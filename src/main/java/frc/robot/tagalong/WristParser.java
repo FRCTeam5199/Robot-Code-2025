@@ -6,17 +6,17 @@ import frc.robot.tagalong.ArmConfJson;
 import frc.robot.tagalong.FileUtils;
 import java.io.File;
 
-public class ArmParser {
-  ArmConfJson armConf;
+public class WristParser {
+  WristConfJson wristConf;
 
   public PivotParser pivotParser;
 
-  public ArmParser(File dir, String filename) {
+  public WristParser(File dir, String filename) {
     try {
 
       pivotParser = new PivotParser(
-          new File(Filesystem.getDeployDirectory().getAbsolutePath() + "/configs/arm"),
-          armConf.pivotFile
+          new File(Filesystem.getDeployDirectory().getAbsolutePath() + "/configs/subsystems/wrist"),
+          wristConf.pivotFile
       );
 
     } catch (Exception err) {
