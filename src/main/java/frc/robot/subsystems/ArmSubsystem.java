@@ -40,16 +40,16 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment{
         return new InstantCommand(()->arm.setPivotProfile(ArmConstants.GROUND_2));
     }
     public Command setL1(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.GROUND));
+        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.L1));
     }
     public Command setL2(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.GROUND));
+        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.L2));
     }
     public Command setL3(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.GROUND));
+        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.L3));
     }
     public Command setL4(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.GROUND));
+        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.L4));
     }
 
 
