@@ -43,8 +43,7 @@ public class IntakeSubsystem extends AbstractSubsystem {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (subsystemOk)
-      subsystemPeriodic();
+    if (subsystemOk) subsystemPeriodic();
   }
 
   /**
