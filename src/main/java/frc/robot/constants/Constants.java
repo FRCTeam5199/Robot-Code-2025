@@ -9,7 +9,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.utils.FeedForward;
 import frc.robot.utils.PID;
 
-import edu.wpi.first.math.util.Units;
+import frc.robot.utils.Type;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -40,6 +40,43 @@ public final class Constants {
     public static final boolean BRAKE = false;
     public static final double SUPPLY_CURRENT_LIMIT = 60;
     public static final double STATOR_CURRENT_LIMIT = 100;
+  }
+
+  public static class ClawConstants {
+    public static final Type CLAW_TYPE = Type.LINEAR;
+    public static final int CLAW_ID = 0;
+    public static final TrapezoidProfile.Constraints CLAW_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
+    public static final PID CLAW_PID = new PID(0, 0, 0);
+    public static final FeedForward CLAW_FEEDFORWARD = new FeedForward(0, 0, 0);
+    public static final double CLAW_lowerTOLERANCE = 0.0;
+    public static final double CLAW_upperTOLERANCE = 0.0;
+    public static final double[][] CLAW_gearRatios = {{0}, {0}};
+  }
+
+  public static class AlgaeIntakeConstants {
+    public static final Type ALGAEINTAKESUBYSTEM_TYPE = Type.LINEAR;
+    public static final int ALGAEINTAKESUBYSTEM_ID = 0;
+    public static final TrapezoidProfile.Constraints ALGAEINTAKESUBYSTEM_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
+    public static final PID ALGAEINTAKESUBYSTEM_PID = new PID(0, 0, 0);
+    public static final FeedForward ALGAEINTAKESUBYSTEM_FEEDFORWARD = new FeedForward(0, 0, 0);
+    public static final double ALGAEINTAKESUBYSTEM_lowerTOLERANCE = 0.0;
+    public static final double ALGAEINTAKESUBYSTEM_upperTOLERANCE = 0.0;
+    public static final double[][] ALGAEINTAKESUBYSTEM_gearRatios = {{0}, {0}};
+  }
+
+  public static class ClimberConstants {
+    public static final Type CLIMBER_TYPE = Type.PIVOT;
+    public static final int CLIMBER_ID = 0;
+    public static final TrapezoidProfile.Constraints CLIMBER_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
+    public static final PID CLIMBER_PID = new PID(0, 0, 0);
+    public static final FeedForward CLIMBER_FEEDFORWARD = new FeedForward(0, 0, 0);
+    public static final double CLIMBER_lowerTOLERANCE = 0.0;
+    public static final double CLIMBER_upperTOLERANCE = 0.0;
+    public static final double[][] CLIMBER_gearRatios = {{0}, {0}};
+  }
+
+  public static class ArmConstants {
+
   }
 
   public static final String Vision = null;
