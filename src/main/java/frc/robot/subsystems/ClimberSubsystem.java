@@ -1,0 +1,26 @@
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import frc.robot.constants.Constants;
+import frc.robot.subsystems.TemplateSubsystem;
+import frc.robot.utils.FeedForward;
+import frc.robot.utils.PID;
+import frc.robot.utils.Type;
+
+public class ClimberSubsystem extends TemplateSubsystem {
+
+    public ClimberSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints, PID pid, FeedForward feedForward, double lowerTolerance, double upperTolerance, double[][] gearRatios) {
+        super(type, id, constraints, pid, feedForward, lowerTolerance, upperTolerance, gearRatios);
+    }
+
+    public ClimberSubsystem() {
+        super(Type.PIVOT,
+                Constants.ClimberConstants.CLIMBER_ID,
+                Constants.ClimberConstants.CLIMBER_CONSTRAINTS,
+                Constants.ClimberConstants.CLIMBER_PID,
+                Constants.ClimberConstants.CLIMBER_FEEDFORWARD,
+                Constants.ClimberConstants.CLIMBER_lowerTOLERANCE,
+                Constants.ClimberConstants.CLIMBER_upperTOLERANCE,
+                Constants.ClimberConstants.CLIMBER_gearRatios);
+    }
+
+    configureMotor();
+}
