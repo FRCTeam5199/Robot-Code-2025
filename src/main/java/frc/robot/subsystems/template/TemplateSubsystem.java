@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.template;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;

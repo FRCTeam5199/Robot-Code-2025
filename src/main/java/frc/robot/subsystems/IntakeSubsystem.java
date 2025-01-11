@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import frc.robot.UserInterface;
 import frc.robot.subsystems.template.AbstractSubsystem;
 import frc.robot.utility.FeedForward;
 import frc.robot.utility.PID;
@@ -33,6 +35,8 @@ public class IntakeSubsystem extends AbstractSubsystem {
     try {
       configureMotors(false, false, new double[][]{{80, 80}, {80, 80}});
 
+      initComponents();
+
       new SubsystemPrint(this, "Initalized");
       subsystemOk = true;
     } catch (Exception e) {
@@ -40,10 +44,15 @@ public class IntakeSubsystem extends AbstractSubsystem {
     }
   }
 
+  public void initComponents() {
+    UserInterface.createTestComponent("Intake Status", false, BuiltInWidgets.kBooleanBox, 0, 0, 1, 1, null);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     if (subsystemOk) subsystemPeriodic();
+    else UserInterface.setTestComponent("Intake Status", false);
   }
 
   /**
@@ -51,6 +60,7 @@ public class IntakeSubsystem extends AbstractSubsystem {
    * errors.
    */
   private void subsystemPeriodic() {
+    UserInterface.setTestComponent("Intake Status", true);
   }
 
   @Override
