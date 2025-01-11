@@ -1,20 +1,32 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Volts;
+
+import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.VoltageOut;
+
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.Constants.ArmConstants;
 import frc.robot.tagalong.ArmParser;
 import frc.robot.tagalong.PivotAugment;
 import frc.robot.tagalong.PivotParser;
 import frc.robot.tagalong.TagalongPivot;
 import frc.robot.tagalong.TagalongSubsystemBase;
+import edu.wpi.first.networktables.GenericEntry;
+
 
 public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment{
     private final TagalongPivot arm;
         private static ArmSubsystem armSubsystem;
         public final ArmParser armParser;
-
+        private VoltageOut armTest;
+        double voltageKg;
+        GenericEntry voltage;
 
 
 
@@ -27,8 +39,30 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment{
         super(parser);
         armParser = parser;
         arm = new TagalongPivot(armParser.pivotParser);
+        voltageKg = getArmVolt();
+
+
+
+
 
         
+    
+    }
+
+    @Override
+        voltageKg = getArmVolt();
+
+        armTest.withOutput(voltageKg);
+
+        System.out.println(arm.getVoltage());
+
+    }
+
+    public float getArmVolt() {
+        if (voltage != null) {
+            return voltage.getFloat(0);
+        }
+        return 0;
     }
 
 
@@ -73,6 +107,24 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getPivot'");
     }
+
+
+    //     public final SysIdRoutine m_sysIdRoutineArm = new SysIdRoutine(
+    //     new SysIdRoutine.Config(
+    //         null,        // Use default ramp rate (1 V/s)
+    //         Volts.of(1), // Use dynamic voltage of 7 V
+    //         null,        // Use default timeout (10 s)
+    //         // Log state with SignalLogger class
+    //         state -> SignalLogger.writeString("SysIdSArm_State", state.toString())
+    //     ),
+    //     new SysIdRoutine.Mechanism(
+    //         volts -> setControl(volts)),
+    //         null,
+    //         this
+    //     )
+    // );
+
+
 
 
 

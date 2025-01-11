@@ -336,6 +336,10 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
         return _pivotMotor.getPosition().getValueAsDouble();
     }
 
+    public double getVoltage(){
+        return _pivotMotor.getMotorVoltage().getValueAsDouble();
+    }
+
     public void setHoldPivotPosition(boolean holdPosition) {
         _holdPivotPosition = holdPosition;
     }

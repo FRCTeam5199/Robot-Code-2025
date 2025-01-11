@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -48,8 +49,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
         new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
-            Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
+             null,        // Use default ramp rate (1 V/s)
+            Volts.of(2), // Reduce dynamic step voltage to 4 V to prevent brownout
             null,        // Use default timeout (10 s)
             // Log state with SignalLogger class
             state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
@@ -62,10 +63,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     );
 
     /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
-    private final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
+    public final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
         new SysIdRoutine.Config(
             null,        // Use default ramp rate (1 V/s)
-            Volts.of(7), // Use dynamic voltage of 7 V
+            Volts.of(5), // Use dynamic voltage of 7 V
             null,        // Use default timeout (10 s)
             // Log state with SignalLogger class
             state -> SignalLogger.writeString("SysIdSteer_State", state.toString())
