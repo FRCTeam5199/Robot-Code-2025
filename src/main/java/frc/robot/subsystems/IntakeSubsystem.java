@@ -14,10 +14,10 @@ public class IntakeSubsystem extends AbstractSubsystem {
   private static boolean subsystemOk = false;
 
   private IntakeSubsystem() {
-    super(Type.ROLLER, new int[]{20, 21},
+    super(Type.ROLLER, 20,
                 new TrapezoidProfile.Constraints(90, 200),
                 new PID(0, 0, 0), new FeedForward(0.23, 0.11904761904761904761904761904762),
-                3, 3, new double[][]{{1, 1}, {1, 1}});
+                3, 3, new double[][]{{1, 1}});
   }
 
   /** Gets the instance of this class, or creates one if one doesn't exsist. */
@@ -28,12 +28,11 @@ public class IntakeSubsystem extends AbstractSubsystem {
   }
 
   /**
-   * The subsystem's initalize method. Only runs when the subsystem has been
-   * initalized completely with no errors.
+   * The subsystem's initalize method.
    */
   public void init() {
     try {
-      configureMotors(false, false, new double[][]{{80, 80}, {80, 80}});
+      configureMotor(false, false, 80, 80);
 
       initComponents();
 

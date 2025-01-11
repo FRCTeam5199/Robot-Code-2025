@@ -2,12 +2,12 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.template.TemplateSubsystem;
-import frc.robot.utils.FeedForward;
-import frc.robot.utils.PID;
-import frc.robot.utils.Type;
+import frc.robot.subsystems.template.AbstractSubsystem;
+import frc.robot.utility.FeedForward;
+import frc.robot.utility.PID;
+import frc.robot.utility.Type;
 
-public class ClimberSubsystem extends TemplateSubsystem {
+public class ClimberSubsystem extends AbstractSubsystem {
 
     public ClimberSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints, PID pid, FeedForward feedForward, double lowerTolerance, double upperTolerance, double[][] gearRatios) {
         super(type, id, constraints, pid, feedForward, lowerTolerance, upperTolerance, gearRatios);

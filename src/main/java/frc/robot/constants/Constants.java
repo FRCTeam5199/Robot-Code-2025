@@ -6,10 +6,9 @@ package frc.robot.constants;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.robot.utils.FeedForward;
-import frc.robot.utils.PID;
-
-import frc.robot.utils.Type;
+import frc.robot.utility.FeedForward;
+import frc.robot.utility.PID;
+import frc.robot.utility.Type;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
