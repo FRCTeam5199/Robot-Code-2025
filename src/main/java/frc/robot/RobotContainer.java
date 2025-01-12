@@ -99,10 +99,10 @@ public class RobotContainer {
  * Joystick B = dynamic forward
  * Joystick X = dyanmic reverse
  */
-    commandXboxController.y().whileTrue(arm.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    commandXboxController.a().whileTrue(arm.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    commandXboxController.b().whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    commandXboxController.x().whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    commandXboxController.y().whileTrue(armSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    commandXboxController.a().whileTrue(armSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    commandXboxController.b().whileTrue(armSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    commandXboxController.x().whileTrue(armSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     drivetrain.registerTelemetry(logger::telemeterize);
   }
 
