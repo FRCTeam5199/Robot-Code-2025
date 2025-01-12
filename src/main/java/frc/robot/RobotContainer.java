@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -11,17 +12,20 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.PivotToCommand;
+import frc.robot.commands.ShooterPivotAngles;
 import frc.robot.constants.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
+// import frc.robot.commands.Autos;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.testing.LinearTestSubsystem;
-
-import javax.sound.sampled.Line;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,7 +40,7 @@ public class RobotContainer {
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // My drivetrain
-
+  // private final ArmSubsystem arm = ArmSubsystem.getInstance();
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -46,13 +50,14 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final Telemetry logger = new Telemetry(MaxSpeed);
+  public static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
 
-  private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
-  public static final LinearTestSubsystem linearTestSubsystem = LinearTestSubsystem.getInstance();
+  // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     configureBindings();
+    SignalLogger.setPath("/media/LOG/ctre-logs/");
   }
 
   private void configureBindings() {
@@ -62,15 +67,32 @@ public class RobotContainer {
             .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
-    commandXboxController.a().onTrue(new InstantCommand(() -> linearTestSubsystem.setPosition(.25)))
-            .onFalse(new InstantCommand(() -> linearTestSubsystem.setPosition(0)));
+    commandXboxController.a().onTrue(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.MID.getRotations(), true))
+            .onFalse(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.STABLE.getRotations(), true));
 
     // reset the field-centric heading on left bumper press
-    commandXboxController.button(6).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+    commandXboxController.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
     if (Utils.isSimulation()) {
       drivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+  
     }
+
+
+    commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
+    commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
+
+ //   commandXboxController.leftBumper().toggleOnTrue(arm.)
+/*
+ * Joystick Y = quasistatic forward
+ * Joystick A = quasistatic reverse
+ * Joystick B = dynamic forward
+ * Joystick X = dyanmic reverse
+ */
+    commandXboxController.y().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    commandXboxController.a().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    commandXboxController.b().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    commandXboxController.x().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     drivetrain.registerTelemetry(logger::telemeterize);
   }
 
@@ -82,6 +104,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return Autos.exampleAuto(armSubsystem);
-    return autoChooser.getSelected();
+    // return autoChooser.getSelected();
+    return null;
   }
 }
