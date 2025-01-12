@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -26,6 +27,9 @@ import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.testing.LinearTestSubsystem;
+
+import javax.sound.sampled.Line;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -50,8 +54,10 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final Telemetry logger = new Telemetry(MaxSpeed);
-  public static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+//  public static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
 
+//  private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
+  public static final LinearTestSubsystem linearTestSubsystem = LinearTestSubsystem.getInstance();
   // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -67,8 +73,10 @@ public class RobotContainer {
             .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
-    commandXboxController.a().onTrue(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.MID.getRotations(), true))
-            .onFalse(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.STABLE.getRotations(), true));
+    commandXboxController.a().onTrue(new InstantCommand(() -> linearTestSubsystem.setPosition(1)))
+            .onFalse(new InstantCommand(() -> linearTestSubsystem.setPosition(0)));
+//    commandXboxController.b().onTrue(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.MID.getRotations(), true))
+//            .onFalse(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.STABLE.getRotations(), true));
 
     // reset the field-centric heading on left bumper press
     commandXboxController.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
@@ -89,10 +97,10 @@ public class RobotContainer {
  * Joystick B = dynamic forward
  * Joystick X = dyanmic reverse
  */
-    commandXboxController.y().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    commandXboxController.a().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    commandXboxController.b().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    commandXboxController.x().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+//    commandXboxController.y().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+//    commandXboxController.a().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+//    commandXboxController.b().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+//    commandXboxController.x().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     drivetrain.registerTelemetry(logger::telemeterize);
   }
 
