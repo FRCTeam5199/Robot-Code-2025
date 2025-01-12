@@ -15,7 +15,7 @@ public class ArmParser {
     try {
 
       pivotParser = new PivotParser(
-          new File(Filesystem.getDeployDirectory().getAbsolutePath() + "/configs/arm"),
+          new File(Filesystem.getDeployDirectory().getAbsolutePath() + "/subsystems/armSubsystem/"),
           armConf.pivotFile
       );
 

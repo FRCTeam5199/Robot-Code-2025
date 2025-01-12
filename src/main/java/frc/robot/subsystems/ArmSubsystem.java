@@ -50,6 +50,7 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment{
     }
 
     @Override
+    public void periodic(){
         voltageKg = getArmVolt();
 
         armTest.withOutput(voltageKg);

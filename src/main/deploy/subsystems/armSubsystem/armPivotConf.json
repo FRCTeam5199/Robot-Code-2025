@@ -1,5 +1,5 @@
 {
-  "name": "Shooter Pivot",
+  "name": "Arm Pivot",
   "fusedDevices": {
     "motor": {
       "type": "kraken",
