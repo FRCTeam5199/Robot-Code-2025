@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.TemplateSubsystem;
+import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.FeedForward;
 import frc.robot.utility.PID;
 import frc.robot.utility.Type;

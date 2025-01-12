@@ -50,7 +50,7 @@
     "clockwisePositive": true,
     "magnetOffset": {
       "unit": "rot",
-      "value": 0.930176
+      "value": 13
     }
   },
   "pivotMotorControl": {

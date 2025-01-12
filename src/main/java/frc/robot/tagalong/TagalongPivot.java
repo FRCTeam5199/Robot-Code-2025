@@ -14,13 +14,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericPublisher;
 import edu.wpi.first.networktables.GenericSubscriber;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
-import frc.robot.constants.Constants;;
+import frc.robot.constants.Constants;
+;
 
 public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMinorSystemInterface {
     public final double _defaultPivotLowerToleranceRot;
@@ -31,8 +26,6 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
     public final double _maxVelocityRPS, _maxAccelerationRPS2;
     public final double _profileTargetOffset;
     public final PositionVoltage _requestedPivotPositionVoltage = new PositionVoltage(0.0);
-    public PivotParser _pivotParser;
-    public PivotConfJson _pivotConf;
     public CANcoder _pivotCancoder;
     /* -------- Hardware: motors and sensors -------- */
     protected TalonFX _pivotMotor;
@@ -42,6 +35,7 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
     protected double _pivotGearRatio;
     /* -------- Control: controllers and utilities -------- */
     protected ArmFeedforward _pivotFF;
+    protected double _pivotFFOffsetRadians;
     protected TagalongTrapezoidProfile.State _pivotCurState =
             new TagalongTrapezoidProfile.State(0.0, 0.0);
     protected TagalongTrapezoidProfile.State _pivotGoalState =
@@ -61,45 +55,37 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
     private double[] _values;
     private int[] _ids;
 
-    public TagalongPivot(PivotParser pivotParser) {
-        super(pivotParser);
-        _pivotParser = pivotParser;
+    public TagalongPivot(int motorID, int encoderID, ArmFeedforward armFeedforward, double ffOffsetRadians,
+                         double lowerToleranceRotations, double upperToleranceRotations,
+                         double minRotations, double maxRotations,
+                         double maxVelocity, double maxAcceleration, double motorToMechGearRatio,
+                         TalonFXConfiguration motorConfig, CANcoderConfiguration encoderConfig,
+                         Slot0Configs slot0Configs) {
+        super();
+        _pivotMotor = new TalonFX(motorID);
+        _pivotCancoder = new CANcoder(encoderID);
 
-        if (_configuredMinorSystemDisable) {
-            _defaultPivotLowerToleranceRot = 0.0;
-            _defaultPivotUpperToleranceRot = 0.0;
-            _absoluteRangeRot = 0.0;
-            _minPositionRot = 0.0;
-            _maxPositionRot = 0.0;
-            _maxVelocityRPS = 0.0;
-            _maxAccelerationRPS2 = 0.0;
-            _profileTargetOffset = 0.0;
-            return;
-        }
-        _pivotConf = _pivotParser.pivotConf;
-        _pivotMotor = _pivotConf.getTalonFX();
-        _pivotCancoder = _pivotConf.getCancoder();
-
-        _pivotFF = _pivotConf.feedforward.getArmFeedforward();
-        _defaultPivotLowerToleranceRot = _pivotConf.defaultTolerances.getLowerToleranceRot();
-        _defaultPivotUpperToleranceRot = _pivotConf.defaultTolerances.getUpperToleranceRot();
-        _minPositionRot = _pivotConf.positionalLimits.getMinRot();
-        _maxPositionRot = _pivotConf.positionalLimits.getMaxRot();
+        _pivotFF = armFeedforward;
+        _pivotFFOffsetRadians = ffOffsetRadians;
+        _defaultPivotLowerToleranceRot = lowerToleranceRotations;
+        _defaultPivotUpperToleranceRot = upperToleranceRotations;
+        _minPositionRot = minRotations;
+        _maxPositionRot = maxRotations;
         _absoluteRangeRot = _maxPositionRot - _minPositionRot;
-        _maxVelocityRPS = _pivotConf.trapezoidalLimits.getLimitsRot().maxVelocity;
-        _maxAccelerationRPS2 = _pivotConf.trapezoidalLimits.getLimitsRot().maxAcceleration;
-        _profileTargetOffset = _pivotConf.profileOffset.getDistRotation().getRotations();
+        _maxVelocityRPS = maxVelocity;
+        _maxAccelerationRPS2 = maxAcceleration;
+        _profileTargetOffset = 0;
 
         _pivotProfile = new TagalongTrapezoidProfile(
-                _pivotConf.trapezoidalLimits.getLimitsRot(), _pivotGoalState, _pivotCurState
+                new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration), _pivotGoalState, _pivotCurState
         );
-        _pivotGearRatio = _pivotConf.getMotorToMechanismRatio();
+        _pivotGearRatio = motorToMechGearRatio;
         _requestedPivotPositionVoltage.withPosition(getPivotAbsolutePositionRot());
 
-        _pivotMotorConfiguration = _pivotConf.getPivotMotorConfiguration();
-        _pivotMotorSlot0 = _pivotConf.pivotMotorControl.getSlot0();
+        _pivotMotorConfiguration = motorConfig;
+        _pivotMotorSlot0 = slot0Configs;
 
-        _pivotCancoderConfiguration = _pivotConf.getPivotCancoderConfiguration();
+        _pivotCancoderConfiguration = encoderConfig;
 
         double minAbs = MathUtils.cppMod(_minPositionRot, 1.0);
         double maxAbs = MathUtils.cppMod(_maxPositionRot, 1.0);
@@ -115,15 +101,6 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
         } else {
             _values = new double[]{maxAbs, midUnused, minAbs, 1.0};
             _ids = new int[]{1, 2, 0, 1};
-        }
-        if (Robot.isReal()) {
-            int count = 0;
-            while (!_pivotMotor.isAlive() && count <= 1000) {
-                System.out.println(_pivotConf.name + " not alive " + (count++));
-            }
-            if (count >= 1000) {
-                System.out.println(_pivotConf.name + " failed to initialize!");
-            }
         }
 
         configCancoder();
@@ -227,47 +204,47 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
             return;
         }
 
-        ShuffleboardTab tuningTab = Shuffleboard.getTab("Tuning tab");
-        ShuffleboardLayout pivotLayout =
-                tuningTab.getLayout(_pivotConf.name + " Pivot", BuiltInLayouts.kGrid)
-                        .withSize(3, 4)
-                        .withPosition(2 * Controlboard.get()._tuningTabCounter++, 0);
-
-        if (RobotAltModes.isPivotTuningMode) {
-            _pivotCurrentPositionEntry =
-                    pivotLayout.add(_pivotConf.name + " Current Position", 0.0).withPosition(2, 0).getEntry();
-            _pivotTargetPositionEntry =
-                    pivotLayout.add(_pivotConf.name + " Target Position", 0.0).withPosition(2, 1).getEntry();
-            _pivotCurrentVelocityRPSEntry =
-                    pivotLayout.add(_pivotConf.name + " Current Velocity", 0.0).withPosition(2, 2).getEntry();
-            _pivotTargetVelocityRPSEntry =
-                    pivotLayout.add(_pivotConf.name + " Target Velocity", 0.0).withPosition(2, 3).getEntry();
-
-            _pivotKGEntry = pivotLayout.add(_pivotConf.name + " kG", _pivotConf.feedforward.g)
-                    .withPosition(1, 0)
-                    .getEntry();
-            _pivotKSEntry = pivotLayout.add(_pivotConf.name + " kS", _pivotConf.feedforward.s)
-                    .withPosition(1, 1)
-                    .getEntry();
-            _pivotKVEntry = pivotLayout.add(_pivotConf.name + " kV", _pivotConf.feedforward.v)
-                    .withPosition(1, 2)
-                    .getEntry();
-            _pivotKAEntry = pivotLayout.add(_pivotConf.name + " kA", _pivotConf.feedforward.a)
-                    .withPosition(1, 3)
-                    .getEntry();
-        }
-
-        if (RobotAltModes.isPIDTuningMode && RobotAltModes.isPivotTuningMode) {
-            _pivotPFactorEntry = pivotLayout.add(_pivotConf.name + " P Fac", _pivotMotorSlot0.kP)
-                    .withPosition(0, 0)
-                    .getEntry();
-            _pivotIFactorEntry = pivotLayout.add(_pivotConf.name + " I Fac", _pivotMotorSlot0.kI)
-                    .withPosition(0, 1)
-                    .getEntry();
-            _pivotDFactorEntry = pivotLayout.add(_pivotConf.name + " D Fac", _pivotMotorSlot0.kD)
-                    .withPosition(0, 2)
-                    .getEntry();
-        }
+//        ShuffleboardTab tuningTab = Shuffleboard.getTab("Tuning tab");
+//        ShuffleboardLayout pivotLayout =
+//                tuningTab.getLayout(_pivotConf.name + " Pivot", BuiltInLayouts.kGrid)
+//                        .withSize(3, 4)
+//                        .withPosition(2 * Controlboard.get()._tuningTabCounter++, 0);
+//
+//        if (RobotAltModes.isPivotTuningMode) {
+//            _pivotCurrentPositionEntry =
+//                    pivotLayout.add(_pivotConf.name + " Current Position", 0.0).withPosition(2, 0).getEntry();
+//            _pivotTargetPositionEntry =
+//                    pivotLayout.add(_pivotConf.name + " Target Position", 0.0).withPosition(2, 1).getEntry();
+//            _pivotCurrentVelocityRPSEntry =
+//                    pivotLayout.add(_pivotConf.name + " Current Velocity", 0.0).withPosition(2, 2).getEntry();
+//            _pivotTargetVelocityRPSEntry =
+//                    pivotLayout.add(_pivotConf.name + " Target Velocity", 0.0).withPosition(2, 3).getEntry();
+//
+//            _pivotKGEntry = pivotLayout.add(_pivotConf.name + " kG", _pivotConf.feedforward.g)
+//                    .withPosition(1, 0)
+//                    .getEntry();
+//            _pivotKSEntry = pivotLayout.add(_pivotConf.name + " kS", _pivotConf.feedforward.s)
+//                    .withPosition(1, 1)
+//                    .getEntry();
+//            _pivotKVEntry = pivotLayout.add(_pivotConf.name + " kV", _pivotConf.feedforward.v)
+//                    .withPosition(1, 2)
+//                    .getEntry();
+//            _pivotKAEntry = pivotLayout.add(_pivotConf.name + " kA", _pivotConf.feedforward.a)
+//                    .withPosition(1, 3)
+//                    .getEntry();
+//        }
+//
+//        if (RobotAltModes.isPIDTuningMode && RobotAltModes.isPivotTuningMode) {
+//            _pivotPFactorEntry = pivotLayout.add(_pivotConf.name + " P Fac", _pivotMotorSlot0.kP)
+//                    .withPosition(0, 0)
+//                    .getEntry();
+//            _pivotIFactorEntry = pivotLayout.add(_pivotConf.name + " I Fac", _pivotMotorSlot0.kI)
+//                    .withPosition(0, 1)
+//                    .getEntry();
+//            _pivotDFactorEntry = pivotLayout.add(_pivotConf.name + " D Fac", _pivotMotorSlot0.kD)
+//                    .withPosition(0, 2)
+//                    .getEntry();
+//        }
     }
 
     public void followLastProfile() {
@@ -295,8 +272,7 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
             return 0.0;
         }
 
-        return Units.rotationsToRadians(positionRot)
-                + _pivotConf.ffOffset.getDistRotation().getRadians();
+        return Units.rotationsToRadians(positionRot) + _pivotFFOffsetRadians;
     }
 
     public double getPivotPower() {
@@ -309,6 +285,8 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
             _pivotMotor.set(power);
         }
     }
+
+
 
     public void setPivotVelocity(double velocity) {
         if (!_isMinorSystemDisabled) {
@@ -336,7 +314,7 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
         return _pivotMotor.getPosition().getValueAsDouble();
     }
 
-    public double getVoltage(){
+    public double getVoltage() {
         return _pivotMotor.getMotorVoltage().getValueAsDouble();
     }
 
@@ -370,7 +348,7 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
 
         _pivotProfile = new TagalongTrapezoidProfile(
                 (maxVelocityRPS >= _maxVelocityRPS)
-                        ? _pivotConf.trapezoidalLimits.getLimitsRot()
+                        ? new TrapezoidProfile.Constraints(_maxVelocityRPS, _maxAccelerationRPS2)
                         : new TrapezoidProfile.Constraints(maxVelocityRPS, _maxAccelerationRPS2),
                 _pivotGoalState,
                 _pivotCurState
@@ -380,6 +358,10 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
 
     public void setPivotProfile(double goalPositionRot) {
         setPivotProfile(goalPositionRot, 0.0);
+    }
+
+    public void setVoltage(double Voltage){
+        setPivotPower(Voltage);
     }
 
     public void setPivotProfile(TagalongAngle goalPositionRot) {
