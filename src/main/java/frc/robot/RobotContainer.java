@@ -29,6 +29,7 @@ import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.testing.LinearTestSubsystem;
 
 import javax.sound.sampled.Line;
@@ -59,6 +60,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
     public static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
 
     // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
@@ -100,10 +102,10 @@ public class RobotContainer {
  * Joystick B = dynamic forward
  * Joystick X = dyanmic reverse
  */
-    commandXboxController.y().whileTrue(armSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    commandXboxController.a().whileTrue(armSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    commandXboxController.b().whileTrue(armSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    commandXboxController.x().whileTrue(armSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    commandXboxController.y().whileTrue(elevatorSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    commandXboxController.a().whileTrue(elevatorSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    commandXboxController.b().whileTrue(elevatorSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    commandXboxController.x().whileTrue(elevatorSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     drivetrain.registerTelemetry(logger::telemeterize);
   }
 
