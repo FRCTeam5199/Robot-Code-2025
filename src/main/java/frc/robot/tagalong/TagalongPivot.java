@@ -20,7 +20,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.constants.Constants;;
+import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.ArmConstants;;
 
 public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMinorSystemInterface {
     public final double _defaultPivotLowerToleranceRot;
@@ -76,15 +77,14 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
             _profileTargetOffset = 0.0;
             return;
         }
-        _pivotConf = _pivotParser.pivotConf;
-        _pivotMotor = _pivotConf.getTalonFX();
-        _pivotCancoder = _pivotConf.getCancoder();
+        _pivotMotor = ArmConstants.ARM_MOTOR;
+        _pivotCancoder = ArmConstants.ARM_CANCODER;
 
-        _pivotFF = _pivotConf.feedforward.getArmFeedforward();
-        _defaultPivotLowerToleranceRot = _pivotConf.defaultTolerances.getLowerToleranceRot();
-        _defaultPivotUpperToleranceRot = _pivotConf.defaultTolerances.getUpperToleranceRot();
-        _minPositionRot = _pivotConf.positionalLimits.getMinRot();
-        _maxPositionRot = _pivotConf.positionalLimits.getMaxRot();
+        _pivotFF = ArmConstants.ARM_FF;
+        _defaultPivotLowerToleranceRot =  ArmConstants.ARM_UPPER_TOLERANCE;
+        _defaultPivotUpperToleranceRot =  ArmConstants.ARM_LOWER_TOLERANCE;
+        _minPositionRot =  ArmConstants.ARM_MIN;
+        _maxPositionRot = ArmConstants.ARM_MAX;
         _absoluteRangeRot = _maxPositionRot - _minPositionRot;
         _maxVelocityRPS = _pivotConf.trapezoidalLimits.getLimitsRot().maxVelocity;
         _maxAccelerationRPS2 = _pivotConf.trapezoidalLimits.getLimitsRot().maxAcceleration;
