@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.constants.Constants.ElevatorConstants;
-import frc.robot.subsystems.TemplateSubsystem;
+import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.Type;
 
 public class ElevatorSubsystem extends TemplateSubsystem {

@@ -1,100 +1,102 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Volts;
-
-import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.VoltageOut;
 
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants.ArmConstants;
-import frc.robot.tagalong.ArmParser;
 import frc.robot.tagalong.PivotAugment;
-import frc.robot.tagalong.PivotParser;
 import frc.robot.tagalong.TagalongPivot;
-import frc.robot.tagalong.TagalongSubsystemBase;
 import edu.wpi.first.networktables.GenericEntry;
+import frc.robot.tagalong.TagalongSubsystemBase;
 
 
-public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment{
+public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment {
     private final TagalongPivot arm;
-        private static ArmSubsystem armSubsystem;
-        public final ArmParser armParser;
-        private VoltageOut armTest;
-        double voltageKg;
-        GenericEntry voltage;
+    private static ArmSubsystem armSubsystem;
+
+    public ArmSubsystem() {
+        super();
+        ArmConstants.TALON_FX_CONFIGURATION.CurrentLimits.SupplyCurrentLimit
+                = ArmConstants.ARM_SUPPLY_CURRENT_LIMIT;
+        ArmConstants.TALON_FX_CONFIGURATION.CurrentLimits.StatorCurrentLimit
+                = ArmConstants.ARM_STATOR_CURRENT_LIMIT;
+        ArmConstants.TALON_FX_CONFIGURATION.CurrentLimits.SupplyCurrentLimitEnable = true;
+        ArmConstants.TALON_FX_CONFIGURATION.CurrentLimits.StatorCurrentLimitEnable = true;
+        ArmConstants.TALON_FX_CONFIGURATION.Feedback.FeedbackRemoteSensorID
+                = ArmConstants.ARM_CANCODER_ID;
+        ArmConstants.TALON_FX_CONFIGURATION.Feedback.FeedbackSensorSource
+                = FeedbackSensorSourceValue.FusedCANcoder;
+        ArmConstants.TALON_FX_CONFIGURATION.Feedback.SensorToMechanismRatio
+                = ArmConstants.ARM_SENSOR_TO_MECH_GEAR_RATIO;
+        ArmConstants.TALON_FX_CONFIGURATION.Feedback.RotorToSensorRatio
+                = ArmConstants.ARM_MOTOR_TO_SENSOR_GEAR_RATIO;
+        ArmConstants.TALON_FX_CONFIGURATION.MotorOutput.NeutralMode
+                = NeutralModeValue.Brake;
+        ArmConstants.TALON_FX_CONFIGURATION.MotorOutput.Inverted =
+                ArmConstants.ARM_INVERTED ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+
+        ArmConstants.ARM_CANCODER_CONFIGURATION.MagnetSensor.AbsoluteSensorDiscontinuityPoint
+                = ArmConstants.ARM_CANCODER_DISCONTINUITY_POINT;
+        ArmConstants.ARM_CANCODER_CONFIGURATION.MagnetSensor.SensorDirection
+                = ArmConstants.ARM_CANCODER_DIRECTION;
+        ArmConstants.ARM_CANCODER_CONFIGURATION.MagnetSensor.MagnetOffset
+                = ArmConstants.ARM_CANCODER_MAGNET_OFFSET;
 
 
-
-    public ArmSubsystem(String filePath) {
-        this(filePath == null ? null : new ArmParser(Filesystem.getDeployDirectory(), filePath));
-    }
-
-
-    public ArmSubsystem(ArmParser parser){
-        super(parser);
-        armParser = parser;
-        arm = new TagalongPivot(armParser.pivotParser);
-        voltageKg = getArmVolt();
-
-
-
-
-
-        
-    
+        arm = new TagalongPivot(ArmConstants.ARM_MOTOR_ID, ArmConstants.ARM_CANCODER_ID,
+                ArmConstants.ARM_FF, ArmConstants.ARM_FF_OFFSET,
+                ArmConstants.ARM_LOWER_TOLERANCE, ArmConstants.ARM_UPPER_TOLERANCE,
+                ArmConstants.ARM_MIN, ArmConstants.ARM_MAX,
+                ArmConstants.ARM_MAX_VELOCITY, ArmConstants.ARM_MAX_ACCELERATION,
+                ArmConstants.ARM_MOTOR_TO_MECH_GEAR_RATIO,
+                ArmConstants.TALON_FX_CONFIGURATION, ArmConstants.ARM_CANCODER_CONFIGURATION,
+                ArmConstants.ARM_SLOT0_CONFIGS);
     }
 
     @Override
-    public void periodic(){
-        voltageKg = getArmVolt();
+    public void periodic() {
 
-        armTest.withOutput(voltageKg);
-
-        System.out.println(arm.getVoltage());
+//        System.out.println(arm.getVoltage());
 
     }
 
-    public float getArmVolt() {
-        if (voltage != null) {
-            return voltage.getFloat(0);
-        }
-        return 0;
+
+    public Command setGround() {
+        return new InstantCommand(() -> arm.setPivotProfile(ArmConstants.GROUND));
     }
 
-
-    public Command setGround(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.GROUND));
+    public Command setGroundBack() {
+        return new InstantCommand(() -> arm.setPivotProfile(ArmConstants.GROUND_2));
     }
 
-    public Command setGroundBack(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.GROUND_2));
+    public Command setL1() {
+        return new InstantCommand(() -> arm.setPivotProfile(ArmConstants.L1));
     }
-    public Command setL1(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.L1));
+
+    public Command setL2() {
+        return new InstantCommand(() -> arm.setPivotProfile(ArmConstants.L2));
     }
-    public Command setL2(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.L2));
+
+    public Command setL3() {
+        return new InstantCommand(() -> arm.setPivotProfile(ArmConstants.L3));
     }
-    public Command setL3(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.L3));
-    }
-    public Command setL4(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.L4));
+
+    public Command setL4() {
+        return new InstantCommand(() -> arm.setPivotProfile(ArmConstants.L4));
     }
 
 
     public static ArmSubsystem getInstance() {
         if (armSubsystem == null) {
-            armSubsystem = new ArmSubsystem("configs/subsystems/armConf");
+            armSubsystem = new ArmSubsystem();
         }
         return armSubsystem;
     }
-
 
 
     @Override
@@ -126,9 +128,4 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment{
     // );
 
 
-
-
-
-
-    
 }
