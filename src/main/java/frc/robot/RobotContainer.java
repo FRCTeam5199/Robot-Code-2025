@@ -13,11 +13,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.testing.LinearTestSubsystem;
+
+import javax.sound.sampled.Line;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -44,6 +48,7 @@ public class RobotContainer {
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
+  public static final LinearTestSubsystem linearTestSubsystem = LinearTestSubsystem.getInstance();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -57,9 +62,8 @@ public class RobotContainer {
             .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
-    commandXboxController.a().whileTrue(drivetrain.applyRequest(() -> brake));
-    commandXboxController.b().whileTrue(drivetrain
-        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-commandXboxController.getLeftY(), -commandXboxController.getLeftX()))));
+    commandXboxController.a().onTrue(new InstantCommand(() -> linearTestSubsystem.setPosition(.25)))
+            .onFalse(new InstantCommand(() -> linearTestSubsystem.setPosition(0)));
 
     // reset the field-centric heading on left bumper press
     commandXboxController.button(6).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));

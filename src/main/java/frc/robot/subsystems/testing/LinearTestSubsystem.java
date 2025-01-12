@@ -7,6 +7,13 @@ import frc.robot.utility.PID;
 import frc.robot.utility.Type;
 
 public class LinearTestSubsystem extends AbstractSubsystem {
+    private static LinearTestSubsystem linearTestSubsystem;
+
+    public static LinearTestSubsystem getInstance() {
+        if (linearTestSubsystem == null) linearTestSubsystem = new LinearTestSubsystem();
+        return linearTestSubsystem;
+    }
+
     public LinearTestSubsystem() {
         super(Type.LINEAR, new int[]{22},
                 new TrapezoidProfile.Constraints(3, 7.5),
