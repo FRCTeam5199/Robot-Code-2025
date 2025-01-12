@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.PivotToCommand;
+import frc.robot.commands.ShooterPivotAngles;
 import frc.robot.constants.Constants.OperatorConstants;
 // import frc.robot.commands.Autos;
 import frc.robot.constants.TunerConstants;
@@ -48,6 +50,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final Telemetry logger = new Telemetry(MaxSpeed);
+  public static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
 
   // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
@@ -64,9 +67,8 @@ public class RobotContainer {
             .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
-    //commandXboxController.a().whileTrue(drivetrain.applyRequest(() -> brake));
-    //commandXboxController.b().whileTrue(drivetrain
-    //    .applyRequest(() -> point.withModuleDirection(new Rotation2d(-commandXboxController.getLeftY(), -commandXboxController.getLeftX()))));
+    commandXboxController.a().onTrue(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.MID.getRotations(), true))
+            .onFalse(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.STABLE.getRotations(), true));
 
     // reset the field-centric heading on left bumper press
     commandXboxController.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
