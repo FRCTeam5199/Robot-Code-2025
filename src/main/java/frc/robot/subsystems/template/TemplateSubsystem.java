@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -87,7 +88,7 @@ public class TemplateSubsystem extends SubsystemBase {
         this.upperTolerance = upperTolerance;
 
         for (double[] ratio : gearRatios) {
-            this.gearRatio *= ratio[1] / ratio[0];
+            this.gearRatio *= ratio[0] / ratio[1];
         }
 
         timer = new Timer();
@@ -100,8 +101,11 @@ public class TemplateSubsystem extends SubsystemBase {
         motorConfig.MotorOutput.NeutralMode = isBrakeMode ? NeutralModeValue.Brake : NeutralModeValue.Coast;
         motorConfig.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
         motorConfig.CurrentLimits.StatorCurrentLimit = statorCurrentLimit;
+        motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         motor.getConfigurator().apply(motorConfig);
+        motor.setPosition(0);
     }
 
     public void configureLinearMech(double drumCircumference, double mechMinM, double mechMaxM) {
@@ -146,6 +150,10 @@ public class TemplateSubsystem extends SubsystemBase {
         motor.set(percent);
     }
 
+    public void setVoltage(double voltage) {
+        motor.setVoltage(voltage);
+    }
+
     public void setVelocity(double rps) {
         if (type == Type.LINEAR || type == Type.PIVOT) return;
 
@@ -161,17 +169,33 @@ public class TemplateSubsystem extends SubsystemBase {
                     .withFeedForward(calculateFF(rps, 0)));
     }
 
-    private double calculateFF(double rps, double acceleration) {
+//    private double calculateFF(double rps, double acceleration) {
+//        switch (type) {
+//            case LINEAR -> {
+//                return linearFF.calculate(rps, acceleration);
+//            }
+//            case PIVOT -> {
+//                return pivotFF.calculate(Math.toRadians(getDegrees() + ffOffset),
+//                        rps * 2 * Math.PI, acceleration * 2 * Math.PI);
+//            }
+//            default -> {
+//                return simpleMotorFF.calculate(rps, acceleration);
+//            }
+//        }
+//    }
+
+    private double calculateFF(double... velocities) {
         switch (type) {
             case LINEAR -> {
-                return linearFF.calculate(rps, acceleration);
+                return linearFF.calculateWithVelocities(getMechMFromMotorRot(velocities[0]),
+                        getMechMFromMotorRot(velocities[1]));
             }
             case PIVOT -> {
-                return pivotFF.calculate(Math.toRadians(getMechDegrees() + ffOffset),
-                        rps * 2 * Math.PI, acceleration * 2 * Math.PI);
+                return pivotFF.calculateWithVelocities(Math.toRadians(getDegrees()),
+                        velocities[0] * 2 * Math.PI, velocities[1] * 2 * Math.PI);
             }
             default -> {
-                return simpleMotorFF.calculate(rps, acceleration);
+                return simpleMotorFF.calculate(velocities[0]);
             }
         }
     }
@@ -179,8 +203,8 @@ public class TemplateSubsystem extends SubsystemBase {
     public void setPosition(double goal) {
         if (type == Type.FLYWHEEL) return;
 
-        if (type == Type.LINEAR && goal < mechMin) goal = mechMin;
-        else if (type == Type.LINEAR && goal > mechMax) goal = mechMax;
+//        if (type == Type.LINEAR && goal < mechMin) goal = mechMin;
+//        else if (type == Type.LINEAR && goal > mechMax) goal = mechMax;
 
         followLastMechProfile = true;
 
@@ -189,6 +213,7 @@ public class TemplateSubsystem extends SubsystemBase {
             case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
             default -> goalState.position = getMotorRotFromMechRot(goal);
         }
+        goalState.position = goal;
 
         goalState.velocity = 0;
         this.goal = goal;
@@ -203,10 +228,19 @@ public class TemplateSubsystem extends SubsystemBase {
         TrapezoidProfile.State nextState = profile.calculate(timer.get(), currentState, goalState);
         motor.setControl(
                 positionVoltage.withPosition(nextState.position)
-                        .withFeedForward(calculateFF(nextState.velocity,
-                                (nextState.velocity - currentState.velocity) / timer.get())));
+                        .withFeedForward(calculateFF(currentState.velocity, nextState.velocity
+                                /*nextState.velocity,
+                                (nextState.velocity - currentState.velocity) / timer.get()*/)));
 
         currentState = nextState;
+
+//        if (goalState.position != 0) {
+//            System.out.println("Motor Rotations: " + getMotorRot());
+//            System.out.println("Current position: " + currentState.position);
+//            System.out.println("Goal position: " + goalState.position);
+        System.out.println("Position: " + currentState.position);
+        System.out.println("Motor Rotations: " + getMotorRot());
+//        }
         timer.restart();
     }
 
@@ -222,7 +256,7 @@ public class TemplateSubsystem extends SubsystemBase {
             }
             case PIVOT -> {
                 return isProfileFinished() &&
-                        getMechDegrees() >= goal - lowerTolerance && getMechDegrees() <= goal + upperTolerance;
+                        getDegrees() >= goal - lowerTolerance && getDegrees() <= goal + upperTolerance;
             }
             default -> {
                 if (isVelocity) return getMechVelocity() >= goal - lowerTolerance
@@ -235,7 +269,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
 
     //Unit Conversions
-    public double getMechDegrees() {
+    public double getDegrees() {
         return motor.getPosition().getValueAsDouble() * gearRatio * 360d;
     }
 
@@ -248,23 +282,23 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     public double getDegreesFromMechRot(double mechRot) {
-        return mechRot * gearRatio * 360d;
+        return mechRot * 360d;
     }
 
     public double getDegreesFromMotorRot(double motorRot) {
-        return motorRot * 360d;
+        return motorRot * gearRatio * 360d;
     }
 
     public double getMechRotFromDegrees(double degrees) {
-        return degrees / 360d / gearRatio;
-    }
-
-    public double getMotorRotFromDegrees(double degrees) {
         return degrees / 360d;
     }
 
     public double getMechRotFromMotorRot(double motorRot) {
         return motorRot * gearRatio;
+    }
+
+    public double getMotorRotFromDegrees(double degrees) {
+        return degrees / 360d / gearRatio;
     }
 
     public double getMotorRotFromMechRot(double mechRot) {
@@ -273,17 +307,17 @@ public class TemplateSubsystem extends SubsystemBase {
 
     public double getMechM() {
         if (type != Type.LINEAR) return 0;
-        return motor.getPosition().getValueAsDouble() * drumCircumference / gearRatio;
+        return motor.getPosition().getValueAsDouble() * drumCircumference * gearRatio;
     }
 
     public double getMechMFromMotorRot(double motorRot) {
         if (type != Type.LINEAR) return 0;
-        return motorRot * drumCircumference / gearRatio;
+        return motorRot * drumCircumference * gearRatio;
     }
 
     public double getMotorRotFromMechM(double mechM) {
         if (type != Type.LINEAR) return 0;
-        return mechM / drumCircumference * gearRatio;
+        return mechM / drumCircumference / gearRatio;
     }
 
     //Motor Values
@@ -299,6 +333,10 @@ public class TemplateSubsystem extends SubsystemBase {
         return motor.getSupplyVoltage().getValueAsDouble();
     }
 
+    public double getSupplyCurrent() {
+        return motor.getSupplyCurrent().getValueAsDouble();
+    }
+
     public double getMechVelocity() {
         return getMechRotFromMotorRot(motor.getVelocity().getValueAsDouble());
     }
@@ -306,10 +344,5 @@ public class TemplateSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (followLastMechProfile) followLastMechProfile();
-        if (type == Type.ROLLER && getMotorVelocity() == 0 && getMotorRot() != 0) {
-            motor.setPosition(0d);
-            currentState.position = 0;
-            currentState.velocity = 0;
-        }
     }
 }

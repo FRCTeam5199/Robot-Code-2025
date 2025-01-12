@@ -16,11 +16,17 @@ public class LinearTestSubsystem extends TemplateSubsystem {
 
     public LinearTestSubsystem() {
         super(Type.LINEAR, 22,
-                new TrapezoidProfile.Constraints(3, 7.5),
-                new PID(2, 0, 0), new FeedForward(.4, .205, 8.3333333333333333333333333333333),
-                .015, .015, new double[][]{{48, 14}, {48, 24}});
-        configureMotor(false, true, 80,80);
+                new TrapezoidProfile.Constraints(150, 300),
+                new PID(100, 0, 0), new FeedForward(.0225, .1525, 8.3333333333333333333333333333333),
+                .015, .015, new double[][]{{15, 56}, {20, 60}});
+        configureMotor(false, true, 80, 80);
         configureFollowerMotor(23);
-        configureLinearMech(1.273, 0, 100);
+        configureLinearMech(.0364 * Math.PI, 0, .44);
+    }
+    //.08928571428571419642857142857143
+
+    @Override
+    public void periodic() {
+        super.periodic();
     }
 }
