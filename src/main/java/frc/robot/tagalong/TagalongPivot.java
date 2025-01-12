@@ -286,6 +286,8 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
         }
     }
 
+
+
     public void setPivotVelocity(double velocity) {
         if (!_isMinorSystemDisabled) {
             _pivotMotor.setControl(
@@ -356,6 +358,10 @@ public class TagalongPivot extends TagalongMinorSystemBase implements TagalongMi
 
     public void setPivotProfile(double goalPositionRot) {
         setPivotProfile(goalPositionRot, 0.0);
+    }
+
+    public void setVoltage(double Voltage){
+        setPivotPower(Voltage);
     }
 
     public void setPivotProfile(TagalongAngle goalPositionRot) {

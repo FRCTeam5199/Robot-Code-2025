@@ -14,6 +14,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.MotorLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -26,6 +28,7 @@ import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.FlywheelMechanism;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -48,6 +51,9 @@ public class RobotContainer {
     private final SwerveRequest.SwerveDriveBrake brake = new com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
+    private final FlywheelMechanism arm = new FlywheelMechanism();
+
+
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
     public static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -60,6 +66,8 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
+        armSubsystem.sysIdRoutineArm.motor("Arm Motor");
+
     }
 
     private void configureBindings() {
@@ -84,19 +92,19 @@ public class RobotContainer {
         commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
         commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
 
-        //   commandXboxController.leftBumper().toggleOnTrue(arm.)
-        /*
-         * Joystick Y = quasistatic forward
-         * Joystick A = quasistatic reverse
-         * Joystick B = dynamic forward
-         * Joystick X = dyanmic reverse
-         */
-//    commandXboxController.y().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-//    commandXboxController.a().whileTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-//    commandXboxController.b().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-//    commandXboxController.x().whileTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-//    drivetrain.registerTelemetry(logger::telemeterize);
-    }
+ //   commandXboxController.leftBumper().toggleOnTrue(arm.)
+/*
+ * Joystick Y = quasistatic forward
+ * Joystick A = quasistatic reverse
+ * Joystick B = dynamic forward
+ * Joystick X = dyanmic reverse
+ */
+    commandXboxController.y().whileTrue(arm.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    commandXboxController.a().whileTrue(arm.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    commandXboxController.b().whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    commandXboxController.x().whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    drivetrain.registerTelemetry(logger::telemeterize);
+  }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
