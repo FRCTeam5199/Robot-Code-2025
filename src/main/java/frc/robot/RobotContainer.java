@@ -51,11 +51,12 @@ public class RobotContainer {
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
+
     // driving in open loop
     private final SwerveRequest.SwerveDriveBrake brake = new com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-
+    private final LinearTestSubsystem elevator = LinearTestSubsystem.getInstance();
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -80,8 +81,8 @@ public class RobotContainer {
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
 
-        commandXboxController.a().onTrue(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.MID.getRotations(), true))
-                .onFalse(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.STABLE.getRotations(), true));
+        // commandXboxController.a().onTrue(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.MID.getRotations(), true))
+        //         .onFalse(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.STABLE.getRotations(), true));
 
         // reset the field-centric heading on left bumper press
         commandXboxController.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
@@ -91,10 +92,12 @@ public class RobotContainer {
 
         }
 
+        commandXboxController.povLeft().onTrue(elevator.go());
+        
 
         commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
         commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
-        commandXboxController.povDown().onTrue(armSubsystem.sysId());
+        commandXboxController.povDown().onTrue(elevatorSubsystem.sysId());
 
  //   commandXboxController.leftBumper().toggleOnTrue(arm.)
 /*

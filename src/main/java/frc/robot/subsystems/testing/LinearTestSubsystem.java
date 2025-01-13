@@ -1,6 +1,8 @@
 package frc.robot.subsystems.testing;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.FeedForward;
 import frc.robot.utility.PID;
@@ -17,8 +19,10 @@ public class LinearTestSubsystem extends TemplateSubsystem {
     public LinearTestSubsystem() {
         super(Type.LINEAR, 22,
                 new TrapezoidProfile.Constraints(150, 300),
-                new PID(100, 0, 0), new FeedForward(.0225, .1525, 8.3333333333333333333333333333333),
-                .015, .015, new double[][]{{15, 56}, {20, 60}});
+                new PID(ElevatorConstants.ELEVATOR_PID.getP(), ElevatorConstants.ELEVATOR_PID.getI(), ElevatorConstants.ELEVATOR_PID.getD()),
+               new FeedForward(ElevatorConstants.ELEVATOR_FF.getkS(), ElevatorConstants.ELEVATOR_FF.getkG(), ElevatorConstants.ELEVATOR_FF.getkV(), ElevatorConstants.ELEVATOR_FF.getkA()),
+               // new FeedForward(.0225, .1525, 8.3333333333333333333333333333333),
+                .015, 100, new double[][]{{15, 56}, {20, 60}});
         configureMotor(false, true, 80, 80);
         configureFollowerMotor(23);
         configureLinearMech(.0364 * Math.PI, 0, .44);
@@ -28,5 +32,9 @@ public class LinearTestSubsystem extends TemplateSubsystem {
     @Override
     public void periodic() {
         super.periodic();
+    }
+
+    public Command go(){
+       return  this.runOnce(()->setPosition(5));
     }
 }
