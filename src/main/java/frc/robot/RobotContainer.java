@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.MotorLog;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -28,6 +29,10 @@ import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.testing.LinearTestSubsystem;
+
+import javax.sound.sampled.Line;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -55,6 +60,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
     public static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
 
     // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
@@ -64,9 +70,8 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
-        armSubsystem.sysIdRoutineArm.motor("Arm Motor");
-
     }
+    
 
     private void configureBindings() {
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
