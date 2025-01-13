@@ -28,7 +28,6 @@ import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.FlywheelMechanism;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -51,7 +50,6 @@ public class RobotContainer {
     private final SwerveRequest.SwerveDriveBrake brake = new com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    private final FlywheelMechanism arm = new FlywheelMechanism();
 
 
     // The robot's subsystems and commands are defined here...
@@ -91,6 +89,7 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
         commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
+        commandXboxController.povDown().onTrue(armSubsystem.sysId());
 
  //   commandXboxController.leftBumper().toggleOnTrue(arm.)
 /*
@@ -99,6 +98,8 @@ public class RobotContainer {
  * Joystick B = dynamic forward
  * Joystick X = dyanmic reverse
  */
+    
+        
     commandXboxController.y().whileTrue(armSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
     commandXboxController.a().whileTrue(armSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
     commandXboxController.b().whileTrue(armSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));

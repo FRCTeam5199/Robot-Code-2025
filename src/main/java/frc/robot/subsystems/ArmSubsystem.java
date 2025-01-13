@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.VoltsPerRadianPerSecondSquared;
@@ -18,6 +19,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -27,7 +29,9 @@ import frc.robot.tagalong.TagalongPivot;
 import edu.wpi.first.networktables.GenericEntry;
 import frc.robot.tagalong.TagalongSubsystemBase;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.units.BaseUnits;
 import edu.wpi.first.units.TimeUnit;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
@@ -48,8 +52,8 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment 
         
         
     new SysIdRoutine.Config(
-         Volts.per(Second).of(.2),        // Use default ramp rate (1 V/s)
-        Volts.of(.6), // Reduce dynamic step voltage to 4 V to prevent brownout
+         null,        // Use default ramp rate (1 V/s)
+        Volts.of(1), // Reduce dynamic step voltage to 4 V to prevent brownout
         
         null,        // Use default timeout (10 s)
         // Log state with SignalLogger class
@@ -58,14 +62,14 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment 
     new SysIdRoutine.Mechanism(
         output -> arm_motor.setControl(new VoltageOut(output)),
         null,
-       // log-> 
-        //{
+    //    (SysIdRoutineLog log)-> 
+    //     {
 
-        // log.motor("Pivot Motor")
-        // .voltage(Volts.mutable(0).mut_replace(arm_motor.getMotorVoltage().getValueAsDouble(), Volts))
-        // .angularPosition(Radians.mutable(0).mut_replace(arm_motor.getPosition().getValueAsDouble(), Rotations))
-        // .angularVelocity(RadiansPerSecond.mutable(0).mut_replace(arm_motor.getVelocity().getValueAsDouble(), RadiansPerSecond));
-        // },
+    //     log.motor("Pivot Motor")
+    //     .voltage(BaseUnits.VoltageUnit.of(arm_motor.getMotorVoltage().getValueAsDouble()))
+    //     .angularPosition(Units.Rotation.of(arm_motor.getPosition().getValueAsDouble()))
+    //     .angularVelocity(Rotations.per(Second).of(arm_motor.getVelocity().getValueAsDouble()));
+    //     },
         this
     )
 );
@@ -108,15 +112,6 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment 
                 ArmConstants.ARM_MOTOR_TO_MECH_GEAR_RATIO,
                 ArmConstants.TALON_FX_CONFIGURATION, ArmConstants.ARM_CANCODER_CONFIGURATION,
                 ArmConstants.ARM_SLOT0_CONFIGS);
-
-
-                setName("Arm");
-                BaseStatusSignal.setUpdateFrequencyForAll(250, 
-                arm_motor.getPosition(),
-                arm_motor.getVelocity(),
-                arm_motor.getMotorVoltage());
-
-                arm_motor.optimizeBusUtilization();
 
     }
 
@@ -180,7 +175,7 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment 
 
 
         public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-            return sysIdRoutineArm.quasistatic(direction);
+            return sysIdRoutineArm.quasistatic(direction).until(()-> (arm_motor.getPosition().getValueAsDouble() > .003418) || (arm_motor.getPosition().getValueAsDouble() < -0.000247));
         }
     
         /**
@@ -191,8 +186,25 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment 
          * @return Command to run
          */
         public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-            return sysIdRoutineArm.dynamic(direction);
+            return sysIdRoutineArm.dynamic(direction).until(()-> (arm_motor.getPosition().getValueAsDouble() > .003418) || (arm_motor.getPosition().getValueAsDouble() < 0));
         }
+
+         public Command sysId() {
+    return Commands.sequence(
+        sysIdRoutineArm
+            .quasistatic(SysIdRoutine.Direction.kForward)
+            .until(() -> (arm_motor.getPosition().getValueAsDouble() > .00341)),
+        sysIdRoutineArm
+            .quasistatic(SysIdRoutine.Direction.kReverse)
+            .until(() -> (arm_motor.getPosition().getValueAsDouble() < 0)),
+        sysIdRoutineArm
+            .dynamic(SysIdRoutine.Direction.kForward)
+            .until(() -> (arm_motor.getPosition().getValueAsDouble() > .003418)),
+        sysIdRoutineArm
+            .dynamic(SysIdRoutine.Direction.kReverse)
+            .until(() -> (arm_motor.getPosition().getValueAsDouble() < 0)));
+  }
+
 
 
 
