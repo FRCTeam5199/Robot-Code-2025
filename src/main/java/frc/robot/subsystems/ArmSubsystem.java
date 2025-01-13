@@ -47,28 +47,28 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment 
     public final SysIdRoutine sysIdRoutineArm = new SysIdRoutine(
         
         
-    new SysIdRoutine.Config(
-         Volts.per(Second).of(.2),        // Use default ramp rate (1 V/s)
-        Volts.of(.6), // Reduce dynamic step voltage to 4 V to prevent brownout
-        
-        null,        // Use default timeout (10 s)
-        // Log state with SignalLogger class
-        state -> SignalLogger.writeString("Arm_State", state.toString())
-    ),
-    new SysIdRoutine.Mechanism(
-        output -> arm_motor.setControl(new VoltageOut(output)),
-        null,
-       // log-> 
-        //{
+        new SysIdRoutine.Config(
+             Volts.per(Second).of(.2),        // Use default ramp rate (1 V/s)
+            Volts.of(.6), // Reduce dynamic step voltage to 4 V to prevent brownout
 
-        // log.motor("Pivot Motor")
-        // .voltage(Volts.mutable(0).mut_replace(arm_motor.getMotorVoltage().getValueAsDouble(), Volts))
-        // .angularPosition(Radians.mutable(0).mut_replace(arm_motor.getPosition().getValueAsDouble(), Rotations))
-        // .angularVelocity(RadiansPerSecond.mutable(0).mut_replace(arm_motor.getVelocity().getValueAsDouble(), RadiansPerSecond));
-        // },
-        this
-    )
-);
+            null,        // Use default timeout (10 s)
+            // Log state with SignalLogger class
+            state -> SignalLogger.writeString("Arm_State", state.toString())
+        ),
+        new SysIdRoutine.Mechanism(
+            output -> arm_motor.setControl(new VoltageOut(output)),
+            null,
+           // log->
+            //{
+
+            // log.motor("Pivot Motor")
+            // .voltage(Volts.mutable(0).mut_replace(arm_motor.getMotorVoltage().getValueAsDouble(), Volts))
+            // .angularPosition(Radians.mutable(0).mut_replace(arm_motor.getPosition().getValueAsDouble(), Rotations))
+            // .angularVelocity(RadiansPerSecond.mutable(0).mut_replace(arm_motor.getVelocity().getValueAsDouble(), RadiansPerSecond));
+            // },
+            this
+        )
+    );
 
 
     public ArmSubsystem() {

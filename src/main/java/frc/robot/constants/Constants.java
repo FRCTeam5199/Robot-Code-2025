@@ -135,17 +135,62 @@ public final class Constants {
     }
 
     public static class WristConstants {
-        public static final int WRIST_ID = 0;
-        public static final double GROUND = 0;
-        public static final double L1 = 0;
-        public static final double L2 = 0;
-        public static final double L3 = 0;
-        public static final double L4 = 0;
-        public static final double HP = 0;
-        public static final double GROUND_2 = 0;
+
+        //TODO: Change all of these constants as they were just copied from arm
+
+        public static final int WRIST_MOTOR_ID = 240000;
+        public static final int WRIST_CANCODER_ID = 300000;
+        public static final TalonFXConfiguration TALON_FX_CONFIGURATION = new TalonFXConfiguration();
+        public static final double WRIST_STATOR_CURRENT_LIMIT = 80;
+        public static final double WRIST_SUPPLY_CURRENT_LIMIT = 80;
+        public static final boolean WRIST_INVERTED = true;
+
+        public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
+                .withKP(135)
+                .withKI(0)
+                .withKD(0)
+                .withKS(0)
+                .withKG(0)
+                .withKV(0)
+                .withKA(0);
+
+
+        public static final double WRIST_FF_OFFSET = Units.degreesToRadians(13.5);
+
+        public static final CANcoderConfiguration WRIST_CANCODER_CONFIGURATION = new CANcoderConfiguration();
+        public static final double WRIST_CANCODER_DISCONTINUITY_POINT = 1;
+        public static final SensorDirectionValue WRIST_CANCODER_DIRECTION
+                = SensorDirectionValue.Clockwise_Positive;
+
+        //rotations
+        public static final double WRIST_CANCODER_MAGNET_OFFSET = 0.930176;
+
+
+        public static final ArmFeedforward WRIST_FF = new ArmFeedforward(.175, .707, 2.5, 0.0);
+        //degrees
+        public static final double WRIST_LOWER_TOLERANCE = .75;
+        public static final double WRIST_UPPER_TOLERANCE = 0.75;
+        //Degrees
+        public static final double WRIST_MIN = 0.0;
+        public static final double WRIST_MAX = 57;
+
+        public static final double WRIST_MAX_VELOCITY = 500;
+        public static final double WRIST_MAX_ACCELERATION = 750;
+        public static final double WRIST_MOTOR_TO_MECH_GEAR_RATIO = 42.4286;
+        public static final double WRIST_MOTOR_TO_SENSOR_GEAR_RATIO = 1;
+        public static final double WRIST_SENSOR_TO_MECH_GEAR_RATIO = 42.4286;
+
+        public static final double
+                GROUND = 0,
+                L1 = 0,
+                L2 = 0,
+                L3 = 0,
+                L4 = 0,
+                HP = 0,
+                GROUND_2 = 0;
+
 
     }
-
 
     public static final String Vision = null;
 }
