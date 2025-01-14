@@ -73,7 +73,7 @@ public class TemplateSubsystem extends SubsystemBase {
         motor.getConfigurator().apply(slot0Configs);
 
         switch (type) {
-            case ROLLER, FLYWHEEL -> simpleMotorFF = new SimpleMotorFeedforward(
+            case ROLLER -> simpleMotorFF = new SimpleMotorFeedforward(
                     feedForward.getkS(), feedForward.getkV());
             case LINEAR -> linearFF = new ElevatorFeedforward(
                     feedForward.getkS(), feedForward.getkG(), feedForward.getkV());
@@ -160,13 +160,8 @@ public class TemplateSubsystem extends SubsystemBase {
         this.goal = rps;
         followLastMechProfile = false;
         motor.setNeutralMode(NeutralModeValue.Coast);
-        if (type == Type.ROLLER)
-            motor.setControl(velocityVoltage.withVelocity(rps)
-                    .withFeedForward(calculateFF(rps, 0)));
-        else
-            motor.setControl(velocityVoltage.withOverrideBrakeDurNeutral(true)
-                    .withVelocity(rps)
-                    .withFeedForward(calculateFF(rps, 0)));
+        motor.setControl(velocityVoltage.withVelocity(rps)
+                .withFeedForward(calculateFF(rps, 0)));
     }
 
 //    private double calculateFF(double rps, double acceleration) {
@@ -191,6 +186,9 @@ public class TemplateSubsystem extends SubsystemBase {
                         getMechMFromMotorRot(velocities[1]));
             }
             case PIVOT -> {
+                //return pivotFF.calculate(Math.toRadians(getDegrees() + ffOffset),
+                //  rps * 2 * Math.PI, acceleration * 2 * Math.PI);
+                //The feedforward calculation below is untested, use above if it doesn't work
                 return pivotFF.calculateWithVelocities(Math.toRadians(getDegrees()),
                         velocities[0] * 2 * Math.PI, velocities[1] * 2 * Math.PI);
             }
@@ -201,10 +199,10 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     public void setPosition(double goal) {
-        if (type == Type.FLYWHEEL) return;
+        if (type == Type.ROLLER) return;
 
-//        if (type == Type.LINEAR && goal < mechMin) goal = mechMin;
-//        else if (type == Type.LINEAR && goal > mechMax) goal = mechMax;
+        if (type == Type.LINEAR && goal < mechMin) goal = mechMin;
+        else if (type == Type.LINEAR && goal > mechMax) goal = mechMax;
 
         followLastMechProfile = true;
 
@@ -213,7 +211,6 @@ public class TemplateSubsystem extends SubsystemBase {
             case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
             default -> goalState.position = getMotorRotFromMechRot(goal);
         }
-        goalState.position = goal;
 
         goalState.velocity = 0;
         this.goal = goal;
@@ -224,7 +221,7 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     public void followLastMechProfile() {
-        if (type == Type.FLYWHEEL) return;
+        if (type == Type.ROLLER) return;
 
         TrapezoidProfile.State nextState = profile.calculate(timer.get(), currentState, goalState);
         motor.setControl(
@@ -235,13 +232,6 @@ public class TemplateSubsystem extends SubsystemBase {
 
         currentState = nextState;
 
-//        if (goalState.position != 0) {
-//            System.out.println("Motor Rotations: " + getMotorRot());
-//            System.out.println("Current position: " + currentState.position);
-//            System.out.println("Goal position: " + goalState.position);
-        System.out.println("Position: " + currentState.position);
-        System.out.println("Motor Rotations: " + getMotorRot());
-//        }
         timer.restart();
     }
 
