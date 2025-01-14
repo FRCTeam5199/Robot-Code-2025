@@ -10,6 +10,7 @@ import static edu.wpi.first.units.Units.VoltsPerRadianPerSecondSquared;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -60,7 +61,7 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment 
         state -> SignalLogger.writeString("Arm_State", state.toString())
     ),
     new SysIdRoutine.Mechanism(
-        output -> arm_motor.setControl(new VoltageOut(output)),
+        output -> arm_motor.setControl(new VoltageOut(output).withEnableFOC((true))),
         null,
     //    (SysIdRoutineLog log)-> 
     //     {
@@ -112,6 +113,8 @@ public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment 
                 ArmConstants.ARM_MOTOR_TO_MECH_GEAR_RATIO,
                 ArmConstants.TALON_FX_CONFIGURATION, ArmConstants.ARM_CANCODER_CONFIGURATION,
                 ArmConstants.ARM_SLOT0_CONFIGS);
+
+        
 
     }
 
