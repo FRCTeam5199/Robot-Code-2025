@@ -14,6 +14,9 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utility.FeedForward;
@@ -56,6 +59,13 @@ public class TemplateSubsystem extends SubsystemBase {
     private Timer timer;
     private Type type;
 
+    private final NetworkTableInstance inst = NetworkTableInstance.getDefault();
+
+    private final NetworkTable stateTable;
+    private final DoublePublisher voltage;
+    private final DoublePublisher position;
+    private final DoublePublisher velocity;
+
     public TemplateSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints,
                              PID pid, FeedForward feedForward,
                              double lowerTolerance, double upperTolerance,
@@ -68,6 +78,11 @@ public class TemplateSubsystem extends SubsystemBase {
         profile = new TrapezoidProfile(constraints);
         goalState = new TrapezoidProfile.State(0.0, 0.0);
         currentState = new TrapezoidProfile.State(0.0, 0.0);
+
+        stateTable = inst.getTable("State");
+        voltage = stateTable.getDoubleTopic("Voltage").publish();
+        position = stateTable.getDoubleTopic("Position").publish();
+        velocity = stateTable.getDoubleTopic("Velocity").publish();
 
         slot0Configs = pid.getSlot0Configs();
         motor.getConfigurator().apply(slot0Configs);
@@ -344,5 +359,10 @@ public class TemplateSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (followLastMechProfile) followLastMechProfile();
+
+
+        voltage.set(motor.getMotorVoltage().getValueAsDouble());
+        position.set(motor.getPosition().getValueAsDouble());
+        velocity.set(motor.getVelocity().getValueAsDouble());
     }
 }
