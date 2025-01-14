@@ -120,9 +120,9 @@ public class TemplateSubsystem extends SubsystemBase {
         this.ffOffset = ffOffset;
     }
 
-    public void configureFollowerMotor(int followerMotorId) {
+    public void configureFollowerMotor(int followerMotorId, boolean invert) {
         followerMotor = new TalonFX(followerMotorId);
-        follower = new Follower(motor.getDeviceID(), true);
+        follower = new Follower(motor.getDeviceID(), invert);
         followerMotor.setControl(follower);
     }
 
@@ -219,6 +219,7 @@ public class TemplateSubsystem extends SubsystemBase {
         this.goal = goal;
 
         currentState = profile.calculate(0, currentState, goalState);
+        currentState.position = getMotorRot();
         timer.restart();
     }
 

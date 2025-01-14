@@ -44,6 +44,8 @@ public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
     private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
+    
+
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // My drivetrain
@@ -92,7 +94,10 @@ public class RobotContainer {
 
         }
 
-        commandXboxController.povLeft().onTrue(elevator.go());
+        commandXboxController.povLeft().onTrue(new InstantCommand(()->elevator.setVoltage(1.175)));
+        commandXboxController.povRight().onTrue(new InstantCommand(()->elevator.setPosition(5))).onFalse(new InstantCommand(()->elevator.setPosition(0)));
+
+        
         
 
         commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));

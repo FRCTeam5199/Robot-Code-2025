@@ -39,8 +39,8 @@ public final class Constants {
         public static final int ELEVATOR2_ID = 23;
 
         public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(3, 3);
-        public static final PID ELEVATOR_PID = new PID(122.65, 0, 0.775);
-        public static final FeedForward ELEVATOR_FF = new FeedForward(0.0377, 0.102, 8.333, 0.003);
+        public static final PID ELEVATOR_PID = new PID(95.748, 0, 5.4125);
+        public static final FeedForward ELEVATOR_FF = new FeedForward(0.043, 0.102, .111, 0.108);
         public static final double ELEVATOR_MIN = 0;
         public static final double ELEVATOR_MAX = 0.595;
         public static final double[][] ELEVATOR_GEARING = new double[][]{{48, 14}, {48, 24}};
@@ -48,6 +48,8 @@ public final class Constants {
         public static final boolean BRAKE = false;
         public static final double SUPPLY_CURRENT_LIMIT = 60;
         public static final double STATOR_CURRENT_LIMIT = 100;
+        public static final double DRUM_CIRCUMFERENCE = .0364;
+
     }
 
     public static class ArmConstants {

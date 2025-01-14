@@ -33,7 +33,7 @@ public class ElevatorSubsystem extends TemplateSubsystem {
 
     public final SysIdRoutine sysIdRoutineElevator = new SysIdRoutine(
             new SysIdRoutine.Config(
-                    Volts.per(Second).of(.005
+                    Volts.per(Second).of(.01
                     ),        // Use default ramp rate (1 V/s)
                     Volts.of(1), // Reduce dynamic step voltage to 4 V to prevent brownout
 
@@ -72,9 +72,11 @@ public class ElevatorSubsystem extends TemplateSubsystem {
         ElevatorConstants.ELEVATOR_GEARING);
 
         configureMotor(ElevatorConstants.INVERT, ElevatorConstants.BRAKE, ElevatorConstants.SUPPLY_CURRENT_LIMIT, ElevatorConstants.STATOR_CURRENT_LIMIT);
-
-        elevator2_motor.setInverted(true);
+        configureFollowerMotor(ElevatorConstants.ELEVATOR2_ID, true);
+        configureLinearMech(ElevatorConstants.DRUM_CIRCUMFERENCE, ElevatorConstants.ELEVATOR_MIN, ElevatorConstants.ELEVATOR_MAX);
     }
+
+ 
 
 
     public Command setL1(){
