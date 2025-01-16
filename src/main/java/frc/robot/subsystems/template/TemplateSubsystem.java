@@ -164,39 +164,39 @@ public class TemplateSubsystem extends SubsystemBase {
                 .withFeedForward(calculateFF(rps, 0)));
     }
 
-//    private double calculateFF(double rps, double acceleration) {
-//        switch (type) {
-//            case LINEAR -> {
-//                return linearFF.calculate(rps, acceleration);
-//            }
-//            case PIVOT -> {
-//                return pivotFF.calculate(Math.toRadians(getDegrees() + ffOffset),
-//                        rps * 2 * Math.PI, acceleration * 2 * Math.PI);
-//            }
-//            default -> {
-//                return simpleMotorFF.calculate(rps, acceleration);
-//            }
-//        }
-//    }
-
-    private double calculateFF(double... velocities) {
+    private double calculateFF(double rps, double acceleration) {
         switch (type) {
             case LINEAR -> {
-                return linearFF.calculateWithVelocities(getMechMFromMotorRot(velocities[0]),
-                        getMechMFromMotorRot(velocities[1]));
+                return linearFF.calculate(rps, acceleration);
             }
             case PIVOT -> {
-                //return pivotFF.calculate(Math.toRadians(getDegrees() + ffOffset),
-                //  rps * 2 * Math.PI, acceleration * 2 * Math.PI);
-                //The feedforward calculation below is untested, use above if it doesn't work
-                return pivotFF.calculateWithVelocities(Math.toRadians(getDegrees()),
-                        velocities[0] * 2 * Math.PI, velocities[1] * 2 * Math.PI);
+                return pivotFF.calculate(Math.toRadians(getDegrees() + ffOffset),
+                        rps * 2 * Math.PI, acceleration * 2 * Math.PI);
             }
             default -> {
-                return simpleMotorFF.calculate(velocities[0]);
+                return simpleMotorFF.calculate(rps, acceleration);
             }
         }
     }
+
+//    private double calculateFF(double... velocities) {
+//        switch (type) {
+//            case LINEAR -> {
+//                return linearFF.calculateWithVelocities(getMechMFromMotorRot(velocities[0]),
+//                        getMechMFromMotorRot(velocities[1]));
+//            }
+//            case PIVOT -> {
+//                //return pivotFF.calculate(Math.toRadians(getDegrees() + ffOffset),
+//                //  rps * 2 * Math.PI, acceleration * 2 * Math.PI);
+//                //The feedforward calculation below is untested, use above if it doesn't work
+//                return pivotFF.calculateWithVelocities(Math.toRadians(getDegrees()),
+//                        velocities[0] * 2 * Math.PI, velocities[1] * 2 * Math.PI);
+//            }
+//            default -> {
+//                return simpleMotorFF.calculate(velocities[0]);
+//            }
+//        }
+//    }
 
     public void setPosition(double goal) {
         if (type == Type.ROLLER) return;
@@ -226,9 +226,9 @@ public class TemplateSubsystem extends SubsystemBase {
         TrapezoidProfile.State nextState = profile.calculate(timer.get(), currentState, goalState);
         motor.setControl(
                 positionVoltage.withPosition(nextState.position)
-                        .withFeedForward(calculateFF(currentState.velocity, nextState.velocity
-                                /*nextState.velocity,
-                                (nextState.velocity - currentState.velocity) / timer.get()*/)));
+                        .withFeedForward(calculateFF(/*currentState.velocity, nextState.velocity*/
+                                nextState.velocity,
+                                (nextState.velocity - currentState.velocity) / timer.get())));
 
         currentState = nextState;
 
@@ -330,6 +330,10 @@ public class TemplateSubsystem extends SubsystemBase {
 
     public double getMechVelocity() {
         return getMechRotFromMotorRot(motor.getVelocity().getValueAsDouble());
+    }
+
+    public CANcoder getEncoder() {
+        return encoder;
     }
 
     @Override

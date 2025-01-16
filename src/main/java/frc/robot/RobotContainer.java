@@ -31,7 +31,9 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.testing.LinearTestSubsystem;
+import frc.robot.subsystems.testing.PivotTestSubsystem;
 import frc.robot.subsystems.testing.RollerTestSubsystem;
+import tagalong.subsystems.micro.Pivot;
 
 import javax.sound.sampled.Line;
 
@@ -65,6 +67,7 @@ public class RobotContainer {
     public static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
+    public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
     // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
     /**
@@ -95,7 +98,7 @@ public class RobotContainer {
         }
 
         commandXboxController.povLeft().onTrue(new InstantCommand(() -> elevator.setVoltage(1.175)));
-        commandXboxController.povRight().onTrue(new InstantCommand(() -> rollerTestSubsystem.setVelocity(10))).onFalse(new InstantCommand(() -> rollerTestSubsystem.setVelocity(0)));
+        commandXboxController.povRight().onTrue(new InstantCommand(() -> pivotTestSubsystem.setPosition(.001))).onFalse(new InstantCommand(() -> pivotTestSubsystem.setPosition(0)));
 
 
         commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
