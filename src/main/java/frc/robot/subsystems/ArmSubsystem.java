@@ -11,7 +11,7 @@ import edu.wpi.first.math.util.Units;
 public class ArmSubsystem extends TemplateSubsystem {
     private static ArmSubsystem armSubsystem;
 
-
+    //.08, .5438
     public ArmSubsystem() {
         super(
                 Type.PIVOT,
@@ -42,8 +42,7 @@ public class ArmSubsystem extends TemplateSubsystem {
                 ArmConstants.ARM_CANCODER_CANBUS,
                 ArmConstants.ARM_CANCODER_MAGNET_OFFSET,
                 ArmConstants.ARM_SENSOR_TO_MECH_GEAR_RATIO,
-                ArmConstants.ARM_MOTOR_TO_SENSOR_GEAR_RATIO,
-                ArmConstants.ARM_CANCODER_DIRECTION
+                ArmConstants.ARM_MOTOR_TO_SENSOR_GEAR_RATIO
         );
 
 
@@ -54,9 +53,10 @@ public class ArmSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
         if (isProfileFinished()) {
-            setVoltage(.05 + (ArmConstants.ARM_FF.getkG() * Math.cos(Units.rotationsToRadians(getAbsPosition()))));
+//            setVoltage(.05 + (ArmConstants.ARM_FF.getkG() * Math.cos(Units.rotationsToRadians(getAbsPosition()))));
 
         }
+        System.out.println("Mech Degrees: " + getEncoderRot() * 360d);
 
     }
 

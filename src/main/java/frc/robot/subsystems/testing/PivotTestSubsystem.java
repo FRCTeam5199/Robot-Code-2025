@@ -13,21 +13,21 @@ public class PivotTestSubsystem extends TemplateSubsystem {
     // kg = .348, ks = .14816, Kv = 6.16786
     public PivotTestSubsystem() {
         super(Type.PIVOT, 24,
-                new TrapezoidProfile.Constraints(500, 750),
-                new PID(50, 0, 0), new FeedForward(.14816, .348, 6.16),
+                new TrapezoidProfile.Constraints(1, 2),
+                new PID(50, 0, 0), new FeedForward(.14816, .348, 2.5),
                 .75, .75, new double[][]{{1, 42.4286}});
         configureMotor(true, true, 80, 80);
-        configurePivot(0, 57, 13.5);
-        configureEncoder(30, "rio", ArmConstants.ARM_CANCODER_MAGNET_OFFSET, 1, 42.4286, ArmConstants.ARM_CANCODER_DIRECTION);
+        configurePivot(0, 57, 0);
+        configureEncoder(30, "rio", ArmConstants.ARM_CANCODER_MAGNET_OFFSET, 1, 1 / 42.4286);
     }
 
     @Override
     public void periodic() {
         super.periodic();
-        System.out.println("Encoder rotations: " + Units.rotationsToDegrees(getEncoder().getAbsolutePosition().getValueAsDouble()));
+        System.out.println("Encoder degrees: " + Units.rotationsToDegrees(getEncoder().getAbsolutePosition().getValueAsDouble()));
 
-        if(isProfileFinished()){
-            setVoltage(ArmConstants.ARM_FF.getkG()/Math.cos(Units.rotationsToRadians(getAbsPosition())));
+        if (isProfileFinished()) {
+//            setVoltage(ArmConstants.ARM_FF.getkG() / Math.cos(Units.rotationsToRadians(getAbsPosition())));
 
         }
     }

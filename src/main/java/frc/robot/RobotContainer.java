@@ -60,14 +60,14 @@ public class RobotContainer {
     private final SwerveRequest.SwerveDriveBrake brake = new com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    private final LinearTestSubsystem elevator = LinearTestSubsystem.getInstance();
-    private ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+//    private ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
     // public static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-    public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
+//    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+//    public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
+    public static final LinearTestSubsystem linearTestSubsystem = new LinearTestSubsystem();
     public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
     // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
@@ -98,11 +98,14 @@ public class RobotContainer {
 
         }
 
+        commandXboxController.a().onTrue(new InstantCommand(() -> pivotTestSubsystem.setPosition(10)))
+                .onFalse(new InstantCommand(() -> pivotTestSubsystem.setPosition(0)));
+
         //       commandXboxController.povLeft().onTrue(new InstantCommand(() -> elevator.setVoltage(1.175)));
-        commandXboxController.povLeft().onTrue(armSubsystem.setGround());
-        commandXboxController.povRight().onTrue(armSubsystem.setL1());
-        commandXboxController.povUp().onTrue(armSubsystem.setL2());
-        commandXboxController.povDown().onTrue(armSubsystem.setL3());
+//        commandXboxController.povLeft().onTrue(armSubsystem.setGround());
+//        commandXboxController.povRight().onTrue(armSubsystem.setL1());
+//        commandXboxController.povUp().onTrue(armSubsystem.setL2());
+//        commandXboxController.povDown().onTrue(armSubsystem.setL3());
 
         commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
         commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
@@ -117,10 +120,10 @@ public class RobotContainer {
          */
 
 
-        commandXboxController.y().whileTrue(elevatorSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        commandXboxController.a().whileTrue(elevatorSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        commandXboxController.b().whileTrue(elevatorSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        commandXboxController.x().whileTrue(elevatorSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+//        commandXboxController.y().whileTrue(elevatorSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+//        commandXboxController.a().whileTrue(elevatorSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+//        commandXboxController.b().whileTrue(elevatorSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
+//        commandXboxController.x().whileTrue(elevatorSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
