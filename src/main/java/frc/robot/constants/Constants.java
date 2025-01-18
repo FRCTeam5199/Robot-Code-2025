@@ -5,6 +5,7 @@
 package frc.robot.constants;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
@@ -59,6 +60,7 @@ public final class Constants {
         public static final double ARM_STATOR_CURRENT_LIMIT = 80;
         public static final double ARM_SUPPLY_CURRENT_LIMIT = 80;
         public static final boolean ARM_INVERTED = true;
+        public static final boolean ARM_BRAKE = true;
 
         public static final Slot0Configs ARM_SLOT0_CONFIGS = new Slot0Configs()
                 .withKP(135)
@@ -69,39 +71,62 @@ public final class Constants {
                 .withKV(0)
                 .withKA(0);
 
+        public static final PID ARM_PID = new PID(50, 0, 0);
 
-        public static final double ARM_FF_OFFSET = Units.degreesToRadians(13.5);
 
+     //   public static final double ARM_FF_OFFSET = Units.degreesToRadians(13.5);
+        
+        public static final double ARM_FF_OFFSET = Units.degreesToRadians(0);
         public static final CANcoderConfiguration ARM_CANCODER_CONFIGURATION = new CANcoderConfiguration();
+
+        /*This determines the range the cancoder records in rotations.
+        * -1 = -1 to 0
+        * 0 = -.5 to .5
+        * 1 = 0 to 1
+        */
         public static final double ARM_CANCODER_DISCONTINUITY_POINT = 1;
-        public static final SensorDirectionValue ARM_CANCODER_DIRECTION
-                = SensorDirectionValue.Clockwise_Positive;
 
-        //rotations
-        public static final double ARM_CANCODER_MAGNET_OFFSET = 0.930176;
+        //What direction should be considered postive.
+        public static final SensorDirectionValue ARM_CANCODER_DIRECTION = SensorDirectionValue.Clockwise_Positive;
+
+        //When the arm is resting if the cancoder does not record 0 for absolute position multiply the value it record by -1 and put it here. This must be in rotations.
+        public static final double ARM_CANCODER_MAGNET_OFFSET = -0.066;
+
+        //The speed and acceleration the arm should move at.
+        public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS = new TrapezoidProfile.Constraints(500, 750);
 
 
-        public static final ArmFeedforward ARM_FF = new ArmFeedforward(.175, .707, 2.5, 0.0);
-        //degrees
-        public static final double ARM_LOWER_TOLERANCE = .75;
+// kg = .348, ks = .14816, Kv = 6.16786
+        // These are the values that will be factored into the arm ff equation. There is a separate documet to find these.
+    
+        public static final FeedForward ARM_FF = new FeedForward(.14816, .348, 6.16786, 0.0);
+
+        //degrees. check super for template subsystem
+        public static final double ARM_LOWER_TOLERANCE = 0.75;
         public static final double ARM_UPPER_TOLERANCE = 0.75;
-        //Degrees
-        public static final double ARM_MIN = 0.0;
-        public static final double ARM_MAX = 57;
 
+        //Degrees check super for template subsystem
+        public static final double ARM_MIN = 4/3;
+        public static final double ARM_MAX = 57/3;
+
+    
         public static final double ARM_MAX_VELOCITY = 500;
         public static final double ARM_MAX_ACCELERATION = 750;
         public static final double ARM_MOTOR_TO_MECH_GEAR_RATIO = 42.4286;
-        public static final double ARM_MOTOR_TO_SENSOR_GEAR_RATIO = 1;
-        public static final double ARM_SENSOR_TO_MECH_GEAR_RATIO = 42.4286;
+        public static final double ARM_MOTOR_TO_SENSOR_GEAR_RATIO = 42.4286;
+        public static final double ARM_SENSOR_TO_MECH_GEAR_RATIO = 1;
 
+        public static final double[][] MOTOR_TO_MECH_GEAR_RATIO = {{1, 42.4286}};
+
+        //Value the arm should move to for a wanted position.
         public static final double GROUND = 0;
-        public static final double L1 = 0;
-        public static final double L2 = 0;
-        public static final double L3 = 0;
-        public static final double L4 = 0;
-        public static final double HP = 0;
+        public static final double L1 = 10/3;
+        public static final double L2 = 15/3;
+        public static final double L3 = 20/3;
+        public static final double L4 = 30/3;
+        public static final double HP = 35/3;
         public static final double GROUND_2 = 0;
+        public static final String ARM_CANCODER_CANBUS = "rio";
 
     }
 

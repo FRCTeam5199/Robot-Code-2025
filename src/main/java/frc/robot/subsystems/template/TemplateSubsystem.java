@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -14,8 +15,11 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Constants.ArmConstants;
+import frc.robot.subsystems.testing.PivotTestSubsystem;
 import frc.robot.utility.FeedForward;
 import frc.robot.utility.PID;
 import frc.robot.utility.Type;
@@ -37,6 +41,7 @@ public class TemplateSubsystem extends SubsystemBase {
     public boolean followLastMechProfile = false;
 
     private PositionVoltage positionVoltage;
+    private PositionTorqueCurrentFOC positionTorque;
     private VelocityVoltage velocityVoltage;
     private Slot0Configs slot0Configs;
 
@@ -56,6 +61,17 @@ public class TemplateSubsystem extends SubsystemBase {
     private Timer timer;
     private Type type;
 
+    /**
+     * 
+     * @param type What type of Mechanism is it? Linear, Pivot, or Roller
+     * @param id What is the ID of the master motor
+     * @param constraints What are the Trapezoidal Profile constraints of the mechanism
+     * @param pid Give a PID object
+     * @param feedForward Give a Feedforward object
+     * @param lowerTolerance The lower range of how much you want to allow your input value to be off. Be reasonable and don't just put 0 lmao.
+     * @param upperTolerance What is the upper range of how much you want your mechanism to be off from a desired value.
+     * @param gearRatios What is the gear ratio from motor to mechanism.
+     */
     public TemplateSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints,
                              PID pid, FeedForward feedForward,
                              double lowerTolerance, double upperTolerance,
@@ -95,6 +111,13 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     //Configurations
+    /**
+     * 
+     * @param isInverted Is the motor inverted true or false
+     * @param isBrakeMode When not running should the motor be in brake or coast mode.
+     * @param supplyCurrentLimit What is the absolute limit on current going to the motor. This is useful for preventing brown out
+     * @param statorCurrentLimit What is the limit on current being outputted by the motor. This is useful for prevent burnout of the motor.
+     */
     public void configureMotor(boolean isInverted, boolean isBrakeMode, double supplyCurrentLimit, double statorCurrentLimit) {
         motorConfig.MotorOutput.Inverted =
                 isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
@@ -108,11 +131,25 @@ public class TemplateSubsystem extends SubsystemBase {
         motor.setPosition(0);
     }
 
+    /**
+     * 
+     * @param drumCircumference idk man this is rohans thing
+     * @param mechMinM What is the lowest position you want the motor to be allowed to run.
+     * @param mechMaxM what is the maximum position you want the motor to run.
+     */
+
     public void configureLinearMech(double drumCircumference, double mechMinM, double mechMaxM) {
         this.drumCircumference = drumCircumference;
         this.mechMin = mechMinM;
         this.mechMax = mechMaxM;
     }
+
+    /**
+     * 
+     * @param mechMinDegrees What is lowest you want your arm to go in Degrees
+     * @param mechMaxDegrees What is the highest you want your arm to go in degrees
+     * @param ffOffset If the encoder being used does not go to zero when the arm is horizontal to the ground this is the value it is at when it is horizontal to the ground. In degrees.
+     */
 
     public void configurePivot(double mechMinDegrees, double mechMaxDegrees, double ffOffset) {
         this.mechMin = mechMinDegrees;
@@ -120,19 +157,34 @@ public class TemplateSubsystem extends SubsystemBase {
         this.ffOffset = ffOffset;
     }
 
+    /**
+     * 
+     * @param followerMotorId If there is more than one motor what is the second motor in the system.
+     * @param invert Does the motor run opposite to the master when following. invert it.
+     */
+
     public void configureFollowerMotor(int followerMotorId, boolean invert) {
         followerMotor = new TalonFX(followerMotorId);
         follower = new Follower(motor.getDeviceID(), invert);
         followerMotor.setControl(follower);
     }
 
+    /**
+     * 
+     * @param encoderId What is the id of the encoder.
+     * @param canbus What canbus is the encoder on
+     * @param magnetOffset When using absolute position how far off is the resting position of the encoder from 0. You can find this using Phoenix Tuner if its a cancoder.
+     * @param sensorToMechRatio What is the gear ratio between the sensor and mechanism
+     * @param motorToSensorRatio What is the gear ratio between the motor and the sensor.
+     */
+
     public void configureEncoder(int encoderId, String canbus, double magnetOffset,
-                                 double sensorToMechRatio, double motorToSensorRatio) {
+                                 double sensorToMechRatio, double motorToSensorRatio, SensorDirectionValue direction ) {
         encoder = new CANcoder(encoderId, canbus);
         encoderConfig = new CANcoderConfiguration();
 
         encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
-        encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        encoderConfig.MagnetSensor.SensorDirection = direction;
         encoderConfig.MagnetSensor.MagnetOffset = magnetOffset;
 
         encoder.getConfigurator().apply(encoderConfig);
@@ -154,6 +206,11 @@ public class TemplateSubsystem extends SubsystemBase {
         motor.setVoltage(voltage);
     }
 
+    /**
+     * 
+     * @param rps What is the desired velocity in rotations per second
+     */
+
     public void setVelocity(double rps) {
         if (type == Type.LINEAR || type == Type.PIVOT) return;
 
@@ -164,14 +221,22 @@ public class TemplateSubsystem extends SubsystemBase {
                 .withFeedForward(calculateFF(rps, 0)));
     }
 
+    /**
+     * 
+     * @param rps What is the desired velocity while moving. This changes depending on the mechanism. A pivot uses rot per sec.
+     * 
+     * @param acceleration What is the desired acceleration of the motor while moving. Changes dependign on the mechanism
+     * @return Returns a value to be used for feed forward calculations
+     */
+
     private double calculateFF(double rps, double acceleration) {
         switch (type) {
             case LINEAR -> {
                 return linearFF.calculate(rps, acceleration);
             }
             case PIVOT -> {
-                return pivotFF.calculate(Math.toRadians(getDegrees() + ffOffset),
-                        rps * 2 * Math.PI, acceleration * 2 * Math.PI);
+                return pivotFF.calculate(Units.rotationsToRadians(getAbsPosition() + Units.degreesToRotations(ffOffset)),
+                        Units.degreesToRadians(rps), Units.degreesToRadians(acceleration));
             }
             default -> {
                 return simpleMotorFF.calculate(rps, acceleration);
@@ -198,17 +263,26 @@ public class TemplateSubsystem extends SubsystemBase {
 //        }
 //    }
 
+/**
+ * @param goal The position you want the arm to go to in degrees.
+ * @param goal The position you want the elevator to go to in meters.
+ */
     public void setPosition(double goal) {
         if (type == Type.ROLLER) return;
 
         if (type == Type.LINEAR && goal < mechMin) goal = mechMin;
         else if (type == Type.LINEAR && goal > mechMax) goal = mechMax;
 
+        if (type == Type.PIVOT && goal < mechMin) goal = mechMin;
+        else if (type == Type.PIVOT && goal > mechMax) goal = mechMax;
+
         followLastMechProfile = true;
 
         switch (type) {
             case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
-            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
+      //      case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
+           case PIVOT -> goalState.position = 
+           goal;
             default -> goalState.position = getMotorRotFromMechRot(goal);
         }
 
@@ -216,7 +290,11 @@ public class TemplateSubsystem extends SubsystemBase {
         this.goal = goal;
 
         currentState = profile.calculate(0, currentState, goalState);
-        currentState.position = getMotorRot();
+
+
+        currentState.position = Units.rotationsToDegrees(getAbsPosition());
+
+    
         timer.restart();
     }
 
@@ -237,6 +315,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     public boolean isProfileFinished() {
         return currentState.position == goalState.position && currentState.velocity == goalState.velocity;
+
     }
 
     public boolean isMechAtGoal(boolean isVelocity) {
@@ -247,7 +326,7 @@ public class TemplateSubsystem extends SubsystemBase {
             }
             case PIVOT -> {
                 return isProfileFinished() &&
-                        getDegrees() >= goal - lowerTolerance && getDegrees() <= goal + upperTolerance;
+                        Units.rotationsToDegrees(getAbsPosition()) >= goal - lowerTolerance && Units.rotationsToDegrees(getAbsPosition())  <= goal + upperTolerance;
             }
             default -> {
                 if (isVelocity) return getMechVelocity() >= goal - lowerTolerance
@@ -262,6 +341,13 @@ public class TemplateSubsystem extends SubsystemBase {
     //Unit Conversions
     public double getDegrees() {
         return motor.getPosition().getValueAsDouble() * gearRatio * 360d;
+    }
+
+    /**
+     * Returns the absolute position of the encoder in rotations.
+     */
+    public double getAbsPosition(){
+        return encoder.getAbsolutePosition().getValueAsDouble();
     }
 
     public double getMotorRot() {
@@ -338,6 +424,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (followLastMechProfile) followLastMechProfile();
+            if (followLastMechProfile) followLastMechProfile();
+     
     }
 }
