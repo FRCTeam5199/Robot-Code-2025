@@ -14,47 +14,46 @@ public class ArmSubsystem extends TemplateSubsystem {
 
     public ArmSubsystem() {
         super(
-        Type.PIVOT,
-        ArmConstants.ARM_MOTOR_ID,
-        ArmConstants.ARM_CONSTRAINTS,
-        ArmConstants.ARM_PID,
-        ArmConstants.ARM_FF,
-        ArmConstants.ARM_LOWER_TOLERANCE,
-        ArmConstants.ARM_UPPER_TOLERANCE,
-        ArmConstants.MOTOR_TO_MECH_GEAR_RATIO
+                Type.PIVOT,
+                ArmConstants.ARM_MOTOR_ID,
+                ArmConstants.ARM_CONSTRAINTS,
+                ArmConstants.ARM_PID,
+                ArmConstants.ARM_FF,
+                ArmConstants.ARM_LOWER_TOLERANCE,
+                ArmConstants.ARM_UPPER_TOLERANCE,
+                ArmConstants.MOTOR_TO_MECH_GEAR_RATIO
         );
 
         configureMotor(
-            ArmConstants.ARM_INVERTED,
-            ArmConstants.ARM_BRAKE, 
-            ArmConstants.ARM_SUPPLY_CURRENT_LIMIT, 
-            ArmConstants.ARM_STATOR_CURRENT_LIMIT
+                ArmConstants.ARM_INVERTED,
+                ArmConstants.ARM_BRAKE,
+                ArmConstants.ARM_SUPPLY_CURRENT_LIMIT,
+                ArmConstants.ARM_STATOR_CURRENT_LIMIT
         );
 
         configurePivot(
-            ArmConstants.ARM_MIN, 
-            ArmConstants.ARM_MAX,
-            ArmConstants.ARM_FF_OFFSET
+                ArmConstants.ARM_MIN,
+                ArmConstants.ARM_MAX,
+                ArmConstants.ARM_FF_OFFSET
         );
-        
+
         configureEncoder(
-            ArmConstants.ARM_CANCODER_ID, 
-            ArmConstants.ARM_CANCODER_CANBUS, 
-            ArmConstants.ARM_CANCODER_MAGNET_OFFSET, 
-            ArmConstants.ARM_SENSOR_TO_MECH_GEAR_RATIO, 
-            ArmConstants.ARM_MOTOR_TO_SENSOR_GEAR_RATIO, 
-            ArmConstants.ARM_CANCODER_DIRECTION
+                ArmConstants.ARM_CANCODER_ID,
+                ArmConstants.ARM_CANCODER_CANBUS,
+                ArmConstants.ARM_CANCODER_MAGNET_OFFSET,
+                ArmConstants.ARM_SENSOR_TO_MECH_GEAR_RATIO,
+                ArmConstants.ARM_MOTOR_TO_SENSOR_GEAR_RATIO,
+                ArmConstants.ARM_CANCODER_DIRECTION
         );
-        
+
 
     }
-
 
 
     @Override
     public void periodic() {
         super.periodic();
-        if(isProfileFinished()){
+        if (isProfileFinished()) {
             setVoltage(.05 + (ArmConstants.ARM_FF.getkG() * Math.cos(Units.rotationsToRadians(getAbsPosition()))));
 
         }
@@ -95,16 +94,10 @@ public class ArmSubsystem extends TemplateSubsystem {
     }
 
 
-
-
-
- 
-
-
 //         public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
 //             return sysIdRoutineArm.quasistatic(direction).until(()-> (arm_motor.getPosition().getValueAsDouble() > .003418) || (arm_motor.getPosition().getValueAsDouble() < -0.000247));
 //         }
-    
+
 //         /**
 //          * Runs the SysId Dynamic test in the given direction for the routine
 //          * specified by {@link #m_sysIdRoutineToApply}.
@@ -117,15 +110,13 @@ public class ArmSubsystem extends TemplateSubsystem {
 //         }
 
 
-
-
 //         public final SysIdRoutine sysIdRoutineArm = new SysIdRoutine(
-        
-        
+
+
 //         new SysIdRoutine.Config(
 //              null,        // Use default ramp rate (1 V/s)
 //             Volts.of(1), // Reduce dynamic step voltage to 4 V to prevent brownout
-            
+
 //             null,        // Use default timeout (10 s)
 //             // Log state with SignalLogger class
 //             state -> SignalLogger.writeString("Arm_State", state.toString())
@@ -135,7 +126,7 @@ public class ArmSubsystem extends TemplateSubsystem {
 //             null,
 //         //    (SysIdRoutineLog log)-> 
 //         //     {
-    
+
 //         //     log.motor("Pivot Motor")
 //         //     .voltage(BaseUnits.VoltageUnit.of(arm_motor.getMotorVoltage().getValueAsDouble()))
 //         //     .angularPosition(Units.Rotation.of(arm_motor.getPosition().getValueAsDouble()))
@@ -160,12 +151,6 @@ public class ArmSubsystem extends TemplateSubsystem {
 //             .dynamic(SysIdRoutine.Direction.kReverse)
 //             .until(() -> (arm_motor.getPosition().getValueAsDouble() < 0)));
 //   }
-
-
-
-  
-
-
 
 
 }

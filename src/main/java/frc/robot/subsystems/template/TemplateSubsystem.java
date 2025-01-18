@@ -62,15 +62,14 @@ public class TemplateSubsystem extends SubsystemBase {
     private Type type;
 
     /**
-     * 
-     * @param type What type of Mechanism is it? Linear, Pivot, or Roller
-     * @param id What is the ID of the master motor
-     * @param constraints What are the Trapezoidal Profile constraints of the mechanism
-     * @param pid Give a PID object
-     * @param feedForward Give a Feedforward object
+     * @param type           What type of Mechanism is it? Linear, Pivot, or Roller
+     * @param id             What is the ID of the master motor
+     * @param constraints    What are the Trapezoidal Profile constraints of the mechanism
+     * @param pid            Give a PID object
+     * @param feedForward    Give a Feedforward object
      * @param lowerTolerance The lower range of how much you want to allow your input value to be off. Be reasonable and don't just put 0 lmao.
      * @param upperTolerance What is the upper range of how much you want your mechanism to be off from a desired value.
-     * @param gearRatios What is the gear ratio from motor to mechanism.
+     * @param gearRatios     What is the gear ratio from motor to mechanism.
      */
     public TemplateSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints,
                              PID pid, FeedForward feedForward,
@@ -111,10 +110,10 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     //Configurations
+
     /**
-     * 
-     * @param isInverted Is the motor inverted true or false
-     * @param isBrakeMode When not running should the motor be in brake or coast mode.
+     * @param isInverted         Is the motor inverted true or false
+     * @param isBrakeMode        When not running should the motor be in brake or coast mode.
      * @param supplyCurrentLimit What is the absolute limit on current going to the motor. This is useful for preventing brown out
      * @param statorCurrentLimit What is the limit on current being outputted by the motor. This is useful for prevent burnout of the motor.
      */
@@ -132,10 +131,9 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     /**
-     * 
      * @param drumCircumference idk man this is rohans thing
-     * @param mechMinM What is the lowest position you want the motor to be allowed to run.
-     * @param mechMaxM what is the maximum position you want the motor to run.
+     * @param mechMinM          What is the lowest position you want the motor to be allowed to run.
+     * @param mechMaxM          what is the maximum position you want the motor to run.
      */
 
     public void configureLinearMech(double drumCircumference, double mechMinM, double mechMaxM) {
@@ -145,10 +143,9 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     /**
-     * 
      * @param mechMinDegrees What is lowest you want your arm to go in Degrees
      * @param mechMaxDegrees What is the highest you want your arm to go in degrees
-     * @param ffOffset If the encoder being used does not go to zero when the arm is horizontal to the ground this is the value it is at when it is horizontal to the ground. In degrees.
+     * @param ffOffset       If the encoder being used does not go to zero when the arm is horizontal to the ground this is the value it is at when it is horizontal to the ground. In degrees.
      */
 
     public void configurePivot(double mechMinDegrees, double mechMaxDegrees, double ffOffset) {
@@ -158,9 +155,8 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     /**
-     * 
      * @param followerMotorId If there is more than one motor what is the second motor in the system.
-     * @param invert Does the motor run opposite to the master when following. invert it.
+     * @param invert          Does the motor run opposite to the master when following. invert it.
      */
 
     public void configureFollowerMotor(int followerMotorId, boolean invert) {
@@ -170,16 +166,15 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     /**
-     * 
-     * @param encoderId What is the id of the encoder.
-     * @param canbus What canbus is the encoder on
-     * @param magnetOffset When using absolute position how far off is the resting position of the encoder from 0. You can find this using Phoenix Tuner if its a cancoder.
-     * @param sensorToMechRatio What is the gear ratio between the sensor and mechanism
+     * @param encoderId          What is the id of the encoder.
+     * @param canbus             What canbus is the encoder on
+     * @param magnetOffset       When using absolute position how far off is the resting position of the encoder from 0. You can find this using Phoenix Tuner if its a cancoder.
+     * @param sensorToMechRatio  What is the gear ratio between the sensor and mechanism
      * @param motorToSensorRatio What is the gear ratio between the motor and the sensor.
      */
 
     public void configureEncoder(int encoderId, String canbus, double magnetOffset,
-                                 double sensorToMechRatio, double motorToSensorRatio, SensorDirectionValue direction ) {
+                                 double sensorToMechRatio, double motorToSensorRatio, SensorDirectionValue direction) {
         encoder = new CANcoder(encoderId, canbus);
         encoderConfig = new CANcoderConfiguration();
 
@@ -207,7 +202,6 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     /**
-     * 
      * @param rps What is the desired velocity in rotations per second
      */
 
@@ -222,9 +216,7 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     /**
-     * 
-     * @param rps What is the desired velocity while moving. This changes depending on the mechanism. A pivot uses rot per sec.
-     * 
+     * @param rps          What is the desired velocity while moving. This changes depending on the mechanism. A pivot uses rot per sec.
      * @param acceleration What is the desired acceleration of the motor while moving. Changes dependign on the mechanism
      * @return Returns a value to be used for feed forward calculations
      */
@@ -263,10 +255,10 @@ public class TemplateSubsystem extends SubsystemBase {
 //        }
 //    }
 
-/**
- * @param goal The position you want the arm to go to in degrees.
- * @param goal The position you want the elevator to go to in meters.
- */
+    /**
+     * @param goal The position you want the arm to go to in degrees.
+     * @param goal The position you want the elevator to go to in meters.
+     */
     public void setPosition(double goal) {
         if (type == Type.ROLLER) return;
 
@@ -280,9 +272,9 @@ public class TemplateSubsystem extends SubsystemBase {
 
         switch (type) {
             case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
-      //      case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
-           case PIVOT -> goalState.position = 
-           goal;
+            //      case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
+            case PIVOT -> goalState.position =
+                    goal;
             default -> goalState.position = getMotorRotFromMechRot(goal);
         }
 
@@ -294,7 +286,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
         currentState.position = Units.rotationsToDegrees(getAbsPosition());
 
-    
+
         timer.restart();
     }
 
@@ -326,7 +318,7 @@ public class TemplateSubsystem extends SubsystemBase {
             }
             case PIVOT -> {
                 return isProfileFinished() &&
-                        Units.rotationsToDegrees(getAbsPosition()) >= goal - lowerTolerance && Units.rotationsToDegrees(getAbsPosition())  <= goal + upperTolerance;
+                        Units.rotationsToDegrees(getAbsPosition()) >= goal - lowerTolerance && Units.rotationsToDegrees(getAbsPosition()) <= goal + upperTolerance;
             }
             default -> {
                 if (isVelocity) return getMechVelocity() >= goal - lowerTolerance
@@ -346,7 +338,7 @@ public class TemplateSubsystem extends SubsystemBase {
     /**
      * Returns the absolute position of the encoder in rotations.
      */
-    public double getAbsPosition(){
+    public double getAbsPosition() {
         return encoder.getAbsolutePosition().getValueAsDouble();
     }
 
@@ -424,7 +416,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-            if (followLastMechProfile) followLastMechProfile();
-     
+        if (followLastMechProfile) followLastMechProfile();
+
     }
 }

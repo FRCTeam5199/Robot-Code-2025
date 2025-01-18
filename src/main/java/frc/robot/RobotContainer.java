@@ -65,7 +65,7 @@ public class RobotContainer {
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
-   // public static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+    // public static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
     public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
@@ -98,15 +98,15 @@ public class RobotContainer {
 
         }
 
- //       commandXboxController.povLeft().onTrue(new InstantCommand(() -> elevator.setVoltage(1.175)));
-       commandXboxController.povLeft().onTrue(armSubsystem.setGround());
-       commandXboxController.povRight().onTrue(armSubsystem.setL1());
-       commandXboxController.povUp().onTrue(armSubsystem.setL2());
-       commandXboxController.povDown().onTrue(armSubsystem.setL3());
+        //       commandXboxController.povLeft().onTrue(new InstantCommand(() -> elevator.setVoltage(1.175)));
+        commandXboxController.povLeft().onTrue(armSubsystem.setGround());
+        commandXboxController.povRight().onTrue(armSubsystem.setL1());
+        commandXboxController.povUp().onTrue(armSubsystem.setL2());
+        commandXboxController.povDown().onTrue(armSubsystem.setL3());
 
         commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
         commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
-    //    commandXboxController.povDown().onTrue(elevatorSubsystem.sysId());
+        //    commandXboxController.povDown().onTrue(elevatorSubsystem.sysId());
 
         //   commandXboxController.leftBumper().toggleOnTrue(arm.)
         /*
