@@ -14,7 +14,7 @@ public class ClimberSubsystem extends TemplateSubsystem {
     }
 
     public ClimberSubsystem() {
-        super(Type.PIVOT,
+        super(Type.ROLLER,
                 Constants.ClimberConstants.CLIMBER_ID,
                 Constants.ClimberConstants.CLIMBER_CONSTRAINTS,
                 Constants.ClimberConstants.CLIMBER_PID,
