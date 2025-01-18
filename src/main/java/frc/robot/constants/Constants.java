@@ -10,11 +10,22 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.utility.FeedForward;
 import frc.robot.utility.PID;
+import org.photonvision.utils.PacketUtils;
 
 import frc.robot.utility.Type;
 
@@ -220,6 +231,26 @@ public final class Constants {
 
 
     }
+    
+    public static class Vision {
+        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+        public static final Matrix<N3, N1> kMultiTagStdDevsAuton = VecBuilder.fill(0.07, .07, 999);
+        public static final Matrix<N3, N1> kMultiTagStdDevsTeleop = VecBuilder.fill(0.00, .00, 999);
 
-    public static final String Vision = null;
+        public static final String kCameraName = "Camera";
+        public static final String kCameraName_Back = "Camera Back";
+        public static final String LIMELIGHT = "limelight";
+
+        public static final Transform3d kRobotToCam =
+                new Transform3d(new Translation3d(-0.1006348, 0.0, 0.4481322), new Rotation3d(0, -.29, 0));
+        public static final Transform3d kRobotToCamBack =
+                new Transform3d(new Translation3d(-0.381, -0.348, 0.128), new Rotation3d(Math.PI, .59, 0));
+
+
+        // The layout of the AprilTags on the field
+        public static final AprilTagFieldLayout kTagLayout =
+                AprilTagFields.kDefaultField.loadAprilTagLayoutField();
+        public static final double[] RED_SPEAKER_COORDINATES = new double[]{16.54, 5.547};
+        public static final double[] BLUE_SPEAKER_COORDINATES = new double[]{0, 5.547};
+    }
 }
