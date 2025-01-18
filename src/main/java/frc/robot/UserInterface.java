@@ -3,7 +3,6 @@ package frc.robot;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
