@@ -8,8 +8,10 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -62,21 +64,13 @@ public final class Constants {
         public static final boolean ARM_INVERTED = true;
         public static final boolean ARM_BRAKE = true;
 
-        public static final Slot0Configs ARM_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(135)
-                .withKI(0)
-                .withKD(0)
-                .withKS(0)
-                .withKG(0)
-                .withKV(0)
-                .withKA(0);
 
-        public static final PID ARM_PID = new PID(100, 0, 0);
+        public static final PID ARM_PID = new PID(50, 0, 0);
 
 
         //   public static final double ARM_FF_OFFSET = Units.degreesToRadians(13.5);
 
-        public static final double ARM_FF_OFFSET = 13.5;
+        public static final double ARM_FF_OFFSET = 0.61524;
         public static final CANcoderConfiguration ARM_CANCODER_CONFIGURATION = new CANcoderConfiguration();
 
         /*This determines the range the cancoder records in rotations.
@@ -93,40 +87,53 @@ public final class Constants {
         public static final double ARM_CANCODER_MAGNET_OFFSET = -0.064453125;
 
         //The speed and acceleration the arm should move at.
-        public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2);
+        public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS = new TrapezoidProfile.Constraints(5, 6);
 
 
+        
 // kg = .348, ks = .14816, Kv = 6.16786
         // These are the values that will be factored into the arm ff equation. There is a separate documet to find these.
 
-        public static final FeedForward ARM_FF = new FeedForward(.14816, .348, 2.5);
+        public static final FeedForward ARM_FF = new FeedForward(0.14816, .348, 6.16786);
 
         //degrees. check super for template subsystem
-        public static final double ARM_LOWER_TOLERANCE = 0.75;
-        public static final double ARM_UPPER_TOLERANCE = 0.75;
+        public static final double ARM_LOWER_TOLERANCE = 0.001;
+        public static final double ARM_UPPER_TOLERANCE = 0.001;
 
         //Degrees check super for template subsystem
-        public static final double ARM_MIN = 0;
+        public static final double ARM_MIN = 0.61524;
         public static final double ARM_MAX = 57;
 
 
         public static final double ARM_MAX_VELOCITY = 500;
         public static final double ARM_MAX_ACCELERATION = 750;
         public static final double ARM_MOTOR_TO_MECH_GEAR_RATIO = 42.4286;
-        public static final double ARM_MOTOR_TO_SENSOR_GEAR_RATIO = 1 / 42.4286;
+        public static final double ARM_MOTOR_TO_SENSOR_GEAR_RATIO = 42.4286;
         public static final double ARM_SENSOR_TO_MECH_GEAR_RATIO = 1;
 
-        public static final double[][] MOTOR_TO_MECH_GEAR_RATIO = {{1, 42.4286}};
+        public static final double[][] MOTOR_TO_MECH_GEAR_RATIO = {{42.4286, 1}};
 
         //Value the arm should move to for a wanted position.
-        public static final double GROUND = 0;
+        public static final double GROUND = 5;
         public static final double L1 = 10;
         public static final double L2 = 15;
         public static final double L3 = 20;
-        public static final double L4 = 30;
+        public static final double L4 = 25;
         public static final double HP = 35 / 3;
         public static final double GROUND_2 = 0;
         public static final String ARM_CANCODER_CANBUS = "rio";
+
+        public static final Slot0Configs ARM_SLOT0_CONFIGS = new Slot0Configs()
+        .withKP(50)
+        .withKI(0)
+        .withKD(0)
+        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
+        .withKS(ARM_FF.getkS())
+        .withKG(ARM_FF.getkG())
+        .withKV(ARM_FF.getkV())
+        .withKA(ARM_FF.getkA())
+        .withGravityType(GravityTypeValue.Arm_Cosine);
+
 
     }
 

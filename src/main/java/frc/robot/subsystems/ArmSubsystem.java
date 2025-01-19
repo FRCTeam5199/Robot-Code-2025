@@ -28,7 +28,11 @@ public class ArmSubsystem extends TemplateSubsystem {
                 ArmConstants.ARM_INVERTED,
                 ArmConstants.ARM_BRAKE,
                 ArmConstants.ARM_SUPPLY_CURRENT_LIMIT,
-                ArmConstants.ARM_STATOR_CURRENT_LIMIT
+                ArmConstants.ARM_STATOR_CURRENT_LIMIT,
+                ArmConstants.ARM_CANCODER_ID,
+                ArmConstants.ARM_SLOT0_CONFIGS
+
+
         );
 
         configurePivot(
@@ -53,10 +57,10 @@ public class ArmSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
         if (isProfileFinished()) {
-//            setVoltage(.05 + (ArmConstants.ARM_FF.getkG() * Math.cos(Units.rotationsToRadians(getAbsPosition()))));
+         //   setVoltage((ArmConstants.ARM_FF.getkG()) / Math.cos(Units.rotationsToRadians(getEncoderRot())));
 
         }
-        System.out.println("Mech Degrees: " + getEncoderRot() * 360d);
+     //   System.out.println("Mech Degrees: " + getEncoderRot() * 360d);
 
     }
 
