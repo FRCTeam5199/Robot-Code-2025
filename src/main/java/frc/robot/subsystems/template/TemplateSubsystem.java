@@ -3,6 +3,7 @@ package frc.robot.subsystems.template;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -18,6 +19,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants.ArmConstants;
@@ -215,8 +217,8 @@ public class TemplateSubsystem extends SubsystemBase {
         motor.set(percent);
     }
 
-    public void setVoltage(double voltage) {
-        motor.setVoltage(voltage);
+    public void setVoltage(double output) {
+        motor.setVoltage(output);
     }
 
     public void setVelocity(double rps) {
@@ -360,6 +362,10 @@ public class TemplateSubsystem extends SubsystemBase {
         return motor.getPosition().getValueAsDouble();
     }
 
+    public double getRotorPosition() {
+        return motor.getRotorPosition().getValueAsDouble();
+    }
+
     public double getMechRot() {
         return motor.getPosition().getValueAsDouble() * gearRatio;
     }
@@ -456,5 +462,9 @@ public class TemplateSubsystem extends SubsystemBase {
             default:
                 return mechMin;
         }
+    }
+
+    public void setControl(ControlRequest control){
+        motor.setControl(control);
     }
 }

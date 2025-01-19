@@ -112,7 +112,7 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
         commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
-        //    commandXboxController.povDown().onTrue(elevatorSubsystem.sysId());
+            commandXboxController.povDown().onTrue(armSubsystem.sysId());
 
         //   commandXboxController.leftBumper().toggleOnTrue(arm.)
         /*

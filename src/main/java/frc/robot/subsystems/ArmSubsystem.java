@@ -1,10 +1,17 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.Constants.ArmConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.Type;
+
+import static edu.wpi.first.units.Units.Volts;
+
+import com.ctre.phoenix6.SignalLogger;
+
 import edu.wpi.first.math.util.Units;
 
 
@@ -25,7 +32,7 @@ public class ArmSubsystem extends TemplateSubsystem {
         );
 
         configureMotor(
-                ArmConstants.ARM_INVERTED,
+                ArmConstants.LEFT_ARM_INVERTED,
                 ArmConstants.ARM_BRAKE,
                 ArmConstants.ARM_SUPPLY_CURRENT_LIMIT,
                 ArmConstants.ARM_STATOR_CURRENT_LIMIT,
@@ -102,63 +109,65 @@ public class ArmSubsystem extends TemplateSubsystem {
     }
 
 
-//         public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-//             return sysIdRoutineArm.quasistatic(direction).until(()-> (arm_motor.getPosition().getValueAsDouble() > .003418) || (arm_motor.getPosition().getValueAsDouble() < -0.000247));
-//         }
 
-//         /**
-//          * Runs the SysId Dynamic test in the given direction for the routine
-//          * specified by {@link #m_sysIdRoutineToApply}.
-//          *
-//          * @param direction Direction of the SysId Dynamic test
-//          * @return Command to run
-//          */
-//         public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-//             return sysIdRoutineArm.dynamic(direction).until(()-> (arm_motor.getPosition().getValueAsDouble() > .003418) || (arm_motor.getPosition().getValueAsDouble() < 0));
-//         }
+        public final SysIdRoutine sysIdRoutineArm = new SysIdRoutine(
 
 
-//         public final SysIdRoutine sysIdRoutineArm = new SysIdRoutine(
+        new SysIdRoutine.Config(
+             null,        // Use default ramp rate (1 V/s)
+            Volts.of(1), // Reduce dynamic step voltage to 4 V to prevent brownout
 
+            null,        // Use default timeout (10 s)
+            // Log state with SignalLogger class
+            state -> SignalLogger.writeString("Arm_State", state.toString())
+        ),
+        new SysIdRoutine.Mechanism(
+            output -> setVoltage(output.baseUnitMagnitude()),
+            null,
+        //    (SysIdRoutineLog log)-> 
+        //     {
 
-//         new SysIdRoutine.Config(
-//              null,        // Use default ramp rate (1 V/s)
-//             Volts.of(1), // Reduce dynamic step voltage to 4 V to prevent brownout
+        //     log.motor("Pivot Motor")
+        //     .voltage(BaseUnits.VoltageUnit.of(arm_motor.getMotorVoltage().getValueAsDouble()))
+        //     .angularPosition(Units.Rotation.of(arm_motor.getPosition().getValueAsDouble()))
+        //     .angularVelocity(Rotations.per(Second).of(arm_motor.getVelocity().getValueAsDouble()));
+        //     },
+            this
+        )
+    );
 
-//             null,        // Use default timeout (10 s)
-//             // Log state with SignalLogger class
-//             state -> SignalLogger.writeString("Arm_State", state.toString())
-//         ),
-//         new SysIdRoutine.Mechanism(
-//             output -> arm_motor.setControl(new VoltageOut(output).withEnableFOC((true))),
-//             null,
-//         //    (SysIdRoutineLog log)-> 
-//         //     {
+         public Command sysId() {
+    return Commands.sequence(
+        sysIdRoutineArm
+            .quasistatic(SysIdRoutine.Direction.kForward)
+            .until(() -> (getRotorPosition() > 120)),
+        sysIdRoutineArm
+            .quasistatic(SysIdRoutine.Direction.kReverse)
+            .until(() -> (getRotorPosition() < 3)),
+        sysIdRoutineArm
+            .dynamic(SysIdRoutine.Direction.kForward)
+            .until(() -> (getRotorPosition() > 120)),
+        sysIdRoutineArm
+            .dynamic(SysIdRoutine.Direction.kReverse)
+            .until(() -> (getRotorPosition() < 3)));
+  }
 
-//         //     log.motor("Pivot Motor")
-//         //     .voltage(BaseUnits.VoltageUnit.of(arm_motor.getMotorVoltage().getValueAsDouble()))
-//         //     .angularPosition(Units.Rotation.of(arm_motor.getPosition().getValueAsDouble()))
-//         //     .angularVelocity(Rotations.per(Second).of(arm_motor.getVelocity().getValueAsDouble()));
-//         //     },
-//             this
-//         )
-//     );
+  
+        // public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        //     return sysIdRoutineArm.quasistatic(direction).until(()-> (getRotorPosit > .003418) || (getPosition().getValueAsDouble() < -0.000247));
+        // }
 
-//          public Command sysId() {
-//     return Commands.sequence(
-//         sysIdRoutineArm
-//             .quasistatic(SysIdRoutine.Direction.kForward)
-//             .until(() -> (arm_motor.getPosition().getValueAsDouble() > .00341)),
-//         sysIdRoutineArm
-//             .quasistatic(SysIdRoutine.Direction.kReverse)
-//             .until(() -> (arm_motor.getPosition().getValueAsDouble() < 0)),
-//         sysIdRoutineArm
-//             .dynamic(SysIdRoutine.Direction.kForward)
-//             .until(() -> (arm_motor.getPosition().getValueAsDouble() > .003418)),
-//         sysIdRoutineArm
-//             .dynamic(SysIdRoutine.Direction.kReverse)
-//             .until(() -> (arm_motor.getPosition().getValueAsDouble() < 0)));
-//   }
+        // /**
+        //  * Runs the SysId Dynamic test in the given direction for the routine
+        //  * specified by {@link #m_sysIdRoutineToApply}.
+        //  *
+        //  * @param direction Direction of the SysId Dynamic test
+        //  * @return Command to run
+        //  */
+        // public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        //     return sysIdRoutineArm.dynamic(direction).until(()-> (getPosition().getValueAsDouble() > .003418) || (getPosition().getValueAsDouble() < 0));
+        // }
+
 
 
 }

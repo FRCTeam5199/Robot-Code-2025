@@ -62,11 +62,11 @@ public final class Constants {
         public static final TalonFXConfiguration TALON_FX_CONFIGURATION = new TalonFXConfiguration();
         public static final double ARM_STATOR_CURRENT_LIMIT = 80;
         public static final double ARM_SUPPLY_CURRENT_LIMIT = 80;
-        public static final boolean ARM_INVERTED = false;
+        public static final boolean LEFT_ARM_INVERTED = true;
         public static final boolean ARM_FOLLOWER_INVERTED = true;
 
-        public static final boolean ARM_BRAKE = true;
-        public static final boolean ARM_FOLLOW_BRAKE = true;
+        public static final boolean ARM_BRAKE = false;
+        public static final boolean ARM_FOLLOW_BRAKE = false;
 
 
         public static final PID ARM_PID = new PID(50, 0, 0);
@@ -98,7 +98,7 @@ public final class Constants {
 // kg = .348, ks = .14816, Kv = 6.16786
         // These are the values that will be factored into the arm ff equation. There is a separate documet to find these.
 
-        public static final FeedForward ARM_FF = new FeedForward(0.14816, .348, 6.16786);
+        public static final FeedForward ARM_FF = new FeedForward(0.14, 0, 6.16786);
 
         //degrees. check super for template subsystem
         public static final double ARM_LOWER_TOLERANCE = 0.001;
