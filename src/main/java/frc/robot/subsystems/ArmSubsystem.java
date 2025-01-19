@@ -36,14 +36,11 @@ public class ArmSubsystem extends TemplateSubsystem {
                 ArmConstants.ARM_BRAKE,
                 ArmConstants.ARM_SUPPLY_CURRENT_LIMIT,
                 ArmConstants.ARM_STATOR_CURRENT_LIMIT,
-                ArmConstants.ARM_CANCODER_ID,
                 ArmConstants.ARM_SLOT0_CONFIGS
-
-
         );
         configureFollowerMotor(
-            ArmConstants.ARM_FOLLOW_MOTOR_ID, 
-            ArmConstants.ARM_FOLLOWER_INVERTED
+                ArmConstants.ARM_FOLLOW_MOTOR_ID,
+                ArmConstants.ARM_FOLLOWER_INVERTED
         );
 
         configurePivot(
@@ -52,13 +49,13 @@ public class ArmSubsystem extends TemplateSubsystem {
                 ArmConstants.ARM_FF_OFFSET
         );
 
-        configureEncoder(
-                ArmConstants.ARM_CANCODER_ID,
-                ArmConstants.ARM_CANCODER_CANBUS,
-                ArmConstants.ARM_CANCODER_MAGNET_OFFSET,
-                ArmConstants.ARM_SENSOR_TO_MECH_GEAR_RATIO,
-                ArmConstants.ARM_MOTOR_TO_SENSOR_GEAR_RATIO
-        );
+//        configureEncoder(
+//                ArmConstants.ARM_CANCODER_ID,
+//                ArmConstants.ARM_CANCODER_CANBUS,
+//                ArmConstants.ARM_CANCODER_MAGNET_OFFSET,
+//                ArmConstants.ARM_SENSOR_TO_MECH_GEAR_RATIO,
+//                ArmConstants.ARM_MOTOR_TO_SENSOR_GEAR_RATIO
+//        );
 
 
     }
@@ -68,10 +65,10 @@ public class ArmSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
         if (isProfileFinished()) {
-         //   setVoltage((ArmConstants.ARM_FF.getkG()) / Math.cos(Units.rotationsToRadians(getEncoderRot())));
+            //   setVoltage((ArmConstants.ARM_FF.getkG()) / Math.cos(Units.rotationsToRadians(getEncoderRot())));
 
         }
-     //   System.out.println("Mech Degrees: " + getEncoderRot() * 360d);
+        //   System.out.println("Mech Degrees: " + getEncoderRot() * 360d);
 
     }
 
@@ -109,65 +106,63 @@ public class ArmSubsystem extends TemplateSubsystem {
     }
 
 
+    public final SysIdRoutine sysIdRoutineArm = new SysIdRoutine(
 
-        public final SysIdRoutine sysIdRoutineArm = new SysIdRoutine(
 
+            new SysIdRoutine.Config(
+                    null,        // Use default ramp rate (1 V/s)
+                    Volts.of(1), // Reduce dynamic step voltage to 4 V to prevent brownout
 
-        new SysIdRoutine.Config(
-             null,        // Use default ramp rate (1 V/s)
-            Volts.of(1), // Reduce dynamic step voltage to 4 V to prevent brownout
+                    null,        // Use default timeout (10 s)
+                    // Log state with SignalLogger class
+                    state -> SignalLogger.writeString("Arm_State", state.toString())
+            ),
+            new SysIdRoutine.Mechanism(
+                    output -> setVoltage(output.baseUnitMagnitude()),
+                    null,
+                    //    (SysIdRoutineLog log)->
+                    //     {
 
-            null,        // Use default timeout (10 s)
-            // Log state with SignalLogger class
-            state -> SignalLogger.writeString("Arm_State", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            output -> setVoltage(output.baseUnitMagnitude()),
-            null,
-        //    (SysIdRoutineLog log)-> 
-        //     {
-
-        //     log.motor("Pivot Motor")
-        //     .voltage(BaseUnits.VoltageUnit.of(arm_motor.getMotorVoltage().getValueAsDouble()))
-        //     .angularPosition(Units.Rotation.of(arm_motor.getPosition().getValueAsDouble()))
-        //     .angularVelocity(Rotations.per(Second).of(arm_motor.getVelocity().getValueAsDouble()));
-        //     },
-            this
-        )
+                    //     log.motor("Pivot Motor")
+                    //     .voltage(BaseUnits.VoltageUnit.of(arm_motor.getMotorVoltage().getValueAsDouble()))
+                    //     .angularPosition(Units.Rotation.of(arm_motor.getPosition().getValueAsDouble()))
+                    //     .angularVelocity(Rotations.per(Second).of(arm_motor.getVelocity().getValueAsDouble()));
+                    //     },
+                    this
+            )
     );
 
-         public Command sysId() {
-    return Commands.sequence(
-        sysIdRoutineArm
-            .quasistatic(SysIdRoutine.Direction.kForward)
-            .until(() -> (getRotorPosition() > 120)),
-        sysIdRoutineArm
-            .quasistatic(SysIdRoutine.Direction.kReverse)
-            .until(() -> (getRotorPosition() < 3)),
-        sysIdRoutineArm
-            .dynamic(SysIdRoutine.Direction.kForward)
-            .until(() -> (getRotorPosition() > 120)),
-        sysIdRoutineArm
-            .dynamic(SysIdRoutine.Direction.kReverse)
-            .until(() -> (getRotorPosition() < 3)));
-  }
+    public Command sysId() {
+        return Commands.sequence(
+                sysIdRoutineArm
+                        .quasistatic(SysIdRoutine.Direction.kForward)
+                        .until(() -> (getRotorPosition() > 120)),
+                sysIdRoutineArm
+                        .quasistatic(SysIdRoutine.Direction.kReverse)
+                        .until(() -> (getRotorPosition() < 3)),
+                sysIdRoutineArm
+                        .dynamic(SysIdRoutine.Direction.kForward)
+                        .until(() -> (getRotorPosition() > 120)),
+                sysIdRoutineArm
+                        .dynamic(SysIdRoutine.Direction.kReverse)
+                        .until(() -> (getRotorPosition() < 3)));
+    }
 
-  
-        // public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        //     return sysIdRoutineArm.quasistatic(direction).until(()-> (getRotorPosit > .003418) || (getPosition().getValueAsDouble() < -0.000247));
-        // }
 
-        // /**
-        //  * Runs the SysId Dynamic test in the given direction for the routine
-        //  * specified by {@link #m_sysIdRoutineToApply}.
-        //  *
-        //  * @param direction Direction of the SysId Dynamic test
-        //  * @return Command to run
-        //  */
-        // public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        //     return sysIdRoutineArm.dynamic(direction).until(()-> (getPosition().getValueAsDouble() > .003418) || (getPosition().getValueAsDouble() < 0));
-        // }
+    // public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    //     return sysIdRoutineArm.quasistatic(direction).until(()-> (getRotorPosit > .003418) || (getPosition().getValueAsDouble() < -0.000247));
+    // }
 
+    // /**
+    //  * Runs the SysId Dynamic test in the given direction for the routine
+    //  * specified by {@link #m_sysIdRoutineToApply}.
+    //  *
+    //  * @param direction Direction of the SysId Dynamic test
+    //  * @return Command to run
+    //  */
+    // public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    //     return sysIdRoutineArm.dynamic(direction).until(()-> (getPosition().getValueAsDouble() > .003418) || (getPosition().getValueAsDouble() < 0));
+    // }
 
 
 }

@@ -16,7 +16,7 @@ public class PivotTestSubsystem extends TemplateSubsystem {
                 new TrapezoidProfile.Constraints(1, 2),
                 new PID(50, 0, 0), new FeedForward(.14816, .348, 2.5),
                 .75, .75, new double[][]{{1, 42.4286}});
-        configureMotor(true, true, 80, 80);
+        configureMotor(true, true, 80, 80, ArmConstants.ARM_PID.getSlot0Configs());
         configurePivot(0, 57, 0);
         configureEncoder(30, "rio", ArmConstants.ARM_CANCODER_MAGNET_OFFSET, 1, 1 / 42.4286);
     }

@@ -65,10 +65,10 @@ public class RobotContainer {
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
-//    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+    //    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
 //    public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
     public static final LinearTestSubsystem linearTestSubsystem = new LinearTestSubsystem();
-  //  public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
+    //  public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
     // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
     /**
@@ -87,8 +87,8 @@ public class RobotContainer {
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
 
-        // commandXboxController.a().onTrue(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.MID.getRotations(), true))
-        //         .onFalse(new PivotToCommand<>(armSubsystem, ShooterPivotAngles.STABLE.getRotations(), true));
+        commandXboxController.a().onTrue(new InstantCommand(() -> armSubsystem.setPosition(5)))
+                .onFalse(new InstantCommand(() -> armSubsystem.setPosition(0)));
 
         // reset the field-centric heading on left bumper press
         commandXboxController.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
@@ -98,21 +98,20 @@ public class RobotContainer {
 
         }
 
-        
 
-   //     commandXboxController.a().onTrue(new InstantCommand(() -> pivotTestSubsystem.setPosition(10)))
-   //             .onFalse(new InstantCommand(() -> pivotTestSubsystem.setPosition(0)));
+        //     commandXboxController.a().onTrue(new InstantCommand(() -> pivotTestSubsystem.setPosition(10)))
+        //             .onFalse(new InstantCommand(() -> pivotTestSubsystem.setPosition(0)));
 
 //               commandXboxController.povLeft().onTrue(new InstantCommand(() -> elevator.setVoltage(1.175)));
-    //     commandXboxController.povLeft().onTrue(armSubsystem.setGround());
-    //     commandXboxController.povRight().onTrue(armSubsystem.setL1());
-    //     commandXboxController.povDown().onTrue(armSubsystem.setL3());
-     //  commandXboxController.povDown().onTrue(new InstantCommand(()-> linearTestSubsystem.setPosition(1)));
-    
+        //     commandXboxController.povLeft().onTrue(armSubsystem.setGround());
+        //     commandXboxController.povRight().onTrue(armSubsystem.setL1());
+        //     commandXboxController.povDown().onTrue(armSubsystem.setL3());
+        //  commandXboxController.povDown().onTrue(new InstantCommand(()-> linearTestSubsystem.setPosition(1)));
+
 
         commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
         commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
-            commandXboxController.povDown().onTrue(armSubsystem.sysId());
+        commandXboxController.povDown().onTrue(armSubsystem.sysId());
 
         //   commandXboxController.leftBumper().toggleOnTrue(arm.)
         /*
