@@ -27,6 +27,7 @@ import frc.robot.commands.ShooterPivotAngles;
 import frc.robot.constants.Constants.OperatorConstants;
 // import frc.robot.commands.Autos;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -64,7 +65,6 @@ public class RobotContainer {
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
-    // public static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
 //    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
 //    public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
     public static final LinearTestSubsystem linearTestSubsystem = new LinearTestSubsystem();
@@ -98,15 +98,16 @@ public class RobotContainer {
 
         }
 
+        
+
    //     commandXboxController.a().onTrue(new InstantCommand(() -> pivotTestSubsystem.setPosition(10)))
    //             .onFalse(new InstantCommand(() -> pivotTestSubsystem.setPosition(0)));
 
 //               commandXboxController.povLeft().onTrue(new InstantCommand(() -> elevator.setVoltage(1.175)));
     //     commandXboxController.povLeft().onTrue(armSubsystem.setGround());
     //     commandXboxController.povRight().onTrue(armSubsystem.setL1());
-    //    commandXboxController.povUp().onTrue(armSubsystem.setL2());
     //     commandXboxController.povDown().onTrue(armSubsystem.setL3());
-       commandXboxController.povDown().onTrue(new InstantCommand(()-> linearTestSubsystem.setPosition(1)));
+     //  commandXboxController.povDown().onTrue(new InstantCommand(()-> linearTestSubsystem.setPosition(1)));
     
 
         commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));

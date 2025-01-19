@@ -34,6 +34,10 @@ public class ArmSubsystem extends TemplateSubsystem {
 
 
         );
+        configureFollowerMotor(
+            ArmConstants.ARM_FOLLOW_MOTOR_ID, 
+            ArmConstants.ARM_FOLLOWER_INVERTED
+        );
 
         configurePivot(
                 ArmConstants.ARM_MIN,

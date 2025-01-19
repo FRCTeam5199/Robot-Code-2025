@@ -33,6 +33,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     private TalonFX followerMotor;
     private Follower follower;
+    private TalonFXConfiguration followerConfig;
 
     private CANcoder encoder;
     private CANcoderConfiguration encoderConfig;
@@ -141,8 +142,7 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     public void configureMotor(boolean isInverted, boolean isBrakeMode, double supplyCurrentLimit, double statorCurrentLimit, int cancoderID, Slot0Configs slot0Configs) {
-        motorConfig.MotorOutput.Inverted =
-                isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+        motorConfig.MotorOutput.Inverted = isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
         motorConfig.MotorOutput.NeutralMode = isBrakeMode ? NeutralModeValue.Brake : NeutralModeValue.Coast;
         motorConfig.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
         motorConfig.CurrentLimits.StatorCurrentLimit = statorCurrentLimit;
@@ -171,9 +171,20 @@ public class TemplateSubsystem extends SubsystemBase {
         this.ffOffset = ffOffset;
     }
 
-    public void configureFollowerMotor(int followerMotorId, boolean invert) {
+    public void configureFollowerMotor(int followerMotorId, boolean invert){
         followerMotor = new TalonFX(followerMotorId);
         follower = new Follower(motor.getDeviceID(), invert);
+
+        followerMotor.setControl(follower);
+    }
+
+
+    public void configureFollowerMotor(int followerMotorId, boolean invert, boolean brake, Slot0Configs slot0Configs) {
+        followerMotor = new TalonFX(followerMotorId);
+        followerConfig.MotorOutput.NeutralMode = brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+        followerMotor.getConfigurator().apply(followerConfig);
+        follower = new Follower(motor.getDeviceID(), invert);
+
         followerMotor.setControl(follower);
     }
 

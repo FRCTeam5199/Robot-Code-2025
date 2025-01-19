@@ -56,13 +56,17 @@ public final class Constants {
     }
 
     public static class ArmConstants {
-        public static final int ARM_MOTOR_ID = 24;
+        public static final int ARM_MOTOR_ID = 14;
+        public static final int ARM_FOLLOW_MOTOR_ID = 15;
         public static final int ARM_CANCODER_ID = 30;
         public static final TalonFXConfiguration TALON_FX_CONFIGURATION = new TalonFXConfiguration();
         public static final double ARM_STATOR_CURRENT_LIMIT = 80;
         public static final double ARM_SUPPLY_CURRENT_LIMIT = 80;
-        public static final boolean ARM_INVERTED = true;
+        public static final boolean ARM_INVERTED = false;
+        public static final boolean ARM_FOLLOWER_INVERTED = true;
+
         public static final boolean ARM_BRAKE = true;
+        public static final boolean ARM_FOLLOW_BRAKE = true;
 
 
         public static final PID ARM_PID = new PID(50, 0, 0);
