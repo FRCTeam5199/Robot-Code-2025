@@ -23,7 +23,8 @@ public class LinearTestSubsystem extends TemplateSubsystem {
                 new PID(ElevatorConstants.ELEVATOR_PID.getP(), ElevatorConstants.ELEVATOR_PID.getI(), ElevatorConstants.ELEVATOR_PID.getD()),
 //new FeedForward(ElevatorConstants.ELEVATOR_FF.getkS(), ElevatorConstants.ELEVATOR_FF.getkG(), ElevatorConstants.ELEVATOR_FF.getkV(), ElevatorConstants.ELEVATOR_FF.getkA()),
                 new FeedForward(.0225, .1525, 11.1297), //8.8 rotations for kV to meters
-                .015, 100, new double[][]{{15, 56}, {20, 60}});
+                .015, 100, new double[][]{{15, 56}, {20, 60}},
+                "Lin Test");
         configureMotor(false, true, 80, 80, ElevatorConstants.ELEVATOR_PID.getSlot0Configs());
         configureFollowerMotor(23, true);
         configureLinearMech(.0364 * Math.PI, 0, .44);

@@ -68,7 +68,9 @@ public class ElevatorSubsystem extends TemplateSubsystem {
                 ElevatorConstants.ELEVATOR_FF,
                 ElevatorConstants.ELEVATOR_MIN,
                 ElevatorConstants.ELEVATOR_MAX,
-                ElevatorConstants.ELEVATOR_GEARING);
+                ElevatorConstants.ELEVATOR_GEARING,
+                "Elevator"     
+            );
 
         configureMotor(ElevatorConstants.INVERT,
                 ElevatorConstants.BRAKE,

@@ -9,9 +9,6 @@ import frc.robot.utility.Type;
 
 public class ClimberSubsystem extends TemplateSubsystem {
 
-    public ClimberSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints, PID pid, FeedForward feedForward, double lowerTolerance, double upperTolerance, double[][] gearRatios) {
-        super(type, id, constraints, pid, feedForward, lowerTolerance, upperTolerance, gearRatios);
-    }
 
     public ClimberSubsystem() {
         super(Type.PIVOT,
@@ -21,7 +18,9 @@ public class ClimberSubsystem extends TemplateSubsystem {
                 Constants.ClimberConstants.CLIMBER_FEEDFORWARD,
                 Constants.ClimberConstants.CLIMBER_lowerTOLERANCE,
                 Constants.ClimberConstants.CLIMBER_upperTOLERANCE,
-                Constants.ClimberConstants.CLIMBER_gearRatios);
+                Constants.ClimberConstants.CLIMBER_gearRatios,
+                "Climber"
+        );
     }
 
 }
