@@ -155,9 +155,9 @@ public class TemplateSubsystem extends SubsystemBase {
         this.ffOffset = ffOffset;
     }
 
-    public void configureFollowerMotor(int followerMotorId, boolean invert) {
+    public void configureFollowerMotor(int followerMotorId, boolean opposeMasterDirection) {
         followerMotor = new TalonFX(followerMotorId);
-        follower = new Follower(motor.getDeviceID(), invert);
+        follower = new Follower(motor.getDeviceID(), opposeMasterDirection);
 
         followerMotor.setControl(follower);
     }

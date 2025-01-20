@@ -68,7 +68,6 @@ public class ArmSubsystem extends TemplateSubsystem {
             //   setVoltage((ArmConstants.ARM_FF.getkG()) / Math.cos(Units.rotationsToRadians(getEncoderRot())));
 
         }
-        System.out.println("Rotor position: " + getMotorRot());
 
     }
 

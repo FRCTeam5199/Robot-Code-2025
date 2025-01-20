@@ -62,6 +62,7 @@ public class RobotContainer {
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+    private ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -87,8 +88,8 @@ public class RobotContainer {
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
 
-        commandXboxController.a().onTrue(new InstantCommand(() -> armSubsystem.setPosition(70)))
-                .onFalse(new InstantCommand(() -> armSubsystem.setPosition(0)));
+        commandXboxController.a().onTrue(new InstantCommand(() -> elevatorSubsystem.setPosition(.25)))
+                .onFalse(new InstantCommand(() -> elevatorSubsystem.setPosition(0)));
 
         // reset the field-centric heading on left bumper press
         commandXboxController.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
@@ -111,7 +112,11 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
         commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
-        commandXboxController.povDown().onTrue(armSubsystem.sysId());
+
+        commandXboxController.povLeft().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        commandXboxController.povRight().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        commandXboxController.povUp().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        commandXboxController.povDown().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
         //   commandXboxController.leftBumper().toggleOnTrue(arm.)
         /*

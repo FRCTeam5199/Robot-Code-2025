@@ -70,11 +70,25 @@ public class ElevatorSubsystem extends TemplateSubsystem {
                 ElevatorConstants.ELEVATOR_MAX,
                 ElevatorConstants.ELEVATOR_GEARING);
 
-        configureMotor(ElevatorConstants.INVERT, ElevatorConstants.BRAKE, ElevatorConstants.SUPPLY_CURRENT_LIMIT, ElevatorConstants.STATOR_CURRENT_LIMIT, ElevatorConstants.ELEVATOR_PID.getSlot0Configs());
-        configureFollowerMotor(ElevatorConstants.ELEVATOR2_ID, true);
-        configureLinearMech(ElevatorConstants.DRUM_CIRCUMFERENCE, ElevatorConstants.ELEVATOR_MIN, ElevatorConstants.ELEVATOR_MAX);
+        configureMotor(ElevatorConstants.INVERT,
+                ElevatorConstants.BRAKE,
+                ElevatorConstants.SUPPLY_CURRENT_LIMIT,
+                ElevatorConstants.STATOR_CURRENT_LIMIT,
+                ElevatorConstants.ELEVATOR_SLOT0_CONFIGS);
+
+        configureFollowerMotor(ElevatorConstants.ELEVATOR2_ID,
+                ElevatorConstants.FOLLOWER_OPPOSE_MASTER_DIRECTION);
+
+        configureLinearMech(ElevatorConstants.DRUM_CIRCUMFERENCE,
+                ElevatorConstants.ELEVATOR_LOWER_TOLERANCE,
+                ElevatorConstants.ELEVATOR_UPPER_TOLERANCE);
     }
 
+    public void periodic() {
+        super.periodic();
+        System.out.println("is at goal position: " + isMechAtGoal(false));
+        System.out.println("meters: " + getMechM());
+    }
 
     public Command setL1() {
         return new InstantCommand(() -> setPosition(0));

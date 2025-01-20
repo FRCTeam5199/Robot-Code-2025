@@ -15,6 +15,7 @@ import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.utility.FeedForward;
 import frc.robot.utility.PID;
 
@@ -38,20 +39,34 @@ public final class Constants {
     }
 
     public static class ElevatorConstants {
-        public static final int ELEVATOR1_ID = 22;
-        public static final int ELEVATOR2_ID = 23;
+        public static final int ELEVATOR1_ID = 17;
+        public static final int ELEVATOR2_ID = 18;
 
-        public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(3, 3);
-        public static final PID ELEVATOR_PID = new PID(100, 0, 0); //95.748, 5.4125
-        public static final FeedForward ELEVATOR_FF = new FeedForward(0.043, 0.102, .111, 0.108);
+        public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS
+                = new TrapezoidProfile.Constraints(100, 200);
+        public static final PID ELEVATOR_PID = new PID(0, 0, 0);
+        public static final FeedForward ELEVATOR_FF = new FeedForward(0.08, 0.25, 0.127429);
         public static final double ELEVATOR_MIN = 0;
-        public static final double ELEVATOR_MAX = 0.595;
-        public static final double[][] ELEVATOR_GEARING = new double[][]{{48, 14}, {48, 24}};
+        public static final double ELEVATOR_MAX = 1; //fix
+        public static final double ELEVATOR_LOWER_TOLERANCE = .5;
+        public static final double ELEVATOR_UPPER_TOLERANCE = .5;
+        public static final double[][] ELEVATOR_GEARING = new double[][]{{3, 1}};
         public static final boolean INVERT = false;
+        public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
         public static final boolean BRAKE = false;
         public static final double SUPPLY_CURRENT_LIMIT = 60;
-        public static final double STATOR_CURRENT_LIMIT = 100;
-        public static final double DRUM_CIRCUMFERENCE = .0364;
+        public static final double STATOR_CURRENT_LIMIT = 60;
+        public static final double DRUM_CIRCUMFERENCE = .119694706;
+
+        public static final Slot0Configs ELEVATOR_SLOT0_CONFIGS = new Slot0Configs()
+                .withKP(5)
+                .withKI(0)
+                .withKD(0)
+                .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
+                .withKS(ELEVATOR_FF.getkS())
+                .withKG(ELEVATOR_FF.getkG())
+                .withKV(ELEVATOR_FF.getkV())
+                .withGravityType(GravityTypeValue.Elevator_Static);
 
     }
 
@@ -69,7 +84,7 @@ public final class Constants {
         public static final boolean ARM_FOLLOW_BRAKE = false;
 
 
-        public static final PID ARM_PID = new PID(0, 0, 0);
+        public static final PID ARM_PID = new PID(0, 0, 0); //53.3332
 
 
         //   public static final double ARM_FF_OFFSET = Units.degreesToRadians(13.5);
@@ -136,8 +151,6 @@ public final class Constants {
                 .withKV(ARM_FF.getkV())
                 .withKA(ARM_FF.getkA())
                 .withGravityType(GravityTypeValue.Arm_Cosine);
-
-
     }
 
     public static class ClawConstants {
