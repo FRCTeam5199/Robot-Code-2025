@@ -20,7 +20,6 @@ public class LinearTestSubsystem extends TemplateSubsystem {
     public LinearTestSubsystem() {
         super(Type.LINEAR, 22,
                 new TrapezoidProfile.Constraints(150, 300),
-                new PID(ElevatorConstants.ELEVATOR_PID.getP(), ElevatorConstants.ELEVATOR_PID.getI(), ElevatorConstants.ELEVATOR_PID.getD()),
 //new FeedForward(ElevatorConstants.ELEVATOR_FF.getkS(), ElevatorConstants.ELEVATOR_FF.getkG(), ElevatorConstants.ELEVATOR_FF.getkV(), ElevatorConstants.ELEVATOR_FF.getkA()),
                 new FeedForward(.0225, .1525, 11.1297), //8.8 rotations for kV to meters
                 .015, 100, new double[][]{{15, 56}, {20, 60}},
