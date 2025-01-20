@@ -64,7 +64,6 @@ public class ElevatorSubsystem extends TemplateSubsystem {
         super(Type.LINEAR,
                 ElevatorConstants.ELEVATOR1_ID,
                 ElevatorConstants.ELEVATOR_CONSTRAINTS,
-                ElevatorConstants.ELEVATOR_PID,
                 ElevatorConstants.ELEVATOR_FF,
                 ElevatorConstants.ELEVATOR_MIN,
                 ElevatorConstants.ELEVATOR_MAX,
