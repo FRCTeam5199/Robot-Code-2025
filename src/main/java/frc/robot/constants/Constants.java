@@ -197,6 +197,9 @@ public final class Constants {
         public static final double WRIST_SUPPLY_CURRENT_LIMIT = 80;
         public static final boolean WRIST_INVERTED = true;
 
+        public static final boolean WRIST_BRAKE = false;
+
+
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
                 .withKP(135)
                 .withKI(0)
@@ -217,8 +220,14 @@ public final class Constants {
         //rotations
         public static final double WRIST_CANCODER_MAGNET_OFFSET = 0.930176;
 
+        //TODO: CHANGE
+        public static final PID WRIST_PID = new PID(0, 0, 0); //53.3332
 
-        public static final ArmFeedforward WRIST_FF = new ArmFeedforward(.175, .707, 2.5, 0.0);
+        //The speed and acceleration the wrist should move at.
+        //TODO: CHANGE
+        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(800, 1600);
+
+        public static final FeedForward WRIST_FF = new FeedForward(.175, .707, 2.5, 0.0);
         //degrees
         public static final double WRIST_LOWER_TOLERANCE = .75;
         public static final double WRIST_UPPER_TOLERANCE = 0.75;
@@ -231,6 +240,10 @@ public final class Constants {
         public static final double WRIST_MOTOR_TO_MECH_GEAR_RATIO = 42.4286;
         public static final double WRIST_MOTOR_TO_SENSOR_GEAR_RATIO = 1;
         public static final double WRIST_SENSOR_TO_MECH_GEAR_RATIO = 42.4286;
+
+        //TODO: CHANGE
+        public static final double[][] MOTOR_TO_MECH_GEAR_RATIO = {{125, 1}};
+
 
         public static final double
                 GROUND = 0,
