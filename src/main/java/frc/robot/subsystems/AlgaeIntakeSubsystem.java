@@ -10,9 +10,6 @@ import frc.robot.utility.Type;
 public class AlgaeIntakeSubsystem extends TemplateSubsystem {
 
 
-    public AlgaeIntakeSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints, PID pid, FeedForward feedForward, double lowerTolerance, double upperTolerance, double[][] gearRatios) {
-        super(type, id, constraints, pid, feedForward, lowerTolerance, upperTolerance, gearRatios);
-    }
 
     public AlgaeIntakeSubsystem() {
         super(Type.LINEAR,
@@ -22,7 +19,8 @@ public class AlgaeIntakeSubsystem extends TemplateSubsystem {
                 Constants.AlgaeIntakeConstants.ALGAEINTAKESUBYSTEM_FEEDFORWARD,
                 Constants.AlgaeIntakeConstants.ALGAEINTAKESUBYSTEM_lowerTOLERANCE,
                 Constants.AlgaeIntakeConstants.ALGAEINTAKESUBYSTEM_upperTOLERANCE,
-                Constants.AlgaeIntakeConstants.ALGAEINTAKESUBYSTEM_gearRatios);
+                Constants.AlgaeIntakeConstants.ALGAEINTAKESUBYSTEM_gearRatios,
+                "Algae Intake");
 
 //        configureMotor();
 }

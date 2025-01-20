@@ -16,9 +16,18 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -73,10 +82,20 @@ public class TemplateSubsystem extends SubsystemBase {
 
     private Type type;
 
+    NetworkTableInstance inst;
+
+    NetworkTable systemStateTable;
+    DoublePublisher systemPose;
+    DoublePublisher systemSpeeds;
+    DoublePublisher systemTimestamp;
+    DoublePublisher systemStatorCurrent;
+    DoublePublisher systemVoltage;
+    DoublePublisher systemStatorVoltage;
+
     public TemplateSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints,
                              PID pid, FeedForward feedForward,
                              double lowerTolerance, double upperTolerance,
-                             double[][] gearRatios) {
+                             double[][] gearRatios, String SubsystemName) {
         this.type = type;
 
         motor = new TalonFX(id);
@@ -107,6 +126,15 @@ public class TemplateSubsystem extends SubsystemBase {
         }
 
         timer = new Timer();
+
+        inst = NetworkTableInstance.getDefault();
+
+        /* Robot swerve drive state */
+        systemStateTable = inst.getTable(SubsystemName);
+        systemPose = systemStateTable.getDoubleTopic("Position").publish();
+        systemSpeeds = systemStateTable.getDoubleTopic("Speeds").publish();
+        systemTimestamp = systemStateTable.getDoubleTopic("Timestamp").publish();
+
     }
 
     //Configurations
@@ -397,6 +425,10 @@ public class TemplateSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (followLastMechProfile) followLastMechProfile();
+
+        systemPose.set(getMotorRot());
+        systemSpeeds.set(getMotorVelocity());
+        systemTimestamp.set(Timer.getFPGATimestamp());
     }
 
     public double absoluteClamp(double value) {

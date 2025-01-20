@@ -28,7 +28,8 @@ public class ArmSubsystem extends TemplateSubsystem {
                 ArmConstants.ARM_FF,
                 ArmConstants.ARM_LOWER_TOLERANCE,
                 ArmConstants.ARM_UPPER_TOLERANCE,
-                ArmConstants.MOTOR_TO_MECH_GEAR_RATIO
+                ArmConstants.MOTOR_TO_MECH_GEAR_RATIO,
+                "Arm Subsystem"
         );
 
         configureMotor(
