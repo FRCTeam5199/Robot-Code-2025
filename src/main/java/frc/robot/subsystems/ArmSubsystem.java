@@ -68,7 +68,7 @@ public class ArmSubsystem extends TemplateSubsystem {
             //   setVoltage((ArmConstants.ARM_FF.getkG()) / Math.cos(Units.rotationsToRadians(getEncoderRot())));
 
         }
-        //   System.out.println("Mech Degrees: " + getEncoderRot() * 360d);
+        System.out.println("Rotor position: " + getMotorRot());
 
     }
 
@@ -136,16 +136,16 @@ public class ArmSubsystem extends TemplateSubsystem {
         return Commands.sequence(
                 sysIdRoutineArm
                         .quasistatic(SysIdRoutine.Direction.kForward)
-                        .until(() -> (getRotorPosition() > 120)),
+                        .until(() -> (getMotorRot() > 120)),
                 sysIdRoutineArm
                         .quasistatic(SysIdRoutine.Direction.kReverse)
-                        .until(() -> (getRotorPosition() < 3)),
+                        .until(() -> (getMotorRot() < 3)),
                 sysIdRoutineArm
                         .dynamic(SysIdRoutine.Direction.kForward)
-                        .until(() -> (getRotorPosition() > 120)),
+                        .until(() -> (getMotorRot() > 120)),
                 sysIdRoutineArm
                         .dynamic(SysIdRoutine.Direction.kReverse)
-                        .until(() -> (getRotorPosition() < 3)));
+                        .until(() -> (getMotorRot() < 3)));
     }
 
 

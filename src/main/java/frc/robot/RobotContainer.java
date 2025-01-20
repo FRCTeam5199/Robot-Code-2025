@@ -67,7 +67,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
     //    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
 //    public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
-    public static final LinearTestSubsystem linearTestSubsystem = new LinearTestSubsystem();
+//    public static final LinearTestSubsystem linearTestSubsystem = new LinearTestSubsystem();
     //  public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
     // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
@@ -87,7 +87,7 @@ public class RobotContainer {
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
 
-        commandXboxController.a().onTrue(new InstantCommand(() -> armSubsystem.setPosition(5)))
+        commandXboxController.a().onTrue(new InstantCommand(() -> armSubsystem.setPosition(70)))
                 .onFalse(new InstantCommand(() -> armSubsystem.setPosition(0)));
 
         // reset the field-centric heading on left bumper press

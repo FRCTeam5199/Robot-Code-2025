@@ -60,8 +60,8 @@ public final class Constants {
         public static final int ARM_FOLLOW_MOTOR_ID = 15;
         public static final int ARM_CANCODER_ID = 30;
         public static final TalonFXConfiguration TALON_FX_CONFIGURATION = new TalonFXConfiguration();
-        public static final double ARM_STATOR_CURRENT_LIMIT = 80;
-        public static final double ARM_SUPPLY_CURRENT_LIMIT = 80;
+        public static final double ARM_STATOR_CURRENT_LIMIT = 60;
+        public static final double ARM_SUPPLY_CURRENT_LIMIT = 60;
         public static final boolean LEFT_ARM_INVERTED = true;
         public static final boolean ARM_FOLLOWER_INVERTED = true;
 
@@ -69,7 +69,7 @@ public final class Constants {
         public static final boolean ARM_FOLLOW_BRAKE = false;
 
 
-        public static final PID ARM_PID = new PID(50, 0, 0);
+        public static final PID ARM_PID = new PID(0, 0, 0);
 
 
         //   public static final double ARM_FF_OFFSET = Units.degreesToRadians(13.5);
@@ -91,7 +91,7 @@ public final class Constants {
         public static final double ARM_CANCODER_MAGNET_OFFSET = -0.064453125;
 
         //The speed and acceleration the arm should move at.
-        public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS = new TrapezoidProfile.Constraints(5, 6);
+        public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS = new TrapezoidProfile.Constraints(800, 1600);
 
 
 // kg = .348, ks = .14816, Kv = 6.16786
@@ -127,7 +127,7 @@ public final class Constants {
         public static final String ARM_CANCODER_CANBUS = "rio";
 
         public static final Slot0Configs ARM_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(50)
+                .withKP(2.5)
                 .withKI(0)
                 .withKD(0)
                 .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)

@@ -40,7 +40,6 @@ public class TemplateSubsystem extends SubsystemBase {
     private CANcoder encoder;
     private CANcoderConfiguration encoderConfig;
 
-
     private ProfiledPIDController pidProfile;
     private TrapezoidProfile profile;
     public TrapezoidProfile.State initState;
@@ -88,9 +87,6 @@ public class TemplateSubsystem extends SubsystemBase {
         goalState = new TrapezoidProfile.State(0.0, 0.0);
         currentState = new TrapezoidProfile.State(0.0, 0.0);
 
-        slot0Configs = pid.getSlot0Configs();
-        motor.getConfigurator().apply(slot0Configs);
-
         switch (type) {
             case ROLLER -> simpleMotorFF = new SimpleMotorFeedforward(
                     feedForward.getkS(), feedForward.getkV());
@@ -107,27 +103,10 @@ public class TemplateSubsystem extends SubsystemBase {
         this.upperTolerance = upperTolerance;
 
         for (double[] ratio : gearRatios) {
-            this.gearRatio *= ratio[0] / ratio[1];
+            this.gearRatio *= ratio[1] / ratio[0];
         }
 
         timer = new Timer();
-
-
-        double minAbs = MathUtils.cppMod(mechMin, 1.0);
-        double maxAbs = MathUtils.cppMod(mechMax, 1.0);
-        double halfUnusedRange = (mechMax - mechMin) / 2.0;
-        double midUnused = maxAbs + halfUnusedRange;
-
-        if (midUnused > 1.0) {
-            _values = new double[]{midUnused - 1.0, minAbs, maxAbs, 1.0};
-            _ids = new int[]{2, 0, 1, 2};
-        } else if (mechMin > 0.0) {
-            _values = new double[]{minAbs, maxAbs, midUnused, 1.0};
-            _ids = new int[]{0, 1, 2, 0};
-        } else {
-            _values = new double[]{maxAbs, midUnused, minAbs, 1.0};
-            _ids = new int[]{1, 2, 0, 1};
-        }
     }
 
     //Configurations
@@ -241,7 +220,7 @@ public class TemplateSubsystem extends SubsystemBase {
             }
             case PIVOT -> {
                 return pivotFF.calculate(Units.degreesToRadians(getDegrees() + Units.degreesToRotations(ffOffset)),
-                        rps, acceleration);
+                        Units.degreesToRadians(getDegreesFromMotorRot(rps)), Units.degreesToRadians(getDegreesFromMotorRot(acceleration)));
             }
             default -> {
                 return simpleMotorFF.calculate(rps, acceleration);
@@ -276,16 +255,18 @@ public class TemplateSubsystem extends SubsystemBase {
 
         switch (type) {
             case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
-            case PIVOT -> goalState.position = Units.degreesToRadians(goal);
+//            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
+            case PIVOT -> goalState.position = goal;
             default -> goalState.position = getMotorRotFromMechRot(goal);
         }
+
 
         goalState.velocity = 0;
         this.goal = goal;
 
         currentState = profile.calculate(0, currentState, goalState);
-        if (type == Type.LINEAR) currentState.position = getMotorRot();
-        else currentState.position = Units.degreesToRadians(getDegreesFromMotorRot(getMotorRot())); //fix
+        if (encoder == null) currentState.position = getMotorRot();
+        else currentState.position = getEncoderRot();
 
         followLastMechProfile = true;
     }
@@ -294,33 +275,12 @@ public class TemplateSubsystem extends SubsystemBase {
         if (type == Type.ROLLER) return;
 
         TrapezoidProfile.State nextState = profile.calculate(timer.get(), currentState, goalState);
-        switch (type) {
-            case LINEAR -> {
-                motor.setControl(
-                        positionVoltage.withPosition(nextState.position)
-                                .withFeedForward(calculateFF(nextState.velocity,
-                                        (nextState.velocity - currentState.velocity) / timer.get())));
-            }
-            case PIVOT -> {
-                motor.setControl(
-                        positionVoltage.withSlot(0).withPosition(getMotorRotFromDegrees(Units.radiansToDegrees(nextState.position)))
-                                .withFeedForward(calculateFF(nextState.velocity,
-                                        (nextState.velocity - currentState.velocity) / timer.get())));
+        motor.setControl(
+                positionVoltage.withPosition(nextState.position)
+                        .withFeedForward(calculateFF(nextState.velocity,
+                                (nextState.velocity - currentState.velocity) / timer.get())));
 
-                currentState = nextState;
-//                System.out.println("Next state position rot: " + getMotorRotFromDegrees(Units.radiansToDegrees(nextState.position)));
-                System.out.println("goal state position rot: " + getMotorRotFromDegrees(Units.radiansToDegrees(goalState.position)));
-            }
-            default -> {
-                motor.setControl(
-                        positionVoltage.withPosition(nextState.position)
-                                .withFeedForward(calculateFF(nextState.velocity,
-                                        (nextState.velocity - currentState.velocity) / timer.get())));
-            }
-
-        }
-
-
+        currentState = nextState;
         timer.restart();
     }
 
@@ -355,10 +315,6 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     public double getMotorRot() {
-        return motor.getRotorPosition().getValueAsDouble();
-    }
-
-    public double getRotorPosition() {
         return motor.getRotorPosition().getValueAsDouble();
     }
 
