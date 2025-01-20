@@ -14,7 +14,6 @@ public class ClimberSubsystem extends TemplateSubsystem {
         super(Type.ROLLER,
                 Constants.ClimberConstants.CLIMBER_ID,
                 Constants.ClimberConstants.CLIMBER_CONSTRAINTS,
-                Constants.ClimberConstants.CLIMBER_PID,
                 Constants.ClimberConstants.CLIMBER_FEEDFORWARD,
                 Constants.ClimberConstants.CLIMBER_lowerTOLERANCE,
                 Constants.ClimberConstants.CLIMBER_upperTOLERANCE,

@@ -49,17 +49,15 @@ public class TemplateSubsystem extends SubsystemBase {
     private CANcoder encoder;
     private CANcoderConfiguration encoderConfig;
 
-    private ProfiledPIDController pidProfile;
     private TrapezoidProfile profile;
-    public TrapezoidProfile.State initState;
-    public TrapezoidProfile.State currentState;
-    public TrapezoidProfile.State goalState;
-    public double goal;
-    public boolean followLastMechProfile = false;
+    private TrapezoidProfile.State initState;
+    private TrapezoidProfile.State currentState;
+    private TrapezoidProfile.State goalState;
+    private double goal;
+    private boolean followLastMechProfile = false;
 
     private PositionVoltage positionVoltage;
     private VelocityVoltage velocityVoltage;
-    private Slot0Configs slot0Configs;
 
     private SimpleMotorFeedforward simpleMotorFF;
     private ElevatorFeedforward linearFF;
@@ -76,10 +74,6 @@ public class TemplateSubsystem extends SubsystemBase {
     private double ffOffset;
 
     private Timer timer;
-    private double[] _values;
-    private int[] _ids;
-
-
     private Type type;
 
     NetworkTableInstance inst;
@@ -92,8 +86,7 @@ public class TemplateSubsystem extends SubsystemBase {
     DoublePublisher systemVoltage;
     DoublePublisher systemStatorVoltage;
 
-    public TemplateSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints,
-                             PID pid, FeedForward feedForward,
+     public TemplateSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints, FeedForward feedForward,
                              double lowerTolerance, double upperTolerance,
                              double[][] gearRatios, String SubsystemName) {
         this.type = type;
@@ -148,22 +141,6 @@ public class TemplateSubsystem extends SubsystemBase {
         motorConfig.CurrentLimits.StatorCurrentLimit = statorCurrentLimit;
         motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        motorConfig.Slot0 = slot0Configs;
-
-        motor.getConfigurator().apply(motorConfig);
-        motor.setPosition(0);
-    }
-
-    public void configureMotor(boolean isInverted, boolean isBrakeMode, double supplyCurrentLimit, double statorCurrentLimit, int cancoderID, Slot0Configs slot0Configs) {
-        motorConfig.MotorOutput.Inverted = isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
-        motorConfig.MotorOutput.NeutralMode = isBrakeMode ? NeutralModeValue.Brake : NeutralModeValue.Coast;
-        motorConfig.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
-        motorConfig.CurrentLimits.StatorCurrentLimit = statorCurrentLimit;
-        motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        motorConfig.Feedback.RotorToSensorRatio = ArmConstants.ARM_MOTOR_TO_SENSOR_GEAR_RATIO;
-        motorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        motorConfig.Feedback.FeedbackRemoteSensorID = cancoderID;
         motorConfig.Slot0 = slot0Configs;
 
         motor.getConfigurator().apply(motorConfig);
@@ -283,11 +260,9 @@ public class TemplateSubsystem extends SubsystemBase {
 
         switch (type) {
             case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
-//            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
-            case PIVOT -> goalState.position = goal;
+            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
             default -> goalState.position = getMotorRotFromMechRot(goal);
         }
-
 
         goalState.velocity = 0;
         this.goal = goal;
@@ -297,6 +272,28 @@ public class TemplateSubsystem extends SubsystemBase {
         else currentState.position = getEncoderRot();
 
         followLastMechProfile = true;
+    }
+
+    public void setPosition(double goal, boolean holdPosition) {
+        if (type == Type.ROLLER) return;
+
+        if (goal < mechMin) goal = mechMin;
+        else if (goal > mechMax) goal = mechMax;
+
+        switch (type) {
+            case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
+            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
+            default -> goalState.position = getMotorRotFromMechRot(goal);
+        }
+
+        goalState.velocity = 0;
+        this.goal = goal;
+
+        currentState = profile.calculate(0, currentState, goalState);
+        if (encoder == null) currentState.position = getMotorRot();
+        else currentState.position = getEncoderRot();
+
+        followLastMechProfile = holdPosition;
     }
 
     public void followLastMechProfile() {
@@ -314,7 +311,6 @@ public class TemplateSubsystem extends SubsystemBase {
 
     public boolean isProfileFinished() {
         return currentState.position == goalState.position && currentState.velocity == goalState.velocity;
-
     }
 
     public boolean isMechAtGoal(boolean isVelocity) {
@@ -334,6 +330,14 @@ public class TemplateSubsystem extends SubsystemBase {
                         && getMechRot() <= goal + upperTolerance;
             }
         }
+    }
+
+    public double getGoal() {
+        return goal;
+    }
+
+    public void setFollowLastMechProfile(boolean followLastMechProfile) {
+        this.followLastMechProfile = followLastMechProfile;
     }
 
 
@@ -429,23 +433,6 @@ public class TemplateSubsystem extends SubsystemBase {
         systemPose.set(getMotorRot());
         systemSpeeds.set(getMotorVelocity());
         systemTimestamp.set(Timer.getFPGATimestamp());
-    }
-
-    public double absoluteClamp(double value) {
-        double abs = MathUtils.cppMod(value, 1.0);
-        int i = 0;
-        while (abs >= _values[i] && i < _values.length) {
-            i++;
-        }
-        switch (_ids[i]) {
-            case 2:
-                return mechMax;
-            case 1:
-                return abs;
-            case 0:
-            default:
-                return mechMin;
-        }
     }
 
     public void setControl(ControlRequest control) {

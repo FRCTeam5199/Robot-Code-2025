@@ -24,7 +24,6 @@ public class ArmSubsystem extends TemplateSubsystem {
                 Type.PIVOT,
                 ArmConstants.ARM_MOTOR_ID,
                 ArmConstants.ARM_CONSTRAINTS,
-                ArmConstants.ARM_PID,
                 ArmConstants.ARM_FF,
                 ArmConstants.ARM_LOWER_TOLERANCE,
                 ArmConstants.ARM_UPPER_TOLERANCE,

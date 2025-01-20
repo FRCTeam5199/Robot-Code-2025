@@ -40,11 +40,11 @@ public class WristSubsystem extends TemplateSubsystem {
                 Type.PIVOT,
                 WristConstants.WRIST_MOTOR_ID,
                 WristConstants.WRIST_CONSTRAINTS,
-                WristConstants.WRIST_PID,
                 WristConstants.WRIST_FF,
                 WristConstants.WRIST_LOWER_TOLERANCE,
                 WristConstants.WRIST_UPPER_TOLERANCE,
-                WristConstants.MOTOR_TO_MECH_GEAR_RATIO
+                WristConstants.MOTOR_TO_MECH_GEAR_RATIO,
+                "Wrist"
         );
 
         configureMotor(
