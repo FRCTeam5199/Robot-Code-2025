@@ -91,8 +91,8 @@ public class RobotContainer {
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
 
-        commandXboxController.a().onTrue(new InstantCommand(() -> elevatorSubsystem.setPosition(.25)))
-                .onFalse(new InstantCommand(() -> elevatorSubsystem.setPosition(0)));
+        // commandXboxController.a().onTrue(new InstantCommand(() -> elevatorSubsystem.setPosition(.25)))
+        //         .onFalse(new InstantCommand(() -> elevatorSubsystem.setPosition(0)));
 
         // reset the field-centric heading on left bumper press
         commandXboxController.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
@@ -121,11 +121,17 @@ public class RobotContainer {
         // commandXboxController.povUp().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // commandXboxController.povDown().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-        commandXboxController.povUp().onTrue(armSubsystem.setGround());
-        commandXboxController.povDown().onTrue(armSubsystem.setL1());
-        commandXboxController.povLeft().onTrue(armSubsystem.setL2());
-        commandXboxController.povRight().onTrue(armSubsystem.setL3());
-        commandXboxController.a().onTrue(armSubsystem.setL4());
+        // commandXboxController.povUp().onTrue(armSubsystem.setGround());
+        // commandXboxController.povDown().onTrue(armSubsystem.setL1());
+        // commandXboxController.povLeft().onTrue(armSubsystem.setL2());
+        // commandXboxController.povRight().onTrue(armSubsystem.setL3());
+        // commandXboxController.a().onTrue(armSubsystem.setL4());
+
+        commandXboxController.povUp().onTrue(elevatorSubsystem.setBase());
+        commandXboxController.povDown().onTrue(elevatorSubsystem.setL1());
+        commandXboxController.povLeft().onTrue(elevatorSubsystem.setL2());
+        commandXboxController.povRight().onTrue(elevatorSubsystem.setL3());
+        commandXboxController.a().onTrue(elevatorSubsystem.setL4());
 
 
     //    commandXboxController.povDown().onTrue(climber.moveDOWN()).onFalse(new InstantCommand(()->climber.setPercent(0)));
