@@ -28,9 +28,11 @@ import frc.robot.constants.Constants.OperatorConstants;
 // import frc.robot.commands.Autos;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 // import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.testing.LinearTestSubsystem;
 import frc.robot.subsystems.testing.PivotTestSubsystem;
 import frc.robot.subsystems.testing.RollerTestSubsystem;
@@ -53,6 +55,7 @@ public class RobotContainer {
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // My drivetrain
     private final ArmSubsystem arm = ArmSubsystem.getInstance();
+    private final ClimberSubsystem climber = ClimberSubsystem.getInstance();
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
              .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -113,10 +116,20 @@ public class RobotContainer {
         commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
         commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
 
-        commandXboxController.povLeft().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        commandXboxController.povRight().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        commandXboxController.povUp().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        commandXboxController.povDown().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        // commandXboxController.povLeft().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // commandXboxController.povRight().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // commandXboxController.povUp().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // commandXboxController.povDown().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+        commandXboxController.povUp().onTrue(armSubsystem.setGround());
+        commandXboxController.povDown().onTrue(armSubsystem.setL1());
+        commandXboxController.povLeft().onTrue(armSubsystem.setL2());
+        commandXboxController.povRight().onTrue(armSubsystem.setL3());
+        commandXboxController.a().onTrue(armSubsystem.setL4());
+
+
+    //    commandXboxController.povDown().onTrue(climber.moveDOWN()).onFalse(new InstantCommand(()->climber.setPercent(0)));
+
 
         //   commandXboxController.leftBumper().toggleOnTrue(arm.)
         /*

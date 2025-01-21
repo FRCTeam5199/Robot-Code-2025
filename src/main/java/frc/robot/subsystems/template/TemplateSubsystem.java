@@ -147,6 +147,29 @@ public class TemplateSubsystem extends SubsystemBase {
         motor.setPosition(0);
     }
 
+    public void configureMotor(boolean isInverted, boolean isBrakeMode,
+    double supplyCurrentLimit, double statorCurrentLimit,
+    Slot0Configs slot0Configs, double softLimLow, double softLimHigh) {
+motorConfig.MotorOutput.Inverted =
+isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+motorConfig.MotorOutput.NeutralMode = isBrakeMode ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+motorConfig.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
+motorConfig.CurrentLimits.StatorCurrentLimit = statorCurrentLimit;
+motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+motorConfig.Slot0 = slot0Configs;
+motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = softLimHigh;
+motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = softLimLow;
+motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
+
+
+motor.getConfigurator().apply(motorConfig);
+motor.setPosition(0);
+}
+
+
 
     public void configureLinearMech(double drumCircumference, double mechMinM, double mechMaxM) {
         this.drumCircumference = drumCircumference;
