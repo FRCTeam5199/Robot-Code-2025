@@ -278,8 +278,8 @@ motor.setPosition(0);
     public void setPosition(double goal) {
         if (type == Type.ROLLER) return;
 
-        if (goal < mechMin) goal = mechMin;
-        else if (goal > mechMax) goal = mechMax;
+        // if (goal < mechMin) goal = mechMin;
+        // else if (goal > mechMax) goal = mechMax;
 
         switch (type) {
             case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
@@ -327,6 +327,8 @@ motor.setPosition(0);
                 positionVoltage.withPosition(nextState.position)
                         .withFeedForward(calculateFF(nextState.velocity,
                                 (nextState.velocity - currentState.velocity) / timer.get())));
+
+                System.out.println("Next State: " + nextState.position);
 
         currentState = nextState;
         timer.restart();

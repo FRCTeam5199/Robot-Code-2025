@@ -36,6 +36,13 @@ public class LinearTestSubsystem extends TemplateSubsystem {
     }
 
     public Command go() {
-        return this.runOnce(() -> setPosition(5));
+        return this.runOnce(() -> setPosition(.1));
+    }
+
+    public Command go2() {
+        return this.runOnce(() -> setPosition(.2));
+    }
+    public Command go3() {
+        return this.runOnce(() -> setPosition(.3));
     }
 }
