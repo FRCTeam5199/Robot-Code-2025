@@ -87,8 +87,8 @@ public class ElevatorSubsystem extends TemplateSubsystem {
 
     public void periodic() {
         super.periodic();
-        System.out.println("is at goal position: " + isMechAtGoal(false));
-        System.out.println("meters: " + getMechM());
+        // System.out.println("is at goal position: " + isMechAtGoal(false));
+        // System.out.println("meters: " + getMechM());
     }
 
     public Command setL1() {

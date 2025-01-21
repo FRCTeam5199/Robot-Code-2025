@@ -24,7 +24,7 @@ public class PivotTestSubsystem extends TemplateSubsystem {
     @Override
     public void periodic() {
         super.periodic();
-        System.out.println("Encoder degrees: " + Units.rotationsToDegrees(getEncoder().getAbsolutePosition().getValueAsDouble()));
+      //  System.out.println("Encoder degrees: " + Units.rotationsToDegrees(getEncoder().getAbsolutePosition().getValueAsDouble()));
 
         if (isProfileFinished()) {
 //            setVoltage(ArmConstants.ARM_FF.getkG() / Math.cos(Units.rotationsToRadians(getAbsPosition())));

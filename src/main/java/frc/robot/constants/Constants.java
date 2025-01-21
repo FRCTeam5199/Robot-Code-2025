@@ -80,8 +80,8 @@ public final class Constants {
         public static final boolean LEFT_ARM_INVERTED = true;
         public static final boolean ARM_FOLLOWER_INVERTED = true;
 
-        public static final boolean ARM_BRAKE = false;
-        public static final boolean ARM_FOLLOW_BRAKE = false;
+        public static final boolean ARM_BRAKE = true;
+        public static final boolean ARM_FOLLOW_BRAKE = true;
 
 
         public static final PID ARM_PID = new PID(0, 0, 0); //53.3332
@@ -129,15 +129,15 @@ public final class Constants {
         public static final double ARM_MOTOR_TO_SENSOR_GEAR_RATIO = 42.4286;
         public static final double ARM_SENSOR_TO_MECH_GEAR_RATIO = 1;
 
-        public static final double[][] MOTOR_TO_MECH_GEAR_RATIO = {{125, 1}};
+        public static final double[][] MOTOR_TO_MECH_GEAR_RATIO = {{240, 1}};
 
         //Value the arm should move to for a wanted position.
         public static final double GROUND = 5;
-        public static final double L1 = 10;
-        public static final double L2 = 15;
-        public static final double L3 = 20;
-        public static final double L4 = 25;
-        public static final double HP = 35 / 3;
+        public static final double L1 = 25;
+        public static final double L2 = 40;
+        public static final double L3 = 50;
+        public static final double L4 = 60;
+        public static final double HP = 90;
         public static final double GROUND_2 = 0;
         public static final String ARM_CANCODER_CANBUS = "rio";
 
@@ -151,6 +151,10 @@ public final class Constants {
                 .withKV(ARM_FF.getkV())
                 .withKA(ARM_FF.getkA())
                 .withGravityType(GravityTypeValue.Arm_Cosine);
+
+        public static final double ARM_LOW_LIMIT = 6;
+        public static final double ARM_HIGH_LIMIT = 77;
+        
     }
 
     public static class ClawConstants {
@@ -177,21 +181,41 @@ public final class Constants {
 
     public static class ClimberConstants {
         public static final Type CLIMBER_TYPE = Type.PIVOT;
-        public static final int CLIMBER_ID = 0;
+        public static final int CLIMBER_ID = 16;
         public static final TrapezoidProfile.Constraints CLIMBER_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
-        public static final PID CLIMBER_PID = new PID(0, 0, 0);
-        public static final FeedForward CLIMBER_FEEDFORWARD = new FeedForward(0, 0, 0);
+        public static final FeedForward CLIMBER_FF = new FeedForward(0, 0, 0);
         public static final double CLIMBER_lowerTOLERANCE = 0.0;
         public static final double CLIMBER_upperTOLERANCE = 0.0;
-        public static final double[][] CLIMBER_gearRatios = {{0}, {0}};
+        public static final double[][] CLIMBER_GEAR_RATIO = {{125, 1}};
+        public static final double CLIMBER_LOW_LIMIT = 10;
+        public static final double CLIMBER_HIGH_LIMIT = 110;
+
+
+        public static final boolean CLIMBER_INVERT = true;
+        public static final boolean CLIMBER_BRAKE = true;
+        public static final double CLIMBER_STATOR_CURRENT_LIMIT = 100;
+        public static final double CLIMBER_SUPPLY_CURRENT_LIMIT = 100;
+
+        public static final Slot0Configs CLIMBER_SLOT0_CONFIGS = new Slot0Configs()
+        .withKP(2.5)
+        .withKI(0)
+        .withKD(0)
+        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
+        .withKS(CLIMBER_FF.getkS())
+        .withKG(CLIMBER_FF.getkG())
+        .withKV(CLIMBER_FF.getkV())
+        .withKA(CLIMBER_FF.getkA())
+        .withGravityType(GravityTypeValue.Arm_Cosine);
+
+
+
     }
 
     public static class WristConstants {
 
         //TODO: Change all of these constants as they were just copied from arm
 
-        public static final int WRIST_MOTOR_ID = 240000;
-        public static final int WRIST_CANCODER_ID = 300000;
+        public static final int WRIST_MOTOR_ID = 19;
         public static final TalonFXConfiguration TALON_FX_CONFIGURATION = new TalonFXConfiguration();
         public static final double WRIST_STATOR_CURRENT_LIMIT = 80;
         public static final double WRIST_SUPPLY_CURRENT_LIMIT = 80;
@@ -210,7 +234,7 @@ public final class Constants {
                 .withKA(0);
 
 
-        public static final double WRIST_FF_OFFSET = Units.degreesToRadians(13.5);
+        public static final double WRIST_FF_OFFSET = Units.degreesToRadians(0);
 
         public static final CANcoderConfiguration WRIST_CANCODER_CONFIGURATION = new CANcoderConfiguration();
         public static final double WRIST_CANCODER_DISCONTINUITY_POINT = 1;
@@ -221,13 +245,12 @@ public final class Constants {
         public static final double WRIST_CANCODER_MAGNET_OFFSET = 0.930176;
 
         //TODO: CHANGE
-        public static final PID WRIST_PID = new PID(0, 0, 0); //53.3332
 
         //The speed and acceleration the wrist should move at.
         //TODO: CHANGE
-        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(800, 1600);
+        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2);
 
-        public static final FeedForward WRIST_FF = new FeedForward(.175, .707, 2.5, 0.0);
+        public static final FeedForward WRIST_FF = new FeedForward(.13, 0, .116, 0.0);
         //degrees
         public static final double WRIST_LOWER_TOLERANCE = .75;
         public static final double WRIST_UPPER_TOLERANCE = 0.75;
