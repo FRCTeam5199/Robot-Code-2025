@@ -1,81 +1,169 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.Constants.ArmConstants;
-import frc.robot.tagalong.ArmParser;
-import frc.robot.tagalong.PivotAugment;
-import frc.robot.tagalong.PivotParser;
-import frc.robot.tagalong.TagalongPivot;
-import frc.robot.tagalong.TagalongSubsystemBase;
+import frc.robot.subsystems.template.TemplateSubsystem;
+import frc.robot.utility.Type;
 
-public class ArmSubsystem extends TagalongSubsystemBase implements PivotAugment{
-    private final TagalongPivot arm;
-        private static ArmSubsystem armSubsystem;
-        public final ArmParser armParser;
+import static edu.wpi.first.units.Units.Volts;
+
+import com.ctre.phoenix6.SignalLogger;
+
+import edu.wpi.first.math.util.Units;
 
 
+public class ArmSubsystem extends TemplateSubsystem {
+    private static ArmSubsystem armSubsystem;
+
+    //.08, .5438
+    public ArmSubsystem() {
+        super(
+                Type.PIVOT,
+                ArmConstants.ARM_MOTOR_ID,
+                ArmConstants.ARM_CONSTRAINTS,
+                ArmConstants.ARM_FF,
+                ArmConstants.ARM_LOWER_TOLERANCE,
+                ArmConstants.ARM_UPPER_TOLERANCE,
+                ArmConstants.MOTOR_TO_MECH_GEAR_RATIO,
+                "Arm Subsystem"
+        );
+
+        configureMotor(
+                ArmConstants.LEFT_ARM_INVERTED,
+                ArmConstants.ARM_BRAKE,
+                ArmConstants.ARM_SUPPLY_CURRENT_LIMIT,
+                ArmConstants.ARM_STATOR_CURRENT_LIMIT,
+                ArmConstants.ARM_SLOT0_CONFIGS,
+                ArmConstants.ARM_LOW_LIMIT,
+                ArmConstants.ARM_HIGH_LIMIT
+        );
+        configureFollowerMotor(
+                ArmConstants.ARM_FOLLOW_MOTOR_ID,
+                ArmConstants.ARM_FOLLOWER_INVERTED
+        );
+
+        configurePivot(
+                ArmConstants.ARM_MIN,
+                ArmConstants.ARM_MAX,
+                ArmConstants.ARM_FF_OFFSET
+        );
+
+//        configureEncoder(
+//                ArmConstants.ARM_CANCODER_ID,
+//                ArmConstants.ARM_CANCODER_CANBUS,
+//                ArmConstants.ARM_CANCODER_MAGNET_OFFSET,
+//                ArmConstants.ARM_SENSOR_TO_MECH_GEAR_RATIO,
+//                ArmConstants.ARM_MOTOR_TO_SENSOR_GEAR_RATIO
+//        );
 
 
-    public ArmSubsystem(String filePath) {
-        this(filePath == null ? null : new ArmParser(Filesystem.getDeployDirectory(), filePath));
     }
 
 
-    public ArmSubsystem(ArmParser parser){
-        super(parser);
-        armParser = parser;
-        arm = new TagalongPivot(armParser.pivotParser);
+    @Override
+    public void periodic() {
+        super.periodic();
+        if (isProfileFinished()) {
+            //   setVoltage((ArmConstants.ARM_FF.getkG()) / Math.cos(Units.rotationsToRadians(getEncoderRot())));
 
-        
-    }
+        }
 
-
-    public Command setGround(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.GROUND));
     }
 
-    public Command setGroundBack(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.GROUND_2));
+
+    public Command setGround() {
+        return new InstantCommand(() -> setPosition(ArmConstants.GROUND));
     }
-    public Command setL1(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.L1));
+
+    public Command setGroundBack() {
+        return new InstantCommand(() -> setPosition(ArmConstants.GROUND_2));
     }
-    public Command setL2(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.L2));
+
+    public Command setL1() {
+        return new InstantCommand(() -> setPosition(ArmConstants.L1));
     }
-    public Command setL3(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.L3));
+
+    public Command setL2() {
+        return new InstantCommand(() -> setPosition(ArmConstants.L2));
     }
-    public Command setL4(){
-        return new InstantCommand(()->arm.setPivotProfile(ArmConstants.L4));
+
+    public Command setL3() {
+        return new InstantCommand(() -> setPosition(ArmConstants.L3));
+    }
+
+    public Command setL4() {
+        return new InstantCommand(() -> setPosition(ArmConstants.L4));
     }
 
 
     public static ArmSubsystem getInstance() {
         if (armSubsystem == null) {
-            armSubsystem = new ArmSubsystem("configs/subsystems/armConf");
+            armSubsystem = new ArmSubsystem();
         }
         return armSubsystem;
     }
 
 
+    public final SysIdRoutine sysIdRoutineArm = new SysIdRoutine(
 
-    @Override
-    public TagalongPivot getPivot() {
-        return arm;
+
+            new SysIdRoutine.Config(
+                    null,        // Use default ramp rate (1 V/s)
+                    Volts.of(1), // Reduce dynamic step voltage to 4 V to prevent brownout
+
+                    null,        // Use default timeout (10 s)
+                    // Log state with SignalLogger class
+                    state -> SignalLogger.writeString("Arm_State", state.toString())
+            ),
+            new SysIdRoutine.Mechanism(
+                    output -> setVoltage(output.baseUnitMagnitude()),
+                    null,
+                    //    (SysIdRoutineLog log)->
+                    //     {
+
+                    //     log.motor("Pivot Motor")
+                    //     .voltage(BaseUnits.VoltageUnit.of(arm_motor.getMotorVoltage().getValueAsDouble()))
+                    //     .angularPosition(Units.Rotation.of(arm_motor.getPosition().getValueAsDouble()))
+                    //     .angularVelocity(Rotations.per(Second).of(arm_motor.getVelocity().getValueAsDouble()));
+                    //     },
+                    this
+            )
+    );
+
+    public Command sysId() {
+        return Commands.sequence(
+                sysIdRoutineArm
+                        .quasistatic(SysIdRoutine.Direction.kForward)
+                        .until(() -> (getMotorRot() > 120)),
+                sysIdRoutineArm
+                        .quasistatic(SysIdRoutine.Direction.kReverse)
+                        .until(() -> (getMotorRot() < 3)),
+                sysIdRoutineArm
+                        .dynamic(SysIdRoutine.Direction.kForward)
+                        .until(() -> (getMotorRot() > 120)),
+                sysIdRoutineArm
+                        .dynamic(SysIdRoutine.Direction.kReverse)
+                        .until(() -> (getMotorRot() < 3)));
     }
 
 
-    @Override
-    public TagalongPivot getPivot(int i) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPivot'");
-    }
+    // public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    //     return sysIdRoutineArm.quasistatic(direction).until(()-> (getRotorPosit > .003418) || (getPosition().getValueAsDouble() < -0.000247));
+    // }
+
+    // /**
+    //  * Runs the SysId Dynamic test in the given direction for the routine
+    //  * specified by {@link #m_sysIdRoutineToApply}.
+    //  *
+    //  * @param direction Direction of the SysId Dynamic test
+    //  * @return Command to run
+    //  */
+    // public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    //     return sysIdRoutineArm.dynamic(direction).until(()-> (getPosition().getValueAsDouble() > .003418) || (getPosition().getValueAsDouble() < 0));
+    // }
 
 
-
-
-    
 }

@@ -11,10 +11,12 @@ public class PID {
         I = i;
         D = d;
 
+
         slot0Configs = new Slot0Configs();
         slot0Configs.kP = p;
         slot0Configs.kI = i;
         slot0Configs.kD = d;
+  
     }
 
     public double getP() {

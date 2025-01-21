@@ -1,5 +1,5 @@
 {
-  "name": "Shooter Pivot",
+  "name": "Arm Pivot",
   "fusedDevices": {
     "motor": {
       "type": "kraken",
@@ -50,7 +50,7 @@
     "clockwisePositive": true,
     "magnetOffset": {
       "unit": "rot",
-      "value": 0.930176
+      "value": 13
     }
   },
   "pivotMotorControl": {

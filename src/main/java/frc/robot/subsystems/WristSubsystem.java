@@ -1,84 +1,144 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.constants.Constants.ArmConstants;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.WristConstants;
-import frc.robot.tagalong.ArmParser;
+import frc.robot.constants.Constants.WristConstants;
+import frc.robot.tagalong.WristParser;
 import frc.robot.tagalong.PivotAugment;
 import frc.robot.tagalong.PivotParser;
 import frc.robot.tagalong.TagalongPivot;
-import frc.robot.tagalong.TagalongSubsystemBase;
 import frc.robot.tagalong.WristParser;
 import frc.robot.tagalong.WristParser;
+import frc.robot.utility.Type;
 
-public class WristSubsystem extends TagalongSubsystemBase implements PivotAugment{
-    private final TagalongPivot wrist;
-        private static WristSubsystem wristSubsystem;
-        public final WristParser wristParser;
+import frc.robot.subsystems.template.TemplateSubsystem;
 
 
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Volts;
 
+public class WristSubsystem extends TemplateSubsystem {
+    private static WristSubsystem wristSubsystem;
 
-    public WristSubsystem(String filePath) {
-        this(filePath == null ? null : new WristParser(Filesystem.getDeployDirectory(), filePath));
+    public WristSubsystem(){
+
+        super(
+                Type.PIVOT,
+                WristConstants.WRIST_MOTOR_ID,
+                WristConstants.WRIST_CONSTRAINTS,
+                WristConstants.WRIST_FF,
+                WristConstants.WRIST_LOWER_TOLERANCE,
+                WristConstants.WRIST_UPPER_TOLERANCE,
+                WristConstants.MOTOR_TO_MECH_GEAR_RATIO,
+                "Wrist"
+        );
+
+        configureMotor(
+                WristConstants.WRIST_INVERTED,
+                WristConstants.WRIST_BRAKE,
+                WristConstants.WRIST_SUPPLY_CURRENT_LIMIT,
+                WristConstants.WRIST_STATOR_CURRENT_LIMIT,
+                WristConstants.WRIST_SLOT0_CONFIGS
+        );
+
+        configurePivot(
+                WristConstants.WRIST_MIN,
+                WristConstants.WRIST_MAX,
+                WristConstants.WRIST_FF_OFFSET
+        );
     }
 
+    public void periodic() {
+        super.periodic();
+        if (isProfileFinished()) {
 
-    public WristSubsystem(WristParser parser){
-        super(parser);
-        wristParser = parser;
-        wrist = new TagalongPivot(wristParser.pivotParser);
-
-        
+        }
     }
 
 
     public Command setGround(){
-        return new InstantCommand(()->wrist.setPivotProfile(WristConstants.GROUND));
+        return new InstantCommand(()-> setPosition(WristConstants.GROUND));
     }
 
     public Command setGroundBack(){
-        return new InstantCommand(()->wrist.setPivotProfile(WristConstants.GROUND_2));
+        return new InstantCommand(()-> setPosition(WristConstants.GROUND_2));
     }
     public Command setL1(){
-        return new InstantCommand(()->wrist.setPivotProfile(WristConstants.L1));
+        return new InstantCommand(()-> setPosition(WristConstants.L1));
     }
     public Command setL2(){
-        return new InstantCommand(()->wrist.setPivotProfile(WristConstants.L2));
+        return new InstantCommand(()-> setPosition(WristConstants.L2));
     }
     public Command setL3(){
-        return new InstantCommand(()->wrist.setPivotProfile(WristConstants.L3));
+        return new InstantCommand(()-> setPosition(WristConstants.L3));
     }
     public Command setL4(){
-        return new InstantCommand(()->wrist.setPivotProfile(WristConstants.L4));
+        return new InstantCommand(()-> setPosition(WristConstants.L4));
     }
 
 
     public static WristSubsystem getInstance() {
         if (wristSubsystem == null) {
-            wristSubsystem = new WristSubsystem("configs/subsystems/wristConf");
+            wristSubsystem = new WristSubsystem();
         }
         return wristSubsystem;
     }
 
 
+    public final SysIdRoutine sysIdRoutineWrist = new SysIdRoutine(
 
-    @Override
-    public TagalongPivot getPivot() {
-        return wrist;
+            new SysIdRoutine.Config(
+                    Volts.per(Second).of(.2),        // Use default ramp rate (1 V/s)
+                    Volts.of(.6), // Reduce dynamic step voltage to 4 V to prevent brownout
+
+                    null,        // Use default timeout (10 s)
+                    // Log state with SignalLogger class
+                    state -> SignalLogger.writeString("Wrist_State", state.toString())
+            ),
+            new SysIdRoutine.Mechanism(
+                    output -> setVoltage(output.baseUnitMagnitude()),
+                    null,
+                    // log->
+                    //{
+
+                    // log.motor("Pivot Motor")
+                    // .voltage(Volts.mutable(0).mut_replace(wrist_motor.getMotorVoltage().getValueAsDouble(), Volts))
+                    // .angularPosition(Radians.mutable(0).mut_replace(wrist_motor.getPosition().getValueAsDouble(), Rotations))
+                    // .angularVelocity(RadiansPerSecond.mutable(0).mut_replace(wrist_motor.getVelocity().getValueAsDouble(), RadiansPerSecond));
+                    // },
+                    this
+            )
+    );
+
+    public Command sysId() {
+        return Commands.sequence(
+                sysIdRoutineWrist
+                        .quasistatic(SysIdRoutine.Direction.kForward)
+                        .until(() -> (getMotorRot() > 120)),
+                sysIdRoutineWrist
+                        .quasistatic(SysIdRoutine.Direction.kReverse)
+                        .until(() -> (getMotorRot() < 3)),
+                sysIdRoutineWrist
+                        .dynamic(SysIdRoutine.Direction.kForward)
+                        .until(() -> (getMotorRot() > 120)),
+                sysIdRoutineWrist
+                        .dynamic(SysIdRoutine.Direction.kReverse)
+                        .until(() -> (getMotorRot() < 3)));
     }
 
 
-    @Override
-    public TagalongPivot getPivot(int i) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPivot'");
-    }
-
-
-
-
-    
 }

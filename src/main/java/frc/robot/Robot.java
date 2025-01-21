@@ -4,11 +4,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.SignalLogger;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,21 +21,19 @@ public class Robot extends TimedRobot {
 
   private RobotContainer robotContainer;
 
+//  private IntakeSubsystem exampleSubsystem = IntakeSubsystem.getInstance();
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
   public void robotInit() {
-
-    IntakeSubsystem.getInstance().init();
-
-    ElevatorSubsystem.getInstance().init();
-
-    UserInterface.init();
-
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
+//    exampleSubsystem.init();
+
     robotContainer = new RobotContainer();
   }
 
@@ -48,8 +46,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    UserInterface.update();
-
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -73,8 +69,6 @@ public class Robot extends TimedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
     }
-
-    UserInterface.setTab("Auton");
   }
 
   /** This function is called periodically during autonomous. */
@@ -87,24 +81,20 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-
-    UserInterface.setTab("Teleop");
-  }
-
-  /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
   }
 
+  /** This function is called periodically during operator control. */
+  @Override
+  public void teleopPeriodic() {}
+
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    
-    UserInterface.setTab("Test");
+
   }
 
   /** This function is called periodically during test mode. */

@@ -1,102 +1,155 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.UserInterface;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.Constants.ElevatorConstants;
-import frc.robot.subsystems.template.AbstractSubsystem;
-import frc.robot.utility.SubsystemPrint;
+import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.Type;
+import tagalong.units.TimeUnits;
 
-public class ElevatorSubsystem extends AbstractSubsystem {
-    private static ElevatorSubsystem elevatorSubsystem;
-    private static boolean subsystemOk = false;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
 
-    private ElevatorSubsystem(){
-        super(Type.LINEAR, 
-        ElevatorConstants.ELEVATOR_ID, 
-        ElevatorConstants.ELEVATOR_CONSTRAINTS, 
-        ElevatorConstants.ELEVATOR_PID, 
-        ElevatorConstants.ELEVATOR_FF,
-        ElevatorConstants.ELEVATOR_MIN, 
-        ElevatorConstants.ELEVATOR_MAX, 
-        ElevatorConstants.ELEVATOR_GEARING);
+import java.util.concurrent.TimeUnit;
 
-        configureMotor(ElevatorConstants.INVERT, ElevatorConstants.BRAKE, ElevatorConstants.SUPPLY_CURRENT_LIMIT, ElevatorConstants.STATOR_CURRENT_LIMIT);
+public class ElevatorSubsystem extends TemplateSubsystem {
+    public static ElevatorSubsystem elevatorSubsystem;
+    public TalonFX elevator1_motor = new TalonFX(ElevatorConstants.ELEVATOR1_ID);
+    public TalonFX elevator2_motor = new TalonFX(ElevatorConstants.ELEVATOR2_ID);
+
+
+    SysIdRoutineLog elevatorLOG = new SysIdRoutineLog("Elevator Motor");
+
+    public final SysIdRoutine sysIdRoutineElevator = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    Volts.per(Second).of(.01
+                    ),        // Use default ramp rate (1 V/s)
+                    Volts.of(1), // Reduce dynamic step voltage to 4 V to prevent brownout
+
+                    Time.ofBaseUnits(10000, Seconds),  // default timeout (10 s)
+                    // Log state with SignalLogger class
+                    state -> SignalLogger.writeString("Elevator_State", state.toString())
+            ),
+            new SysIdRoutine.Mechanism(
+                    output -> {
+                        elevator1_motor.setControl(new VoltageOut(output).withEnableFOC(true));
+                        elevator2_motor.setControl(new Follower(ElevatorConstants.ELEVATOR1_ID, true));
+                    },
+                    null,
+                    // log->
+                    //{
+
+                    // log.motor("Pivot Motor")
+                    // .voltage(Volts.mutable(0).mut_replace(elevator_motor.getMotorVoltage().getValueAsDouble(), Volts))
+                    // .angularPosition(Radians.mutable(0).mut_replace(elevator_motor.getPosition().getValueAsDouble(), Rotations))
+                    // .angularVelocity(RadiansPerSecond.mutable(0).mut_replace(elevator_motor.getVelocity().getValueAsDouble(), RadiansPerSecond));
+                    // },
+                    this
+            )
+    );
+
+
+    public ElevatorSubsystem() {
+        super(Type.LINEAR,
+                ElevatorConstants.ELEVATOR1_ID,
+                ElevatorConstants.ELEVATOR_CONSTRAINTS,
+                ElevatorConstants.ELEVATOR_FF,
+                ElevatorConstants.ELEVATOR_MIN,
+                ElevatorConstants.ELEVATOR_MAX,
+                ElevatorConstants.ELEVATOR_GEARING,
+                "Elevator"     
+            );
+
+        configureMotor(ElevatorConstants.INVERT,
+                ElevatorConstants.BRAKE,
+                ElevatorConstants.SUPPLY_CURRENT_LIMIT,
+                ElevatorConstants.STATOR_CURRENT_LIMIT,
+                ElevatorConstants.ELEVATOR_SLOT0_CONFIGS);
+
+        configureFollowerMotor(ElevatorConstants.ELEVATOR2_ID,
+                ElevatorConstants.FOLLOWER_OPPOSE_MASTER_DIRECTION);
+
+        configureLinearMech(ElevatorConstants.DRUM_CIRCUMFERENCE,
+                ElevatorConstants.ELEVATOR_LOWER_TOLERANCE,
+                ElevatorConstants.ELEVATOR_UPPER_TOLERANCE);
+    }
+
+    public void periodic() {
+        super.periodic();
+        // System.out.println("is at goal position: " + isMechAtGoal(false));
+        // System.out.println("meters: " + getMechM());
+    }
+
+    public Command setL1() {
+        return new InstantCommand(() -> setPosition(0));
+
+    }
+
+    public Command setL2() {
+        return new InstantCommand(() -> setPosition(0));
+
+    }
+
+    public Command setL3() {
+        return new InstantCommand(() -> setPosition(0));
+
+    }
+
+    public Command setL4() {
+        return new InstantCommand(() -> setPosition(0));
+
+    }
+
+    public Command setHP() {
+        return new InstantCommand(() -> setPosition(0));
+
+    }
+
+    public Command setHeight(double position) {
+        return new InstantCommand(() -> setPosition(position));
     }
 
     public static ElevatorSubsystem getInstance() {
-        if (elevatorSubsystem == null) elevatorSubsystem = new ElevatorSubsystem();
+        if (elevatorSubsystem == null) {
+            elevatorSubsystem = new ElevatorSubsystem();
+        }
         return elevatorSubsystem;
     }
 
-    /**
-   * The subsystem's initalize method.
-   */
-    public void init() {
-        try {
-        configureMotor(false, false, 80, 80);
-
-        initComponents();
-
-        new SubsystemPrint(this, "Initalized");
-        subsystemOk = true;
-        } catch (Exception e) {
-            System.err.println(e.getStackTrace());
-        }
-    }
-    
-    public void initComponents() {
-        UserInterface.createTestComponent("Elevator Status", false, BuiltInWidgets.kBooleanBox, 0, 0, 1, 1, null);
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysIdRoutineElevator.quasistatic(direction);
     }
 
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        if (subsystemOk) subsystemPeriodic();
-        else UserInterface.setTestComponent("Elevator Status", false);
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysIdRoutineElevator.dynamic(direction);
     }
 
-    /**
-     * The subsystem's periodic method. Only runs when the subsystem is ok with no
-     * errors.
-     */
-    private void subsystemPeriodic() {
-        UserInterface.setTestComponent("Elevator Status", true);
+    public Command sysId() {
+        return Commands.sequence(
+                sysIdRoutineElevator
+                        .quasistatic(SysIdRoutine.Direction.kForward)
+                        .until(() -> (elevator1_motor.getPosition().getValueAsDouble() > 34)),
+                sysIdRoutineElevator
+                        .quasistatic(SysIdRoutine.Direction.kReverse)
+                        .until(() -> (elevator1_motor.getPosition().getValueAsDouble() < 1)),
+                sysIdRoutineElevator
+                        .dynamic(SysIdRoutine.Direction.kForward)
+                        .until(() -> (elevator1_motor.getPosition().getValueAsDouble() > 34)),
+                sysIdRoutineElevator
+                        .dynamic(SysIdRoutine.Direction.kReverse)
+                        .until(() -> (elevator1_motor.getPosition().getValueAsDouble() < 1)));
     }
 
-    @Override
-    public void simulationPeriodic() {
-        // This method will be called once per scheduler run during simulation
-    }
 
-    public Command setL1(){
-        return new InstantCommand(()-> setPosition(0));
-    
-    }
-
-    public Command setL2(){
-        return new InstantCommand(()-> setPosition(0));
-
-    }
-
-    public Command setL3(){
-        return new InstantCommand(()-> setPosition(0));
-
-    }
-
-    public Command setL4(){
-        return new InstantCommand(()-> setPosition(0));
-
-    }
-
-    public Command setHP(){
-        return new InstantCommand(()-> setPosition(0));
-
-    }
-
-    public Command setHeight(double position){
-        return new InstantCommand(()-> setPosition(position));
-    }
 }
