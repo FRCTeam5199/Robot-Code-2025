@@ -36,7 +36,9 @@ public class ArmSubsystem extends TemplateSubsystem {
                 ArmConstants.ARM_BRAKE,
                 ArmConstants.ARM_SUPPLY_CURRENT_LIMIT,
                 ArmConstants.ARM_STATOR_CURRENT_LIMIT,
-                ArmConstants.ARM_SLOT0_CONFIGS
+                ArmConstants.ARM_SLOT0_CONFIGS,
+                ArmConstants.ARM_LOW_LIMIT,
+                ArmConstants.ARM_HIGH_LIMIT
         );
         configureFollowerMotor(
                 ArmConstants.ARM_FOLLOW_MOTOR_ID,
