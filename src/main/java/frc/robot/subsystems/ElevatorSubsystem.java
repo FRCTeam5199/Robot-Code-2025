@@ -92,28 +92,32 @@ public class ElevatorSubsystem extends TemplateSubsystem {
     }
 
     public Command setL1() {
-        return new InstantCommand(() -> setPosition(0));
+        return new InstantCommand(() -> setPosition(0.1));
 
     }
 
     public Command setL2() {
-        return new InstantCommand(() -> setPosition(0));
+        return new InstantCommand(() -> setPosition(.2));
 
     }
 
     public Command setL3() {
-        return new InstantCommand(() -> setPosition(0));
+        return new InstantCommand(() -> setPosition(.3));
 
     }
 
     public Command setL4() {
-        return new InstantCommand(() -> setPosition(0));
+        return new InstantCommand(() -> setPosition(.7));
 
     }
 
     public Command setHP() {
-        return new InstantCommand(() -> setPosition(0));
+        return new InstantCommand(() -> setPosition(.5));
 
+    }
+
+    public Command setBase(){
+        return new InstantCommand(()-> setPosition(0));
     }
 
     public Command setHeight(double position) {
