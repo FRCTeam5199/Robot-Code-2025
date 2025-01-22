@@ -78,8 +78,8 @@ public class ArmSubsystem extends TemplateSubsystem {
         return new InstantCommand(() -> setPosition(ArmConstants.GROUND));
     }
 
-    public Command setGroundBack() {
-        return new InstantCommand(() -> setPosition(ArmConstants.GROUND_2));
+    public Command setHP() {
+        return new InstantCommand(() -> setPosition(ArmConstants.HP));
     }
 
     public Command setL1() {
@@ -97,6 +97,11 @@ public class ArmSubsystem extends TemplateSubsystem {
     public Command setL4() {
         return new InstantCommand(() -> setPosition(ArmConstants.L4));
     }
+    public Command setDunk() {
+        return new InstantCommand(() -> setPosition(ArmConstants.DUNK));
+    }
+
+    
 
 
     public static ArmSubsystem getInstance() {

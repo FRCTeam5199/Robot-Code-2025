@@ -74,9 +74,11 @@ public class WristSubsystem extends TemplateSubsystem {
         return new InstantCommand(()-> setPosition(WristConstants.GROUND));
     }
 
-    public Command setGroundBack(){
-        return new InstantCommand(()-> setPosition(WristConstants.GROUND_2));
+    public Command setHP(){
+        return new InstantCommand(()-> setPosition(WristConstants.HP));
+
     }
+
     public Command setL1(){
         return new InstantCommand(()-> setPosition(WristConstants.L1));
     }
@@ -89,6 +91,11 @@ public class WristSubsystem extends TemplateSubsystem {
     public Command setL4(){
         return new InstantCommand(()-> setPosition(WristConstants.L4));
     }
+
+    public Command setDunk(){
+        return new InstantCommand(()-> setPosition(WristConstants.L4));
+    }
+    
 
 
     public static WristSubsystem getInstance() {
