@@ -58,6 +58,10 @@ public final class Constants {
         public static final double STATOR_CURRENT_LIMIT = 60;
         public static final double DRUM_CIRCUMFERENCE = .119694706;
 
+        public static final double ARM_MM_CV = 80;
+        public static final double ARM_MM_A = 160;
+        public static final double ARM_MM_J = 1600;
+
         public static final Slot0Configs ELEVATOR_SLOT0_CONFIGS = new Slot0Configs()
                 .withKP(5)
                 .withKI(0)
@@ -107,6 +111,13 @@ public final class Constants {
 
         //The speed and acceleration the arm should move at.
         public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS = new TrapezoidProfile.Constraints(800, 1600);
+        public static final double ARM_MM_CV = 80;
+        public static final double ARM_MM_A = 160;
+        public static final double ARM_MM_J = 1600;
+
+
+
+
 
 
 // kg = .348, ks = .14816, Kv = 6.16786
@@ -121,6 +132,8 @@ public final class Constants {
         //Degrees check super for template subsystem
         public static final double ARM_MIN = 0.61524;
         public static final double ARM_MAX = 57; //fix
+
+
 
 
         public static final double ARM_MAX_VELOCITY = 500;
@@ -138,7 +151,8 @@ public final class Constants {
         public static final double L3 = 50;
         public static final double L4 = 60;
         public static final double HP = 90;
-        public static final double GROUND_2 = 0;
+        public static final double DUNK = 100;
+
         public static final String ARM_CANCODER_CANBUS = "rio";
 
         public static final Slot0Configs ARM_SLOT0_CONFIGS = new Slot0Configs()
@@ -155,17 +169,6 @@ public final class Constants {
         public static final double ARM_LOW_LIMIT = 6;
         public static final double ARM_HIGH_LIMIT = 77;
         
-    }
-
-    public static class ClawConstants {
-        public static final Type CLAW_TYPE = Type.LINEAR;
-        public static final int CLAW_ID = 0;
-        public static final TrapezoidProfile.Constraints CLAW_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
-        public static final PID CLAW_PID = new PID(0, 0, 0);
-        public static final FeedForward CLAW_FEEDFORWARD = new FeedForward(0, 0, 0);
-        public static final double CLAW_lowerTOLERANCE = 0.0;
-        public static final double CLAW_upperTOLERANCE = 0.0;
-        public static final double[][] CLAW_gearRatios = {{0}, {0}};
     }
 
     public static class AlgaeIntakeConstants {
@@ -233,6 +236,8 @@ public final class Constants {
                 .withKV(0)
                 .withKA(0);
 
+                
+
 
         public static final double WRIST_FF_OFFSET = Units.degreesToRadians(0);
 
@@ -240,7 +245,12 @@ public final class Constants {
         public static final double WRIST_CANCODER_DISCONTINUITY_POINT = 1;
         public static final SensorDirectionValue WRIST_CANCODER_DIRECTION
                 = SensorDirectionValue.Clockwise_Positive;
+        
 
+        public static final double WRIST_MM_CV = 80;
+        public static final double ARM_MM_A = 160;
+        public static final double ARM_MM_J = 1600;
+        
         //rotations
         public static final double WRIST_CANCODER_MAGNET_OFFSET = 0.930176;
 
@@ -275,7 +285,8 @@ public final class Constants {
                 L3 = 0,
                 L4 = 0,
                 HP = 0,
-                GROUND_2 = 0;
+                GROUND_2 = 0,
+                DUNK = 0;
 
 
     }
