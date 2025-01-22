@@ -341,11 +341,9 @@ public class TemplateSubsystem extends SubsystemBase {
 
         TrapezoidProfile.State nextState = profile.calculate(timer.get(), currentState, goalState);
         motor.setControl(
-                magicMan.withPosition(nextState.position)
+                positionVoltage.withPosition(nextState.position)
                         .withFeedForward(calculateFF(nextState.velocity,
                                 (nextState.velocity - currentState.velocity) / timer.get())));
-
-                System.out.println("Next State: " + nextState.position);
 
         currentState = nextState;
         timer.restart();
@@ -362,8 +360,12 @@ public class TemplateSubsystem extends SubsystemBase {
                         getMechM() >= goal - lowerTolerance && getMechM() <= goal + upperTolerance;
             }
             case PIVOT -> {
-                return isProfileFinished() &&
-                        Units.rotationsToDegrees(getEncoderRot()) >= goal - lowerTolerance && Units.rotationsToDegrees(getEncoderRot()) <= goal + upperTolerance;
+                if (encoder != null)
+                    return isProfileFinished() &&
+                            Units.rotationsToDegrees(getEncoderRot()) >= goal - lowerTolerance && Units.rotationsToDegrees(getEncoderRot()) <= goal + upperTolerance;
+                else
+                    return isProfileFinished() &&
+                        getDegrees() >= goal - lowerTolerance && getDegrees() <= goal + upperTolerance;
             }
             default -> {
                 if (isVelocity) return getMechVelocity() >= goal - lowerTolerance

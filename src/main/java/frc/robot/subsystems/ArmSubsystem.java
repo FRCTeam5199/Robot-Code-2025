@@ -71,6 +71,8 @@ public class ArmSubsystem extends TemplateSubsystem {
 
         }
 
+        // System.out.println(getDegrees());
+
     }
 
 

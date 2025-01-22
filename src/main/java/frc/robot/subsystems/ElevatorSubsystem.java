@@ -89,10 +89,12 @@ public class ElevatorSubsystem extends TemplateSubsystem {
         super.periodic();
         // System.out.println("is at goal position: " + isMechAtGoal(false));
         // System.out.println("meters: " + getMechM());
+
+        System.out.println("Elevator MechRot: " + getMechM());
     }
 
     public Command setL1() {
-        return new InstantCommand(() -> setPosition(0.1));
+        return new InstantCommand(() -> setPosition(0));
 
     }
 
@@ -107,7 +109,7 @@ public class ElevatorSubsystem extends TemplateSubsystem {
     }
 
     public Command setL4() {
-        return new InstantCommand(() -> setPosition(.7));
+        return new InstantCommand(() -> setPosition(6));
 
     }
 
