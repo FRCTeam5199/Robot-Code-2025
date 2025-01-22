@@ -122,11 +122,11 @@ public class RobotContainer {
         // commandXboxController.povUp().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // commandXboxController.povDown().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-        // commandXboxController.povUp().onTrue(armSubsystem.setGround());
-        // commandXboxController.povDown().onTrue(armSubsystem.setL1());
-        // commandXboxController.povLeft().onTrue(armSubsystem.setL2());
-        // commandXboxController.povRight().onTrue(armSubsystem.setL3());
-        // commandXboxController.a().onTrue(armSubsystem.setL4());
+        commandXboxController.povUp().onTrue(armSubsystem.setGround());
+        commandXboxController.povDown().onTrue(armSubsystem.setL1());
+        commandXboxController.povLeft().onTrue(armSubsystem.setL2());
+        commandXboxController.povRight().onTrue(armSubsystem.setL3());
+        commandXboxController.a().onTrue(new PositionCommand(armSubsystem, 30));
 
         // commandXboxController.povUp().onTrue(elevatorSubsystem.setBase());
         // commandXboxController.povDown().onTrue(elevatorSubsystem.setL1());
@@ -134,13 +134,13 @@ public class RobotContainer {
         // commandXboxController.povRight().onTrue(elevatorSubsystem.setL3());
         // commandXboxController.a().onTrue(elevatorSubsystem.setL4());
 
-        commandXboxController.povDown().onTrue(ScoreCommands.scoreHP());
-        commandXboxController.povUp().onTrue(ScoreCommands.scoreL1());
+        // commandXboxController.povDown().onTrue(ScoreCommands.scoreHP());
+        // commandXboxController.povUp().onTrue(ScoreCommands.scoreL1());
 
-        commandXboxController.povLeft().onTrue(ScoreCommands.scoreL2());
-        commandXboxController.povRight().onTrue(ScoreCommands.scoreL3());
-        commandXboxController.a().onTrue(ScoreCommands.scoreL4());
-        commandXboxController.rightBumper().onTrue(ScoreCommands.dunk());
+        // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL2());
+        // commandXboxController.povRight().onTrue(ScoreCommands.scoreL3());
+        // commandXboxController.a().onTrue(ScoreCommands.scoreL4());
+        // commandXboxController.rightBumper().onTrue(ScoreCommands.dunk());
 
 
 

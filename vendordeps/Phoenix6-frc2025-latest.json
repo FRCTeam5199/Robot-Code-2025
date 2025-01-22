@@ -1,9 +1,5 @@
 {
-<<<<<<<< HEAD:vendordeps/Phoenix6-frc2025-latest.json
     "fileName": "Phoenix6-frc2025-latest.json",
-========
-    "fileName": "Phoenix6-25.2.1.json",
->>>>>>>> main:vendordeps/Phoenix6-25.2.1.json
     "name": "CTRE-Phoenix (v6)",
     "version": "25.2.1",
     "frcYear": "2025",

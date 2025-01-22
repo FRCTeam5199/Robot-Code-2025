@@ -71,6 +71,8 @@ public final class Constants {
                 .withKG(ELEVATOR_FF.getkG())
                 .withKV(ELEVATOR_FF.getkV())
                 .withGravityType(GravityTypeValue.Elevator_Static);
+        
+        public static final double L1 = 1;
 
     }
 
@@ -126,8 +128,8 @@ public final class Constants {
         public static final FeedForward ARM_FF = new FeedForward(0.14, 0, .123407);
 
         //degrees. check super for template subsystem
-        public static final double ARM_LOWER_TOLERANCE = 0.001;
-        public static final double ARM_UPPER_TOLERANCE = 0.001;
+        public static final double ARM_LOWER_TOLERANCE = 1;
+        public static final double ARM_UPPER_TOLERANCE = 1;
 
         //Degrees check super for template subsystem
         public static final double ARM_MIN = 0.61524;
@@ -146,11 +148,11 @@ public final class Constants {
 
         //Value the arm should move to for a wanted position.
         public static final double GROUND = 5;
-        public static final double L1 = 25;
-        public static final double L2 = 40;
-        public static final double L3 = 50;
+        public static final double L1 = 137.2;
+        public static final double L2 = 128.8;
+        public static final double L3 = 119;
         public static final double L4 = 60;
-        public static final double HP = 90;
+        public static final double HP = 59.04;
         public static final double DUNK = 100;
 
         public static final String ARM_CANCODER_CANBUS = "rio";
