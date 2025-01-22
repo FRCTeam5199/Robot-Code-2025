@@ -67,6 +67,8 @@ public class WristSubsystem extends TemplateSubsystem {
         if (isProfileFinished()) {
 
         }
+
+        // System.out.println(getDegrees());
     }
 
 
