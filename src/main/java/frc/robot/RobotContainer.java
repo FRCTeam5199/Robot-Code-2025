@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.PivotToCommand;
+import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ShooterPivotAngles;
 import frc.robot.constants.Constants.OperatorConstants;
 // import frc.robot.commands.Autos;
@@ -113,8 +114,8 @@ public class RobotContainer {
         //  commandXboxController.povDown().onTrue(new InstantCommand(()-> linearTestSubsystem.setPosition(1)));
 
 
-        commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
-        commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
+        // commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
+        // commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
 
         // commandXboxController.povLeft().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         // commandXboxController.povRight().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
@@ -127,11 +128,20 @@ public class RobotContainer {
         // commandXboxController.povRight().onTrue(armSubsystem.setL3());
         // commandXboxController.a().onTrue(armSubsystem.setL4());
 
-        commandXboxController.povUp().onTrue(elevatorSubsystem.setBase());
-        commandXboxController.povDown().onTrue(elevatorSubsystem.setL1());
-        commandXboxController.povLeft().onTrue(elevatorSubsystem.setL2());
-        commandXboxController.povRight().onTrue(elevatorSubsystem.setL3());
-        commandXboxController.a().onTrue(elevatorSubsystem.setL4());
+        // commandXboxController.povUp().onTrue(elevatorSubsystem.setBase());
+        // commandXboxController.povDown().onTrue(elevatorSubsystem.setL1());
+        // commandXboxController.povLeft().onTrue(elevatorSubsystem.setL2());
+        // commandXboxController.povRight().onTrue(elevatorSubsystem.setL3());
+        // commandXboxController.a().onTrue(elevatorSubsystem.setL4());
+
+        commandXboxController.povDown().onTrue(ScoreCommands.scoreHP());
+        commandXboxController.povUp().onTrue(ScoreCommands.scoreL1());
+
+        commandXboxController.povLeft().onTrue(ScoreCommands.scoreL2());
+        commandXboxController.povRight().onTrue(ScoreCommands.scoreL3());
+        commandXboxController.a().onTrue(ScoreCommands.scoreL4());
+        commandXboxController.rightBumper().onTrue(ScoreCommands.dunk());
+
 
 
     //    commandXboxController.povDown().onTrue(climber.moveDOWN()).onFalse(new InstantCommand(()->climber.setPercent(0)));

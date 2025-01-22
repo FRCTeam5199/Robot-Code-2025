@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -58,6 +59,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     private PositionVoltage positionVoltage;
     private VelocityVoltage velocityVoltage;
+    private MotionMagicVoltage magicMan;
 
     private SimpleMotorFeedforward simpleMotorFF;
     private ElevatorFeedforward linearFF;
@@ -148,26 +150,30 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     public void configureMotor(boolean isInverted, boolean isBrakeMode,
-    double supplyCurrentLimit, double statorCurrentLimit,
-    Slot0Configs slot0Configs, double softLimLow, double softLimHigh) {
-motorConfig.MotorOutput.Inverted =
-isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
-motorConfig.MotorOutput.NeutralMode = isBrakeMode ? NeutralModeValue.Brake : NeutralModeValue.Coast;
-motorConfig.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
-motorConfig.CurrentLimits.StatorCurrentLimit = statorCurrentLimit;
-motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-motorConfig.Slot0 = slot0Configs;
-motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = softLimHigh;
-motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = softLimLow;
-motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        double supplyCurrentLimit, double statorCurrentLimit,
+        Slot0Configs slot0Configs, double softLimLow, double softLimHigh) {
+        motorConfig.MotorOutput.Inverted =
+            isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+        motorConfig.MotorOutput.NeutralMode = isBrakeMode ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+        motorConfig.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
+        motorConfig.CurrentLimits.StatorCurrentLimit = statorCurrentLimit;
+        motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        motorConfig.Slot0 = slot0Configs;
+        motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = softLimHigh;
+        motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = softLimLow;
+        motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        motorConfig.MotionMagic.MotionMagicCruiseVelocity = ArmConstants.ARM_MM_CV;
+        motorConfig.MotionMagic.MotionMagicAcceleration = ArmConstants.ARM_MM_A;
+        motorConfig.MotionMagic.MotionMagicJerk = ArmConstants.ARM_MM_J;
+        
 
 
 
-motor.getConfigurator().apply(motorConfig);
-motor.setPosition(0);
-}
+        motor.getConfigurator().apply(motorConfig);
+        motor.setPosition(0);
+    }   
 
 
 
@@ -175,12 +181,23 @@ motor.setPosition(0);
         this.drumCircumference = drumCircumference;
         this.mechMin = mechMinM;
         this.mechMax = mechMaxM;
+        motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = getMotorRotFromMechM(mechMaxM);
+        motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = getMotorRotFromMechM(mechMinM);
+        motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
     }
 
     public void configurePivot(double mechMinDegrees, double mechMaxDegrees, double ffOffset) {
         this.mechMin = mechMinDegrees;
         this.mechMax = mechMaxDegrees;
         this.ffOffset = ffOffset;
+
+        motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = getMotorRotFromMechM(mechMaxDegrees);
+        motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = getMotorRotFromMechM(mechMinDegrees);
+        motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
     }
 
     public void configureFollowerMotor(int followerMotorId, boolean opposeMasterDirection) {
@@ -324,7 +341,7 @@ motor.setPosition(0);
 
         TrapezoidProfile.State nextState = profile.calculate(timer.get(), currentState, goalState);
         motor.setControl(
-                positionVoltage.withPosition(nextState.position)
+                magicMan.withPosition(nextState.position)
                         .withFeedForward(calculateFF(nextState.velocity,
                                 (nextState.velocity - currentState.velocity) / timer.get())));
 
