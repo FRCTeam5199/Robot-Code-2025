@@ -7,8 +7,9 @@
 
 //  import edu.wpi.first.apriltag.AprilTagFieldLayout;
 //  import edu.wpi.first.apriltag.AprilTagFields;
-//  import edu.wpi.first.wpilibj.Filesystem;
-//  import frc.robot.generated.TunerConstants;
+// import edu.wpi.first.apriltag.AprilTagPoseEstimate;
+// import edu.wpi.first.wpilibj.Filesystem;
+//  import frc.robot.constants.TunerConstants;
 //  import org.photonvision.EstimatedRobotPose;
 //  import org.photonvision.PhotonCamera;
 //  import org.photonvision.PhotonPoseEstimator;
@@ -24,7 +25,9 @@
 //  import edu.wpi.first.math.numbers.N1;
 //  import edu.wpi.first.math.numbers.N3;
 //  import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//  import frc.robot.Constants;
+//  import frc.robot.constants.Constants;
+//  import org.photonvision.simulation.VisionTargetSim;
+//  import edu.wpi.first.math.geometry.Pose3d;
 
 //  public class AprilTagSubsystem extends SubsystemBase {
 
@@ -38,20 +41,22 @@
 //      private PhotonPipelineResult lastResult;
 //      //    private PhotonPipelineResult lastResultBack;
 //      private AprilTagFieldLayout customLayout;
+//      private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 //  //    private AprilTagFieldLayout backCameraLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
+//      private AprilTagPoseEstimate poseEstimate;
 
-//      public AprilTagSubsystem() {
-//          camera = new PhotonCamera(Constants.Vision.kCameraName);
-//  //        camera_Back = new PhotonCamera(Constants.Vision.kCameraName_Back);
-//          try {
-//              customLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory() + "/configs/2024-crescendo.json");
-//          } catch (IOException e) {
-//              throw new RuntimeException(e);
-//          }
+// //      public AprilTagSubsystem() {
+// //          camera = new PhotonCamera(Constants.Vision.kCameraName);
+// //  //        camera_Back = new PhotonCamera(Constants.Vision.kCameraName_Back);
+// //          try {
+// //              customLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory() + "/configs/2024-crescendo.json");
+// //          } catch (IOException e) {
+// //              throw new RuntimeException(e);
+// //          }
 
 
-//          photonEstimator =
-//                  new PhotonPoseEstimator(customLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, Constants.Vision.kRobotToCam);
+//         photonEstimator =
+//                  new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.Vision.kRobotToCam);
 //  //        photonEstimatorBack =
 //  //                new PhotonPoseEstimator(backCameraLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera_Back, Constants.Vision.kRobotToCamBack);
 //          photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
@@ -96,7 +101,7 @@
 //      // }
 
 //      public Pair<Optional<EstimatedRobotPose>, Double> getEstimatedGlobalPose() {
-//          photonEstimator.setReferencePose(drivetrain.getPose());
+//          photonEstimator.update(lastResult);
 
 //          getLatestResult();
 
@@ -130,7 +135,9 @@
 //      }
 
 //      public double getAmbiguity() {
-//          return lastResult.getMultiTagResult().estimatedPose.ambiguity;
+//         //  return lastResult.getMultiTagResult().estimatedPose.ambiguity;
+        
+//         return poseEstimate.getAmbiguity();
 //      }
 
 //      public double getAmbiguityBack() {
@@ -143,27 +150,27 @@
 //          return lastResult.getTimestampSeconds();
 //      }
 
-//      public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
-//          var estStdDevs = Constants.Vision.kSingleTagStdDevs;
-//          var targets = lastResult.getTargets();
-//          int numTags = 0;
-//          double avgDist = 0;
-//          for (var tgt : targets) {
-//              var tagPose = photonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
-//              if (tagPose.isEmpty()) continue;
-//              numTags++;
-//              avgDist +=
-//                      tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
-//          }
-//          if (numTags == 0) return estStdDevs;
-//          avgDist /= numTags;
-//          // Decrease std devs if multiple targets are visible
-//          if (numTags > 1) estStdDevs = Constants.Vision.kMultiTagStdDevsTeleop;
-//          // Increase std devs based on (average) distance
-//          if (numTags == 1 && avgDist > 4)
-//              estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-//          else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+// //      public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
+// //          var estStdDevs = Constants.Vision.kSingleTagStdDevs;
+// //          var targets = lastResult.getTargets();
+// //          int numTags = 0;
+// //          double avgDist = 0;
+// //          for (var tgt : targets) {
+// //              var tagPose = photonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+// //              if (tagPose.isEmpty()) continue;
+// //              numTags++;
+// //              avgDist +=
+// //                      tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
+// //          }
+// //          if (numTags == 0) return estStdDevs;
+// //          avgDist /= numTags;
+// //          // Decrease std devs if multiple targets are visible
+// //          if (numTags > 1) estStdDevs = Constants.Vision.kMultiTagStdDevsTeleop;
+// //          // Increase std devs based on (average) distance
+// //          if (numTags == 1 && avgDist > 4)
+// //              estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+// //          else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
 
-//          return estStdDevs;
-//      }
-//  }
+// //          return estStdDevs;
+// //      }
+// //  }
