@@ -5,17 +5,14 @@
 package frc.robot.constants;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.utility.FeedForward;
 import frc.robot.utility.PID;
 
@@ -43,7 +40,7 @@ public final class Constants {
         public static final int ELEVATOR2_ID = 18;
 
         public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS
-                = new TrapezoidProfile.Constraints(100, 200);
+                = new TrapezoidProfile.Constraints(150, 300);
         public static final PID ELEVATOR_PID = new PID(0, 0, 0);
         public static final FeedForward ELEVATOR_FF = new FeedForward(0.08, 0.25, 0.127429);
         public static final double ELEVATOR_MIN = 0;
@@ -53,7 +50,7 @@ public final class Constants {
         public static final double[][] ELEVATOR_GEARING = new double[][]{{3, 1}};
         public static final boolean INVERT = false;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
-        public static final boolean BRAKE = false;
+        public static final boolean BRAKE = true;
         public static final double SUPPLY_CURRENT_LIMIT = 60;
         public static final double STATOR_CURRENT_LIMIT = 60;
         public static final double DRUM_CIRCUMFERENCE = .119694706;
@@ -71,7 +68,7 @@ public final class Constants {
                 .withKG(ELEVATOR_FF.getkG())
                 .withKV(ELEVATOR_FF.getkV())
                 .withGravityType(GravityTypeValue.Elevator_Static);
-        
+
         public static final double L1 = 1;
 
     }
@@ -118,10 +115,6 @@ public final class Constants {
         public static final double ARM_MM_J = 1600;
 
 
-
-
-
-
 // kg = .348, ks = .14816, Kv = 6.16786
         // These are the values that will be factored into the arm ff equation. There is a separate documet to find these.
 
@@ -133,9 +126,7 @@ public final class Constants {
 
         //Degrees check super for template subsystem
         public static final double ARM_MIN = 0.61524;
-        public static final double ARM_MAX = 57; //fix
-
-
+        public static final double ARM_MAX = 180; //fix
 
 
         public static final double ARM_MAX_VELOCITY = 500;
@@ -170,18 +161,34 @@ public final class Constants {
 
         public static final double ARM_LOW_LIMIT = 6;
         public static final double ARM_HIGH_LIMIT = 77;
-        
+
     }
 
-    public static class AlgaeIntakeConstants {
-        public static final Type ALGAEINTAKESUBYSTEM_TYPE = Type.LINEAR;
-        public static final int ALGAEINTAKESUBYSTEM_ID = 0;
-        public static final TrapezoidProfile.Constraints ALGAEINTAKESUBYSTEM_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
-        public static final PID ALGAEINTAKESUBYSTEM_PID = new PID(0, 0, 0);
-        public static final FeedForward ALGAEINTAKESUBYSTEM_FEEDFORWARD = new FeedForward(0, 0, 0);
-        public static final double ALGAEINTAKESUBYSTEM_lowerTOLERANCE = 0.0;
-        public static final double ALGAEINTAKESUBYSTEM_upperTOLERANCE = 0.0;
-        public static final double[][] ALGAEINTAKESUBYSTEM_gearRatios = {{0}, {0}};
+    public static class IntakeConstants {
+        public static final Type INTAKE_TYPE = Type.LINEAR;
+        public static final int INTAKE_ID = 20;
+        public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
+        public static final PID INTAKE_PID = new PID(0, 0, 0);
+        public static final FeedForward INTAKE_FEEDFORWARD = new FeedForward(0, 0, 0);
+        public static final double INTAKE_lowerTOLERANCE = 0.0;
+        public static final double INTAKE_upperTOLERANCE = 0.0;
+        public static final double[][] INTAKE_gearRatios = {{1, 1}};
+
+        public static final boolean INTAKE_INVERT = true;
+        public static final boolean INTAKE_BRAKE = true;
+        public static final double INTAKE_STATOR_CURRENT_LIMIT = 100;
+        public static final double INTAKE_SUPPLY_CURRENT_LIMIT = 100;
+
+        public static final FeedForward INTAKE_FF = new FeedForward(0.14, 0, .123407);
+
+        public static final Slot0Configs INTAKE_SLOT0_CONFIGS = new Slot0Configs()
+                .withKP(5)
+                .withKI(0)
+                .withKD(0)
+                .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
+                .withKS(INTAKE_FF.getkS())
+                .withKG(INTAKE_FF.getkG())
+                .withKV(INTAKE_FF.getkV());
     }
 
     public static class ClimberConstants {
@@ -202,16 +209,15 @@ public final class Constants {
         public static final double CLIMBER_SUPPLY_CURRENT_LIMIT = 100;
 
         public static final Slot0Configs CLIMBER_SLOT0_CONFIGS = new Slot0Configs()
-        .withKP(2.5)
-        .withKI(0)
-        .withKD(0)
-        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
-        .withKS(CLIMBER_FF.getkS())
-        .withKG(CLIMBER_FF.getkG())
-        .withKV(CLIMBER_FF.getkV())
-        .withKA(CLIMBER_FF.getkA())
-        .withGravityType(GravityTypeValue.Arm_Cosine);
-
+                .withKP(2.5)
+                .withKI(0)
+                .withKD(0)
+                .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
+                .withKS(CLIMBER_FF.getkS())
+                .withKG(CLIMBER_FF.getkG())
+                .withKV(CLIMBER_FF.getkV())
+                .withKA(CLIMBER_FF.getkA())
+                .withGravityType(GravityTypeValue.Arm_Cosine);
 
 
     }
@@ -226,19 +232,17 @@ public final class Constants {
         public static final double WRIST_SUPPLY_CURRENT_LIMIT = 80;
         public static final boolean WRIST_INVERTED = true;
 
-        public static final boolean WRIST_BRAKE = false;
+        public static final boolean WRIST_BRAKE = true;
 
 
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(135)
+                .withKP(10)
                 .withKI(0)
                 .withKD(0)
                 .withKS(0)
                 .withKG(0)
                 .withKV(0)
                 .withKA(0);
-
-                
 
 
         public static final double WRIST_FF_OFFSET = Units.degreesToRadians(0);
@@ -247,12 +251,12 @@ public final class Constants {
         public static final double WRIST_CANCODER_DISCONTINUITY_POINT = 1;
         public static final SensorDirectionValue WRIST_CANCODER_DIRECTION
                 = SensorDirectionValue.Clockwise_Positive;
-        
+
 
         public static final double WRIST_MM_CV = 80;
         public static final double ARM_MM_A = 160;
         public static final double ARM_MM_J = 1600;
-        
+
         //rotations
         public static final double WRIST_CANCODER_MAGNET_OFFSET = 0.930176;
 
@@ -260,15 +264,15 @@ public final class Constants {
 
         //The speed and acceleration the wrist should move at.
         //TODO: CHANGE
-        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 2);
+        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(300, 600);
 
-        public static final FeedForward WRIST_FF = new FeedForward(.13, 0, .116, 0.0);
+        public static final FeedForward WRIST_FF = new FeedForward(.243, 0.02, 0.117, 0.0);
         //degrees
         public static final double WRIST_LOWER_TOLERANCE = .75;
         public static final double WRIST_UPPER_TOLERANCE = 0.75;
         //Degrees
         public static final double WRIST_MIN = 0.0;
-        public static final double WRIST_MAX = 57;
+        public static final double WRIST_MAX = 200;
 
         public static final double WRIST_MAX_VELOCITY = 500;
         public static final double WRIST_MAX_ACCELERATION = 750;

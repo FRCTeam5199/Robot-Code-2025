@@ -25,18 +25,14 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.PivotToCommand;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ShooterPivotAngles;
+import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
 // import frc.robot.commands.Autos;
 import frc.robot.constants.TunerConstants;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.*;
 // import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.template.PositionCommand;
-import frc.robot.subsystems.testing.LinearTestSubsystem;
-import frc.robot.subsystems.testing.PivotTestSubsystem;
-import frc.robot.subsystems.testing.RollerTestSubsystem;
+import frc.robot.subsystems.template.VelocityCommand;
 // import tagalong.subsystems.micro.Pivot;
 
 import javax.sound.sampled.Line;
@@ -57,6 +53,7 @@ public class RobotContainer {
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // My drivetrain
     private final ArmSubsystem arm = ArmSubsystem.getInstance();
     private final ClimberSubsystem climber = ClimberSubsystem.getInstance();
+    private final WristSubsystem wrist = WristSubsystem.getInstance();
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
              .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -67,6 +64,7 @@ public class RobotContainer {
 
     private ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+    private IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -122,17 +120,39 @@ public class RobotContainer {
         // commandXboxController.povUp().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // commandXboxController.povDown().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-        commandXboxController.povUp().onTrue(armSubsystem.setGround());
-        commandXboxController.povDown().onTrue(armSubsystem.setL1());
-        commandXboxController.povLeft().onTrue(armSubsystem.setL2());
-        commandXboxController.povRight().onTrue(armSubsystem.setL3());
-        commandXboxController.a().onTrue(new PositionCommand(armSubsystem, 30));
+//        commandXboxController.povUp().onTrue(armSubsystem.setGround());
+//        commandXboxController.povDown().onTrue(armSubsystem.setL1());
+//        commandXboxController.povLeft().onTrue(armSubsystem.setL2());
+//        commandXboxController.povRight().onTrue(armSubsystem.setL3());
+//        commandXboxController.a().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
+//                .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
+//                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
+
+//        commandXboxController.b().onTrue((new VelocityCommand());
+//        commandXboxController.x().onTrue(new InstantCommand(() -> wrist.setPercent(.1))).onFalse(new InstantCommand(() -> wrist.setPercent(0.)));
 
         // commandXboxController.povUp().onTrue(elevatorSubsystem.setBase());
         // commandXboxController.povDown().onTrue(elevatorSubsystem.setL1());
         // commandXboxController.povLeft().onTrue(elevatorSubsystem.setL2());
         // commandXboxController.povRight().onTrue(elevatorSubsystem.setL3());
-        // commandXboxController.a().onTrue(elevatorSubsystem.setL4());
+//         commandXboxController.b().onTrue(new PositionCommand(wrist, 30)).onFalse(new PositionCommand(wrist, 0));
+
+        //arm = 77, elevator = 0.13, wrist = 89, hp
+        //arm = , elevator = , wrist = , l1
+        //arm = 93, elevator = .067, wrist = 18.7, l2
+        //arm = 97.2, elevator = .445, wrist = 20.0, l3
+        //arm = 99.5, elevator = .950, wrist = , 27.76 l4
+
+        commandXboxController.a().onTrue(ScoreCommands.intakeHP());
+        commandXboxController.b().onTrue(ScoreCommands.scoreL2());
+        commandXboxController.x().onTrue(ScoreCommands.scoreL3());
+        commandXboxController.y().onTrue(ScoreCommands.scoreL4());
+        commandXboxController.povDown().onTrue(ScoreCommands.stable());
+        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setVoltage(6)))
+                .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));
+        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setVoltage(-4)))
+                .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));
+
 
         // commandXboxController.povDown().onTrue(ScoreCommands.scoreHP());
         // commandXboxController.povUp().onTrue(ScoreCommands.scoreL1());
