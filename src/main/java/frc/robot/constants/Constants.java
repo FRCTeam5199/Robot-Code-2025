@@ -68,7 +68,7 @@ public final class Constants {
                 .withKG(ELEVATOR_FF.getkG())
                 .withKV(ELEVATOR_FF.getkV())
                 .withGravityType(GravityTypeValue.Elevator_Static);
-        
+
         public static final double L1 = 1;
 
     }
@@ -115,10 +115,6 @@ public final class Constants {
         public static final double ARM_MM_J = 1600;
 
 
-
-
-
-
 // kg = .348, ks = .14816, Kv = 6.16786
         // These are the values that will be factored into the arm ff equation. There is a separate documet to find these.
 
@@ -130,9 +126,7 @@ public final class Constants {
 
         //Degrees check super for template subsystem
         public static final double ARM_MIN = 0.61524;
-        public static final double ARM_MAX = 57; //fix
-
-
+        public static final double ARM_MAX = 180; //fix
 
 
         public static final double ARM_MAX_VELOCITY = 500;
@@ -167,7 +161,7 @@ public final class Constants {
 
         public static final double ARM_LOW_LIMIT = 6;
         public static final double ARM_HIGH_LIMIT = 77;
-        
+
     }
 
     public static class IntakeConstants {
@@ -216,16 +210,15 @@ public final class Constants {
         public static final double CLIMBER_SUPPLY_CURRENT_LIMIT = 100;
 
         public static final Slot0Configs CLIMBER_SLOT0_CONFIGS = new Slot0Configs()
-        .withKP(2.5)
-        .withKI(0)
-        .withKD(0)
-        .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
-        .withKS(CLIMBER_FF.getkS())
-        .withKG(CLIMBER_FF.getkG())
-        .withKV(CLIMBER_FF.getkV())
-        .withKA(CLIMBER_FF.getkA())
-        .withGravityType(GravityTypeValue.Arm_Cosine);
-
+                .withKP(2.5)
+                .withKI(0)
+                .withKD(0)
+                .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
+                .withKS(CLIMBER_FF.getkS())
+                .withKG(CLIMBER_FF.getkG())
+                .withKV(CLIMBER_FF.getkV())
+                .withKA(CLIMBER_FF.getkA())
+                .withGravityType(GravityTypeValue.Arm_Cosine);
 
 
     }
@@ -252,8 +245,6 @@ public final class Constants {
                 .withKV(0)
                 .withKA(0);
 
-                
-
 
         public static final double WRIST_FF_OFFSET = Units.degreesToRadians(0);
 
@@ -261,12 +252,12 @@ public final class Constants {
         public static final double WRIST_CANCODER_DISCONTINUITY_POINT = 1;
         public static final SensorDirectionValue WRIST_CANCODER_DIRECTION
                 = SensorDirectionValue.Clockwise_Positive;
-        
+
 
         public static final double WRIST_MM_CV = 80;
         public static final double ARM_MM_A = 160;
         public static final double ARM_MM_J = 1600;
-        
+
         //rotations
         public static final double WRIST_CANCODER_MAGNET_OFFSET = 0.930176;
 
