@@ -5,17 +5,14 @@
 package frc.robot.constants;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.utility.FeedForward;
 import frc.robot.utility.PID;
 
@@ -173,15 +170,32 @@ public final class Constants {
         
     }
 
-    public static class AlgaeIntakeConstants {
-        public static final Type ALGAEINTAKESUBYSTEM_TYPE = Type.LINEAR;
-        public static final int ALGAEINTAKESUBYSTEM_ID = 0;
-        public static final TrapezoidProfile.Constraints ALGAEINTAKESUBYSTEM_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
-        public static final PID ALGAEINTAKESUBYSTEM_PID = new PID(0, 0, 0);
-        public static final FeedForward ALGAEINTAKESUBYSTEM_FEEDFORWARD = new FeedForward(0, 0, 0);
-        public static final double ALGAEINTAKESUBYSTEM_lowerTOLERANCE = 0.0;
-        public static final double ALGAEINTAKESUBYSTEM_upperTOLERANCE = 0.0;
-        public static final double[][] ALGAEINTAKESUBYSTEM_gearRatios = {{0}, {0}};
+    public static class IntakeConstants {
+        public static final Type INTAKE_TYPE = Type.LINEAR;
+        public static final int INTAKE_ID = 0;
+        public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
+        public static final PID INTAKE_PID = new PID(0, 0, 0);
+        public static final FeedForward INTAKE_FEEDFORWARD = new FeedForward(0, 0, 0);
+        public static final double INTAKE_lowerTOLERANCE = 0.0;
+        public static final double INTAKE_upperTOLERANCE = 0.0;
+        public static final double[][] INTAKE_gearRatios = {{0}, {0}};
+
+        public static final boolean INTAKE_INVERT = true;
+        public static final boolean INTAKE_BRAKE = true;
+        public static final double INTAKE_STATOR_CURRENT_LIMIT = 100;
+        public static final double INTAKE_SUPPLY_CURRENT_LIMIT = 100;
+
+        public static final FeedForward INTAKE_FF = new FeedForward(0.14, 0, .123407);
+
+        public static final Slot0Configs INTAKE_SLOT0_CONFIGS = new Slot0Configs()
+                .withKP(5)
+                .withKI(0)
+                .withKD(0)
+                .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
+                .withKS(INTAKE_FF.getkS())
+                .withKG(INTAKE_FF.getkG())
+                .withKV(INTAKE_FF.getkV())
+                .withGravityType(GravityTypeValue.Elevator_Static);
     }
 
     public static class ClimberConstants {

@@ -71,7 +71,8 @@ public class ElevatorSubsystem extends TemplateSubsystem {
                 "Elevator"     
             );
 
-        configureMotor(ElevatorConstants.INVERT,
+        configureMotor(
+                ElevatorConstants.INVERT,
                 ElevatorConstants.BRAKE,
                 ElevatorConstants.SUPPLY_CURRENT_LIMIT,
                 ElevatorConstants.STATOR_CURRENT_LIMIT,
