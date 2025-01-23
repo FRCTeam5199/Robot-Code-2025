@@ -1,10 +1,10 @@
 //  package frc.robot.subsystems;
-
+//
 //  import java.io.IOException;
 //  import java.util.ArrayList;
 //  import java.util.List;
 //  import java.util.Optional;
-
+//
 //  import edu.wpi.first.apriltag.AprilTagFieldLayout;
 //  import edu.wpi.first.apriltag.AprilTagFields;
 // import edu.wpi.first.apriltag.AprilTagPoseEstimate;
@@ -17,7 +17,7 @@
 //  import org.photonvision.proto.Photon;
 //  import org.photonvision.targeting.PhotonPipelineResult;
 //  import org.photonvision.targeting.PhotonTrackedTarget;
-
+//
 //  import edu.wpi.first.math.Matrix;
 //  import edu.wpi.first.math.Pair;
 //  import edu.wpi.first.math.VecBuilder;
@@ -28,9 +28,9 @@
 //  import frc.robot.constants.Constants;
 //  import org.photonvision.simulation.VisionTargetSim;
 //  import edu.wpi.first.math.geometry.Pose3d;
-
+//
 //  public class AprilTagSubsystem extends SubsystemBase {
-
+//
 //      private final PhotonCamera camera;
 //      //    private final PhotonCamera camera_Back;
 //      private final PhotonPoseEstimator photonEstimator;
@@ -44,7 +44,7 @@
 //      private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 //  //    private AprilTagFieldLayout backCameraLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo);
 //      private AprilTagPoseEstimate poseEstimate;
-
+//
 // //      public AprilTagSubsystem() {
 // //          camera = new PhotonCamera(Constants.Vision.kCameraName);
 // //  //        camera_Back = new PhotonCamera(Constants.Vision.kCameraName_Back);
@@ -53,39 +53,39 @@
 // //          } catch (IOException e) {
 // //              throw new RuntimeException(e);
 // //          }
-
-
+//
+//
 //         photonEstimator =
 //                  new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.Vision.kRobotToCam);
 //  //        photonEstimatorBack =
 //  //                new PhotonPoseEstimator(backCameraLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera_Back, Constants.Vision.kRobotToCamBack);
 //          photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 //  //        photonEstimatorBack.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-
+//
 //          lastResult = camera.getLatestResult();
 //  //        lastResultBack = camera_Back.getLatestResult();
 //      }
-
+//
 //      @Override
 //      public void periodic() {
 //      }
-
-
-    
-
-
+//
+//
+//
+//
+//
 //      public void getLatestResult() {
 //      if (camera.getLatestResult().hasTargets()) {
 //              lastResult = camera.getLatestResult();
 //          }
 //      }
-
+//
 //      public void getLatestResultBack() {
 //  //        if (camera_Back.getLatestResult().hasTargets()) {
 //  //            lastResultBack = camera_Back.getLatestResult();
 //  //        }
 //      }
-
+//
 //      // public int[] getTargets() {
 //      //     List<PhotonTrackedTarget> targets = camera.getLatestResult().targets;
 //      //     ArrayList targetids = new ArrayList<>() {
@@ -99,12 +99,12 @@
 //      //         taretids
 //      //     }
 //      // }
-
+//
 //      public Pair<Optional<EstimatedRobotPose>, Double> getEstimatedGlobalPose() {
 //          photonEstimator.update(lastResult);
-
+//
 //          getLatestResult();
-
+//
 //          // filtering stages
 //          // Ensure the result is
 //          if (lastResult.getTimestampSeconds() <= lastEstTimestamp) {
@@ -114,9 +114,9 @@
 //          } else {
 //              return new Pair<>(photonEstimator.update(lastResult), lastResult.getTimestampSeconds());
 //          }
-
+//
 //      }
-
+//
 //      public Pair<Optional<EstimatedRobotPose>, Double> getEstimatedGlobalPoseBack() {
 //  //        photonEstimatorBack.setReferencePose(drivetrain.getPose());
 //  //
@@ -133,23 +133,23 @@
 //  //        }
 //          return new Pair<>(Optional.empty(), 0d);
 //      }
-
+//
 //      public double getAmbiguity() {
 //         //  return lastResult.getMultiTagResult().estimatedPose.ambiguity;
-        
+//
 //         return poseEstimate.getAmbiguity();
 //      }
-
+//
 //      public double getAmbiguityBack() {
 //  //        return lastResultBack.getMultiTagResult().estimatedPose.ambiguity;
 //          return 0;
 //      }
-
-
+//
+//
 //      public double getTimestamp() {
 //          return lastResult.getTimestampSeconds();
 //      }
-
+//
 // //      public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
 // //          var estStdDevs = Constants.Vision.kSingleTagStdDevs;
 // //          var targets = lastResult.getTargets();
@@ -170,7 +170,7 @@
 // //          if (numTags == 1 && avgDist > 4)
 // //              estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
 // //          else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
-
+//
 // //          return estStdDevs;
 // //      }
 // //  }
