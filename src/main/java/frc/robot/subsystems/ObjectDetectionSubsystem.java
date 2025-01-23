@@ -42,7 +42,8 @@ public class ObjectDetectionSubsystem extends SubsystemBase {
 
 
     public LimelightResults getLimelightResults() {
-        return LimelightHelpers.getLatestResults(Constants.Vision.LIMELIGHT);
+//        return LimelightHelpers.getLatestResults(Constants.Vision.LIMELIGHT);
+        return null;
     }
 
 
