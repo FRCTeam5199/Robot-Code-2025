@@ -264,7 +264,7 @@ public final class Constants {
 
         //The speed and acceleration the wrist should move at.
         //TODO: CHANGE
-        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(300, 600);
+        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(100, 200);
 
         public static final FeedForward WRIST_FF = new FeedForward(.243, 0.02, 0.117, 0.0);
         //degrees
