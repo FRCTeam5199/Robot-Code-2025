@@ -71,7 +71,8 @@ public class ElevatorSubsystem extends TemplateSubsystem {
                 "Elevator"     
             );
 
-        configureMotor(ElevatorConstants.INVERT,
+        configureMotor(
+                ElevatorConstants.INVERT,
                 ElevatorConstants.BRAKE,
                 ElevatorConstants.SUPPLY_CURRENT_LIMIT,
                 ElevatorConstants.STATOR_CURRENT_LIMIT,
@@ -90,7 +91,7 @@ public class ElevatorSubsystem extends TemplateSubsystem {
         // System.out.println("is at goal position: " + isMechAtGoal(false));
         // System.out.println("meters: " + getMechM());
 
-        System.out.println("Elevator MechRot: " + getMechM());
+//        System.out.println("Elevator MechRot: " + getMechM());
     }
 
     public Command setL1() {
