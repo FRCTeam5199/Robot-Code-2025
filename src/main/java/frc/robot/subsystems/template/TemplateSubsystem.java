@@ -75,6 +75,10 @@ public class TemplateSubsystem extends SubsystemBase {
     private double drumCircumference;
     private double ffOffset;
 
+    private double velocity;
+    private double acceleration;
+
+
     private Timer timer;
     private Type type;
 
@@ -275,12 +279,32 @@ public class TemplateSubsystem extends SubsystemBase {
 
         goalState.velocity = 0;
         this.goal = goal;
-
         currentState = profile.calculate(0, currentState, goalState);
         if (encoder == null) currentState.position = getMotorRot();
         else currentState.position = getEncoderRot();
 
         followLastMechProfile = true;
+    }
+
+    //Used if velocity/acceleration constraint needs to be changed
+    public void setPosition(double goal, boolean holdPosition, double vel, double acc) {
+        if (type == Type.ROLLER) return;
+
+        switch (type) {
+            case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
+            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
+            default -> goalState.position = getMotorRotFromMechRot(goal);
+        }
+
+        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(vel, acc));
+
+        goalState.velocity = 0;
+        this.goal = goal;
+        currentState = profile.calculate(0, currentState, goalState);
+        if (encoder == null) currentState.position = getMotorRot();
+        else currentState.position = getEncoderRot();
+
+        followLastMechProfile = holdPosition;
     }
 
     public void setPosition(double goal, boolean holdPosition) {
@@ -443,6 +467,11 @@ public class TemplateSubsystem extends SubsystemBase {
         systemPose.set(getMotorRot());
         systemSpeeds.set(getMotorVelocity());
         systemTimestamp.set(Timer.getFPGATimestamp());
+    }
+
+    public void setConstraints(double vel, double accel){
+        velocity = vel;
+        acceleration = accel;
     }
 
     public void setControl(ControlRequest control) {
