@@ -142,6 +142,8 @@ public class RobotContainer {
         commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-80)))
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));
 
+        commandXboxController.rightBumper().onTrue(new InstantCommand(() -> System.out.println(elevatorSubsystem.getMechM())));
+
         commandXboxController.povUp().onTrue(new InstantCommand(() -> climber.setPercent(0.15))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
         commandXboxController.povDown().onTrue(new InstantCommand(() -> climber.setPercent(-0.15))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
 
