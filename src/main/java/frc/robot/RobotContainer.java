@@ -6,36 +6,24 @@ package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.MotorLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.PivotToCommand;
 import frc.robot.commands.ScoreCommands;
-import frc.robot.commands.ShooterPivotAngles;
-import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
 // import frc.robot.commands.Autos;
 import frc.robot.constants.TunerConstants;
-import frc.robot.subsystems.*;
-// import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.template.PositionCommand;
-import frc.robot.subsystems.template.VelocityCommand;
-// import tagalong.subsystems.micro.Pivot;
-
-import javax.sound.sampled.Line;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -93,14 +81,14 @@ public class RobotContainer {
         // commandXboxController.a().onTrue(new InstantCommand(() -> elevatorSubsystem.setPosition(.25)))
         //         .onFalse(new InstantCommand(() -> elevatorSubsystem.setPosition(0)));
 
-        // reset the field-centric heading on left bumper press
+        commandXboxController.button(7).toggleOnFalse(drivetrain.applyRequest(() -> brake)); // TESTING ONLY -> CHANGE TO onTrue AT COMP
+        // reset the field-centric heading on menu button press
         commandXboxController.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         if (Utils.isSimulation()) {
             drivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
 
         }
-
 
         //     commandXboxController.a().onTrue(new InstantCommand(() -> pivotTestSubsystem.setPosition(10)))
         //             .onFalse(new InstantCommand(() -> pivotTestSubsystem.setPosition(0)));
@@ -147,12 +135,15 @@ public class RobotContainer {
         commandXboxController.b().onTrue(ScoreCommands.scoreL2());
         commandXboxController.x().onTrue(ScoreCommands.scoreL3());
         commandXboxController.y().onTrue(ScoreCommands.scoreL4());
-        commandXboxController.povDown().onTrue(ScoreCommands.stable());
-        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setVoltage(6)))
+        commandXboxController.povRight().onTrue(ScoreCommands.stable());
+
+        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(60)))
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));
-        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setVoltage(-4)))
+        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-80)))
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));
 
+        commandXboxController.povUp().onTrue(new InstantCommand(() -> climber.setPercent(0.15))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
+        commandXboxController.povDown().onTrue(new InstantCommand(() -> climber.setPercent(-0.15))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
 
         // commandXboxController.povDown().onTrue(ScoreCommands.scoreHP());
         // commandXboxController.povUp().onTrue(ScoreCommands.scoreL1());
