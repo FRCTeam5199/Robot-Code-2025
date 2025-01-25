@@ -1,17 +1,14 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.ClimberConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
-import frc.robot.utility.FeedForward;
-import frc.robot.utility.PID;
 import frc.robot.utility.Type;
 
 public class ClimberSubsystem extends TemplateSubsystem {
-    static ClimberSubsystem climber;
+    private static ClimberSubsystem climber;
 
     public ClimberSubsystem() {
         super(Type.PIVOT,
@@ -38,15 +35,6 @@ public class ClimberSubsystem extends TemplateSubsystem {
                 0
         );
     }
-
-    public Command moveUP() {
-        return new InstantCommand(() -> setPercent(30));
-    }
-
-    public Command moveDOWN() {
-        return new InstantCommand(() -> setPercent(-10));
-    }
-
 
     public static ClimberSubsystem getInstance() {
         if (climber == null) {
