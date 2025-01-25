@@ -50,7 +50,7 @@ public final class Constants {
         public static final double[][] ELEVATOR_GEARING = new double[][]{{3, 1}};
         public static final boolean INVERT = false;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
-        public static final boolean BRAKE = true;
+        public static final boolean BRAKE = false;
         public static final double SUPPLY_CURRENT_LIMIT = 120;
         public static final double STATOR_CURRENT_LIMIT = 120;
         public static final double DRUM_CIRCUMFERENCE = .119694706;
@@ -83,8 +83,8 @@ public final class Constants {
         public static final boolean LEFT_ARM_INVERTED = true;
         public static final boolean ARM_FOLLOWER_INVERTED = true;
 
-        public static final boolean ARM_BRAKE = true;
-        public static final boolean ARM_FOLLOW_BRAKE = true;
+        public static final boolean ARM_BRAKE = false;
+        public static final boolean ARM_FOLLOW_BRAKE = false;
 
 
         public static final PID ARM_PID = new PID(0, 0, 0); //53.3332
@@ -175,7 +175,7 @@ public final class Constants {
         public static final double[][] INTAKE_gearRatios = {{1, 1}};
 
         public static final boolean INTAKE_INVERT = true;
-        public static final boolean INTAKE_BRAKE = true;
+        public static final boolean INTAKE_BRAKE = false;
         public static final double INTAKE_STATOR_CURRENT_LIMIT = 100;
         public static final double INTAKE_SUPPLY_CURRENT_LIMIT = 100;
 
@@ -232,7 +232,7 @@ public final class Constants {
         public static final double WRIST_SUPPLY_CURRENT_LIMIT = 80;
         public static final boolean WRIST_INVERTED = true;
 
-        public static final boolean WRIST_BRAKE = true;
+        public static final boolean WRIST_BRAKE = false;
 
 
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()

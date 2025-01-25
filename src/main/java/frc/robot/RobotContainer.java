@@ -134,7 +134,7 @@ public class RobotContainer {
         //arm = 77.03, elevator = .314, wrist = 95.3   HP
 
         commandXboxController.b().onTrue(ScoreCommands.intakeHP());
-//        commandXboxController.b().onTrue(ScoreCommands.scoreL2());
+        // commandXboxController.b().onTrue(ScoreCommands.scoreL2());
         commandXboxController.x().onTrue(ScoreCommands.scoreL3());
         commandXboxController.y().onTrue(ScoreCommands.scoreL4());
         commandXboxController.povRight().onTrue(ScoreCommands.stable());
@@ -147,7 +147,7 @@ public class RobotContainer {
         commandXboxController.rightBumper().onTrue(new InstantCommand(() -> System.out.println("Elevator: " + elevatorSubsystem.getMechM())));
 
         commandXboxController.povUp().onTrue(new InstantCommand(() -> climber.setPercent(0.3))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
-        commandXboxController.povDown().onTrue(new InstantCommand(() -> climber.setPercent(-0.3))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
+        commandXboxController.povDown().onTrue(new InstantCommand(() -> climber.setPercent(-0.))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
 
         // commandXboxController.povDown().onTrue(ScoreCommands.scoreHP());
         // commandXboxController.povUp().onTrue(ScoreCommands.scoreL1());
