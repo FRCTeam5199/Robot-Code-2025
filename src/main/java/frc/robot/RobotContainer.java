@@ -146,8 +146,8 @@ public class RobotContainer {
 
         commandXboxController.rightBumper().onTrue(new InstantCommand(() -> System.out.println("Elevator: " + elevatorSubsystem.getMechM())));
 
-        commandXboxController.povUp().onTrue(new InstantCommand(() -> climber.setPercent(0.15))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
-        commandXboxController.povDown().onTrue(new InstantCommand(() -> climber.setPercent(-0.15))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
+        commandXboxController.povUp().onTrue(new InstantCommand(() -> climber.setPercent(0.3))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
+        commandXboxController.povDown().onTrue(new InstantCommand(() -> climber.setPercent(-0.3))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
 
         // commandXboxController.povDown().onTrue(ScoreCommands.scoreHP());
         // commandXboxController.povUp().onTrue(ScoreCommands.scoreL1());
