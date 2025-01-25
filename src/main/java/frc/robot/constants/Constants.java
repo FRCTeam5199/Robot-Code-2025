@@ -51,8 +51,8 @@ public final class Constants {
         public static final boolean INVERT = false;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
         public static final boolean BRAKE = true;
-        public static final double SUPPLY_CURRENT_LIMIT = 60;
-        public static final double STATOR_CURRENT_LIMIT = 60;
+        public static final double SUPPLY_CURRENT_LIMIT = 120;
+        public static final double STATOR_CURRENT_LIMIT = 120;
         public static final double DRUM_CIRCUMFERENCE = .119694706;
 
         public static final double ARM_MM_CV = 80;
