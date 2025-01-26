@@ -139,7 +139,7 @@ public class RobotContainer {
         commandXboxController.b().onTrue(ScoreCommands.scoreL2());
         commandXboxController.x().onTrue(ScoreCommands.scoreL3());
         commandXboxController.y().onTrue(ScoreCommands.scoreL4());
-        commandXboxController.povRight().onTrue(ScoreCommands.stable());
+        commandXboxController.leftBumper().onTrue(ScoreCommands.stable());
 
         commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(60)))
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));

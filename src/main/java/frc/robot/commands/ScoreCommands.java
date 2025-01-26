@@ -19,14 +19,14 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.152, 40, 200),
+                                new PositionCommand(elevatorSubsystem, 0.152, 36, 180),
                                 new PositionCommand(wristSubsystem, 1.24)
                         ),
                         new PositionCommand(armSubsystem, 74.48)
                 ),
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 74.48),
-                        new PositionCommand(elevatorSubsystem, .152, 115, 200),
+                        new PositionCommand(elevatorSubsystem, .152, 105, 180),
                         new PositionCommand(wristSubsystem, 1.24)
                 ),
                 () -> elevatorSubsystem.getMechM() > .3
@@ -37,15 +37,15 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.013, 40, 200),
-                                new PositionCommand(wristSubsystem, 57.16)
+                                new PositionCommand(elevatorSubsystem, 0.013, 36, 180),
+                                new PositionCommand(wristSubsystem, 59.66)
                         ),
                         new PositionCommand(armSubsystem, 44.12)
                 ),
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 44.12),
-                        new PositionCommand(elevatorSubsystem, .013, 115, 200),
-                        new PositionCommand(wristSubsystem, 57.16)
+                        new PositionCommand(elevatorSubsystem, .013, 105, 180),
+                        new PositionCommand(wristSubsystem, 59.66)
                 ),
                 () -> elevatorSubsystem.getMechM() > .3
         );
@@ -55,16 +55,16 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .151, 40, 200),
-                                new PositionCommand(wristSubsystem, 69.47)
+                                new PositionCommand(elevatorSubsystem, .151, 36, 180),
+                                new PositionCommand(wristSubsystem, 66.97)
                                 ),
                         new PositionCommand(armSubsystem, 64.71)
                 ),
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 64.71),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .151, 115, 200),
-                                new PositionCommand(wristSubsystem, 69.47)
+                                new PositionCommand(elevatorSubsystem, .151, 105, 180),
+                                new PositionCommand(wristSubsystem, 66.97)
                         )
 
                 ),
@@ -76,16 +76,16 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem,  0.44, 40, 200),
-                                new PositionCommand(wristSubsystem, 69.33) //30
+                                new PositionCommand(elevatorSubsystem,  0.44, 36, 180),
+                                new PositionCommand(wristSubsystem, 66.83) //30
                          ),
                         new PositionCommand(armSubsystem, 72.21)
                 ),
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 72.21),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem,  0.44, 200, 400),
-                                new PositionCommand(wristSubsystem, 69.33) //30
+                                new PositionCommand(elevatorSubsystem,  0.44, 180, 360),
+                                new PositionCommand(wristSubsystem, 66.83) //30
                         )
                 ),
                 () -> elevatorSubsystem.getMechM() > .4
@@ -97,8 +97,8 @@ public class ScoreCommands {
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 80.874),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0.9167, 135, 400),
-                        new PositionCommand(wristSubsystem, 65.84)//27.76
+                        new PositionCommand(elevatorSubsystem, 0.9167, 120, 360),
+                        new PositionCommand(wristSubsystem, 62.9)//27.76
                 )
         );
     }
