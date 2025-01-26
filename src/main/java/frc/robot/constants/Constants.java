@@ -48,7 +48,7 @@ public final class Constants {
         public static final double ELEVATOR_LOWER_TOLERANCE = .5;
         public static final double ELEVATOR_UPPER_TOLERANCE = .5;
         public static final double[][] ELEVATOR_GEARING = new double[][]{{3, 1}};
-        public static final boolean INVERT = false;
+        public static final boolean INVERT = true;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
         public static final boolean BRAKE = false;
         public static final double SUPPLY_CURRENT_LIMIT = 120;
