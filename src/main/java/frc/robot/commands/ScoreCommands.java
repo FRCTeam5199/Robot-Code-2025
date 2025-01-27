@@ -55,16 +55,16 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .151, 36, 180),
-                                new PositionCommand(wristSubsystem, 66.97)
+                                new PositionCommand(elevatorSubsystem, .151, 20, 50), //36, 180
+                                new PositionCommand(wristSubsystem, 66.37)
                                 ),
                         new PositionCommand(armSubsystem, 64.71)
                 ),
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 64.71),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .151, 105, 180),
-                                new PositionCommand(wristSubsystem, 66.97)
+                                new PositionCommand(elevatorSubsystem, .151, 20, 50), //105, 180
+                                new PositionCommand(wristSubsystem, 66.37)
                         )
 
                 ),
@@ -76,29 +76,29 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem,  0.44, 36, 180),
-                                new PositionCommand(wristSubsystem, 66.83) //30
+                                new PositionCommand(elevatorSubsystem,  0.44, 36, 20), //36, 180
+                                new PositionCommand(wristSubsystem, 65.8) //30
                          ),
                         new PositionCommand(armSubsystem, 72.21)
                 ),
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 72.21),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem,  0.44, 180, 360),
-                                new PositionCommand(wristSubsystem, 66.83) //30
+                                new PositionCommand(elevatorSubsystem,  0.44, 60, 20), //75, 360
+                                new PositionCommand(wristSubsystem, 65.8) //30
                         )
                 ),
                 () -> elevatorSubsystem.getMechM() > .4
         );
     }
 
-    
+    //hotsunay makoe in fortnite battle royale
     public static Command scoreL4(){
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 80.874),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0.9167, 120, 360),
-                        new PositionCommand(wristSubsystem, 62.9)//27.76
+                        new PositionCommand(elevatorSubsystem, 0.929, 60, 20),//120, 360
+                        new PositionCommand(wristSubsystem, 64)//27.76
                 )
         );
     }
@@ -108,13 +108,13 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Won't clip elevator
                         new ParallelCommandGroup(
                                 new PositionCommand(wristSubsystem, 0),
-                                new PositionCommand(elevatorSubsystem, 0, 40, 200)
+                                new PositionCommand(elevatorSubsystem, 0, 40, 20)
                         ),
                         new PositionCommand(armSubsystem, 0.5)
                 ),
                 new SequentialCommandGroup( //Will clip elevator
                         new PositionCommand(wristSubsystem, 0),
-                        new PositionCommand(elevatorSubsystem, 0, 40, 200),
+                        new PositionCommand(elevatorSubsystem, 0, 40, 20),
                         new PositionCommand(armSubsystem, 0.5)
                 ),
                 () -> wristSubsystem.getDegrees() < 50
