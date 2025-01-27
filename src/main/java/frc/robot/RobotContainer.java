@@ -81,9 +81,6 @@ public class RobotContainer {
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
 
-        // commandXboxController.a().onTrue(new InstantCommand(() -> elevatorSubsystem.setPosition(.25)))
-        //         .onFalse(new InstantCommand(() -> elevatorSubsystem.setPosition(0)));
-
         commandXboxController.button(7).toggleOnFalse(drivetrain.applyRequest(() -> brake)); // TESTING ONLY -> CHANGE TO onTrue AT COMP
         // reset the field-centric heading on menu button press
         commandXboxController.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
