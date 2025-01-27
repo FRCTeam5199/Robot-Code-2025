@@ -54,6 +54,8 @@ public class RobotContainer {
     private ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     private IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
 
+    private Boolean algaeControls = false;
+
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
     //    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
@@ -135,11 +137,38 @@ public class RobotContainer {
                 .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
                 .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
 
+
+        commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
+        commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
         commandXboxController.a().onTrue(ScoreCommands.intakeHP());
-        commandXboxController.b().onTrue(ScoreCommands.scoreL2());
-        commandXboxController.x().onTrue(ScoreCommands.scoreL3());
+        commandXboxController.b().onTrue(new InstantCommand(() -> {if(algaeControls){
+                ScoreCommands.algaeL1();
+                }else{
+                       ScoreCommands.scoreL2();         
+                }
+                }
+        ));
+        commandXboxController.x().onTrue(new InstantCommand(() -> {if(algaeControls){
+                ScoreCommands.algaeL2();
+                }else{
+                        ScoreCommands.scoreL3();
+                }
+                }
+        ));
         commandXboxController.y().onTrue(ScoreCommands.scoreL4());
-        commandXboxController.leftBumper().onTrue(ScoreCommands.stable());
+        commandXboxController.leftBumper().onTrue(new InstantCommand(() -> {if(algaeControls){
+                ScoreCommands.algaeStable();
+                }else{
+                        ScoreCommands.stable();
+                }
+                }
+        ));
+
+        // commandXboxController.a().onTrue(ScoreCommands.intakeHP());
+        // commandXboxController.b().onTrue(ScoreCommands.scoreL2());
+        // commandXboxController.x().onTrue(ScoreCommands.scoreL3());
+        // commandXboxController.y().onTrue(ScoreCommands.scoreL4());
+        // commandXboxController.leftBumper().onTrue(ScoreCommands.stable());
 
         commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(60)))
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));
