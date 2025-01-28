@@ -11,13 +11,14 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
-// import frc.robot.commands.Autos;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -36,11 +37,10 @@ public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
     private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
-
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // My drivetrain
-    private final ArmSubsystem arm = ArmSubsystem.getInstance();
+
     private final ClimberSubsystem climber = ClimberSubsystem.getInstance();
     private final WristSubsystem wrist = WristSubsystem.getInstance();
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
@@ -48,22 +48,18 @@ public class RobotContainer {
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
 
     // driving in open loop
-    private final SwerveRequest.SwerveDriveBrake brake = new com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+    private static final SwerveRequest.SwerveDriveBrake brake = new com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake();
 
-    private ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-    private ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-    private IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+    private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+    private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+    private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
 
-    private Boolean algaeControls = false;
-
+    private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
+    
+    private static Boolean algaeControls = false;
+    
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
-    //    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-//    public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
-//    public static final LinearTestSubsystem linearTestSubsystem = new LinearTestSubsystem();
-    //  public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
-    // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -72,7 +68,6 @@ public class RobotContainer {
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
     }
-
 
     private void configureBindings() {
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -91,9 +86,8 @@ public class RobotContainer {
         }
         
         commandXboxController.rightBumper().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
-                .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
-                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
-
+            .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
+            .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
 
         commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
         commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
@@ -122,9 +116,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An example command will be run in autonomous
-        // return Autos.exampleAuto(armSubsystem);
-        // return autoChooser.getSelected();
-        return null;
+        return autoChooser.getSelected();
     }
 }

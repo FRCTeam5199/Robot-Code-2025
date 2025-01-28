@@ -1,17 +1,34 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.PositionCommand;
 
 public class ScoreCommands {
+    private static IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private static ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     private static WristSubsystem wristSubsystem = WristSubsystem.getInstance();
-            
-            
+
+    public static Command intake() {
+        return new FunctionalCommand(() -> intakeSubsystem.setPercent(80)  , () -> {}, interrupted -> intakeSubsystem.setPercent(0), null, intakeSubsystem);
+    }
+
+    public static Command outtake() {
+        return new FunctionalCommand(() -> intakeSubsystem.setPercent(-80)  , () -> {}, interrupted -> intakeSubsystem.setPercent(0), null, intakeSubsystem);
+    }
+
+    public static Command stopIntake() {
+        return new FunctionalCommand(() -> intakeSubsystem.setPercent(0)  , () -> {}, interrupted -> intakeSubsystem.setPercent(0), null, intakeSubsystem);
+    }
+
     public static Command intakeHP() {
         //Was -- elevator = .13, arm = 77, wrist = 85 [adding 5 to wrist]
         return new ConditionalCommand(
@@ -166,6 +183,7 @@ public class ScoreCommands {
                 () -> elevatorSubsystem.getMechM() > .4
         );
     }
+
     public static Command algaeStable(){
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Won't clip elevator
