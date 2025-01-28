@@ -17,11 +17,12 @@ public final class Autos {
       NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
       NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
       NamedCommands.registerCommand("STOPINTAKE", ScoreCommands.stopIntake());
-      NamedCommands.registerCommand("HP", ScoreCommands.armHP());
-      NamedCommands.registerCommand("L1", ScoreCommands.armL1());
-      NamedCommands.registerCommand("L2", ScoreCommands.armL2());
-      NamedCommands.registerCommand("L3", ScoreCommands.armL3());
-      NamedCommands.registerCommand("L4", ScoreCommands.armL4());
+      NamedCommands.registerCommand("ARMSTABLE", ScoreCommands.stopIntake());
+      NamedCommands.registerCommand("ARMHP", ScoreCommands.armHP());
+      NamedCommands.registerCommand("ARML1", ScoreCommands.armL1());
+      NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
+      NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
+      NamedCommands.registerCommand("ARML4", ScoreCommands.armL4());
     }
 
     /**
