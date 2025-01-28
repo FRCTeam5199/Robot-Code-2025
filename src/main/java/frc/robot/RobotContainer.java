@@ -54,7 +54,7 @@ public class RobotContainer {
     private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
 
-    private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
+    // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
     
     private static Boolean algaeControls = false;
     
@@ -116,6 +116,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
+        // return autoChooser.getSelected();
+        return Autos.threePieceProcessor();
     }
 }

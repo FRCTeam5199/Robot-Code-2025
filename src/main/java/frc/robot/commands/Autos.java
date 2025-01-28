@@ -28,8 +28,12 @@ public final class Autos {
     /**
      * Gets or creates the AutoChooser (Singleton Method)
      */
-    public static SendableChooser<Command> getAutoChooser() {
-      if (autoChooser == null) autoChooser = AutoBuilder.buildAutoChooser();
-      return autoChooser;
+    // public static SendableChooser<Command> getAutoChooser() {
+    //   if (autoChooser == null) autoChooser = AutoBuilder.buildAutoChooser();
+    //   return autoChooser;
+    // }
+
+    public static Command threePieceProcessor() {
+        return AutoBuilder.buildAuto("HP 4 blue bottom");
     }
 }

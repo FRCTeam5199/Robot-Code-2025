@@ -9,12 +9,6 @@
           "data": {
             "pathName": "test path red"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intake"
-          }
         }
       ]
     }

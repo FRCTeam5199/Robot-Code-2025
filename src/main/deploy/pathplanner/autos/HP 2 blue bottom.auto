@@ -57,12 +57,6 @@
           "data": {
             "pathName": "HP to reefside 5"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "reef3"
-          }
         }
       ]
     }
