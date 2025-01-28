@@ -33,7 +33,7 @@ public class ObjectDetectionSubsystem extends SubsystemBase {
 
     }
 
-    String cwass = tclass.getString("no note");
+    String cwass = tclass.getString("no piece");
 
     public static ObjectDetectionSubsystem getInstance() {
         if (objectDetectionSubsystem == null) objectDetectionSubsystem = new ObjectDetectionSubsystem();
@@ -55,21 +55,21 @@ public class ObjectDetectionSubsystem extends SubsystemBase {
 
     }
 
-    public LimelightTarget_Detector getNearestNote() {
-        LimelightTarget_Detector nearestNote = null;
+    public LimelightTarget_Detector getNearestAlgae() {
+        LimelightTarget_Detector nearestAlgae = null;
         double minDistance = Double.MAX_VALUE;
 
         for (LimelightTarget_Detector object : getObjects()) {
-            if (object.className.equals("note")) {
+            if (object.className.equals("Algae")) {
                 double distance = calculateDistance(object); // Implement this method
                 if (distance < minDistance) {
-                    nearestNote = object;
+                    nearestAlgae = object;
                     minDistance = distance;
                 }
             }
         }
 
-        return nearestNote;
+        return nearestAlgae;
     }
 
     private double calculateDistance(LimelightTarget_Detector object) {
@@ -78,15 +78,15 @@ public class ObjectDetectionSubsystem extends SubsystemBase {
         return Math.sqrt(object.tx * object.tx + object.ty * object.ty);
     }
 
-    public double getNotePoseX() {
+    public double getAlgaePoseX() {
         return x;
     }
 
-    public double getNotePoseY() {
+    public double getAlgaePoseY() {
         return y;
     }
 
-    public double getNoteDistance() {
+    public double getAlgaeDistance() {
         return area;
     }
 
@@ -94,7 +94,7 @@ public class ObjectDetectionSubsystem extends SubsystemBase {
         return x;
     }
 
-    public boolean notePresent() {
+    public boolean algaePresent() {
         if (x == 0 && y == 0 && area == 0) {
             return false;
         } else {
