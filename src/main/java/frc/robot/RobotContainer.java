@@ -92,12 +92,12 @@ public class RobotContainer {
         commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
         commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
 
-        commandXboxController.a().onTrue(ScoreCommands.intakeHP());
-        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
-        commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeL2(), ScoreCommands.scoreL3(), () -> algaeControls));
-        commandXboxController.y().onTrue(ScoreCommands.scoreL4());
+        commandXboxController.a().onTrue(ScoreCommands.armHP());
+        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.armAlgaeL1(), ScoreCommands.armL2(), () -> algaeControls));
+        commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeArmL2(), ScoreCommands.armL3(), () -> algaeControls));
+        commandXboxController.y().onTrue(ScoreCommands.armL4());
         
-        commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
+        commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeArmStable(), ScoreCommands.armStable(), () -> algaeControls));
 
         commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(60)))
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));

@@ -29,7 +29,7 @@ public class ScoreCommands {
         return new FunctionalCommand(() -> intakeSubsystem.setPercent(0)  , () -> {}, interrupted -> intakeSubsystem.setPercent(0), null, intakeSubsystem);
     }
 
-    public static Command intakeHP() {
+    public static Command armHP() {
         //Was -- elevator = .13, arm = 77, wrist = 85 [adding 5 to wrist]
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
@@ -48,7 +48,7 @@ public class ScoreCommands {
         );
     }
 
-    public static Command scoreL1(){ 
+    public static Command armL1(){ 
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
@@ -66,7 +66,7 @@ public class ScoreCommands {
         );
     }
 
-    public static Command scoreL2(){
+    public static Command armL2(){
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
@@ -87,7 +87,7 @@ public class ScoreCommands {
         );
     }
 
-    public static Command scoreL3(){
+    public static Command armL3(){
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
@@ -108,7 +108,7 @@ public class ScoreCommands {
     }
 
     //hotsunay makoe in fortnite battle royale
-    public static Command scoreL4(){
+    public static Command armL4(){
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 80.874),
                 new ParallelCommandGroup(
@@ -118,7 +118,7 @@ public class ScoreCommands {
         );
     }
 
-    public static Command stable(){
+    public static Command armStable(){
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Won't clip elevator
                         new ParallelCommandGroup(
@@ -137,13 +137,13 @@ public class ScoreCommands {
     }
 
 
-    public static Command dunk(){
+    public static Command armDunk(){
         return new SequentialCommandGroup(
        
         );
     }
     
-    public static Command algaeL1(){ 
+    public static Command armAlgaeL1(){ 
         return new ConditionalCommand(
                 new SequentialCommandGroup(
                         new ParallelCommandGroup(
@@ -164,7 +164,7 @@ public class ScoreCommands {
         );
     }
 
-    public static Command algaeL2(){
+    public static Command algaeArmL2(){
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
@@ -184,7 +184,7 @@ public class ScoreCommands {
         );
     }
 
-    public static Command algaeStable(){
+    public static Command algaeArmStable(){
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Won't clip elevator
                         new ParallelCommandGroup(

@@ -9,18 +9,19 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public final class Autos {
     private static SendableChooser<Command> autoChooser;
   
     private Autos() {
-      NamedCommands.registerCommand("Intake", ScoreCommands.intake());
-      NamedCommands.registerCommand("Outtake", ScoreCommands.outtake());
-      NamedCommands.registerCommand("HP", new SequentialCommandGroup(ScoreCommands.intakeHP()));
-      NamedCommands.registerCommand("L1", new SequentialCommandGroup(ScoreCommands.scoreL1()));
-      NamedCommands.registerCommand("L2", new SequentialCommandGroup(ScoreCommands.scoreL2()));
-      NamedCommands.registerCommand("L3", new SequentialCommandGroup(ScoreCommands.scoreL3()));
+      NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
+      NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
+      NamedCommands.registerCommand("STOPINTAKE", ScoreCommands.stopIntake());
+      NamedCommands.registerCommand("HP", ScoreCommands.armHP());
+      NamedCommands.registerCommand("L1", ScoreCommands.armL1());
+      NamedCommands.registerCommand("L2", ScoreCommands.armL2());
+      NamedCommands.registerCommand("L3", ScoreCommands.armL3());
+      NamedCommands.registerCommand("L4", ScoreCommands.armL4());
     }
 
     /**
