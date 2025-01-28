@@ -293,5 +293,9 @@ public final class Constants {
 
     }
 
-    public static final String Vision = null;
+    public static class VisionConstants {
+        public static final String Vision = null;
+        public static final String LIMELIGHT_NAME = "LemonDark"; //TODO: change it to the right thing
+
+    }
 }

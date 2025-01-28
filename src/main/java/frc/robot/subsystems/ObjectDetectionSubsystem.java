@@ -42,7 +42,7 @@ public class ObjectDetectionSubsystem extends SubsystemBase {
 
 
     public LimelightResults getLimelightResults() {
-        return LimelightHelpers.getLatestResults(Constants.Vision.LIMELIGHT); //Why is there a LIMELIGHT here?
+        return LimelightHelpers.getLatestResults(Constants.VisionConstants.LIMELIGHT_NAME); //Why is there a LIMELIGHT here?
     }
 
 
