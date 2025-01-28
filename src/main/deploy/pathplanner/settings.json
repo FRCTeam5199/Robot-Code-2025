@@ -4,7 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "Bottom Blue Example",
-    "Top Blue Example"
+    "net side L4 paths",
+    "Top Blue Example",
+    "processor side L4 paths"
   ],
   "autoFolders": [],
   "defaultMaxVel": 6.0,
