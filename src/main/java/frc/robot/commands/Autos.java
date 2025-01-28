@@ -34,6 +34,6 @@ public final class Autos {
     // }
 
     public static Command threePieceProcessor() {
-        return AutoBuilder.buildAuto("HP 4 blue bottom");
+        return AutoBuilder.buildAuto("processor side L4");
     }
 }
