@@ -36,9 +36,7 @@ public class ArmSubsystem extends TemplateSubsystem {
                 ArmConstants.ARM_BRAKE,
                 ArmConstants.ARM_SUPPLY_CURRENT_LIMIT,
                 ArmConstants.ARM_STATOR_CURRENT_LIMIT,
-                ArmConstants.ARM_SLOT0_CONFIGS,
-                ArmConstants.ARM_LOW_LIMIT,
-                ArmConstants.ARM_HIGH_LIMIT
+                ArmConstants.ARM_SLOT0_CONFIGS
         );
         configureFollowerMotor(
                 ArmConstants.ARM_FOLLOW_MOTOR_ID,
@@ -99,11 +97,10 @@ public class ArmSubsystem extends TemplateSubsystem {
     public Command setL4() {
         return new InstantCommand(() -> setPosition(ArmConstants.L4));
     }
+
     public Command setDunk() {
         return new InstantCommand(() -> setPosition(ArmConstants.DUNK));
     }
-
-    
 
 
     public static ArmSubsystem getInstance() {

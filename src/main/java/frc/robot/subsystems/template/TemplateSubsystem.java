@@ -75,6 +75,10 @@ public class TemplateSubsystem extends SubsystemBase {
     private double drumCircumference;
     private double ffOffset;
 
+    private double velocity;
+    private double acceleration;
+
+
     private Timer timer;
     private Type type;
 
@@ -88,7 +92,7 @@ public class TemplateSubsystem extends SubsystemBase {
     DoublePublisher systemVoltage;
     DoublePublisher systemStatorVoltage;
 
-     public TemplateSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints, FeedForward feedForward,
+    public TemplateSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints, FeedForward feedForward,
                              double lowerTolerance, double upperTolerance,
                              double[][] gearRatios, String SubsystemName) {
         this.type = type;
@@ -149,33 +153,6 @@ public class TemplateSubsystem extends SubsystemBase {
         motor.setPosition(0);
     }
 
-    public void configureMotor(boolean isInverted, boolean isBrakeMode,
-        double supplyCurrentLimit, double statorCurrentLimit,
-        Slot0Configs slot0Configs, double softLimLow, double softLimHigh) {
-        motorConfig.MotorOutput.Inverted =
-            isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
-        motorConfig.MotorOutput.NeutralMode = isBrakeMode ? NeutralModeValue.Brake : NeutralModeValue.Coast;
-        motorConfig.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
-        motorConfig.CurrentLimits.StatorCurrentLimit = statorCurrentLimit;
-        motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        motorConfig.Slot0 = slot0Configs;
-        motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = softLimHigh;
-        motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = softLimLow;
-        motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        motorConfig.MotionMagic.MotionMagicCruiseVelocity = ArmConstants.ARM_MM_CV;
-        motorConfig.MotionMagic.MotionMagicAcceleration = ArmConstants.ARM_MM_A;
-        motorConfig.MotionMagic.MotionMagicJerk = ArmConstants.ARM_MM_J;
-        
-
-
-
-        motor.getConfigurator().apply(motorConfig);
-        motor.setPosition(0);
-    }   
-
-
 
     public void configureLinearMech(double drumCircumference, double mechMinM, double mechMaxM) {
         this.drumCircumference = drumCircumference;
@@ -193,11 +170,10 @@ public class TemplateSubsystem extends SubsystemBase {
         this.mechMax = mechMaxDegrees;
         this.ffOffset = ffOffset;
 
-        motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = getMotorRotFromMechM(mechMaxDegrees);
-        motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = getMotorRotFromMechM(mechMinDegrees);
+        motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = getMotorRotFromDegrees(mechMaxDegrees);
+        motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = getMotorRotFromDegrees(mechMinDegrees);
         motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-
     }
 
     public void configureFollowerMotor(int followerMotorId, boolean opposeMasterDirection) {
@@ -253,8 +229,8 @@ public class TemplateSubsystem extends SubsystemBase {
 
         this.goal = rps;
         followLastMechProfile = false;
-        motor.setNeutralMode(NeutralModeValue.Coast);
-        motor.setControl(velocityVoltage.withVelocity(rps)
+        if (rps == 0) setPercent(0);
+        else motor.setControl(velocityVoltage.withVelocity(rps)
                 .withFeedForward(calculateFF(rps, 0)));
     }
 
@@ -295,9 +271,6 @@ public class TemplateSubsystem extends SubsystemBase {
     public void setPosition(double goal) {
         if (type == Type.ROLLER) return;
 
-        // if (goal < mechMin) goal = mechMin;
-        // else if (goal > mechMax) goal = mechMax;
-
         switch (type) {
             case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
             case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
@@ -306,7 +279,6 @@ public class TemplateSubsystem extends SubsystemBase {
 
         goalState.velocity = 0;
         this.goal = goal;
-
         currentState = profile.calculate(0, currentState, goalState);
         if (encoder == null) currentState.position = getMotorRot();
         else currentState.position = getEncoderRot();
@@ -314,11 +286,29 @@ public class TemplateSubsystem extends SubsystemBase {
         followLastMechProfile = true;
     }
 
-    public void setPosition(double goal, boolean holdPosition) {
+    //Used if velocity/acceleration constraint needs to be changed
+    public void setPosition(double goal, boolean holdPosition, double vel, double acc) {
         if (type == Type.ROLLER) return;
 
-        if (goal < mechMin) goal = mechMin;
-        else if (goal > mechMax) goal = mechMax;
+        switch (type) {
+            case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
+            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
+            default -> goalState.position = getMotorRotFromMechRot(goal);
+        }
+
+        profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(vel, acc));
+
+        goalState.velocity = 0;
+        this.goal = goal;
+        currentState = profile.calculate(0, currentState, goalState);
+        if (encoder == null) currentState.position = getMotorRot();
+        else currentState.position = getEncoderRot();
+
+        followLastMechProfile = holdPosition;
+    }
+
+    public void setPosition(double goal, boolean holdPosition) {
+        if (type == Type.ROLLER) return;
 
         switch (type) {
             case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
@@ -365,7 +355,7 @@ public class TemplateSubsystem extends SubsystemBase {
                             Units.rotationsToDegrees(getEncoderRot()) >= goal - lowerTolerance && Units.rotationsToDegrees(getEncoderRot()) <= goal + upperTolerance;
                 else
                     return isProfileFinished() &&
-                        getDegrees() >= goal - lowerTolerance && getDegrees() <= goal + upperTolerance;
+                            getDegrees() >= goal - lowerTolerance && getDegrees() <= goal + upperTolerance;
             }
             default -> {
                 if (isVelocity) return getMechVelocity() >= goal - lowerTolerance
@@ -477,6 +467,11 @@ public class TemplateSubsystem extends SubsystemBase {
         systemPose.set(getMotorRot());
         systemSpeeds.set(getMotorVelocity());
         systemTimestamp.set(Timer.getFPGATimestamp());
+    }
+
+    public void setConstraints(double vel, double accel){
+        velocity = vel;
+        acceleration = accel;
     }
 
     public void setControl(ControlRequest control) {
