@@ -341,7 +341,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
         TrapezoidProfile.State nextState = profile.calculate(timer.get(), currentState, goalState);
         motor.setControl(
-                magicMan.withPosition(nextState.position)
+                positionVoltage.withPosition(nextState.position)
                         .withFeedForward(calculateFF(nextState.velocity,
                                 (nextState.velocity - currentState.velocity) / timer.get())));
 
