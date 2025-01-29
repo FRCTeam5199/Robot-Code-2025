@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.ArmSubsystem;
@@ -21,12 +22,24 @@ public class ScoreCommands {
         return new FunctionalCommand(() -> intakeSubsystem.setPercent(80)  , () -> {}, interrupted -> intakeSubsystem.setPercent(0), null, intakeSubsystem);
     }
 
+    public static Command intake2() {
+        return new InstantCommand(() -> intakeSubsystem.setPercent(80));
+    }
+
     public static Command outtake() {
         return new FunctionalCommand(() -> intakeSubsystem.setPercent(-80)  , () -> {}, interrupted -> intakeSubsystem.setPercent(0), null, intakeSubsystem);
     }
 
+    public static Command outtake2() {
+        return new InstantCommand(() -> intakeSubsystem.setPercent(-80));
+    }
+
     public static Command stopIntake() {
         return new FunctionalCommand(() -> intakeSubsystem.setPercent(0)  , () -> {}, interrupted -> intakeSubsystem.setPercent(0), null, intakeSubsystem);
+    }
+
+    public static Command stopIntake2() {
+        return new InstantCommand(() -> intakeSubsystem.setPercent(0));
     }
 
     public static Command armHP() {
@@ -112,7 +125,7 @@ public class ScoreCommands {
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 80.874),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0.929, 60, 20),//120, 360
+                        new PositionCommand(elevatorSubsystem, 0.921, 60, 20),//120, 360
                         new PositionCommand(wristSubsystem, 65)//27.76
                 )
         );

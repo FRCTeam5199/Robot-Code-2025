@@ -43,19 +43,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ARMSTABLE"
+            "name": "ARMHP"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "b reefside 6 L4 to HP right"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ARMHP"
           }
         },
         {
@@ -74,12 +68,6 @@
           "type": "named",
           "data": {
             "name": "STOPINTAKE"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ARMSTABLE"
           }
         },
         {
@@ -121,19 +109,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ARMSTABLE"
+            "name": "ARMHP"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "b reefside 2 L4 to HP right"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ARMHP"
           }
         },
         {
@@ -152,12 +134,6 @@
           "type": "named",
           "data": {
             "name": "STOPINTAKE"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ARMSTABLE"
           }
         },
         {
@@ -193,7 +169,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ARMSTABLE"
+            "name": "ARMHP"
           }
         }
       ]

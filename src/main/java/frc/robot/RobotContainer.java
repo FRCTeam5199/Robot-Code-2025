@@ -7,6 +7,9 @@ package frc.robot;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -40,7 +43,6 @@ public class RobotContainer {
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // My drivetrain
-
     private final ClimberSubsystem climber = ClimberSubsystem.getInstance();
     private final WristSubsystem wrist = WristSubsystem.getInstance();
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
@@ -65,6 +67,17 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        drivetrain.configureAutoBuilder();
+
+        NamedCommands.registerCommand("INTAKE", ScoreCommands.intake2());
+        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake2());
+        NamedCommands.registerCommand("STOPINTAKE", ScoreCommands.stopIntake2());
+        NamedCommands.registerCommand("ARMSTABLE", ScoreCommands.stopIntake2());
+        NamedCommands.registerCommand("ARMHP", ScoreCommands.armHP());
+        NamedCommands.registerCommand("ARML1", ScoreCommands.armL1());
+        NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
+        NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
+        NamedCommands.registerCommand("ARML4", ScoreCommands.armL4());
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
     }
@@ -117,6 +130,10 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // return autoChooser.getSelected();
-        return Autos.threePieceProcessor();
+        return new PathPlannerAuto("processor side L4");
     }
+    
+    // public static Command threePieceProcessor() {                                                                                         
+    //     return AutoBuilder.buildAuto("Lfue");
+    // }
 }
