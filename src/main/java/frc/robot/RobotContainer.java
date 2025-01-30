@@ -19,12 +19,7 @@ import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 // import frc.robot.commands.Autos;
 import frc.robot.constants.TunerConstants;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -39,7 +34,7 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
-    private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // My drivetrain
+    public static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // My drivetrain
     private final ArmSubsystem arm = ArmSubsystem.getInstance();
     private final ClimberSubsystem climber = ClimberSubsystem.getInstance();
     private final WristSubsystem wrist = WristSubsystem.getInstance();
@@ -54,6 +49,8 @@ public class RobotContainer {
     private ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     private IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+
+    private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     private Boolean algaeControls = false;
 
@@ -107,7 +104,14 @@ public class RobotContainer {
 
         commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(60)))
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));
-        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-80)))
+        commandXboxController.rightTrigger()
+                .onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-80))
+                    // Lock on with limelight thing, if breaking comment the entire andThen statement
+//                    .andThen(new InstantCommand(() -> drivetrain.applyRequest(() -> drive
+//                            .withVelocityX(0.0)
+//                            .withVelocityY(0.0)
+//                            .withRotationalRate(objectDetectionSubsystem.lockOn()))))
+                )
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));
 
         commandXboxController.povUp().onTrue(new InstantCommand(() -> climber.setPercent(0.3))).onFalse(new InstantCommand(() -> climber.setPercent(0)));

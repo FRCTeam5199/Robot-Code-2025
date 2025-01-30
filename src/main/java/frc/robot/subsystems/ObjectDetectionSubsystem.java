@@ -1,17 +1,23 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.LimelightResults;
 import frc.robot.LimelightHelpers.LimelightTarget_Classifier;
 import frc.robot.LimelightHelpers.LimelightTarget_Detector;
+import frc.robot.constants.TunerConstants;
 
 public class ObjectDetectionSubsystem extends SubsystemBase {
     private static ObjectDetectionSubsystem objectDetectionSubsystem;
+
+    private final PIDController lockOnPID = new PIDController(TunerConstants.kLockOnP, TunerConstants.kLockOnI, TunerConstants.kLockOnD);
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     NetworkTableEntry tx = table.getEntry("tx");
@@ -102,5 +108,8 @@ public class ObjectDetectionSubsystem extends SubsystemBase {
         }
     }
 
+    public double lockOn() {
+        return lockOnPID.calculate(getAlgaePoseY(), 0);
+    }
 
 }
