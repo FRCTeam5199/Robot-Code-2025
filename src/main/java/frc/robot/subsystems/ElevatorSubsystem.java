@@ -68,8 +68,8 @@ public class ElevatorSubsystem extends TemplateSubsystem {
                 ElevatorConstants.ELEVATOR_MIN,
                 ElevatorConstants.ELEVATOR_MAX,
                 ElevatorConstants.ELEVATOR_GEARING,
-                "Elevator"     
-            );
+                "Elevator"
+        );
 
         configureMotor(
                 ElevatorConstants.INVERT,
@@ -91,7 +91,7 @@ public class ElevatorSubsystem extends TemplateSubsystem {
         // System.out.println("is at goal position: " + isMechAtGoal(false));
         // System.out.println("meters: " + getMechM());
 
-//        System.out.println("Elevator MechRot: " + getMechM());
+        System.out.println("Elevator Mech M: " + getMechM());
     }
 
     public Command setL1() {
@@ -119,8 +119,8 @@ public class ElevatorSubsystem extends TemplateSubsystem {
 
     }
 
-    public Command setBase(){
-        return new InstantCommand(()-> setPosition(0));
+    public Command setBase() {
+        return new InstantCommand(() -> setPosition(0));
     }
 
     public Command setHeight(double position) {

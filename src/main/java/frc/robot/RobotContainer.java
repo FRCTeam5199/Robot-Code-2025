@@ -44,7 +44,7 @@ public class RobotContainer {
     private final ClimberSubsystem climber = ClimberSubsystem.getInstance();
     private final WristSubsystem wrist = WristSubsystem.getInstance();
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
-             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
+            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
 
     // driving in open loop
@@ -89,7 +89,7 @@ public class RobotContainer {
             drivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
 
         }
-        
+
         commandXboxController.rightBumper().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
                 .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
                 .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
@@ -102,7 +102,15 @@ public class RobotContainer {
         commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
         commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeL2(), ScoreCommands.scoreL3(), () -> algaeControls));
         commandXboxController.y().onTrue(ScoreCommands.scoreL4());
-        
+
+        /*
+        arm - , elevator - , wrist - hp
+        arm - , elevator - , wrist - l1
+        arm - , elevator - , wrist - l2
+        arm - , elevator - , wrist - l3
+        arm - , elevator - , wrist - l4
+         */
+
         commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
 
         commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(60)))
