@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.587,
+        "x": 5.782,
         "y": 3.827
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.474127049180327,
+        "x": 6.669127049180327,
         "y": 2.5085553278688524
       },
       "isLocked": false,
@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 0.897,
-        "y": 0.07625
+        "x": 1.52,
+        "y": 0.7197499999999991
       },
       "prevControl": {
-        "x": 2.210804399444606,
-        "y": 1.390054399444606
+        "x": 2.833804399444607,
+        "y": 2.0335543994446055
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ARMHP",
+      "waypointRelativePos": 0.5017985611510759,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 6.0,
     "maxAcceleration": 6.0,
@@ -48,7 +55,7 @@
   "folder": "processor side L4 paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": false
 }

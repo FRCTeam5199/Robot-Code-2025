@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 0.897,
-        "y": 0.076
+        "x": 1.52,
+        "y": 0.72
       },
       "prevControl": {
-        "x": 1.4104843699035228,
-        "y": 0.5189370927282622
+        "x": 2.0334843699035225,
+        "y": 1.1629370927282623
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ARMHP",
+      "waypointRelativePos": 0.37661870503596695,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 6.0,
     "maxAcceleration": 6.0,

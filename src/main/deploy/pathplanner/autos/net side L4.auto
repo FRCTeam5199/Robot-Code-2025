@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "b start to reefside 6 L4"
+            "pathName": "r start to reefside 6 L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ARML4"
           }
         },
         {
@@ -37,7 +43,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "b reefside 6 L4 to HP right"
+            "pathName": "r reefside 6 L4 to HP right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ARMHP"
           }
         },
         {
@@ -61,7 +73,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "b HP right to reefside 2 L4"
+            "pathName": "r HP right to reefside 2 L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ARML4"
           }
         },
         {
@@ -91,7 +109,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "b reefside 2 L4 to HP right"
+            "pathName": "r reefside 2 L4 to HP right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ARMHP"
           }
         },
         {
@@ -115,7 +139,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "b HP right to reefside 2 L4 2"
+            "pathName": "r HP right to reefside 2 L4 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ARML4"
           }
         },
         {
