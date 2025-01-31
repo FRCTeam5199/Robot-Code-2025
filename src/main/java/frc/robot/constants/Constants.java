@@ -11,6 +11,14 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.utility.FeedForward;
@@ -297,5 +305,11 @@ public final class Constants {
 
     }
 
-    public static final String Vision = null;
+    public static class Vision {
+        public static final String CAMERA_NAME = "Camera";
+        public static final Transform3d CAMERA_POSE =
+                new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(5), 0));
+        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.00, 0.00, 999.0);
+
+    }
 }

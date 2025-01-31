@@ -39,7 +39,7 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
-    private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // My drivetrain
+    public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain(); // My commandSwerveDrivetrain
     private final ArmSubsystem arm = ArmSubsystem.getInstance();
     private final ClimberSubsystem climber = ClimberSubsystem.getInstance();
     private final WristSubsystem wrist = WristSubsystem.getInstance();
@@ -75,18 +75,18 @@ public class RobotContainer {
 
 
     private void configureBindings() {
-        drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-commandXboxController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+        commandSwerveDrivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+                commandSwerveDrivetrain.applyRequest(() -> drive.withVelocityX(-commandXboxController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                         .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
 
-        commandXboxController.button(7).toggleOnFalse(drivetrain.applyRequest(() -> brake)); // TESTING ONLY -> CHANGE TO onTrue AT COMP
+        commandXboxController.button(7).toggleOnFalse(commandSwerveDrivetrain.applyRequest(() -> brake)); // TESTING ONLY -> CHANGE TO onTrue AT COMP
         // reset the field-centric heading on menu button press
-        commandXboxController.button(8).onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        commandXboxController.button(8).onTrue(commandSwerveDrivetrain.runOnce(() -> commandSwerveDrivetrain.seedFieldCentric()));
 
         if (Utils.isSimulation()) {
-            drivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+            commandSwerveDrivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
 
         }
 
@@ -113,15 +113,15 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
 
-        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(60)))
-                .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));
-        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-80)))
-                .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));
+        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(1)))
+                .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
+        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-1)))
+                .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
 
         commandXboxController.povUp().onTrue(new InstantCommand(() -> climber.setPercent(0.3))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
         commandXboxController.povDown().onTrue(new InstantCommand(() -> climber.setPercent(-0.3))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
 
-        drivetrain.registerTelemetry(logger::telemeterize);
+        commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
     }
 
     /**
