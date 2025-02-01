@@ -471,6 +471,11 @@ public Command zero(Subsystem subsystem){
         return motor.getSupplyCurrent().getValueAsDouble();
     }
 
+    public double getStatorCurrent() {
+        return motor.getStatorCurrent().getValueAsDouble();
+    }
+
+
     public double getMechVelocity() {
         return getMechRotFromMotorRot(motor.getVelocity().getValueAsDouble());
     }

@@ -44,7 +44,7 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
-    private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // My drivetrain
+    public static CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // My drivetrain
     private final ClimberSubsystem climber = ClimberSubsystem.getInstance();
     private final WristSubsystem wrist = WristSubsystem.getInstance();
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
@@ -76,15 +76,12 @@ public class RobotContainer {
     public RobotContainer() {
         drivetrain.configureAutoBuilder();
 
-        NamedCommands.registerCommand("INTAKE", ScoreCommands.intake2());
-        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake2());
-        NamedCommands.registerCommand("STOPINTAKE", ScoreCommands.stopIntake2());
-        NamedCommands.registerCommand("ARMSTABLE", ScoreCommands.stopIntake2());
-        NamedCommands.registerCommand("ARMHP", ScoreCommands.armHP());
-        NamedCommands.registerCommand("ARML1", ScoreCommands.armL1());
-        NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
-        NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
-        NamedCommands.registerCommand("ARML4", ScoreCommands.armL4());
+        NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
+        NamedCommands.registerCommand("ARMHP", ScoreCommands.intakeHP());
+        NamedCommands.registerCommand("ARML1", ScoreCommands.scoreL1());
+        NamedCommands.registerCommand("ARML2", ScoreCommands.scoreL2());
+        NamedCommands.registerCommand("ARML3", ScoreCommands.scoreL3());
+        NamedCommands.registerCommand("ARML4", ScoreCommands.scoreL4());
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
     }

@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.PositionCommand;
 
@@ -10,6 +11,7 @@ public class ScoreCommands {
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private static ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     private static WristSubsystem wristSubsystem = WristSubsystem.getInstance();
+    private static IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
 
 
 
@@ -53,6 +55,15 @@ public class ScoreCommands {
                 ),
                 () -> elevatorSubsystem.getMechM() > .3
         );
+    }
+
+    public static Command intake(){
+        return new FunctionalCommand(
+                ()-> {}, 
+                ()-> intakeSubsystem.intake(), 
+                (bool)-> intakeSubsystem.stopIntake(), 
+                ()-> intakeSubsystem.getStatorCurrent() > 50, 
+                intakeSubsystem);
     }
 
     public static Command scoreL1() {
