@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -12,6 +13,7 @@ public class ScoreCommands {
     private static ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     private static WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+    private static Timer timer;
 
 
 
@@ -59,10 +61,37 @@ public class ScoreCommands {
 
     public static Command intake(){
         return new FunctionalCommand(
-                ()-> {}, 
+                ()-> {timer.reset();}, 
                 ()-> intakeSubsystem.intake(), 
                 (bool)-> intakeSubsystem.stopIntake(), 
-                ()-> intakeSubsystem.getStatorCurrent() > 50, 
+                ()-> {
+                        if(intakeSubsystem.getStatorCurrent() > 50){
+                                timer.start();
+                                if(timer.hasElapsed(.5)){
+                                        timer.stop();
+                                        return true;
+                                }
+                                return false;
+                        }
+                        return false;
+                }, 
+                intakeSubsystem);
+    }
+
+    public static Command outtake(){
+        return new FunctionalCommand(
+                ()-> {timer.reset();}, 
+                ()-> intakeSubsystem.outtake(), 
+                (bool)-> intakeSubsystem.stopIntake(), 
+                ()-> {
+                        timer.start();
+                        if(timer.hasElapsed(.2)){
+                                timer.stop();
+                                return true;
+                                
+                        }
+                        return false;
+                }, 
                 intakeSubsystem);
     }
 
