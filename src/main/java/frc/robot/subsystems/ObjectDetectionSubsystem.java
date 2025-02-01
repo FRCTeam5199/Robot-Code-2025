@@ -66,7 +66,7 @@ public class ObjectDetectionSubsystem extends SubsystemBase {
         double minDistance = Double.MAX_VALUE;
 
         for (LimelightTarget_Detector object : getObjects()) {
-            if (object.className.equals("Algae")) {
+            if (object.className.equals("Algae")) { // Possibly add OR statement to select the object whether its algae or coral?
                 double distance = calculateDistance(object); // Implement this method
                 if (distance < minDistance) {
                     nearestAlgae = object;
