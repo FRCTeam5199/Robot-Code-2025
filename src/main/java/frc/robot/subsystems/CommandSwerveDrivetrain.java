@@ -70,7 +70,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             ), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
                     new PIDConstants(10.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(7.0, 0.0, 0.0) // Rotation PID constants
+                    new PIDConstants(80.973, 0.0, 8.051) // Rotation PID constants
             ),
             config,
             () -> {
@@ -149,7 +149,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     );
 
     /* The SysId routine to test */
-    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineSteer;
+    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineRotation;
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.

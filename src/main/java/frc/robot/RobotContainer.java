@@ -1,4 +1,4 @@
-// 
+//
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -18,10 +18,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.Autos;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
+// import frc.robot.commands.Autos;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -57,11 +59,16 @@ public class RobotContainer {
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
-    
+
     private static Boolean algaeControls = false;
-    
+
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
+    //    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+//    public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
+//    public static final LinearTestSubsystem linearTestSubsystem = new LinearTestSubsystem();
+    //  public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
+    // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -84,6 +91,17 @@ public class RobotContainer {
 
     private void configureBindings() {
         drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+                drivetrain.applyRequest(() -> drive.withVelocityX(-commandXboxController.getLeftY() * MaxSpeed))); // Drive forward with negative Y (forward)
+
+        commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
+        commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
+
+        commandXboxController.povLeft().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        commandXboxController.povRight().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        commandXboxController.povUp().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        commandXboxController.povDown().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+        drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 drivetrain.applyRequest(() -> drive.withVelocityX(-commandXboxController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                         .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
@@ -97,28 +115,37 @@ public class RobotContainer {
             drivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
 
         }
-        
-        commandXboxController.rightBumper().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
-            .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
-            .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
+
+//        commandXboxController.rightBumper().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
+//                .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
+//                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
+
 
         commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
         commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
 
-        commandXboxController.a().onTrue(ScoreCommands.armHP());
-        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.armAlgaeL1(), ScoreCommands.armL2(), () -> algaeControls));
-        commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeArmL2(), ScoreCommands.armL3(), () -> algaeControls));
-        commandXboxController.y().onTrue(ScoreCommands.armL4());
-        
-        commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeArmStable(), ScoreCommands.armStable(), () -> algaeControls));
+//        commandXboxController.a().onTrue(ScoreCommands.intakeHP());
+//        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
+//        commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeL2(), ScoreCommands.scoreL3(), () -> algaeControls));
+//        commandXboxController.y().onTrue(ScoreCommands.scoreL4());
 
-        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(60)))
-                .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));
-        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-80)))
-                .onFalse(new InstantCommand(() -> intakeSubsystem.setVoltage(0)));
+        /*
+        arm - , elevator - , wrist - hp
+        arm - , elevator - , wrist - l1
+        arm - , elevator - , wrist - l2
+        arm - , elevator - , wrist - l3
+        arm - , elevator - , wrist - l4
+         */
 
-        commandXboxController.povUp().onTrue(new InstantCommand(() -> climber.setPercent(0.3))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
-        commandXboxController.povDown().onTrue(new InstantCommand(() -> climber.setPercent(-0.3))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
+//        commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
+
+        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(1)))
+                .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
+        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-1)))
+                .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
+
+//        commandXboxController.povUp().onTrue(new InstantCommand(() -> climber.setPercent(0.3))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
+//        commandXboxController.povDown().onTrue(new InstantCommand(() -> climber.setPercent(-0.3))).onFalse(new InstantCommand(() -> climber.setPercent(0)));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
@@ -129,11 +156,13 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
+        // An example command will be run in autonomous
+        // return Autos.exampleAuto(armSubsystem);
         // return autoChooser.getSelected();
         return new PathPlannerAuto("test auto red");
     }
-    
-    // public static Command threePieceProcessor() {                                                                                         
+
+    // public static Command threePieceProcessor() {
     //     return AutoBuilder.buildAuto("Lfue");
     // }
 }
