@@ -66,12 +66,13 @@ public class Robot extends TimedRobot {
             Pose2d robotPose2d = estimatePose.getFirst().get().estimatedPose.toPose2d();
             Pose2d modify = new Pose2d(robotPose2d.getX(), robotPose2d.getY(),
                     commandSwerveDrivetrain.getPose().getRotation());
-            System.out.println("vision x: " + robotPose2d.getX());
 
             commandSwerveDrivetrain.addVisionMeasurement(modify, estimatePose.getSecond(),
                     Constants.Vision.kSingleTagStdDevs);
-            System.out.println("drive x: " + commandSwerveDrivetrain.getPose().getX());
+//            commandSwerveDrivetrain.resetPose(modify);
         }
+
+        RobotContainer.periodic();
     }
 
     /**
