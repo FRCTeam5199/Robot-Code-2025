@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.PositionCommand;
 
@@ -10,6 +11,31 @@ public class ScoreCommands {
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private static ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     private static WristSubsystem wristSubsystem = WristSubsystem.getInstance();
+    private static IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+
+
+
+    public static double intakeWristPos = 0.63;
+    public static double intakeElevatorPos = 0.238;
+
+    public static double coralL1WristPos = 59.66;
+    public static double coralL1ElevatorPos = 0.013;
+
+    public static double coralL2WristPos = 66.37;
+    public static double coralL2ElevatorPos = 0.151;
+
+    public static double coralL3WristPos = 65.8;
+    public static double coralL3ElevatorPos = 0.44;
+
+    public static double coralL4WristPos = 65;
+    public static double coralL4ElevatorPos = 0.929;
+
+    public static double algaeL1WristPos = 66.37;
+    public static double algaeL1ElevatorPos = 0.2;
+
+    public static double algaeL2WristPos = 65.8;
+    public static double algaeL2ElevatorPos = 0.5;
+
 
 
     public static Command intakeHP() {
@@ -29,6 +55,15 @@ public class ScoreCommands {
                 ),
                 () -> elevatorSubsystem.getMechM() > .3
         );
+    }
+
+    public static Command intake(){
+        return new FunctionalCommand(
+                ()-> {}, 
+                ()-> intakeSubsystem.intake(), 
+                (bool)-> intakeSubsystem.stopIntake(), 
+                ()-> intakeSubsystem.getStatorCurrent() > 50, 
+                intakeSubsystem);
     }
 
     public static Command scoreL1() {
@@ -90,7 +125,7 @@ public class ScoreCommands {
         );
     }
 
-    public static Command scoreL4() {
+    public static Command scoreL4(){
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 80.874),
                 new ParallelCommandGroup(
@@ -146,7 +181,7 @@ public class ScoreCommands {
         );
     }
 
-    public static Command algaeL2() {
+    public static Command algaeL2(){
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(

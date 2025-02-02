@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
 
     private RobotContainer robotContainer;
-    private static final CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
+    private static final CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.drivetrain;
     private static Pair<Optional<EstimatedRobotPose>, Double> estimatePose;
     private static AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 

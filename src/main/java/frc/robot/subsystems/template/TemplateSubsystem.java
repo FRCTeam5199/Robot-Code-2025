@@ -1,5 +1,7 @@
 package frc.robot.subsystems.template;
 
+import javax.xml.transform.Templates;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -8,6 +10,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
@@ -31,6 +34,11 @@ import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants.ArmConstants;
 import frc.robot.tagalong.GeometricUtils;
@@ -77,6 +85,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     private double velocity;
     private double acceleration;
+    double zero = 0;
 
 
     private Timer timer;
@@ -116,6 +125,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
         positionVoltage = new PositionVoltage(0).withSlot(0).withEnableFOC(true);
         velocityVoltage = new VelocityVoltage(0).withSlot(0).withEnableFOC(true);
+        magicMan = new MotionMagicVoltage(0).withSlot(0).withEnableFOC(true);
 
         this.lowerTolerance = lowerTolerance;
         this.upperTolerance = upperTolerance;
@@ -291,9 +301,9 @@ public class TemplateSubsystem extends SubsystemBase {
         if (type == Type.ROLLER) return;
 
         switch (type) {
-            case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
-            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
-            default -> goalState.position = getMotorRotFromMechRot(goal);
+            case LINEAR -> goalState.position = getMotorRotFromMechM(goal) + zero;
+            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal) + zero;
+            default -> goalState.position = getMotorRotFromMechRot(goal) + zero;
         }
 
         profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(vel, acc));
@@ -311,11 +321,11 @@ public class TemplateSubsystem extends SubsystemBase {
         if (type == Type.ROLLER) return;
 
         switch (type) {
-            case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
-            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
-            default -> goalState.position = getMotorRotFromMechRot(goal);
+            case LINEAR -> goalState.position = getMotorRotFromMechM(goal) + zero;
+            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal) + zero;
+            default -> goalState.position = getMotorRotFromMechRot(goal) + zero;
         }
-
+  
         goalState.velocity = 0;
         this.goal = goal;
 
@@ -365,6 +375,23 @@ public class TemplateSubsystem extends SubsystemBase {
             }
         }
     }
+
+
+public Command zero(Subsystem subsystem){
+    return new FunctionalCommand(
+        ()->{}, 
+    ()-> {
+        motor.setVoltage(-.1);
+
+    },
+    (onend)->{
+        motor.setVoltage(0);
+        zero = motor.getRotorPosition().getValueAsDouble();
+    },
+    ()-> motor.getSupplyCurrent().getValueAsDouble() > 50,
+     subsystem
+     );
+}
 
     public double getGoal() {
         return goal;
@@ -443,6 +470,11 @@ public class TemplateSubsystem extends SubsystemBase {
     public double getSupplyCurrent() {
         return motor.getSupplyCurrent().getValueAsDouble();
     }
+
+    public double getStatorCurrent() {
+        return motor.getStatorCurrent().getValueAsDouble();
+    }
+
 
     public double getMechVelocity() {
         return getMechRotFromMotorRot(motor.getVelocity().getValueAsDouble());

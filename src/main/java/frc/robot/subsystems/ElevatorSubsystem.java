@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.Type;
-import tagalong.units.TimeUnits;
 
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
@@ -73,7 +72,7 @@ public class ElevatorSubsystem extends TemplateSubsystem {
 
         configureMotor(
                 ElevatorConstants.INVERT,
-                ElevatorConstants.BRAKE,
+                ElevatorConstants.ELEVATOR_BRAKE,
                 ElevatorConstants.SUPPLY_CURRENT_LIMIT,
                 ElevatorConstants.STATOR_CURRENT_LIMIT,
                 ElevatorConstants.ELEVATOR_SLOT0_CONFIGS);
