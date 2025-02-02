@@ -91,7 +91,7 @@ public class ElevatorSubsystem extends TemplateSubsystem {
         // System.out.println("is at goal position: " + isMechAtGoal(false));
         // System.out.println("meters: " + getMechM());
 
-        System.out.println("Elevator Mech M: " + getMechM());
+//        System.out.println("Elevator Mech M: " + getMechM());
     }
 
     public Command setL1() {
