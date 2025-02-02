@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.Type;
-import tagalong.units.TimeUnits;
 
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
@@ -68,12 +67,12 @@ public class ElevatorSubsystem extends TemplateSubsystem {
                 ElevatorConstants.ELEVATOR_MIN,
                 ElevatorConstants.ELEVATOR_MAX,
                 ElevatorConstants.ELEVATOR_GEARING,
-                "Elevator"     
-            );
+                "Elevator"
+        );
 
         configureMotor(
                 ElevatorConstants.INVERT,
-                ElevatorConstants.BRAKE,
+                ElevatorConstants.ELEVATOR_BRAKE,
                 ElevatorConstants.SUPPLY_CURRENT_LIMIT,
                 ElevatorConstants.STATOR_CURRENT_LIMIT,
                 ElevatorConstants.ELEVATOR_SLOT0_CONFIGS);
@@ -91,7 +90,7 @@ public class ElevatorSubsystem extends TemplateSubsystem {
         // System.out.println("is at goal position: " + isMechAtGoal(false));
         // System.out.println("meters: " + getMechM());
 
-//        System.out.println("Elevator MechRot: " + getMechM());
+//        System.out.println("Elevator Mech M: " + getMechM());
     }
 
     public Command setL1() {
@@ -119,8 +118,8 @@ public class ElevatorSubsystem extends TemplateSubsystem {
 
     }
 
-    public Command setBase(){
-        return new InstantCommand(()-> setPosition(0));
+    public Command setBase() {
+        return new InstantCommand(() -> setPosition(0));
     }
 
     public Command setHeight(double position) {
