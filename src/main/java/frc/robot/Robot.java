@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand; 
 
     private RobotContainer robotContainer;
-    private static final CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.drivetrain;
+    private static final CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
     private static Pair<Optional<EstimatedRobotPose>, Double> estimatePose;
     private static AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
@@ -72,7 +72,6 @@ public class Robot extends TimedRobot {
 //            commandSwerveDrivetrain.resetPose(modify);
         }
 
-        RobotContainer.periodic();
     }
 
     /**

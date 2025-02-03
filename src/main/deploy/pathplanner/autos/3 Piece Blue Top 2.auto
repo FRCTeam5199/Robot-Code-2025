@@ -7,31 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 piece red top Start to  H"
+            "pathName": "3 Piece Blue Start to  H"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 piece red top H to HP"
+            "pathName": "3 Piece Blue H to HPT"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red HPT to L"
+            "pathName": "3 Piece Blue HPT to L"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 piece red top L to HP"
+            "pathName": "3 Piece Blue L to HPT"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 piece red top HP to K"
+            "pathName": "3 Piece Blue HPT to K"
           }
         }
       ]
