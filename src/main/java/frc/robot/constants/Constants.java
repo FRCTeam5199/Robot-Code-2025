@@ -309,7 +309,8 @@ public final class Constants {
         public static final String CAMERA_NAME = "Camera";
         public static final Transform3d CAMERA_POSE =
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(5), 0));
-        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.00, 0.00, 999.0);
+        public static final double CAMERA_TO_FRONT_DISTANCE = .48895;
+        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.0, 0.0, 999.0);
 
     }
 }
