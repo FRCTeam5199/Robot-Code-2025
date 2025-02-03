@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue Start to D"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue D to HPB"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue HPB to C"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "2 Piece",
+  "choreoAuto": false
+}
