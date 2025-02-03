@@ -7,37 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 piece red bottom start to H"
+            "pathName": "3 piece red top Start to  H"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 piece red bottom H to Hp"
+            "pathName": "3 piece red top H to HP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 piece red bottom HP to L"
+            "pathName": "3 Piece Red HPT to L"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 piece red bottom L to Hp"
+            "pathName": "3 piece red top L to HP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 piece red bottom HP to K"
+            "pathName": "3 piece red top HP to K"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "3 Piece L1",
   "choreoAuto": false
 }

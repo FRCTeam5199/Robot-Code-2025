@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 15.028995901639345,
-        "y": 1.1096311475409852
+        "y": 1.109631147540985
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 125.00000000000001
   },
   "reversed": false,
-  "folder": "3 pice red bottom",
+  "folder": "3 piece red bottom",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

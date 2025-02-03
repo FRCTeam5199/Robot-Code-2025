@@ -12,7 +12,7 @@
         "y": 0.9992665816326518
       },
       "isLocked": false,
-      "linkedName": "HPB"
+      "linkedName": "HP Blue Bottom"
     },
     {
       "anchor": {
@@ -48,7 +48,7 @@
   "folder": "4 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 54.1447716537843
+    "rotation": 54.144771653784304
   },
   "useDefaultConstraints": true
 }
