@@ -46,7 +46,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, 0.27, 36, 180),
-                                new PositionCommand(wristSubsystem, 0.63)
+                                new PositionCommand(wristSubsystem, 0.7)
                         ),
                         new PositionCommand(armSubsystem, 74.48)
                 ),
