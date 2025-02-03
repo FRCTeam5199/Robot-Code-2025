@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.5,
-        "y": 7.25
+        "x": 3.641326530612245,
+        "y": 5.103220663265305
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.145,
-        "y": 6.7745
+        "x": 2.708609693877551,
+        "y": 5.804623724489796
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "L Blue"
     },
     {
       "anchor": {
-        "x": 3.6855,
-        "y": 5.08775
+        "x": 1.4998086734693878,
+        "y": 7.214891581632653
       },
       "prevControl": {
-        "x": 3.12975,
-        "y": 5.604500000000001
+        "x": 2.626530612244898,
+        "y": 5.931473214285713
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "HP Blue Top"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": -52.943471810590374
   },
   "reversed": false,
-  "folder": "3 Piece Blue Paths",
+  "folder": "4 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.0
+    "rotation": -57.7243556854224
   },
   "useDefaultConstraints": true
 }

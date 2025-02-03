@@ -28,12 +28,7 @@
       "linkedName": "HPB"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.8320079522862819,
-      "rotationDegrees": -124.60943074438312
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.1447716537843
+    "rotation": 54.144771653784304
   },
   "reversed": false,
   "folder": "1 Piece Blue Paths",
