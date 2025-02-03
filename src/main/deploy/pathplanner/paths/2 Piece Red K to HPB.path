@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 11.75,
-        "y": 3.85
+        "x": 13.582069672131148,
+        "y": 2.8142418032786884
       },
       "prevControl": null,
       "nextControl": {
-        "x": 10.357377049180327,
-        "y": 1.7353483606557374
+        "x": 14.639923469387757,
+        "y": 1.8797512755102037
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "K Red"
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 0.75
       },
       "prevControl": {
-        "x": 15.028995901639345,
-        "y": 1.109631147540985
+        "x": 14.908545918367347,
+        "y": 1.6409757653061212
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "HP Red Bottom"
     }
   ],
   "rotationTargets": [],
@@ -45,10 +45,10 @@
     "rotation": 125.00000000000001
   },
   "reversed": false,
-  "folder": "3 piece red bottom",
+  "folder": "2 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

@@ -7,37 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red Start to H"
+            "pathName": "2 Piece Red Start to D"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red H to HPB"
+            "pathName": "2 Piece Red D to HPT"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red HPB to L"
+            "pathName": "2 Piece Red HPT to C"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red L to HPB"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Red HPB to K"
+            "pathName": "2 Piece Red C to HPT"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3 Piece L1",
+  "folder": "2 Piece L1",
   "choreoAuto": false
 }

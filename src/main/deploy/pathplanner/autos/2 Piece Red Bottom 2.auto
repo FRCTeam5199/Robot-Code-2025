@@ -13,31 +13,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red H to HPB"
+            "pathName": "2 Piece Red H to HPB"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red HPB to L"
+            "pathName": "2 Piece Red HPB to K"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red L to HPB"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Red HPB to K"
+            "pathName": "3 Piece Red K to HPB"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3 Piece L1",
+  "folder": "2 Piece L1",
   "choreoAuto": false
 }
