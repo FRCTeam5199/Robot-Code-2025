@@ -9,7 +9,9 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 
+import java.util.ArrayList;
 import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +21,12 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.Vision;
 import frc.robot.tagalong.Controlboard;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
 import org.photonvision.simulation.PhotonCameraSim;
@@ -38,6 +42,9 @@ public class AprilTagSubsystem extends SubsystemBase {
     private double closestTagX = 0, closestTagY = 0, closestTagYaw = 0;
 
     public static AprilTagSubsystem aprilTagSubsystem;
+
+    double[] tagAngles = {1, 1, 1, 1, 1, 1, 300, 0, 60, 120, 180, 240, 1, 1, 1, 1, 1, 240, 180, 120, 60, 0, 300};
+    double[] tagHeights = {1, 1, 1, 1, 1, 1, .308, .308, .308, .308, .308, .308, 1, 1, 1, 1, 1, .308, .308, .308, .308, .308, .308};
 
 
     public AprilTagSubsystem() {
@@ -135,6 +142,75 @@ public class AprilTagSubsystem extends SubsystemBase {
     public Matrix<N3, N1> getEstimationStdDevs() {
         return curStdDevs;
     }
+
+    public double getTargetAngle(PhotonTrackedTarget target){
+        double tag = target.getFiducialId();
+        double angle = 1;
+        for(int i = 0; i < tagAngles.length; i++){
+            if(tag == i){
+                angle = Units.degreesToRadians(tagAngles[i]);
+            }
+        }
+        return angle;
+    }
+
+    public double getTargetHeight(PhotonTrackedTarget target){
+        double tag = target.getFiducialId();
+        double height = 1;
+        for(int i = 0; i < tagAngles.length; i++){
+            if(tag == i){
+                height = tagAngles[i];
+            }
+        }
+        return height;
+    }
+
+    public int closestTarget(){
+        var results = camera.getAllUnreadResults();
+        Pair<Double, Integer> closest = new Pair(100000000, 0);
+        Pair<Double, Integer> closest2 = new Pair(100000, 0);
+
+
+        for(int i = 0; i < results.size(); i++){
+            for(int z = 0; i < results.get(i).getTargets().size(); z++){
+                if(getTargetAngle(results.get(i).getTargets().get(z)) != 1)
+                    closest2 = new Pair(PhotonUtils.calculateDistanceToTargetMeters(Vision.CAMERA_POSE.getZ(), .308, Units.degreesToRadians(Vision.CAMERA_POSE.getRotation().getMeasureY().baseUnitMagnitude()), getTargetAngle(results.get(i).getTargets().get(z))), results.get(i).getTargets().get(z).getFiducialId());
+            }
+            if(closest2.getFirst() < closest.getFirst()){
+                closest = closest2;
+            }
+        }
+        return closest.getSecond();
+    }
+
+    public List<Double> alignValues(int tag){
+        double x, y, z = 80;
+        List<Double> targetValue = new ArrayList<Double>();
+        targetValue.add(x);
+        targetValue.add(y);
+        targetValue.add(z);
+
+
+        var results = camera.getAllUnreadResults();
+
+            if(tag != 0 || tag != -1){
+                for(int i = 0; i < results.size(); i++){
+                    for(int p = 0; p < results.size(); p++){
+                    if(results.get(i).getTargets().get(p).getFiducialId() == tag){
+                       x = results.get(i).getTargets().get(p).getPitch();
+                       y = results.get(i).getTargets().get(p).getYaw();
+                       z = getTargetAngle(results.get(i).getTargets().get(p)) + 180;
+                       
+                    }
+                }
+                }
+            }
+
+            return targetValue;
+        
+    }
+
+
 
 
     public double[] getClosestTagXYYaw() {
