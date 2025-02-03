@@ -7,11 +7,8 @@
     "1 Piece Red Paths",
     "2 Piece Blue Paths",
     "2 Piece Red Paths",
-    "3 Piece Blue Paths",
-    "3 Piece Red Paths",
-    "4 Piece Blue Paths",
     "Bottom Blue Example",
-    "4 Piece Red Paths",
+    "3 pice red bottom",
     "Red Paths",
     "Top Blue Example",
     "net side L4 paths",
@@ -20,12 +17,7 @@
   "autoFolders": [
     "1 Piece L1",
     "1 Piece L4",
-    "2 Piece L1",
-    "2 Piece L4",
-    "3 Piece L1",
-    "3 Piece L4",
-    "4 Piece L1",
-    "4 Piece L4"
+    "2 Piece"
   ],
   "defaultMaxVel": 6.0,
   "defaultMaxAccel": 6.0,
