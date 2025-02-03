@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "start to HP"
+            "pathName": "start to reefside 2"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HP to reefside 5"
+            "pathName": "reefside 2 to HP"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "reefside 5 to HP"
+            "pathName": "HP to reefside 1"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HP to reefside 5"
+            "pathName": "reefside 1 to HP"
           }
         },
         {
@@ -55,49 +55,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "reefside 5 to HP"
+            "pathName": "HP to reefside 1"
           }
         },
         {
           "type": "wait",
           "data": {
             "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HP to reefside 5"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "reefside 5 to HP"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HP to reefside 5"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "2 Piece L4",
+  "folder": "2 Piece L1",
   "choreoAuto": false
 }
