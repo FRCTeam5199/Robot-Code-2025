@@ -7,61 +7,49 @@
         {
           "type": "path",
           "data": {
-            "pathName": "start to reefside 4"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "pathName": "4 Piece Red Start to D"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "reefside 4 to HP"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "pathName": "4 Piece Red D to HPT"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HP to reefside 5"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "pathName": "4 Piece Red HPT to C"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "reefside 5 to pickup"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "pathName": "4 Piece Red C to HPT"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "pickup to reefside 5"
+            "pathName": "4 Piece Red HPT to B"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Piece Red B to HPT"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Piece Red HPT to A"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "4 Piece L1",
   "choreoAuto": false
 }
