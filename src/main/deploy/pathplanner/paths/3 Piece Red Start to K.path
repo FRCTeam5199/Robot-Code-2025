@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 11.400000000000006,
-        "y": 3.85
+        "x": 11.007924107142856,
+        "y": 2.8758928571428566
       },
       "isLocked": false,
       "linkedName": "Start Red Bottom"
     },
     {
       "anchor": {
-        "x": 11.75,
-        "y": 3.85
+        "x": 13.601607266673923,
+        "y": 2.7761981705314156
       },
       "prevControl": {
-        "x": 10.75,
-        "y": 3.85
+        "x": 13.423660714285713,
+        "y": 1.7790178571428568
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "K Red"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "3 Piece Red Paths",

@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 16.109885204081635,
-        "y": 7.155197704081632
+        "x": 16.25,
+        "y": 7.125
       },
       "prevControl": {
-        "x": 15.535331632653062,
-        "y": 6.826881377551021
+        "x": 15.675446428571426,
+        "y": 6.7966836734693885
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.1806993612422
+    "rotation": -125.8159256349378
   },
   "reversed": false,
   "folder": "1 Piece Red Paths",
