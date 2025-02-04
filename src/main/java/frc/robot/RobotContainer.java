@@ -1,4 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
+//
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -58,6 +58,7 @@ public class RobotContainer {
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     private static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
+    // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
     private Boolean algaeControls = false;
 
@@ -171,18 +172,5 @@ public class RobotContainer {
     //     return AutoBuilder.buildAuto("Lfue");
     // }
 
-<<<<<<< Updated upstream
-    public static void periodic() {
-//        System.out.println("Current Angle: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees()
-//                + " Goal Angle: " + aprilTagSubsystem.getClosestTagXYYaw()[2]);
-//        if (commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() > 360)
-//            commandSwerveDrivetrain.getPigeon2()
-//                    .setYaw(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() - 360);
-//        if (commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() < 360)
-//            commandSwerveDrivetrain.getPigeon2()
-//                    .setYaw(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() + 360);
-    }
-=======
-    
->>>>>>> Stashed changes
+
 }
