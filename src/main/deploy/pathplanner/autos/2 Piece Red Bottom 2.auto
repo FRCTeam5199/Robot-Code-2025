@@ -7,19 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue Start to K"
+            "pathName": "3 Piece Red Start to H"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue K to HPT"
+            "pathName": "2 Piece Red H to HPB"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue HPT to L"
+            "pathName": "2 Piece Red HPB to K"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Red K to HPB"
           }
         }
       ]

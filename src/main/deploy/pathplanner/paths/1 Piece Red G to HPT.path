@@ -12,7 +12,7 @@
         "y": 5.521077806122444
       },
       "isLocked": false,
-      "linkedName": "GR"
+      "linkedName": "G Red"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HPR"
+      "linkedName": "HP Red Top"
     }
   ],
   "rotationTargets": [],

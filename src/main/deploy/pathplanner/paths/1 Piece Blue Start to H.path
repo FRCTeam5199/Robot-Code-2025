@@ -12,7 +12,7 @@
         "y": 3.998883928571428
       },
       "isLocked": false,
-      "linkedName": "Start"
+      "linkedName": "Start Blue"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "H"
+      "linkedName": "H Blue"
     }
   ],
   "rotationTargets": [],
