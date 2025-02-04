@@ -65,14 +65,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             () -> getState().Pose, // Robot pose supplier
             (pose)-> this.resetPose(pose), // Method to reset odometry (will be called if your auto has a starting pose)
             () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds, feedforwards) -> setControl(
+            (speeds,  feedforwards) -> setControl(
                   m_pathApplyRobotSpeeds.withSpeeds(speeds)
                     .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
                     .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
             ), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(10.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(80.973, 0.0, 8.051) // Rotation PID constants
+                    new PIDConstants(10.1, 0.01, 0.01), // Translation PID constants  P = 10
+                    new PIDConstants(1.14, 0.0, .004) // Rotation PID constants  P = 1.13 D = 0.003
             ),
             config,
             () -> {

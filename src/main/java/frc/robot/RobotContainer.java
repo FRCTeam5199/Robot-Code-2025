@@ -171,6 +171,7 @@ public class RobotContainer {
     //     return AutoBuilder.buildAuto("Lfue");
     // }
 
+<<<<<<< Updated upstream
     public static void periodic() {
 //        System.out.println("Current Angle: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees()
 //                + " Goal Angle: " + aprilTagSubsystem.getClosestTagXYYaw()[2]);
@@ -181,4 +182,7 @@ public class RobotContainer {
 //            commandSwerveDrivetrain.getPigeon2()
 //                    .setYaw(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() + 360);
     }
+=======
+    
+>>>>>>> Stashed changes
 }
