@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 16.109885204081635,
-        "y": 7.155197704081632
+        "x": 16.25,
+        "y": 7.125
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.99808673469388,
-        "y": 6.229942602040816
+        "x": 15.138201530612244,
+        "y": 6.199744897959183
       },
       "isLocked": false,
       "linkedName": "HP Red Top"
@@ -48,7 +48,7 @@
   "folder": "2 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -125.1806993612422
+    "rotation": -125.8159256349378
   },
   "useDefaultConstraints": true
 }
