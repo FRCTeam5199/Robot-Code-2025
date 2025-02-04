@@ -18,7 +18,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -28,7 +27,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
 import frc.robot.constants.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -65,14 +63,14 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             () -> getState().Pose, // Robot pose supplier
             (pose)-> this.resetPose(pose), // Method to reset odometry (will be called if your auto has a starting pose)
             () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds, feedforwards) -> setControl(
+            (speeds,  feedforwards) -> setControl(
                   m_pathApplyRobotSpeeds.withSpeeds(speeds)
                     .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
                     .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
             ), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
             new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(10.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(80.973, 0.0, 8.051) // Rotation PID constants
+                    new PIDConstants(10.1, 0.01, 0.01), // Translation PID constants  P = 10
+                    new PIDConstants(1.14, 0.0, .004) // Rotation PID constants  P = 1.13 D = 0.003
             ),
             config,
             () -> {
@@ -82,7 +80,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
                 var alliance = DriverStation.getAlliance();
                 if (alliance.isPresent()) {
-                    return alliance.get() == DriverStation.Alliance.Red;
+                    return alliance.get() == Alliance.Red;
                 }
                 return false;
             },
@@ -235,7 +233,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     /**
      * Returns a command that applies the specified control request to this swerve commandSwerveDrivetrain.
      *
-     * @param request Function returning the request to apply
+     * @param requestSupplier Function returning the request to apply
      * @return Command to run
      */
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {

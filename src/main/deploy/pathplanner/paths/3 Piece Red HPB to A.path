@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 10.4,
-        "y": 3.85
+        "x": 16.0,
+        "y": 0.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 11.400000000000006,
-        "y": 3.85
+        "x": 15.460714285713962,
+        "y": 1.9618303571476519
       },
       "isLocked": false,
-      "linkedName": "Start Red Bottom"
+      "linkedName": "HP Red Bottom"
     },
     {
       "anchor": {
-        "x": 11.75,
+        "x": 14.415,
         "y": 3.85
       },
       "prevControl": {
-        "x": 10.75,
-        "y": 3.85
+        "x": 14.989553571428571,
+        "y": 3.458258928571428
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "A Red"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "3 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 125.00000000000001
   },
   "useDefaultConstraints": true
 }
