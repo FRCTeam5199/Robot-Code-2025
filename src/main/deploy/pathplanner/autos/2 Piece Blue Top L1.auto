@@ -11,15 +11,33 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "2 Piece Blue K to HPT"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "INTAKE"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "2 Piece Blue HPT to L"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
           }
         }
       ]
