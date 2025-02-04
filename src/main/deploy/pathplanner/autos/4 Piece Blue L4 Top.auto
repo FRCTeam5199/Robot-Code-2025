@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "b start to reefside 6 L4"
+            "pathName": "4 Piece Blue Start to K"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 1.0
+            "name": "L4"
           }
         },
         {
@@ -23,21 +23,15 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "STOPINTAKE"
+            "name": "HP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "b reefside 6 L4 to HP right"
+            "pathName": "4 Piece Blue K to HPT"
           }
         },
         {
@@ -47,27 +41,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 3.0
+            "pathName": "4 Piece Blue HPT to L"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "STOPINTAKE"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "b HP right to reefside 2 L4"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "name": "L4"
           }
         },
         {
@@ -77,21 +59,15 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "STOPINTAKE"
+            "name": "HP"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "b reefside 2 L4 to HP right"
+            "pathName": "4 Piece Blue L to HPT"
           }
         },
         {
@@ -101,21 +77,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 3.0
+            "pathName": "4 Piece Blue HPT to A"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "STOPINTAKE"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "b HP right to reefside 2 L4 2"
+            "name": "L4"
           }
         },
         {
@@ -125,27 +95,51 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Piece Blue A to HPT"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "STOPINTAKE"
+            "name": "INTAKE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Piece Blue HPT to B"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ARMHP"
+            "name": "L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HP"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3 Piece L4",
+  "folder": "4 Piece L4",
   "choreoAuto": false
 }
