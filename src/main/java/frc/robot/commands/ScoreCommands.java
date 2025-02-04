@@ -156,9 +156,9 @@ public class ScoreCommands {
 
     public static Command scoreL4(){
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 80.874),
+                new PositionCommand(armSubsystem, 76),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0.96, 60, 20),//120, 360
+                        new PositionCommand(elevatorSubsystem, 0.94, 60, 20),//120, 360
                         new PositionCommand(wristSubsystem, 69)//27.76
                 )
         );
