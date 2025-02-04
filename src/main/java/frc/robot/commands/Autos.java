@@ -7,6 +7,7 @@ package frc.robot.commands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -22,11 +23,10 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public final class Autos {
     private final SwerveRequest.ApplyRobotSpeeds m_pathApplyRobotSpeeds = new SwerveRequest.ApplyRobotSpeeds();
-    private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain(); // My drivetrain
-
     private static SendableChooser<Command> autoChooser;
   
     private Autos() {
+      
       
       // NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
       // NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
@@ -46,6 +46,35 @@ public final class Autos {
     //   if (autoChooser == null) autoChooser = AutoBuilder.buildAutoChooser();
     //   return autoChooser;
     // }
+
+
+    public Command onePieceBlueHPTL1(){
+      return new PathPlannerAuto("1 Piece Blue HPT L1");
+    }
+    public Command onePieceBlueHPBL1(){
+      return new PathPlannerAuto("1 Piece Blue HPB L1");
+    }
+    public Command onePieceBlueHPTL4(){
+      return new PathPlannerAuto("1 Piece Blue HPT L4");
+    }
+    public Command onePieceBlueHPBL4(){
+      return new PathPlannerAuto("1 Piece Blue HPB L4");
+    }
+
+    public Command onePieceRedHPTL1(){
+      return new PathPlannerAuto("1 Piece Red HPT L1");
+    }
+    public Command onePieceRedHPBL1(){
+      return new PathPlannerAuto("1 Piece Red HPB L1");
+    }
+
+    public Command onePieceRedHPTL4(){
+      return new PathPlannerAuto("1 Piece Red HPT L4");
+    }
+    public Command onePieceRedHPBL4(){
+      return new PathPlannerAuto("1 Piece Red HPB L4");
+    }
+
 
 
 }
