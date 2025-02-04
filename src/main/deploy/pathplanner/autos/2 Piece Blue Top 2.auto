@@ -68,6 +68,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "2 Piece L1",
   "choreoAuto": false
 }

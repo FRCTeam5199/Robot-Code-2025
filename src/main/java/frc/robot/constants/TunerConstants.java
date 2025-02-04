@@ -24,8 +24,8 @@ public class TunerConstants {
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private static final Slot0Configs steerGains = new Slot0Configs()
-            .withKP(75).withKI(0).withKD(0)
-            .withKS(0.136).withKV(1.46).withKA(0.075)
+            .withKP(60).withKI(0).withKD(.75)
+            .withKS(0).withKV(0).withKA(0)
             .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
@@ -56,13 +56,13 @@ public class TunerConstants {
     // Initial configs for the drive and steer motors and the azimuth encoder; these cannot be null.
     // Some configs will be overwritten; check the `with*InitialConfigs()` API documentation.
     private static final TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration()
-    .withCurrentLimits(
-        new CurrentLimitsConfigs()
-        .withStatorCurrentLimit(65)
-        .withStatorCurrentLimitEnable(true)
-        .withSupplyCurrentLimit(70)
-        .withSupplyCurrentLimitEnable(true)
-    );
+            .withCurrentLimits(
+                    new CurrentLimitsConfigs()
+                            .withStatorCurrentLimit(65)
+                            .withStatorCurrentLimitEnable(true)
+                            .withSupplyCurrentLimit(70)
+                            .withSupplyCurrentLimitEnable(true)
+            );
     private static final TalonFXConfiguration steerInitialConfigs = new TalonFXConfiguration()
             .withCurrentLimits(
                     new CurrentLimitsConfigs()
@@ -292,6 +292,7 @@ public class TunerConstants {
             );
         }
     }
+
     public static final CommandSwerveDrivetrain DriveTrain = new CommandSwerveDrivetrain(DrivetrainConstants, FrontLeft,
-    FrontRight, BackLeft, BackRight);
+            FrontRight, BackLeft, BackRight);
 }
