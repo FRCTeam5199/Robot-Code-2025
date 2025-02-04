@@ -24,40 +24,8 @@ import java.util.concurrent.TimeUnit;
 
 public class ElevatorSubsystem extends TemplateSubsystem {
     public static ElevatorSubsystem elevatorSubsystem;
-    public TalonFX elevator1_motor = new TalonFX(ElevatorConstants.ELEVATOR1_ID);
-    public TalonFX elevator2_motor = new TalonFX(ElevatorConstants.ELEVATOR2_ID);
-
-
-    SysIdRoutineLog elevatorLOG = new SysIdRoutineLog("Elevator Motor");
-
-    public final SysIdRoutine sysIdRoutineElevator = new SysIdRoutine(
-            new SysIdRoutine.Config(
-                    Volts.per(Second).of(.01
-                    ),        // Use default ramp rate (1 V/s)
-                    Volts.of(1), // Reduce dynamic step voltage to 4 V to prevent brownout
-
-                    Time.ofBaseUnits(10000, Seconds),  // default timeout (10 s)
-                    // Log state with SignalLogger class
-                    state -> SignalLogger.writeString("Elevator_State", state.toString())
-            ),
-            new SysIdRoutine.Mechanism(
-                    output -> {
-                        elevator1_motor.setControl(new VoltageOut(output).withEnableFOC(true));
-                        elevator2_motor.setControl(new Follower(ElevatorConstants.ELEVATOR1_ID, true));
-                    },
-                    null,
-                    // log->
-                    //{
-
-                    // log.motor("Pivot Motor")
-                    // .voltage(Volts.mutable(0).mut_replace(elevator_motor.getMotorVoltage().getValueAsDouble(), Volts))
-                    // .angularPosition(Radians.mutable(0).mut_replace(elevator_motor.getPosition().getValueAsDouble(), Rotations))
-                    // .angularVelocity(RadiansPerSecond.mutable(0).mut_replace(elevator_motor.getVelocity().getValueAsDouble(), RadiansPerSecond));
-                    // },
-                    this
-            )
-    );
-
+    private int currentSpike = 0;
+    private int noCurrentSpike = 0;
 
     public ElevatorSubsystem() {
         super(Type.LINEAR,
@@ -91,39 +59,14 @@ public class ElevatorSubsystem extends TemplateSubsystem {
         // System.out.println("meters: " + getMechM());
 
 //        System.out.println("Elevator Mech M: " + getMechM());
-    }
 
-    public Command setL1() {
-        return new InstantCommand(() -> setPosition(0));
+        if (getSupplyCurrent() > 20) currentSpike++;
+        else noCurrentSpike++;
 
-    }
-
-    public Command setL2() {
-        return new InstantCommand(() -> setPosition(.2));
-
-    }
-
-    public Command setL3() {
-        return new InstantCommand(() -> setPosition(.3));
-
-    }
-
-    public Command setL4() {
-        return new InstantCommand(() -> setPosition(6));
-
-    }
-
-    public Command setHP() {
-        return new InstantCommand(() -> setPosition(.5));
-
-    }
-
-    public Command setBase() {
-        return new InstantCommand(() -> setPosition(0));
-    }
-
-    public Command setHeight(double position) {
-        return new InstantCommand(() -> setPosition(position));
+        if (noCurrentSpike >= 5) {
+            currentSpike = 0;
+            noCurrentSpike = 0;
+        }
     }
 
     public static ElevatorSubsystem getInstance() {
@@ -133,29 +76,7 @@ public class ElevatorSubsystem extends TemplateSubsystem {
         return elevatorSubsystem;
     }
 
-    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-        return sysIdRoutineElevator.quasistatic(direction);
+    public boolean isAtBottom() {
+        return currentSpike >= 10;
     }
-
-    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-        return sysIdRoutineElevator.dynamic(direction);
-    }
-
-    public Command sysId() {
-        return Commands.sequence(
-                sysIdRoutineElevator
-                        .quasistatic(SysIdRoutine.Direction.kForward)
-                        .until(() -> (elevator1_motor.getPosition().getValueAsDouble() > 34)),
-                sysIdRoutineElevator
-                        .quasistatic(SysIdRoutine.Direction.kReverse)
-                        .until(() -> (elevator1_motor.getPosition().getValueAsDouble() < 1)),
-                sysIdRoutineElevator
-                        .dynamic(SysIdRoutine.Direction.kForward)
-                        .until(() -> (elevator1_motor.getPosition().getValueAsDouble() > 34)),
-                sysIdRoutineElevator
-                        .dynamic(SysIdRoutine.Direction.kReverse)
-                        .until(() -> (elevator1_motor.getPosition().getValueAsDouble() < 1)));
-    }
-
-
 }

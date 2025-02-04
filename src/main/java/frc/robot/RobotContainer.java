@@ -29,6 +29,7 @@ import frc.robot.constants.Constants.OperatorConstants;
 // import frc.robot.commands.Autos;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.template.VelocityCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -152,6 +153,9 @@ public class RobotContainer {
 
         commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+
+        commandXboxController.povRight().onTrue(ScoreCommands.zeroElevator())
+                .onFalse(new VelocityCommand(elevatorSubsystem, 0));
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
     }

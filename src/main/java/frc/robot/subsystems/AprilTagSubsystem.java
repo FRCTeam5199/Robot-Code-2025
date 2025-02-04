@@ -143,48 +143,48 @@ public class AprilTagSubsystem extends SubsystemBase {
         return curStdDevs;
     }
 
-    public double getTargetAngle(PhotonTrackedTarget target){
+    public double getTargetAngle(PhotonTrackedTarget target) {
         double tag = target.getFiducialId();
         double angle = 1;
-        for(int i = 0; i < tagAngles.length; i++){
-            if(tag == i){
+        for (int i = 0; i < tagAngles.length; i++) {
+            if (tag == i) {
                 angle = Units.degreesToRadians(tagAngles[i]);
             }
         }
         return angle;
     }
 
-    public double getTargetHeight(PhotonTrackedTarget target){
+    public double getTargetHeight(PhotonTrackedTarget target) {
         double tag = target.getFiducialId();
         double height = 1;
-        for(int i = 0; i < tagAngles.length; i++){
-            if(tag == i){
+        for (int i = 0; i < tagAngles.length; i++) {
+            if (tag == i) {
                 height = tagAngles[i];
             }
         }
         return height;
     }
 
-    public int closestTarget(){
+    public int closestTarget() {
         var results = camera.getAllUnreadResults();
         Pair<Double, Integer> closest = new Pair(100000000, 0);
         Pair<Double, Integer> closest2 = new Pair(100000, 0);
 
 
-        for(int i = 0; i < results.size(); i++){
-            for(int z = 0; i < results.get(i).getTargets().size(); z++){
-                if(getTargetAngle(results.get(i).getTargets().get(z)) != 1)
+        for (int i = 0; i < results.size(); i++) {
+            for (int z = 0; i < results.get(i).getTargets().size(); z++) {
+                if (getTargetAngle(results.get(i).getTargets().get(z)) != 1)
                     closest2 = new Pair(PhotonUtils.calculateDistanceToTargetMeters(Vision.CAMERA_POSE.getZ(), .308, Units.degreesToRadians(Vision.CAMERA_POSE.getRotation().getMeasureY().baseUnitMagnitude()), getTargetAngle(results.get(i).getTargets().get(z))), results.get(i).getTargets().get(z).getFiducialId());
             }
-            if(closest2.getFirst() < closest.getFirst()){
+            if (closest2.getFirst() < closest.getFirst()) {
                 closest = closest2;
             }
         }
         return closest.getSecond();
     }
 
-    public List<Double> alignValues(int tag){
-        double x, y, z = 80;
+    public List<Double> alignValues(int tag) {
+        double x = 80, y = 80, z = 80;
         List<Double> targetValue = new ArrayList<Double>();
         targetValue.add(x);
         targetValue.add(y);
@@ -193,24 +193,22 @@ public class AprilTagSubsystem extends SubsystemBase {
 
         var results = camera.getAllUnreadResults();
 
-            if(tag != 0 || tag != -1){
-                for(int i = 0; i < results.size(); i++){
-                    for(int p = 0; p < results.size(); p++){
-                    if(results.get(i).getTargets().get(p).getFiducialId() == tag){
-                       x = results.get(i).getTargets().get(p).getPitch();
-                       y = results.get(i).getTargets().get(p).getYaw();
-                       z = getTargetAngle(results.get(i).getTargets().get(p)) + 180;
-                       
+        if (tag != 0 || tag != -1) {
+            for (int i = 0; i < results.size(); i++) {
+                for (int p = 0; p < results.size(); p++) {
+                    if (results.get(i).getTargets().get(p).getFiducialId() == tag) {
+                        x = results.get(i).getTargets().get(p).getPitch();
+                        y = results.get(i).getTargets().get(p).getYaw();
+                        z = getTargetAngle(results.get(i).getTargets().get(p)) + 180;
+
                     }
                 }
-                }
             }
+        }
 
-            return targetValue;
-        
+        return targetValue;
+
     }
-
-
 
 
     public double[] getClosestTagXYYaw() {
