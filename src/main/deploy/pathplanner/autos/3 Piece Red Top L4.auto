@@ -7,37 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1 Piece Blue Start to G"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "OUTTAKE"
+            "pathName": "3 Piece Red Start to D"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1 Piece Blue G to Bottom Side"
+            "pathName": "3 Piece Red D to HPT"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "HP"
+            "pathName": "3 Piece Red HPT to C"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Red C to HPT"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Red HPT to B"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "1 Piece L1",
+  "folder": "3 Piece L4",
   "choreoAuto": false
 }

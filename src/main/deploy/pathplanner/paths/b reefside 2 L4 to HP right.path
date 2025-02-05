@@ -52,7 +52,7 @@
     "rotation": 54.82270389511714
   },
   "reversed": false,
-  "folder": "processor side L4 paths",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 58.52056429782151

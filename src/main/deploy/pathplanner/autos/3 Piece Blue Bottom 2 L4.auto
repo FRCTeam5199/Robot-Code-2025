@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Blue Start to G"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Blue G to HPB"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Blue HPB to D"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Blue D to HPB"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Blue HPB to C"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "3 Piece L4",
+  "choreoAuto": false
+}

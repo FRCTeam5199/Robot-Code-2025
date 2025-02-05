@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -12,9 +16,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import org.photonvision.EstimatedRobotPose;
-
-import java.util.Optional;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
