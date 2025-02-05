@@ -1,4 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
+//
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -7,7 +7,6 @@ package frc.robot;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -15,20 +14,20 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
-// import frc.robot.commands.Autos;
 import frc.robot.constants.TunerConstants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.AprilTagSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -59,6 +58,7 @@ public class RobotContainer {
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     private static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
+    // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
     private Boolean algaeControls = false;
 
@@ -77,11 +77,12 @@ public class RobotContainer {
         commandSwerveDrivetrain.configureAutoBuilder();
 
         NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
-        NamedCommands.registerCommand("ARMHP", ScoreCommands.intakeHP());
-        NamedCommands.registerCommand("ARML1", ScoreCommands.scoreL1());
-        NamedCommands.registerCommand("ARML2", ScoreCommands.scoreL2());
-        NamedCommands.registerCommand("ARML3", ScoreCommands.scoreL3());
-        NamedCommands.registerCommand("ARML4", ScoreCommands.scoreL4());
+        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
+        NamedCommands.registerCommand("HP", ScoreCommands.intakeHP());
+        NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
+        NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
+        NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
+        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
     }
@@ -145,9 +146,9 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
 
-        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(1)))
+        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(1))) //Outtake
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
-        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-1)))
+        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-1))) //Intake
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
 
         commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
@@ -165,21 +166,12 @@ public class RobotContainer {
         // An example command will be run in autonomous
         // return Autos.exampleAuto(armSubsystem);
         // return autoChooser.getSelected();
-        return new PathPlannerAuto("test auto red");
+        return new PathPlannerAuto("1 Piece Blue Bottom L1");
     }
 
     // public static Command threePieceProcessor() {
     //     return AutoBuilder.buildAuto("Lfue");
     // }
 
-    public static void periodic() {
-//        System.out.println("Current Angle: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees()
-//                + " Goal Angle: " + aprilTagSubsystem.getClosestTagXYYaw()[2]);
-//        if (commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() > 360)
-//            commandSwerveDrivetrain.getPigeon2()
-//                    .setYaw(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() - 360);
-//        if (commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() < 360)
-//            commandSwerveDrivetrain.getPigeon2()
-//                    .setYaw(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() + 360);
-    }
+
 }

@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Piece Red Start to D"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Piece Red D to HPT"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Piece Red HPT to C"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Piece Red C to HPT"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Piece Red HPT to B"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Piece Red B to HPT"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4 Piece Red HPT to A"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "4 Piece L1",
+  "choreoAuto": false
+}

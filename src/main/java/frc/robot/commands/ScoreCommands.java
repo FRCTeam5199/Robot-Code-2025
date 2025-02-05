@@ -13,7 +13,7 @@ public class ScoreCommands {
     private static ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     private static WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
-    private static Timer timer;
+    private static Timer timer = new Timer();
 
 
 
@@ -85,7 +85,7 @@ public class ScoreCommands {
                 (bool)-> intakeSubsystem.stopIntake(), 
                 ()-> {
                         timer.start();
-                        if(timer.hasElapsed(.2)){
+                        if(timer.hasElapsed(.4)){
                                 timer.stop();
                                 return true;
                                 
@@ -158,7 +158,7 @@ public class ScoreCommands {
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 76),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0.94, 60, 20),//120, 360
+                        new PositionCommand(elevatorSubsystem, 0.9, 80, 80),//120, 360
                         new PositionCommand(wristSubsystem, 69)//27.76
                 )
         );

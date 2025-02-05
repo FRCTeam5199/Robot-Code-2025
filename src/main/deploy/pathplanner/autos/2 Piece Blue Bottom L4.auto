@@ -7,25 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue Start to K"
+            "pathName": "2 Piece Blue Start to D"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue K to HPT"
+            "pathName": "2 Piece Blue D to HPB"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue HPT to L"
+            "pathName": "2 Piece Blue HPB to C"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "2 Piece L1",
+  "folder": "2 Piece L4",
   "choreoAuto": false
 }

@@ -146,6 +146,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "3 Piece L4",
+  "folder": null,
   "choreoAuto": false
 }
