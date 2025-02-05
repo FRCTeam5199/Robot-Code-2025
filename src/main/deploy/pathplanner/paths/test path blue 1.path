@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.827614795918367,
-        "y": 4.1779655612244895
+        "x": 6.209631147540984,
+        "y": 1.0100922131147536
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.208163265306123,
-        "y": 5.752391581632653
+        "x": 6.420800265424536,
+        "y": 0.8762729183464641
       },
       "isLocked": false,
-      "linkedName": "H Blue"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.0,
-        "y": 6.5
+        "x": 6.209631147540984,
+        "y": 3.131915983606557
       },
       "prevControl": {
-        "x": 5.723788265306123,
-        "y": 5.850829081632654
+        "x": 3.5550086856538625,
+        "y": 3.31938012099185
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.37694047959717303
-  },
-  "reversed": false,
-  "folder": "1 Piece Blue Paths",
-  "idealStartingState": {
-    "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "reversed": false,
+  "folder": "Tests",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": false
 }

@@ -43,14 +43,14 @@ public class IntakeSubsystem extends TemplateSubsystem {
     }
 
     public void intake(){
-        setPercent(10);
+        setPercent(-1);
     }
 
     public void stopIntake(){
-        setPercent(10);
+        setPercent(0);
     }
 
     public void outtake(){
-        setPercent(-10);
+        setPercent(1);
     }
 }

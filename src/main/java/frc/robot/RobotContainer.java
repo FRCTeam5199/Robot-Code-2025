@@ -77,11 +77,12 @@ public class RobotContainer {
         commandSwerveDrivetrain.configureAutoBuilder();
 
         NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
-        NamedCommands.registerCommand("ARMHP", ScoreCommands.intakeHP());
-        NamedCommands.registerCommand("ARML1", ScoreCommands.scoreL1());
-        NamedCommands.registerCommand("ARML2", ScoreCommands.scoreL2());
-        NamedCommands.registerCommand("ARML3", ScoreCommands.scoreL3());
-        NamedCommands.registerCommand("ARML4", ScoreCommands.scoreL4());
+        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
+        NamedCommands.registerCommand("HP", ScoreCommands.intakeHP());
+        NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
+        NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
+        NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
+        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
     }
@@ -145,9 +146,9 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
 
-        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(1)))
+        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(1))) //Outtake
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
-        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-1)))
+        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-1))) //Intake
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
 
         commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
@@ -165,7 +166,7 @@ public class RobotContainer {
         // An example command will be run in autonomous
         // return Autos.exampleAuto(armSubsystem);
         // return autoChooser.getSelected();
-        return new PathPlannerAuto("test auto red");
+        return new PathPlannerAuto("1 Piece Blue Bottom L1");
     }
 
     // public static Command threePieceProcessor() {
