@@ -7,12 +7,12 @@ package frc.robot;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -43,6 +43,8 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
+    
+    // The robot's subsystems and commands are defined here...
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -59,17 +61,11 @@ public class RobotContainer {
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     private static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
-    // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
+    private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
+    private final Telemetry logger = new Telemetry(MaxSpeed);
+
 
     private Boolean algaeControls = false;
-
-    // The robot's subsystems and commands are defined here...
-    private final Telemetry logger = new Telemetry(MaxSpeed);
-    //    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-//    public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
-//    public static final LinearTestSubsystem linearTestSubsystem = new LinearTestSubsystem();
-    //  public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
-    private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -77,6 +73,10 @@ public class RobotContainer {
     public RobotContainer() {
         SignalLogger.setPath("/media/LOG/ctre-logs/");
         
+        // UserInterface.createAutonComponent("AutoChooser", autoChooser, BuiltInWidgets.kComboBoxChooser, 0, 0, 1, 1, null);
+        
+        Autos.initalizeNamedCommands();
+
         configureBindings();
     }
 

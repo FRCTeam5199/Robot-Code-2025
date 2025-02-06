@@ -13,14 +13,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 public final class Autos {
     private static SendableChooser<Command> autoChooser;
 
-    private Autos() {
+    private Autos() {}
+
+    public static void initalizeNamedCommands() {
       NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
       NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
-      NamedCommands.registerCommand("ARMHP", ScoreCommands.intakeHP());
-      NamedCommands.registerCommand("ARML1", ScoreCommands.scoreL1());
-      NamedCommands.registerCommand("ARML2", ScoreCommands.scoreL2());
-      NamedCommands.registerCommand("ARML3", ScoreCommands.scoreL3());
-      NamedCommands.registerCommand("ARML4", ScoreCommands.scoreL4());
+      NamedCommands.registerCommand("HP", ScoreCommands.intakeHP());
+      NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
+      NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
+      NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
+      NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
     }
 
     /**
