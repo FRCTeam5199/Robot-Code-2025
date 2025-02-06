@@ -60,10 +60,10 @@ public class ElevatorSubsystem extends TemplateSubsystem {
 
 //        System.out.println("Elevator Mech M: " + getMechM());
 
-        if (getSupplyCurrent() > 20) currentSpike++;
+        if (getSupplyCurrent() > 25) currentSpike++;
         else noCurrentSpike++;
 
-        if (noCurrentSpike >= 5) {
+        if (noCurrentSpike >= 3) {
             currentSpike = 0;
             noCurrentSpike = 0;
         }

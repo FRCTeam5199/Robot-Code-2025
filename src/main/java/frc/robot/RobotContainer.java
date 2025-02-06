@@ -14,9 +14,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -49,8 +47,10 @@ public class RobotContainer {
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
 
     // driving in open loop
-    private final PIDController drivePIDController = new PIDController(4, 0, 0);
-    private final PIDController turnPIDController = new PIDController(.075, 0, 0);
+    private final PIDController drivePIDControllerFar = new PIDController(2.5, 0, 0);
+    private final PIDController drivePIDControllerClose = new PIDController(5, 0, 0);
+
+//    private final PIDController turnPIDController = new PIDController(.075, 0, 0);
 
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain(); // My commandSwerveDrivetrain
     private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -62,7 +62,8 @@ public class RobotContainer {
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
-    private Boolean algaeControls = false;
+    private boolean algaeControls = false;
+    private boolean shouldOrientAutoAlign = true;
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -106,7 +107,6 @@ public class RobotContainer {
                         .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
-
         // reset the field-centric heading on menu button press
         commandXboxController.button(8).onTrue(commandSwerveDrivetrain
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
@@ -121,14 +121,43 @@ public class RobotContainer {
 //                .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
 //                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
 
-        commandXboxController.rightBumper().whileTrue(commandSwerveDrivetrain.applyRequest(
-                () -> drive.withVelocityX(drivePIDController
-                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))
-                        .withVelocityY(drivePIDController
-                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))
-                        /*.withRotationalRate(turnPIDController
-                                .calculate(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees(),
-                                        aprilTagSubsystem.getClosestTagXYYaw()[2]))*/));
+//        commandXboxController.rightBumper().whileTrue(commandSwerveDrivetrain.applyRequest(
+//                () -> drive.withVelocityX(drivePIDController
+//                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))
+//                        .withVelocityY(drivePIDController
+//                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))
+//                        /*.withRotationalRate(turnPIDController
+//                                .calculate(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees(),
+//                                        aprilTagSubsystem.getClosestTagXYYaw()[2]))*/));
+
+        commandXboxController.rightBumper().whileTrue(new SequentialCommandGroup(
+                        new InstantCommand(aprilTagSubsystem::getClosestTag),
+                        new InstantCommand(()
+                                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math
+                                .toRadians(aprilTagSubsystem.getRotationToAlign())))).onlyIf(() -> shouldOrientAutoAlign),
+                        new InstantCommand(() -> shouldOrientAutoAlign = false),
+                        new ConditionalCommand(
+                                commandSwerveDrivetrain.applyRequest(
+                                        () -> drive.withVelocityX(drivePIDControllerFar
+                                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))
+//                                .withVelocityY(drivePIDControllerFar
+//                                        .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))
+                                ),
+                                commandSwerveDrivetrain.applyRequest(
+                                        () -> drive.withVelocityX(drivePIDControllerClose
+                                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))),
+//                                .withVelocityY(drivePIDControllerClose
+//                                        .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))),
+                                () -> aprilTagSubsystem.getClosestTagXYYaw()[0] > .25
+                                        || aprilTagSubsystem.getClosestTagXYYaw()[1] > .25))
+        ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
+                .resetRotation(new Rotation2d(Math.toRadians(-aprilTagSubsystem.getRotationToAlign()))))
+                .onlyIf(() -> aprilTagSubsystem.getClosestTagID() != -1)
+                .alongWith(new InstantCommand(() -> shouldOrientAutoAlign = true)));
+
+//        commandXboxController.rightBumper().onTrue(new InstantCommand(()
+//                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
+
 
         commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
         commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
