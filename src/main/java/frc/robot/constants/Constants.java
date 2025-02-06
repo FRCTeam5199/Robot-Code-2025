@@ -92,10 +92,6 @@ public final class Constants {
         public static final boolean ARM_FOLLOWER_INVERTED = true;
 
         public static final boolean ARM_BRAKE = true;
-        public static final boolean ARM_FOLLOW_BRAKE = false;
-
-
-        public static final PID ARM_PID = new PID(0, 0, 0); //53.3332
 
 
         //   public static final double ARM_FF_OFFSET = Units.degreesToRadians(13.5);

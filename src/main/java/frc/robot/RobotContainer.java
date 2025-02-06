@@ -115,18 +115,18 @@ public class RobotContainer {
 
         }
 
-//        commandXboxController.rightBumper().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
-//                .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
-//                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
+        commandXboxController.rightBumper().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
+                .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
+                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wristSubsystem.getDegrees()))));
 
-        commandXboxController.rightBumper().whileTrue(commandSwerveDrivetrain.applyRequest(
-                () -> drive.withVelocityX(drivePIDController
-                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))
-                        .withVelocityY(drivePIDController
-                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))
+//        commandXboxController.rightBumper().whileTrue(commandSwerveDrivetrain.applyRequest(
+//                () -> drive.withVelocityX(drivePIDController
+//                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))
+//                        .withVelocityY(drivePIDController
+//                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))
                         /*.withRotationalRate(turnPIDController
                                 .calculate(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees(),
-                                        aprilTagSubsystem.getClosestTagXYYaw()[2]))*/));
+//                                        aprilTagSubsystem.getClosestTagXYYaw()[2])));*/
 
         commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
         commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
@@ -156,6 +156,7 @@ public class RobotContainer {
 
         commandXboxController.povRight().onTrue(ScoreCommands.zeroElevator())
                 .onFalse(new VelocityCommand(elevatorSubsystem, 0));
+        commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
     }
