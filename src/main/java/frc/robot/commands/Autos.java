@@ -23,6 +23,10 @@ public final class Autos {
       NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
       NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
       NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
+      NamedCommands.registerCommand("ARML4", ScoreCommands.armL4());
+      NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
+      NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
+
     }
 
     /**
