@@ -39,13 +39,12 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
+        commandSwerveDrivetrain.configureAutoBuilder();
+        commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
+
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
-
-//    exampleSubsystem.init();
-
         robotContainer = new RobotContainer();
-        commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
     }
 
     /**
@@ -93,7 +92,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
 
-        // schedule the autonomous command (example)
+        // Schedule the autonomous command (example)
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
