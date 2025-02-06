@@ -235,8 +235,6 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     public void setVelocity(double rps) {
-        if (type == Type.LINEAR || type == Type.PIVOT) return;
-
         this.goal = rps;
         followLastMechProfile = false;
         if (rps == 0) setPercent(0);
@@ -325,7 +323,7 @@ public class TemplateSubsystem extends SubsystemBase {
             case PIVOT -> goalState.position = getMotorRotFromDegrees(goal) + zero;
             default -> goalState.position = getMotorRotFromMechRot(goal) + zero;
         }
-  
+
         goalState.velocity = 0;
         this.goal = goal;
 
@@ -377,21 +375,22 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
 
-public Command zero(Subsystem subsystem){
-    return new FunctionalCommand(
-        ()->{}, 
-    ()-> {
-        motor.setVoltage(-.1);
+    public Command zero(Subsystem subsystem) {
+        return new FunctionalCommand(
+                () -> {
+                },
+                () -> {
+                    motor.setVoltage(-.1);
 
-    },
-    (onend)->{
-        motor.setVoltage(0);
-        zero = motor.getRotorPosition().getValueAsDouble();
-    },
-    ()-> motor.getSupplyCurrent().getValueAsDouble() > 50,
-     subsystem
-     );
-}
+                },
+                (onend) -> {
+                    motor.setVoltage(0);
+                    zero = motor.getRotorPosition().getValueAsDouble();
+                },
+                () -> motor.getSupplyCurrent().getValueAsDouble() > 50,
+                subsystem
+        );
+    }
 
     public double getGoal() {
         return goal;
@@ -463,6 +462,14 @@ public Command zero(Subsystem subsystem){
         return motor.getMotorVoltage().getValueAsDouble();
     }
 
+    public TalonFX getMotor() {
+        return motor;
+    }
+
+    public TalonFX getFollowerMotor() {
+        return followerMotor;
+    }
+
     public double getSupplyVoltage() {
         return motor.getSupplyVoltage().getValueAsDouble();
     }
@@ -501,7 +508,7 @@ public Command zero(Subsystem subsystem){
         systemTimestamp.set(Timer.getFPGATimestamp());
     }
 
-    public void setConstraints(double vel, double accel){
+    public void setConstraints(double vel, double accel) {
         velocity = vel;
         acceleration = accel;
     }

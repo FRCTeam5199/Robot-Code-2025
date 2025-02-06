@@ -7,6 +7,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.PositionCommand;
+import frc.robot.subsystems.template.VelocityCommand;
 
 public class ScoreCommands {
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -15,101 +16,71 @@ public class ScoreCommands {
     private static IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static Timer timer = new Timer();
 
-
-
-    public static double intakeWristPos = 0.63;
-    public static double intakeElevatorPos = 0.238;
-
-    public static double coralL1WristPos = 59.66;
-    public static double coralL1ElevatorPos = 0.013;
-
-    public static double coralL2WristPos = 66.37;
-    public static double coralL2ElevatorPos = 0.151;
-
-    public static double coralL3WristPos = 65.8;
-    public static double coralL3ElevatorPos = 0.44;
-
-    public static double coralL4WristPos = 65;
-    public static double coralL4ElevatorPos = 0.929;
-
-    public static double algaeL1WristPos = 66.37;
-    public static double algaeL1ElevatorPos = 0.2;
-
-    public static double algaeL2WristPos = 65.8;
-    public static double algaeL2ElevatorPos = 0.5;
-
-
-
     public static Command intakeHP() {
-        //Was -- elevator = .13, arm = 77, wrist = 85 [adding 5 to wrist]
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.27, 36, 180),
+                                new PositionCommand(elevatorSubsystem, 0.28, 36, 180),
                                 new PositionCommand(wristSubsystem, 0.7)
                         ),
                         new PositionCommand(armSubsystem, 74.48)
                 ),
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 74.48),
-                        new PositionCommand(elevatorSubsystem, .27, 105, 180),
+                        new PositionCommand(elevatorSubsystem, 0.28, 105, 180),
                         new PositionCommand(wristSubsystem, 0.63)
                 ),
-                () -> elevatorSubsystem.getMechM() > .3
+                () -> elevatorSubsystem.getMechM() > .28
         );
     }
 
-    public static Command intake(){
+    public static Command intake() {
         return new FunctionalCommand(
-                ()-> {timer.reset();}, 
-                ()-> intakeSubsystem.intake(), 
-                (bool)-> intakeSubsystem.stopIntake(), 
-                ()-> {
-                        if(intakeSubsystem.getStatorCurrent() > 50){
-                                timer.start();
-                                if(timer.hasElapsed(.5)){
-                                        timer.stop();
-                                        return true;
-                                }
-                                return false;
+                () -> {
+                    timer.reset();
+                },
+                () -> intakeSubsystem.intake(),
+                (bool) -> intakeSubsystem.stopIntake(),
+                () -> {
+                    if (intakeSubsystem.getStatorCurrent() > 50) {
+                        timer.start();
+                        if (timer.hasElapsed(.5)) {
+                            timer.stop();
+                            return true;
                         }
                         return false;
-                }, 
+                    }
+                    return false;
+                },
                 intakeSubsystem);
     }
 
-    public static Command outtake(){
+    public static Command outtake() {
         return new FunctionalCommand(
-                ()-> {timer.reset();}, 
-                ()-> intakeSubsystem.outtake(), 
-                (bool)-> intakeSubsystem.stopIntake(), 
-                ()-> {
-                        timer.start();
-                        if(timer.hasElapsed(.4)){
-                                timer.stop();
-                                return true;
-                                
-                        }
-                        return false;
-                }, 
+                () -> {
+                    timer.reset();
+                },
+                () -> intakeSubsystem.outtake(),
+                (bool) -> intakeSubsystem.stopIntake(),
+                () -> {
+                    timer.start();
+                    if (timer.hasElapsed(.2)) {
+                        timer.stop();
+                        return true;
+
+                    }
+                    return false;
+                },
                 intakeSubsystem);
     }
 
     public static Command scoreL1() {
-        return new ConditionalCommand(
-                new SequentialCommandGroup( //Going down
-                        new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.013, 36, 180),
-                                new PositionCommand(wristSubsystem, 59.66)
-                        ),
-                        new PositionCommand(armSubsystem, 44.12)
-                ),
-                new SequentialCommandGroup( //Going up
-                        new PositionCommand(armSubsystem, 44.12),
-                        new PositionCommand(elevatorSubsystem, .013, 105, 180),
-                        new PositionCommand(wristSubsystem, 59.66)
-                ),
-                () -> elevatorSubsystem.getMechM() > .3
+        return new SequentialCommandGroup(
+                new PositionCommand(armSubsystem, 0),
+                new ParallelCommandGroup(
+                        new PositionCommand(elevatorSubsystem, 0, 50, 100),
+                        new PositionCommand(wristSubsystem, 25)
+                )
         );
     }
 
@@ -154,12 +125,12 @@ public class ScoreCommands {
         );
     }
 
-    public static Command scoreL4(){
+    public static Command scoreL4() {
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 76),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0.9, 80, 80),//120, 360
-                        new PositionCommand(wristSubsystem, 69)//27.76
+                        new PositionCommand(elevatorSubsystem, 0.94, 60, 20),//120, 360
+                        new PositionCommand(wristSubsystem, 66)
                 )
         );
     }
@@ -210,7 +181,7 @@ public class ScoreCommands {
         );
     }
 
-    public static Command algaeL2(){
+    public static Command algaeL2() {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
@@ -247,4 +218,20 @@ public class ScoreCommands {
                 () -> wristSubsystem.getDegrees() < 50
         );
     }
+
+    public static Command zeroElevator() {
+        return new FunctionalCommand(
+                () -> elevatorSubsystem.setVelocity(-10),
+                () -> {
+                },
+                interrupted -> {
+                    elevatorSubsystem.setVelocity(0);
+                    elevatorSubsystem.getMotor().setPosition(0);
+                },
+                elevatorSubsystem::isAtBottom,
+                elevatorSubsystem
+        );
+    }
+
+
 }
