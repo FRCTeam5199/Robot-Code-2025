@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 
+import com.ctre.phoenix6.Utils;
+
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -27,7 +29,6 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
 
     private RobotContainer robotContainer;
-    private static final CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
     private static Pair<Optional<EstimatedRobotPose>, Double> estimatePose;
     private static AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
@@ -37,17 +38,20 @@ public class Robot extends TimedRobot {
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
      */
+    public Robot(){
+        robotContainer = new RobotContainer();
+
+    }
+
     @Override
     public void robotInit() {
-        UserInterface.init();
-        
-        commandSwerveDrivetrain.configureAutoBuilder();
-
-        commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
-
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
+
+//    exampleSubsystem.init();
+
         robotContainer = new RobotContainer();
+        RobotContainer.commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
     }
 
     /**
@@ -59,24 +63,21 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        UserInterface.update();
-        
-        estimatePose = aprilTagSubsystem.getEstimatedGlobalPose();
-        if (estimatePose.getFirst().isPresent()) {
-            Pose2d robotPose2d = estimatePose.getFirst().get().estimatedPose.toPose2d();
-            Pose2d modify = new Pose2d(robotPose2d.getX(), robotPose2d.getY(),
-                    commandSwerveDrivetrain.getPose().getRotation());
-
-            commandSwerveDrivetrain.addVisionMeasurement(modify, estimatePose.getSecond(),
-                    Constants.Vision.kSingleTagStdDevs);
-//            commandSwerveDrivetrain.resetPose(modify);
-        }
-
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        estimatePose = aprilTagSubsystem.getEstimatedGlobalPose();
+        if (estimatePose.getFirst().isPresent()) {
+            Pose2d robotPose2d = estimatePose.getFirst().get().estimatedPose.toPose2d();
+            Pose2d modify = new Pose2d(robotPose2d.getX(), robotPose2d.getY(),
+                    RobotContainer.commandSwerveDrivetrain.getPose().getRotation());
+RobotContainer.commandSwerveDrivetrain.addVisionMeasurement(modify, Utils.getCurrentTimeSeconds(),
+                    Constants.Vision.kSingleTagStdDevs);
+//            commandSwerveDrivetrain.resetPose(modify);
+        }
+
     }
 
     /**
@@ -97,7 +98,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
 
-        // Schedule the autonomous command (example)
+        // schedule the autonomous command (example)
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }

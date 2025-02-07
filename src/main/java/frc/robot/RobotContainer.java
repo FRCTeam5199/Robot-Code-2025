@@ -7,19 +7,18 @@ package frc.robot;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
@@ -47,39 +46,56 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
-    
-    // The robot's subsystems and commands are defined here...
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
 
     // driving in open loop
-    private final PIDController drivePIDController = new PIDController(4, 0, 0);
-    private final PIDController turnPIDController = new PIDController(.075, 0, 0);
+    private final PIDController drivePIDControllerFar = new PIDController(2.5, 0, 0);
+    private final PIDController drivePIDControllerClose = new PIDController(5, 0, 0);
+
+//    private final PIDController turnPIDController = new PIDController(.075, 0, 0);
 
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain(); // My commandSwerveDrivetrain
-
+    private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+    private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+    private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
-
     private static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
-    private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+    // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
+
+    private boolean shouldOrientAutoAlign = true;
     private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     private Boolean algaeControls = false;
+
+
+    // The robot's subsystems and commands are defined here...
+    private final Telemetry logger = new Telemetry(MaxSpeed);
+    //    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+//    public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
+//    public static final LinearTestSubsystem linearTestSubsystem = new LinearTestSubsystem();
+    //  public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
+    // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        SignalLogger.setPath("/media/LOG/ctre-logs/");
+        commandSwerveDrivetrain.configureAutoBuilder();
 
-        Autos.initalizeNamedCommands();
-
+        NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
+        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
+        NamedCommands.registerCommand("HP", ScoreCommands.intakeHP());
+        NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
+        NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
+        NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
+        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
         configureBindings();
+        SignalLogger.setPath("/media/LOG/ctre-logs/");
     }
 
     private void configureBindings() {
@@ -99,7 +115,6 @@ public class RobotContainer {
                         .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
-
         // reset the field-centric heading on menu button press
         commandXboxController.button(8).onTrue(commandSwerveDrivetrain
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
@@ -114,14 +129,43 @@ public class RobotContainer {
 //                .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
 //                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
 
-        commandXboxController.rightBumper().whileTrue(commandSwerveDrivetrain.applyRequest(
-                () -> drive.withVelocityX(drivePIDController
-                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))
-                        .withVelocityY(drivePIDController
-                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))
-                        /*.withRotationalRate(turnPIDController
-                                .calculate(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees(),
-                                        aprilTagSubsystem.getClosestTagXYYaw()[2]))*/));
+//        commandXboxController.rightBumper().whileTrue(commandSwerveDrivetrain.applyRequest(
+//                () -> drive.withVelocityX(drivePIDController
+//                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))
+//                        .withVelocityY(drivePIDController
+//                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))
+//                        /*.withRotationalRate(turnPIDController
+//                                .calculate(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees(),
+//                                        aprilTagSubsystem.getClosestTagXYYaw()[2]))*/));
+
+        commandXboxController.rightBumper().whileTrue(new SequentialCommandGroup(
+                        new InstantCommand(aprilTagSubsystem::getClosestTag),
+                        new InstantCommand(()
+                                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math
+                                .toRadians(aprilTagSubsystem.getRotationToAlign())))).onlyIf(() -> shouldOrientAutoAlign),
+                        new InstantCommand(() -> shouldOrientAutoAlign = false),
+                        new ConditionalCommand(
+                                commandSwerveDrivetrain.applyRequest(
+                                        () -> drive.withVelocityX(drivePIDControllerFar
+                                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))
+//                                .withVelocityY(drivePIDControllerFar
+//                                        .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))
+                                ),
+                                commandSwerveDrivetrain.applyRequest(
+                                        () -> drive.withVelocityX(drivePIDControllerClose
+                                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))),
+//                                .withVelocityY(drivePIDControllerClose
+//                                        .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))),
+                                () -> aprilTagSubsystem.getClosestTagXYYaw()[0] > .25
+                                        || aprilTagSubsystem.getClosestTagXYYaw()[1] > .25))
+        ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
+                .resetRotation(new Rotation2d(Math.toRadians(-aprilTagSubsystem.getRotationToAlign()))))
+                .onlyIf(() -> aprilTagSubsystem.getClosestTagID() != -1)
+                .alongWith(new InstantCommand(() -> shouldOrientAutoAlign = true)));
+
+//        commandXboxController.rightBumper().onTrue(new InstantCommand(()
+//                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
+
 
         commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
         commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
@@ -170,8 +214,8 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
         // return Autos.exampleAuto(armSubsystem);
-        return autoChooser.getSelected();
-        // return new PathPlannerAuto("1 Piece Blue Bottom L1");
+        // return autoChooser.getSelected();
+        return new PathPlannerAuto("1 Piece Blue Bottom L1");
     }
 
     // public static Command threePieceProcessor() {
