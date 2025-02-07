@@ -7,14 +7,20 @@ package frc.robot.commands;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.path.PathConstraints;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.UserInterface;
 
 public final class Autos {
     private static SendableChooser<Command> autoChooser;
+    PathConstraints pathConstraints = new PathConstraints(4, 2, 2, 2);
 
     private Autos() {}
 
@@ -195,6 +201,11 @@ public final class Autos {
         }
       }
   
+    }
+
+
+    public class GO_TO{
+   
     }
 
 
