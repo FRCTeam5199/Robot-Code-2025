@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -41,4 +42,161 @@ public final class Autos {
 
       return autoChooser;
     }
+
+    public class THEONEPIECEISREAAAL{
+
+      public class Blue{
+        public Command onePieceBlueHPTL1(){
+          return new PathPlannerAuto("1 Piece Blue HPT L1");
+        }
+        public Command onePieceBlueHPBL1(){
+          return new PathPlannerAuto("1 Piece Blue HPB L1");
+        }
+        public Command onePieceBlueHPTL4(){
+          return new PathPlannerAuto("1 Piece Blue HPT L4");
+        }
+        public Command onePieceBlueHPBL4(){
+          return new PathPlannerAuto("1 Piece Blue HPB L4");
+        }
+      }
+      public class Red{
+        public Command onePieceRedHPTL1(){
+          return new PathPlannerAuto("1 Piece Red HPT L1");
+        }
+        public Command onePieceRedHPBL1(){
+          return new PathPlannerAuto("1 Piece Red HPB L1");
+        }
+
+        public Command onePieceRedHPTL4(){
+          return new PathPlannerAuto("1 Piece Red HPT L4");
+        }
+        public Command onePieceRedHPBL4(){
+          return new PathPlannerAuto("1 Piece Red HPB L4");
+        }
+      }
+  }
+
+
+    public class TwoPiece{
+      public class Blue{
+        public Command twoPieceBlueBL1(){
+          return new PathPlannerAuto("2 Piece Blue Bottom L1");
+        }
+  
+        public Command twoPieceBlueTL1(){
+          return new PathPlannerAuto("2 Piece Blue Top L1");
+        }
+  
+        public Command twoPieceBlueBL4(){
+          return new PathPlannerAuto("2 Piece Blue Bottom L4");
+        }
+  
+        public Command twoPieceBlueTL4(){
+          return new PathPlannerAuto("2 Piece Blue Top L4");
+        }
+  
+      }
+  
+      public class Red{
+        public Command twoPieceRedBL1(){
+          return new PathPlannerAuto("2 Piece Red Bottom L1");
+        }
+  
+        public Command twoPieceRedTL1(){
+          return new PathPlannerAuto("2 Piece Red Top L1");
+        }
+  
+        public Command twoPieceRedBL4(){
+          return new PathPlannerAuto("2 Piece Red Bottom L4");
+        }
+  
+        public Command twoPieceRedTL4(){
+          return new PathPlannerAuto("2 Piece Red Top L4");
+        }
+      }
+    }
+  
+  
+    public class ThreePiece{
+      public class Blue{
+        public Command threePieceBlueBL1(){
+          return new PathPlannerAuto("3 Piece Blue Bottom L1");
+        }
+  
+        public Command threePieceBlueTL1(){
+          return new PathPlannerAuto("3 Piece Blue Top L1");
+        }
+  
+        public Command threePieceBlueBL4(){
+          return new PathPlannerAuto("3 Piece Blue Bottom L4");
+        }
+  
+        public Command threePieceBlueTL4(){
+          return new PathPlannerAuto("3 Piece Blue Top L4");
+        }
+  
+      }
+  
+      public class Red{
+        public Command threePieceRedBL1(){
+          return new PathPlannerAuto("3 Piece Red Bottom L1");
+        }
+  
+        public Command threePieceRedTL1(){
+          return new PathPlannerAuto("3 Piece Red Top L1");
+        }
+  
+        public Command threePieceRedBL4(){
+          return new PathPlannerAuto("3 Piece Red Bottom L4");
+        }
+  
+        public Command threePieceRedTL4(){
+          return new PathPlannerAuto("3 Piece Red Top L4");
+        }
+      }
+  
+    }
+  
+    public class FourPiece{
+      public class Blue{
+        public Command fourPieceBlueBL1(){
+          return new PathPlannerAuto("4 Piece Blue Bottom L1");
+        }
+  
+        public Command fourPieceBlueTL1(){
+          return new PathPlannerAuto("4 Piece Blue Top L1");
+        }
+  
+        public Command fourPieceBlueBL4(){
+          return new PathPlannerAuto("4 Piece Blue Bottom L4");
+        }
+  
+        public Command fourPieceBlueTL4(){
+          return new PathPlannerAuto("4 Piece Blue Top L4");
+        }
+  
+      }
+  
+      public class Red{
+        public Command fourPieceRedBL1(){
+          return new PathPlannerAuto("4 Piece Red Bottom L1");
+        }
+  
+        public Command fourPieceRedTL1(){
+          return new PathPlannerAuto("4 Piece Red Top L1");
+        }
+  
+        public Command fourPieceRedBL4(){
+          return new PathPlannerAuto("4 Piece Red Bottom L4");
+        }
+  
+        public Command fourPieceRedTL4(){
+          return new PathPlannerAuto("4 Piece Red Top L4");
+        }
+      }
+  
+    }
+
+
+
 }
