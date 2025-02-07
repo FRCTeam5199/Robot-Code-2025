@@ -27,7 +27,6 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
 
     private RobotContainer robotContainer;
-    private static final CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
     private static Pair<Optional<EstimatedRobotPose>, Double> estimatePose;
     private static AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
@@ -37,6 +36,11 @@ public class Robot extends TimedRobot {
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
      */
+    public Robot(){
+        robotContainer = new RobotContainer();
+
+    }
+
     @Override
     public void robotInit() {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -45,7 +49,7 @@ public class Robot extends TimedRobot {
 //    exampleSubsystem.init();
 
         robotContainer = new RobotContainer();
-        commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
+        RobotContainer.commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
     }
 
     /**
@@ -66,9 +70,8 @@ public class Robot extends TimedRobot {
         if (estimatePose.getFirst().isPresent()) {
             Pose2d robotPose2d = estimatePose.getFirst().get().estimatedPose.toPose2d();
             Pose2d modify = new Pose2d(robotPose2d.getX(), robotPose2d.getY(),
-                    commandSwerveDrivetrain.getPose().getRotation());
-
-            commandSwerveDrivetrain.addVisionMeasurement(modify, estimatePose.getSecond(),
+                    RobotContainer.commandSwerveDrivetrain.getPose().getRotation());
+RobotContainer.commandSwerveDrivetrain.addVisionMeasurement(modify, estimatePose.getSecond(),
                     Constants.Vision.kSingleTagStdDevs);
 //            commandSwerveDrivetrain.resetPose(modify);
         }
