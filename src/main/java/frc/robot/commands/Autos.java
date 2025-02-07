@@ -7,8 +7,10 @@ package frc.robot.commands;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.UserInterface;
 
 public final class Autos {
     private static SendableChooser<Command> autoChooser;
@@ -26,7 +28,6 @@ public final class Autos {
       NamedCommands.registerCommand("ARML4", ScoreCommands.armL4());
       NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
       NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
-
     }
 
     /**
@@ -35,6 +36,7 @@ public final class Autos {
     public static SendableChooser<Command> getAutoChooser() {
       if (autoChooser == null) {
         autoChooser = AutoBuilder.buildAutoChooser();
+        UserInterface.getTab("Auton").add("AutoChooser", autoChooser).withWidget(BuiltInWidgets.kComboBoxChooser).withSize(1, 1).withPosition(0, 0);
       }
 
       return autoChooser;

@@ -54,16 +54,14 @@ public class RobotContainer {
     private final PIDController turnPIDController = new PIDController(.075, 0, 0);
 
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain(); // My commandSwerveDrivetrain
-    private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-    private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-    private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
+
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
+
     private static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
     private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
     private final Telemetry logger = new Telemetry(MaxSpeed);
-
 
     private Boolean algaeControls = false;
 
@@ -72,9 +70,7 @@ public class RobotContainer {
      */
     public RobotContainer() {
         SignalLogger.setPath("/media/LOG/ctre-logs/");
-        
-        // UserInterface.createAutonComponent("AutoChooser", autoChooser, BuiltInWidgets.kComboBoxChooser, 0, 0, 1, 1, null);
-        
+
         Autos.initalizeNamedCommands();
 
         configureBindings();

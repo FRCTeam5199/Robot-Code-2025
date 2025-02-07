@@ -39,7 +39,10 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
+        UserInterface.init();
+        
         commandSwerveDrivetrain.configureAutoBuilder();
+
         commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
 
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -56,6 +59,8 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+        UserInterface.update();
+        
         estimatePose = aprilTagSubsystem.getEstimatedGlobalPose();
         if (estimatePose.getFirst().isPresent()) {
             Pose2d robotPose2d = estimatePose.getFirst().get().estimatedPose.toPose2d();
