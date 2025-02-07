@@ -23,18 +23,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "STOPINTAKE"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "b reefside 6 L4 to HP right"
@@ -44,18 +32,6 @@
           "type": "named",
           "data": {
             "name": "INTAKE"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "STOPINTAKE"
           }
         },
         {
@@ -77,18 +53,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "STOPINTAKE"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "b reefside 2 L4 to HP right"
@@ -98,18 +62,6 @@
           "type": "named",
           "data": {
             "name": "INTAKE"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "STOPINTAKE"
           }
         },
         {
@@ -133,13 +85,7 @@
         {
           "type": "named",
           "data": {
-            "name": "STOPINTAKE"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ARMHP"
+            "name": "HP"
           }
         }
       ]

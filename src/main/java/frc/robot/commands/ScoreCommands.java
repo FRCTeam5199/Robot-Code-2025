@@ -135,6 +135,25 @@ public class ScoreCommands {
         );
     }
 
+    public static Command armL2(){
+        return new SequentialCommandGroup(
+                new PositionCommand(armSubsystem, 64.71)
+        );
+    }
+
+    public static Command armL3(){
+        return new SequentialCommandGroup(
+                new PositionCommand(armSubsystem, 72.21)
+        );
+    }
+
+    public static Command armL4(){
+        return new SequentialCommandGroup(
+                new PositionCommand(armSubsystem, 76)
+        );
+    }
+
+
     public static Command stable() {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Won't clip elevator

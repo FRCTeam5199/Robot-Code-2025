@@ -7,18 +7,19 @@ package frc.robot;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
@@ -46,6 +47,8 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
+    
+    // The robot's subsystems and commands are defined here...
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -55,42 +58,28 @@ public class RobotContainer {
     private final PIDController turnPIDController = new PIDController(.075, 0, 0);
 
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain(); // My commandSwerveDrivetrain
-    private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-    private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-    private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
+
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
+
     private static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
-    // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
+    private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
+    private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     private Boolean algaeControls = false;
 
-    // The robot's subsystems and commands are defined here...
-    private final Telemetry logger = new Telemetry(MaxSpeed);
-    //    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-//    public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
-//    public static final LinearTestSubsystem linearTestSubsystem = new LinearTestSubsystem();
-    //  public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
-    // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        commandSwerveDrivetrain.configureAutoBuilder();
-
-        NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
-        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
-        NamedCommands.registerCommand("HP", ScoreCommands.intakeHP());
-        NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
-        NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
-        NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
-        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
-        configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
+
+        Autos.initalizeNamedCommands();
+
+        configureBindings();
     }
 
     private void configureBindings() {
@@ -181,8 +170,8 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
         // return Autos.exampleAuto(armSubsystem);
-        // return autoChooser.getSelected();
-        return new PathPlannerAuto("1 Piece Blue Bottom L1");
+        return autoChooser.getSelected();
+        // return new PathPlannerAuto("1 Piece Blue Bottom L1");
     }
 
     // public static Command threePieceProcessor() {
