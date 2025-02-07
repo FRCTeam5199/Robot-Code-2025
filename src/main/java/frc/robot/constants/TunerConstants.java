@@ -33,6 +33,7 @@ public class TunerConstants {
             .withKP(0.1).withKI(0).withKD(0)
             .withKS(0.1138).withKV(0.124);
 
+
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
     private static final ClosedLoopOutputType kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
@@ -97,6 +98,11 @@ public class TunerConstants {
     private static final boolean kInvertRightSide = true;
 
     private static final int kPigeonId = 13;
+
+    public static final double
+            kLockOnP = 0.00,
+            kLockOnI = 0.00,
+            kLockOnD = 0.00;
 
     // These are only used for simulation
     private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.01);
