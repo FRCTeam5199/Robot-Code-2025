@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 
+import com.ctre.phoenix6.Utils;
+
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -67,7 +69,7 @@ public class Robot extends TimedRobot {
             Pose2d modify = new Pose2d(robotPose2d.getX(), robotPose2d.getY(),
                     commandSwerveDrivetrain.getPose().getRotation());
 
-            commandSwerveDrivetrain.addVisionMeasurement(modify, estimatePose.getSecond(),
+            commandSwerveDrivetrain.addVisionMeasurement(modify, Utils.getCurrentTimeSeconds(),
                     Constants.Vision.kSingleTagStdDevs);
 //            commandSwerveDrivetrain.resetPose(modify);
         }

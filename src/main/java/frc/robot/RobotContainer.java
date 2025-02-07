@@ -155,9 +155,9 @@ public class RobotContainer {
         commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 
-        commandXboxController.povRight().onTrue(ScoreCommands.zeroElevator())
-                .onFalse(new VelocityCommand(elevatorSubsystem, 0));
-        commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
+        // commandXboxController.povRight().onTrue(ScoreCommands.zeroElevator())
+        //         .onFalse(new VelocityCommand(elevatorSubsystem, 0));
+        // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
     }
