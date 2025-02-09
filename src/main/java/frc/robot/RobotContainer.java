@@ -11,9 +11,11 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -30,7 +32,6 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
-import frc.robot.subsystems.*;
 import frc.robot.subsystems.template.VelocityCommand;
 
 /**
@@ -50,11 +51,19 @@ public class RobotContainer {
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
 
-    // driving in open loop
-    private final PIDController drivePIDControllerFar = new PIDController(2.5, 0, 0);
-    private final PIDController drivePIDControllerClose = new PIDController(5, 0, 0);
 
-//    private final PIDController turnPIDController = new PIDController(.075, 0, 0);
+    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(1.5, 0.0, .1, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(5.75, 0.0, .2, new TrapezoidProfile.Constraints(100, 200));
+
+    private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(2, 0.0, .05, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(5.5, 0.0, .05, new TrapezoidProfile.Constraints(100, 200));
+
+    private static final PIDController turnPIDController = new PIDController(0.125, 0.0, 0.0);
+
+    private static double xVelocity = 0;
+    private static double yVelocity = 0;
+
+    private static double autoAlignOffset = -.18;
 
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain(); // My commandSwerveDrivetrain
     private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -67,7 +76,6 @@ public class RobotContainer {
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
 
-    private boolean shouldOrientAutoAlign = true;
     private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     private Boolean algaeControls = false;
@@ -129,40 +137,18 @@ public class RobotContainer {
 //                .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
 //                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
 
-//        commandXboxController.rightBumper().whileTrue(commandSwerveDrivetrain.applyRequest(
-//                () -> drive.withVelocityX(drivePIDController
-//                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))
-//                        .withVelocityY(drivePIDController
-//                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))
-//                        /*.withRotationalRate(turnPIDController
-//                                .calculate(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees(),
-//                                        aprilTagSubsystem.getClosestTagXYYaw()[2]))*/));
-
         commandXboxController.rightBumper().whileTrue(new SequentialCommandGroup(
-                        new InstantCommand(aprilTagSubsystem::getClosestTag),
-                        new InstantCommand(()
-                                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math
-                                .toRadians(aprilTagSubsystem.getRotationToAlign())))).onlyIf(() -> shouldOrientAutoAlign),
-                        new InstantCommand(() -> shouldOrientAutoAlign = false),
-                        new ConditionalCommand(
-                                commandSwerveDrivetrain.applyRequest(
-                                        () -> drive.withVelocityX(drivePIDControllerFar
-                                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))
-//                                .withVelocityY(drivePIDControllerFar
-//                                        .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))
-                                ),
-                                commandSwerveDrivetrain.applyRequest(
-                                        () -> drive.withVelocityX(drivePIDControllerClose
-                                                .calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], 0))),
-//                                .withVelocityY(drivePIDControllerClose
-//                                        .calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], 0))),
-                                () -> aprilTagSubsystem.getClosestTagXYYaw()[0] > .25
-                                        || aprilTagSubsystem.getClosestTagXYYaw()[1] > .25))
+                new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
+                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                .getClosestTagID()))))),
+                commandSwerveDrivetrain.applyRequest(
+                        () -> drive.withVelocityX(xVelocity)
+                                .withVelocityY(yVelocity)
+                                .withRotationalRate(turnPIDController.calculate(
+                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
-                .resetRotation(new Rotation2d(Math.toRadians(-aprilTagSubsystem.getRotationToAlign()))))
-                .onlyIf(() -> aprilTagSubsystem.getClosestTagID() != -1)
-                .alongWith(new InstantCommand(() -> shouldOrientAutoAlign = true)));
-
+                .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
+                        .getPigeon2().getRotation2d().getDegrees())))));
 //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
 //                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
 
@@ -185,9 +171,9 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
 
-        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(1))) //Outtake
+        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-1))) //Outtake
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
-        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-1))) //Intake
+        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(1))) //Intake
                 .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0))
                         // Lock on with limelight thing, if breaking comment the entire andThen statement
 //                    .andThen(new InstantCommand(() -> drivetrain.applyRequest(() -> drive
@@ -199,9 +185,10 @@ public class RobotContainer {
         commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 
-        // commandXboxController.povRight().onTrue(ScoreCommands.zeroElevator())
-        //         .onFalse(new VelocityCommand(elevatorSubsystem, 0));
+        commandXboxController.povRight().onTrue(ScoreCommands.zeroElevator())
+                .onFalse(new VelocityCommand(elevatorSubsystem, 0));
         // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
+        commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
     }
@@ -223,13 +210,17 @@ public class RobotContainer {
     // }
 
     public static void periodic() {
-//        System.out.println("Current Angle: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees()
-//                + " Goal Angle: " + aprilTagSubsystem.getClosestTagXYYaw()[2]);
-//        if (commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() > 360)
-//            commandSwerveDrivetrain.getPigeon2()
-//                    .setYaw(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() - 360);
-//        if (commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() < 360)
-//            commandSwerveDrivetrain.getPigeon2()
-//                    .setYaw(commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees() + 360);
+        if ((Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] + .04) > .125
+                || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(autoAlignOffset) > .05)) {
+            xVelocity = drivePIDControllerX.calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], -.04);
+            yVelocity = drivePIDControllerY.calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], autoAlignOffset);
+        } else {
+            xVelocity = drivePIDControllerXClose.calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], -.04);
+            yVelocity = drivePIDControllerYClose.calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], autoAlignOffset);
+        }
+    }
+
+    public void toggleAutoAlignOffset() {
+        autoAlignOffset = -autoAlignOffset;
     }
 }

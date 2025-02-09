@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         UserInterface.init();
-        
+
         commandSwerveDrivetrain.configureAutoBuilder();
 
         commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
+        commandSwerveDrivetrain.seedFieldCentric();
     }
 
     /**
@@ -62,7 +63,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         UserInterface.update();
-        
+
         estimatePose = aprilTagSubsystem.getEstimatedGlobalPose();
         if (estimatePose.getFirst().isPresent()) {
             Pose2d robotPose2d = estimatePose.getFirst().get().estimatedPose.toPose2d();
@@ -79,6 +80,7 @@ public class Robot extends TimedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        RobotContainer.periodic();
     }
 
     /**
