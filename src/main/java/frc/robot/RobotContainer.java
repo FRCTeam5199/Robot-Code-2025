@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -52,18 +53,31 @@ public class RobotContainer {
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
 
 
-    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(1.5, 0.0, .1, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(5.75, 0.0, .2, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(2, 0.0, .1, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(5.25, 0, .15, new TrapezoidProfile.Constraints(100, 200));
 
-    private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(2, 0.0, .05, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(5.5, 0.0, .05, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(2.25, 0.0, .05, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(5, 0, .15, new TrapezoidProfile.Constraints(100, 200));
 
     private static final PIDController turnPIDController = new PIDController(0.125, 0.0, 0.0);
 
     private static double xVelocity = 0;
     private static double yVelocity = 0;
 
-    private static double autoAlignOffset = -.18;
+    private static double autoAlignXOffset = -.02;
+    private static double autoAlignYOffset = -.17;
+
+    private static TrapezoidProfile profileX = new TrapezoidProfile(
+            new TrapezoidProfile.Constraints(1000, 1000));
+    private static TrapezoidProfile.State currentStateX = new TrapezoidProfile.State(0, 0);
+    private static TrapezoidProfile.State goalStateX = new TrapezoidProfile.State(0, 0);
+
+    private static TrapezoidProfile profileY = new TrapezoidProfile(
+            new TrapezoidProfile.Constraints(1000, 1000));
+    private static TrapezoidProfile.State currentStateY = new TrapezoidProfile.State(0, 0);
+    private static TrapezoidProfile.State goalStateY = new TrapezoidProfile.State(0, 0);
+
+    private static Timer timer = new Timer();
 
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain(); // My commandSwerveDrivetrain
     private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -146,9 +160,11 @@ public class RobotContainer {
                                 .withVelocityY(yVelocity)
                                 .withRotationalRate(turnPIDController.calculate(
                                         commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.1)))
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-                        .getPigeon2().getRotation2d().getDegrees())))));
+                        .getPigeon2().getRotation2d().getDegrees()))))
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0))));
 //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
 //                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
 
@@ -210,17 +226,28 @@ public class RobotContainer {
     // }
 
     public static void periodic() {
-        if ((Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] + .04) > .125
-                || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(autoAlignOffset) > .05)) {
-            xVelocity = drivePIDControllerX.calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], -.04);
-            yVelocity = drivePIDControllerY.calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], autoAlignOffset);
+        if (!timer.isRunning()) timer.start();
+
+        if ((Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) > .15
+                || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(autoAlignYOffset) > .15)) {
+            currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
+            currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
+
+            goalStateX.position = autoAlignXOffset;
+            goalStateY.position = autoAlignYOffset;
+
+            TrapezoidProfile.State nextStateX = profileX.calculate(timer.get(), currentStateX, goalStateX);
+            TrapezoidProfile.State nextStateY = profileY.calculate(timer.get(), currentStateY, goalStateY);
+
+            xVelocity = drivePIDControllerX.calculate(currentStateX.position, nextStateX);
+            yVelocity = drivePIDControllerY.calculate(currentStateY.position, nextStateY);
         } else {
-            xVelocity = drivePIDControllerXClose.calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], -.04);
-            yVelocity = drivePIDControllerYClose.calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], autoAlignOffset);
+            xVelocity = drivePIDControllerXClose.calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], autoAlignXOffset);
+            yVelocity = drivePIDControllerYClose.calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], autoAlignYOffset);
         }
     }
 
     public void toggleAutoAlignOffset() {
-        autoAlignOffset = -autoAlignOffset;
+        autoAlignYOffset = -autoAlignYOffset;
     }
 }
