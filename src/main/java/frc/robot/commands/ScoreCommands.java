@@ -1,7 +1,12 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.RobotContainer;
+import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -15,13 +20,13 @@ public class ScoreCommands {
     private static WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static Timer timer = new Timer();
+    
+    public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
+    public static double MaxAngularRate = TunerConstants.kRotationAt12Volts;
 
-//    public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
-//    public static double MaxAngularRate = TunerConstants.kRotationAt12Volts;
-//
-//    private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
-//                                                                .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
-//                                                                .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
+    private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
+                                                                .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
+                                                                .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     public static Command intakeHP() {
         return new ConditionalCommand(
@@ -134,10 +139,10 @@ public class ScoreCommands {
 
     public static Command scoreL4() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 81),
+                new PositionCommand(armSubsystem, 82),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0.93, 60, 20),
-                        new PositionCommand(wristSubsystem, 75)
+                        new PositionCommand(elevatorSubsystem, 0.87, 60, 20),//120, 360
+                        new PositionCommand(wristSubsystem, 73)
                 )
         );
     }
@@ -260,29 +265,30 @@ public class ScoreCommands {
     }
 
 
-//        public static Command align() {
-//            return new FunctionalCommand(
-//                    () -> {
-//                    },
-//                    () -> {
-//                        new SequentialCommandGroup(
-//                                new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
-//                                        Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))))),
-//                                RobotContainer.commandSwerveDrivetrain.applyRequest(
-//                                        () -> drive.withVelocityX(RobotContainer.xVelocity)
-//                                                .withVelocityY(RobotContainer.yVelocity)
-//                                                .withRotationalRate(RobotContainer.turnPIDController.calculate(
-//                                                        RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))));
-//
-//                    },
-//                    (isdone) -> {
-//                        new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain
-//                                .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
-//                                        .getPigeon2().getRotation2d().getDegrees()))));
-//
-//                    },
-//                    () -> RobotContainer.yVelocity < .01,
-//                    RobotContainer.commandSwerveDrivetrain);
-//
-//        }
+                                        
+        public static Command align() {
+            return new FunctionalCommand(
+                    () -> {
+                    },
+                    () -> {
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
+                                        Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))))),
+                                RobotContainer.commandSwerveDrivetrain.applyRequest(
+                                        () -> drive.withVelocityX(RobotContainer.xVelocity)
+                                                .withVelocityY(RobotContainer.yVelocity)
+                                                .withRotationalRate(RobotContainer.turnPIDController.calculate(
+                                                        RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))));
+
+                    },
+                    (isdone) -> {
+                        new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain
+                                .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
+                                        .getPigeon2().getRotation2d().getDegrees()))));
+
+                    },
+                    () -> RobotContainer.yVelocity < .01,
+                    RobotContainer.commandSwerveDrivetrain);
+
+        }
 }
