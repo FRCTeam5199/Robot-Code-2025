@@ -116,7 +116,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
         NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
         NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
-        NamedCommands.registerCommand("ALIGN", ScoreCommands.align());
+//        NamedCommands.registerCommand("ALIGN", ScoreCommands.align());
 
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
