@@ -1,7 +1,12 @@
 package frc.robot.commands;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.RobotContainer;
+import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -18,7 +23,7 @@ public class ScoreCommands {
     
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
     public static double MaxAngularRate = TunerConstants.kRotationAt12Volts;
-        
+
     private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
                                                                 .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
                                                                 .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
@@ -261,28 +266,29 @@ public class ScoreCommands {
 
 
                                         
-        public static Command align(){
-                return new FunctionalCommand(
-                        ()->{}, 
-                        ()->{
-                                new SequentialCommandGroup(
-                                        new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                                                Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))))),
-                                            RobotContainer.commandSwerveDrivetrain.applyRequest(
-                                                    () -> drive.withVelocityX(RobotContainer.xVelocity)
-                                            .withVelocityY(RobotContainer.yVelocity)
-                                            .withRotationalRate(RobotContainer.turnPIDController.calculate(
-                                                    RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))));
+        public static Command align() {
+            return new FunctionalCommand(
+                    () -> {
+                    },
+                    () -> {
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
+                                        Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))))),
+                                RobotContainer.commandSwerveDrivetrain.applyRequest(
+                                        () -> drive.withVelocityX(RobotContainer.xVelocity)
+                                                .withVelocityY(RobotContainer.yVelocity)
+                                                .withRotationalRate(RobotContainer.turnPIDController.calculate(
+                                                        RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))));
 
-            }, 
-            (isdone)->{
-                    new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain
-                            .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
-                            .getPigeon2().getRotation2d().getDegrees()))));
+                    },
+                    (isdone) -> {
+                        new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain
+                                .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
+                                        .getPigeon2().getRotation2d().getDegrees()))));
 
-            }, 
-            ()-> RobotContainer.yVelocity < .01, 
-            RobotContainer.commandSwerveDrivetrain);
+                    },
+                    () -> RobotContainer.yVelocity < .01,
+                    RobotContainer.commandSwerveDrivetrain);
 
-
+        }
 }
