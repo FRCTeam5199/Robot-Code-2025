@@ -15,6 +15,13 @@ public class ScoreCommands {
     private static WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static Timer timer = new Timer();
+    
+    public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
+    public static double MaxAngularRate = TunerConstants.kRotationAt12Volts;
+        
+    private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
+                                                                .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
+                                                                .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     public static Command intakeHP() {
         return new ConditionalCommand(
@@ -251,6 +258,31 @@ public class ScoreCommands {
                 elevatorSubsystem
         );
     }
+
+
+                                        
+        public static Command align(){
+                return new FunctionalCommand(
+                        ()->{}, 
+                        ()->{
+                                new SequentialCommandGroup(
+                                        new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
+                                                Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))))),
+                                            RobotContainer.commandSwerveDrivetrain.applyRequest(
+                                                    () -> drive.withVelocityX(RobotContainer.xVelocity)
+                                            .withVelocityY(RobotContainer.yVelocity)
+                                            .withRotationalRate(RobotContainer.turnPIDController.calculate(
+                                                    RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))));
+
+            }, 
+            (isdone)->{
+                    new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain
+                            .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
+                            .getPigeon2().getRotation2d().getDegrees()))));
+
+            }, 
+            ()-> RobotContainer.yVelocity < .01, 
+            RobotContainer.commandSwerveDrivetrain);
 
 
 }

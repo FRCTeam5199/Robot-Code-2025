@@ -59,10 +59,10 @@ public class RobotContainer {
     private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(2.25, 0.0, .05, new TrapezoidProfile.Constraints(100, 200));
     private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(5, 0, .15, new TrapezoidProfile.Constraints(100, 200));
 
-    private static final PIDController turnPIDController = new PIDController(0.125, 0.0, 0.0);
+    public static final PIDController turnPIDController = new PIDController(0.125, 0.0, 0.0);
 
-    private static double xVelocity = 0;
-    private static double yVelocity = 0;
+    public static double xVelocity = 0;
+    public static double yVelocity = 0;
 
     private static double autoAlignXOffset = -.02;
     private static double autoAlignYOffset = -.17;
@@ -85,7 +85,7 @@ public class RobotContainer {
     private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
-    private static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
+    public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
@@ -116,6 +116,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
         NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
         NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
+        NamedCommands.registerCommand("ALIGN", ScoreCommands.align());
+
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
     }
