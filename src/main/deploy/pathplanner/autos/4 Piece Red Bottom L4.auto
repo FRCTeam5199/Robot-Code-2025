@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "4 Piece Red HPB to L"
@@ -29,6 +35,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "4 Piece Red HPB to A"
@@ -38,6 +50,12 @@
           "type": "path",
           "data": {
             "pathName": "4 Piece Red A to HPB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
           }
         },
         {

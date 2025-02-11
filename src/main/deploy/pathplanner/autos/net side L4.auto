@@ -49,6 +49,12 @@
         {
           "type": "named",
           "data": {
+            "name": "ALIGN"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "ARMHP"
           }
         },
@@ -110,6 +116,12 @@
           "type": "path",
           "data": {
             "pathName": "r reefside 2 L4 to HP right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
           }
         },
         {

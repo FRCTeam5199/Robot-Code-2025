@@ -11,27 +11,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HP to reefside 5"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "reefside 5 to HP"
+            "name": "ALIGN"
           }
         },
         {
@@ -59,6 +41,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 0.5
@@ -80,6 +68,42 @@
           "type": "path",
           "data": {
             "pathName": "reefside 5 to HP"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "HP to reefside 5"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "reefside 5 to HP"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
           }
         },
         {

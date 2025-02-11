@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "2 Piece Red HPT to C"
@@ -26,6 +32,12 @@
           "type": "path",
           "data": {
             "pathName": "2 Piece Red C to HPT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
           }
         }
       ]

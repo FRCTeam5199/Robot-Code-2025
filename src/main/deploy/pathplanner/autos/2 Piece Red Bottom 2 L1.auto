@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "2 Piece Red HPB to K"
@@ -26,6 +32,12 @@
           "type": "path",
           "data": {
             "pathName": "3 Piece Red K to HPB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
           }
         }
       ]

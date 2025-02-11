@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "3 Piece Red HPT to D"
@@ -26,6 +32,12 @@
           "type": "path",
           "data": {
             "pathName": "3 Piece Red D to HPT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
           }
         },
         {

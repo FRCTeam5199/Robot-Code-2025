@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "3 Piece Blue HPB to C"
@@ -29,6 +35,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "3 Piece Blue HPB to B"
@@ -38,6 +50,12 @@
           "type": "path",
           "data": {
             "pathName": "3 Piece Blue B to HPB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
           }
         }
       ]

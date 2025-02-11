@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "3 Piece Blue HPT to L"
@@ -26,6 +32,12 @@
           "type": "path",
           "data": {
             "pathName": "3 Piece Blue L to HPT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
           }
         },
         {

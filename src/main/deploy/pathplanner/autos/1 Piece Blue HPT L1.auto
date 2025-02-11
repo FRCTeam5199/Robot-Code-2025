@@ -33,6 +33,12 @@
           "data": {
             "pathName": "1 Piece Blue H to HPT"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGN"
+          }
         }
       ]
     }
