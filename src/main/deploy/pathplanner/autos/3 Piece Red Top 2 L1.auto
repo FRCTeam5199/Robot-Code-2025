@@ -11,15 +11,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "3 Piece Red G to HPT"
+            "name": "ALIGNL"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ALIGN"
+            "pathName": "3 Piece Red G to HPT"
           }
         },
         {
@@ -29,21 +29,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ALIGNR"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "3 Piece Red D to HPT"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "ALIGN"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "3 Piece Red HPT to C"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGNL"
           }
         }
       ]

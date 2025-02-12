@@ -116,7 +116,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
         NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
         NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
-//        NamedCommands.registerCommand("ALIGN", ScoreCommands.align());
+        NamedCommands.registerCommand("ALIGNL", ScoreCommands.alignLeft());
+        NamedCommands.registerCommand("ALIGNR", ScoreCommands.alignRight());
+
+
 
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
@@ -229,7 +232,7 @@ public class RobotContainer {
 
     public static void periodic() {
         if (!timer.isRunning()) timer.start();
-
+        
         if ((Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) > .15
                 || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(autoAlignYOffset) > .15)) {
             currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
@@ -249,7 +252,22 @@ public class RobotContainer {
         }
     }
 
+ 
+    public void toggleAutoAlignOffsetLeft() {
+        if(autoAlignYOffset > 0){
+                autoAlignYOffset = -autoAlignYOffset;
+        }
+    }   
+    
+    public void toggleAutoAlignOffsetRight() {
+        if(autoAlignYOffset < 0){
+                autoAlignYOffset = -autoAlignYOffset;
+        }
+    }
+
     public void toggleAutoAlignOffset() {
         autoAlignYOffset = -autoAlignYOffset;
     }
+
+    
 }

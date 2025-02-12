@@ -11,15 +11,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "3 Piece Red H to HPB"
+            "name": "ALIGNR"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ALIGN"
+            "pathName": "3 Piece Red H to HPB"
           }
         },
         {
@@ -29,21 +29,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ALIGNL"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "3 Piece Red L to HPB"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "ALIGN"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "3 Piece Red HPB to K"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGNR"
           }
         }
       ]

@@ -11,15 +11,35 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ALIGNR"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L1"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "L1"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ALIGNR"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
