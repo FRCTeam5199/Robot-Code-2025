@@ -11,21 +11,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "ALIGNL"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "reefside 4 to HP"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ALIGN"
           }
         },
         {
@@ -38,6 +32,12 @@
           "type": "path",
           "data": {
             "pathName": "HP to reefside 5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGNL"
           }
         },
         {

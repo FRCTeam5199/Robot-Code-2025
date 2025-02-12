@@ -11,15 +11,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Blue K to HPT"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "ALIGN"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Blue K to HPT"
           }
         },
         {

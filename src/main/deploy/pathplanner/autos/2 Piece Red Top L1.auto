@@ -11,15 +11,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "2 Piece Red D to HPT"
+            "name": "ALIGNR"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ALIGN"
+            "pathName": "2 Piece Red D to HPT"
           }
         },
         {
@@ -29,15 +29,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "2 Piece Red C to HPT"
+            "name": "ALIGNL"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ALIGN"
+            "pathName": "2 Piece Red C to HPT"
           }
         }
       ]

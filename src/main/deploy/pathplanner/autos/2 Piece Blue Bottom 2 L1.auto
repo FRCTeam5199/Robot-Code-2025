@@ -11,9 +11,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "ALIGNL"
           }
         },
         {
@@ -23,45 +23,21 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "ALIGN"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "HP to reefside 5"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "ALIGNL"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "reefside 5 to HP"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ALIGN"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
           }
         },
         {

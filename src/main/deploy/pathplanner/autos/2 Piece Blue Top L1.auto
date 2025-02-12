@@ -13,6 +13,12 @@
         {
           "type": "named",
           "data": {
+            "name": "ALIGNL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "OUTTAKE"
           }
         },
@@ -25,12 +31,6 @@
         {
           "type": "named",
           "data": {
-            "name": "ALIGN"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "INTAKE"
           }
         },
@@ -38,6 +38,12 @@
           "type": "path",
           "data": {
             "pathName": "2 Piece Blue HPT to L"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGNR"
           }
         },
         {

@@ -11,21 +11,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ALIGNL"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "2 Piece Blue D to HPB"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "ALIGN"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "2 Piece Blue HPB to C"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGNR"
           }
         }
       ]

@@ -13,6 +13,12 @@
         {
           "type": "named",
           "data": {
+            "name": "ALIGNR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "L1"
           }
         },
@@ -26,12 +32,6 @@
           "type": "path",
           "data": {
             "pathName": "1 Piece Red H to HPB"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ALIGN"
           }
         },
         {

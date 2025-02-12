@@ -13,6 +13,12 @@
         {
           "type": "named",
           "data": {
+            "name": "ALIGNL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "L4"
           }
         },
@@ -26,12 +32,6 @@
           "type": "path",
           "data": {
             "pathName": "1 Piece Blue G to HPB"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ALIGN"
           }
         },
         {

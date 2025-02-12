@@ -13,6 +13,12 @@
         {
           "type": "named",
           "data": {
+            "name": "ALIGNR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "L4"
           }
         },
@@ -23,15 +29,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "HP"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "1 Piece Blue H to Top Side"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HP"
           }
         }
       ]
