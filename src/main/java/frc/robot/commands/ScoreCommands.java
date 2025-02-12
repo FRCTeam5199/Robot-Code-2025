@@ -270,8 +270,8 @@ public class ScoreCommands {
         public static Command alignLeft(){
                 return new FunctionalCommand(
                         ()->{
-                                if(RobotContainer.autoAlignOffset < 0){
-                                        RobotContainer.autoAlignOffset = -RobotContainer.autoAlignOffset;
+                                if(RobotContainer.autoAlignYOffset < 0){
+                                        RobotContainer.autoAlignYOffset = -RobotContainer.autoAlignYOffset;
                                 }
 
                         }, 
@@ -292,7 +292,7 @@ public class ScoreCommands {
                             .getPigeon2().getRotation2d().getDegrees()))));
 
             }, 
-            ()-> Math.abs(Math.abs(RobotContainer.aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(RobotContainer.autoAlignOffset)) > .01, 
+            ()-> Math.abs(Math.abs(RobotContainer.aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(RobotContainer.autoAlignYOffset)) > .01, 
             RobotContainer.commandSwerveDrivetrain);
 
         }
@@ -300,8 +300,8 @@ public class ScoreCommands {
         public static Command alignRight(){
                 return new FunctionalCommand(
                         ()->{
-                                if(RobotContainer.autoAlignOffset > 0){
-                                        RobotContainer.autoAlignOffset = -RobotContainer.autoAlignOffset;
+                                if(RobotContainer.autoAlignYOffset > 0){
+                                        RobotContainer.autoAlignYOffset = -RobotContainer.autoAlignYOffset;
                                 }
                         }, 
                         ()->{
@@ -321,7 +321,7 @@ public class ScoreCommands {
                             .getPigeon2().getRotation2d().getDegrees()))));
 
             }, 
-            ()-> Math.abs(Math.abs(RobotContainer.aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(RobotContainer.autoAlignOffset)) > .01, 
+            ()-> Math.abs(Math.abs(RobotContainer.aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(RobotContainer.autoAlignYOffset)) > .01, 
             RobotContainer.commandSwerveDrivetrain);
 
         }

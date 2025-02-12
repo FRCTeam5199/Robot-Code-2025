@@ -65,7 +65,7 @@ public class RobotContainer {
     public static double yVelocity = 0;
 
     private static double autoAlignXOffset = -.02;
-    private static double autoAlignYOffset = -.17;
+    public static double autoAlignYOffset = -.17;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
