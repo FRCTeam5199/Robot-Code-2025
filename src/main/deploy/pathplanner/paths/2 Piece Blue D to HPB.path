@@ -34,9 +34,14 @@
   "eventMarkers": [
     {
       "name": "HP",
-      "waypointRelativePos": 0.44457547169811285,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "HP"
+        }
+      }
     }
   ],
   "globalConstraints": {

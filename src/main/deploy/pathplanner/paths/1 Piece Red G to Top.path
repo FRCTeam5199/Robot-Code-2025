@@ -31,7 +31,19 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Down",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "HP"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 6.0,
     "maxAcceleration": 6.0,
@@ -45,7 +57,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "1 Piece Blue Paths",
+  "folder": "1 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
