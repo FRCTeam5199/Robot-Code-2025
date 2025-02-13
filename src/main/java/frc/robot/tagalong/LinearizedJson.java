@@ -1,7 +1,5 @@
 package frc.robot.tagalong;
 
-import frc.robot.tagalong.LinearizedLookupTable;
-
 public class LinearizedJson {
   public String unitX;
   public String unitY;
