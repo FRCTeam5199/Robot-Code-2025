@@ -7,8 +7,6 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -40,6 +38,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
 
+
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
     /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
@@ -53,6 +52,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+
 
     public void configureAutoBuilder() {
         try {
@@ -89,257 +89,67 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         } catch (Exception e) {}
     }
 
-    // /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
-    // private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
-    //         new SysIdRoutine.Config(
-    //                 Volts.of(.2).per(Second),        // Use default ramp rate (1 V/s)
-    //                 Volts.of(2), // Reduce dynamic step voltage to 4 V to prevent brownout
-    //                 null,        // Use default timeout (10 s)
-    //                 // Log state with SignalLogger class
-    //                 state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
-    //         ),
-    //         new SysIdRoutine.Mechanism(
-    //                 output -> setControl(m_translationCharacterization.withVolts(output)),
-    //                 null,
-    //                 this
-    //         )
-    // );
-
-    // /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
-    // public final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
-    //         new SysIdRoutine.Config(
-    //                 null,        // Use default ramp rate (1 V/s)
-    //                 Volts.of(5), // Use dynamic voltage of 7 V
-    //                 null,        // Use default timeout (10 s)
-    //                 // Log state with SignalLogger class
-    //                 state -> SignalLogger.writeString("SysIdSteer_State", state.toString())
-    //         ),
-    //         new SysIdRoutine.Mechanism(
-    //                 volts -> setControl(m_steerCharacterization.withVolts(volts)),
-    //                 null,
-    //                 this
-    //         )
-    // );
-
-    // /*
-    //  * SysId routine for characterizing rotation.
-    //  * This is used to find PID gains for the FieldCentricFacingAngle HeadingController.
-    //  * See the documentation of SwerveRequest.SysIdSwerveRotation for info on importing the log to SysId.
-    //  */
-    // private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine(
-    //         new SysIdRoutine.Config(
-    //                 /* This is in radians per second², but SysId only supports "volts per second" */
-    //                 Volts.of(Math.PI / 6).per(Second),
-    //                 /* This is in radians per second, but SysId only supports "volts" */
-    //                 Volts.of(Math.PI),
-    //                 null, // Use default timeout (10 s)
-    //                 // Log state with SignalLogger class
-    //                 state -> SignalLogger.writeString("SysIdRotation_State", state.toString())
-    //         ),
-    //         new SysIdRoutine.Mechanism(
-    //                 output -> {
-    //                     /* output is actually radians per second, but SysId only supports "volts" */
-    //                     setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
-    //                     /* also log the requested output for SysId */
-    //                     SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
-    //                 },
-    //                 null,
-    //                 this
-    //         )
-    // );
-
-    private final SysIdRoutine module0DriveSysID =
-    new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
-            Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-            null,        // Use default timeout (10 s)
-                        // Log state with Phoenix SignalLogger class
-            (state) -> SignalLogger.writeString("state", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            (volts) -> this.getModule(0).getDriveMotor().setControl(new VoltageOut(volts.in(Volts))),
-            null,
-            this
-        )
+    /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
+    private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    Volts.of(.2).per(Second),        // Use default ramp rate (1 V/s)
+                    Volts.of(2), // Reduce dynamic step voltage to 4 V to prevent brownout
+                    null,        // Use default timeout (10 s)
+                    // Log state with SignalLogger class
+                    state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
+            ),
+            new SysIdRoutine.Mechanism(
+                    output -> setControl(m_translationCharacterization.withVolts(output)),
+                    null,
+                    this
+            )
     );
 
-    private final SysIdRoutine module1DriveSysID =
-    new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
-            Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-            null,        // Use default timeout (10 s)
-                        // Log state with Phoenix SignalLogger class
-            (state) -> SignalLogger.writeString("state", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            (volts) -> this.getModule(1).getDriveMotor().setControl(new VoltageOut(volts.in(Volts))),
-            null,
-            this
-        )
+    /* SysId routine for characterizing steer. This is used to find PID gains for the steer motors. */
+    public final SysIdRoutine m_sysIdRoutineSteer = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    null,        // Use default ramp rate (1 V/s)
+                    Volts.of(5), // Use dynamic voltage of 7 V
+                    null,        // Use default timeout (10 s)
+                    // Log state with SignalLogger class
+                    state -> SignalLogger.writeString("SysIdSteer_State", state.toString())
+            ),
+            new SysIdRoutine.Mechanism(
+                    volts -> setControl(m_steerCharacterization.withVolts(volts)),
+                    null,
+                    this
+            )
     );
 
-    private final SysIdRoutine module2DriveSysID =
-    new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
-            Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-            null,        // Use default timeout (10 s)
-                        // Log state with Phoenix SignalLogger class
-            (state) -> SignalLogger.writeString("state", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            (volts) -> this.getModule(2).getDriveMotor().setControl(new VoltageOut(volts.in(Volts))),
-            null,
-            this
-        )
+    /*
+     * SysId routine for characterizing rotation.
+     * This is used to find PID gains for the FieldCentricFacingAngle HeadingController.
+     * See the documentation of SwerveRequest.SysIdSwerveRotation for info on importing the log to SysId.
+     */
+    private final SysIdRoutine m_sysIdRoutineRotation = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    /* This is in radians per second², but SysId only supports "volts per second" */
+                    Volts.of(Math.PI / 6).per(Second),
+                    /* This is in radians per second, but SysId only supports "volts" */
+                    Volts.of(Math.PI),
+                    null, // Use default timeout (10 s)
+                    // Log state with SignalLogger class
+                    state -> SignalLogger.writeString("SysIdRotation_State", state.toString())
+            ),
+            new SysIdRoutine.Mechanism(
+                    output -> {
+                        /* output is actually radians per second, but SysId only supports "volts" */
+                        setControl(m_rotationCharacterization.withRotationalRate(output.in(Volts)));
+                        /* also log the requested output for SysId */
+                        SignalLogger.writeDouble("Rotational_Rate", output.in(Volts));
+                    },
+                    null,
+                    this
+            )
     );
 
-    private final SysIdRoutine module3DriveSysID =
-    new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
-            Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-            null,        // Use default timeout (10 s)
-                        // Log state with Phoenix SignalLogger class
-            (state) -> SignalLogger.writeString("state", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            (volts) -> this.getModule(3).getDriveMotor().setControl(new VoltageOut(volts.in(Volts))),
-            null,
-            this
-        )
-    );
-
-
-    private final SysIdRoutine module0SteerSysID =
-    new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
-            Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-            null,        // Use default timeout (10 s)
-                        // Log state with Phoenix SignalLogger class
-            (state) -> SignalLogger.writeString("state", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            (volts) -> this.getModule(0).getSteerMotor().setControl(new VoltageOut(volts.in(Volts))),
-            null,
-            this
-        )
-    );
-
-    private final SysIdRoutine module1SteerSysID =
-    new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
-            Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-            null,        // Use default timeout (10 s)
-                        // Log state with Phoenix SignalLogger class
-            (state) -> SignalLogger.writeString("state", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            (volts) -> this.getModule(1).getSteerMotor().setControl(new VoltageOut(volts.in(Volts))),
-            null,
-            this
-        )
-    );
-
-    private final SysIdRoutine module2SteerSysID =
-    new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
-            Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-            null,        // Use default timeout (10 s)
-                        // Log state with Phoenix SignalLogger class
-            (state) -> SignalLogger.writeString("state", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            (volts) -> this.getModule(2).getSteerMotor().setControl(new VoltageOut(volts.in(Volts))),
-            null,
-            this
-        )
-    );
-
-    private final SysIdRoutine module3SteerSysID =
-    new SysIdRoutine(
-        new SysIdRoutine.Config(
-            null,        // Use default ramp rate (1 V/s)
-            Volts.of(4), // Reduce dynamic step voltage to 4 to prevent brownout
-            null,        // Use default timeout (10 s)
-                        // Log state with Phoenix SignalLogger class
-            (state) -> SignalLogger.writeString("state", state.toString())
-        ),
-        new SysIdRoutine.Mechanism(
-            (volts) -> this.getModule(3).getSteerMotor().setControl(new VoltageOut(volts.in(Volts))),
-            null,
-            this
-        )
-    );
-
-    public Command module0DriveSysIDQuasistatic(SysIdRoutine.Direction direction) {
-        return module0DriveSysID.quasistatic(direction);
-    }
-     
-    public Command module0DriveSysIDDynamic(SysIdRoutine.Direction direction) {
-        return module0DriveSysID.dynamic(direction);
-    }
-
-    public Command module1DriveSysIDQuasistatic(SysIdRoutine.Direction direction) {
-        return module1DriveSysID.quasistatic(direction);
-    }
-     
-    public Command module1DriveSysIDDynamic(SysIdRoutine.Direction direction) {
-        return module1DriveSysID.dynamic(direction);
-    }
-
-    public Command module2DriveSysIDQuasistatic(SysIdRoutine.Direction direction) {
-        return module2DriveSysID.quasistatic(direction);
-    }
-     
-    public Command module2DriveSysIDDynamic(SysIdRoutine.Direction direction) {
-        return module2DriveSysID.dynamic(direction);
-    }
-
-    public Command module3DriveSysIDQuasistatic(SysIdRoutine.Direction direction) {
-        return module3DriveSysID.quasistatic(direction);
-    }
-     
-    public Command module3DriveSysIDDynamic(SysIdRoutine.Direction direction) {
-        return module3DriveSysID.dynamic(direction);
-    }
-
-    public Command module0SteerSysIDQuasistatic(SysIdRoutine.Direction direction) {
-        return module0SteerSysID.quasistatic(direction);
-    }
-     
-    public Command module0SteerSysIDDynamic(SysIdRoutine.Direction direction) {
-        return module0SteerSysID.dynamic(direction);
-    }
-
-    public Command module1SteerSysIDQuasistatic(SysIdRoutine.Direction direction) {
-        return module1SteerSysID.quasistatic(direction);
-    }
-     
-    public Command module1SteerSysIDDynamic(SysIdRoutine.Direction direction) {
-        return module1SteerSysID.dynamic(direction);
-    }
-
-    public Command module2SteerSysIDQuasistatic(SysIdRoutine.Direction direction) {
-        return module2SteerSysID.quasistatic(direction);
-    }
-     
-    public Command module2SteerSysIDDynamic(SysIdRoutine.Direction direction) {
-        return module2SteerSysID.dynamic(direction);
-    }
-
-    public Command module3SteerSysIDQuasistatic(SysIdRoutine.Direction direction) {
-        return module3SteerSysID.quasistatic(direction);
-    }
-     
-    public Command module3SteerSysIDDynamic(SysIdRoutine.Direction direction) {
-        return module3SteerSysID.dynamic(direction);
-    }
+    /* The SysId routine to test */
+    private SysIdRoutine m_sysIdRoutineToApply = m_sysIdRoutineRotation;
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.

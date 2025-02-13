@@ -20,20 +20,19 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ObjectDetectionSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.VelocityCommand;
 
@@ -92,9 +91,11 @@ public class RobotContainer {
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
+
     private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     private Boolean algaeControls = false;
+
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -156,26 +157,26 @@ public class RobotContainer {
 //                .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
 //                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
 
-        // commandXboxController.rightBumper().whileTrue(new SequentialCommandGroup(
-        //         new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
-        //                 Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-        //                         .getClosestTagID()))))),
-        //         commandSwerveDrivetrain.applyRequest(
-        //                 () -> drive.withVelocityX(xVelocity)
-        //                         .withVelocityY(yVelocity)
-        //                         .withRotationalRate(turnPIDController.calculate(
-        //                                 commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
-        //         .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.1)))
-        // ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
-        //         .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-        //                 .getPigeon2().getRotation2d().getDegrees()))))
-        //         .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0))));
+        commandXboxController.rightBumper().whileTrue(new SequentialCommandGroup(
+                new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
+                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                .getClosestTagID()))))),
+                commandSwerveDrivetrain.applyRequest(
+                        () -> drive.withVelocityX(xVelocity)
+                                .withVelocityY(yVelocity)
+                                .withRotationalRate(turnPIDController.calculate(
+                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.1)))
+        ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
+                .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
+                        .getPigeon2().getRotation2d().getDegrees()))))
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0))));
 //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
 //                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
 
 
-        // commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
-        // commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
+        commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
+        commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
 
         commandXboxController.a().onTrue(ScoreCommands.intakeHP());
         commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
@@ -211,79 +212,7 @@ public class RobotContainer {
         // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
         commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
 
-        commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
-
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
-
-        commandXboxController.button(9).onTrue(new ConditionalCommand(
-                new SequentialCommandGroup(
-                        commandSwerveDrivetrain.module0DriveSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module0SteerSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module0DriveSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module0SteerSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module1DriveSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module1SteerSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module1DriveSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module1SteerSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module2DriveSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module2SteerSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module2DriveSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module2SteerSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module3DriveSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module3SteerSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module3DriveSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module3SteerSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module0DriveSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module0SteerSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module0DriveSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module0SteerSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module1DriveSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module1SteerSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module1DriveSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module1SteerSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module2DriveSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module2SteerSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module2DriveSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module2SteerSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module3DriveSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module3SteerSysIDDynamic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module3DriveSysIDQuasistatic(SysIdRoutine.Direction.kReverse),
-                        commandSwerveDrivetrain.module3SteerSysIDQuasistatic(SysIdRoutine.Direction.kReverse)
-                ), 
-                new SequentialCommandGroup(
-                        commandSwerveDrivetrain.module0DriveSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module0SteerSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module0DriveSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module0SteerSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module1DriveSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module1SteerSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module1DriveSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module1SteerSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module2DriveSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module2SteerSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module2DriveSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module2SteerSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module3DriveSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module3SteerSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module3DriveSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module3SteerSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module0DriveSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module0SteerSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module0DriveSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module0SteerSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module1DriveSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module1SteerSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module1DriveSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module1SteerSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module2DriveSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module2SteerSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module2DriveSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module2SteerSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module3DriveSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module3SteerSysIDDynamic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module3DriveSysIDQuasistatic(SysIdRoutine.Direction.kForward),
-                        commandSwerveDrivetrain.module3SteerSysIDQuasistatic(SysIdRoutine.Direction.kForward)
-                ), () -> commandXboxController.rightBumper().getAsBoolean()));
     }
 
     /**
@@ -322,6 +251,7 @@ public class RobotContainer {
         }
     }
 
+
     public void toggleAutoAlignOffsetLeft() {
         if (autoAlignYOffset > 0) {
             autoAlignYOffset = -autoAlignYOffset;
@@ -337,4 +267,6 @@ public class RobotContainer {
     public void toggleAutoAlignOffset() {
         autoAlignYOffset = -autoAlignYOffset;
     }
+
+
 }

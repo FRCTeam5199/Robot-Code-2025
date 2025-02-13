@@ -3,8 +3,10 @@ package frc.robot.subsystems.testing;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.Constants.ElevatorConstants;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.FeedForward;
+import frc.robot.utility.PID;
 import frc.robot.utility.Type;
 
 public class LinearTestSubsystem extends TemplateSubsystem {
