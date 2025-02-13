@@ -1,11 +1,8 @@
 package frc.robot.tagalong;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import frc.robot.tagalong.FileUtils;
-import frc.robot.tagalong.PivotConfJson;
-
 import java.io.File;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PivotParser {
   public PivotConfJson pivotConf;

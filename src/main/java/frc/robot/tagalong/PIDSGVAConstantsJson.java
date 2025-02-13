@@ -1,7 +1,5 @@
 package frc.robot.tagalong;
 
-import frc.robot.tagalong.PIDSGVAConstants;
-
 public class PIDSGVAConstantsJson {
   public double p = 0;
   public double i = 0;

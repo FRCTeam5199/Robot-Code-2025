@@ -1,11 +1,8 @@
 package frc.robot.subsystems.testing;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
-import frc.robot.constants.Constants.ArmConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.FeedForward;
-import frc.robot.utility.PID;
 import frc.robot.utility.Type;
 
 public class PivotTestSubsystem extends TemplateSubsystem {
