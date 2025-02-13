@@ -1,10 +1,10 @@
 package frc.robot.subsystems;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import frc.robot.RobotContainer;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -32,7 +32,15 @@ public class AprilTagSubsystem extends SubsystemBase {
     private AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
     private double closestTagX = 0, closestTagY = 0, closestTagYaw = 0;
 
-    public static AprilTagSubsystem aprilTagSubsystem;
+    public int getClosestTagID() {
+        return closestTagID;
+    }
+
+    private int closestTagID = -1;
+    private List<PhotonPipelineResult> results = new ArrayList<>();
+
+    private static AprilTagSubsystem aprilTagSubsystem;
+    private static CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
 
     double[] tagAngles = {1, 1, 1, 1, 1, 1, 300, 0, 60, 120, 180, 240, 1, 1, 1, 1, 1, 240, 180, 120, 60, 0, 300};
     double[] tagHeights = {1, 1, 1, 1, 1, 1, .308, .308, .308, .308, .308, .308, 1, 1, 1, 1, 1, .308, .308, .308, .308, .308, .308};
@@ -50,7 +58,11 @@ public class AprilTagSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+//        System.out.println("Drive rotation: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
+//        System.out.println("Pigeon angle: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
+//        System.out.println("Closest tag id: " + closestTagID);
+        results = camera.getAllUnreadResults();
+        updateClosestTagID();
     }
 
     /**
@@ -65,7 +77,7 @@ public class AprilTagSubsystem extends SubsystemBase {
      */
     public Pair<Optional<EstimatedRobotPose>, Double> getEstimatedGlobalPose() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        for (var change : camera.getAllUnreadResults()) {
+        for (var change : results) {
             visionEst = photonEstimator.update(change);
             updateEstimationStdDevs(visionEst, change.getTargets());
 
@@ -134,84 +146,107 @@ public class AprilTagSubsystem extends SubsystemBase {
         return curStdDevs;
     }
 
-    public double getTargetAngle(PhotonTrackedTarget target) {
-        double tag = target.getFiducialId();
-        double angle = 1;
-        for (int i = 0; i < tagAngles.length; i++) {
-            if (tag == i) {
-                angle = Units.degreesToRadians(tagAngles[i]);
-            }
-        }
-        return angle;
-    }
+    public int updateClosestTagID() {
+        PhotonTrackedTarget bestTarget = null;
+        if (!results.isEmpty()) {
+            PhotonPipelineResult result = results.get(results.size() - 1);
+            if (result.hasTargets()) {
+                double smallestDistance = Double.MAX_VALUE;
 
-    public double getTargetHeight(PhotonTrackedTarget target) {
-        double tag = target.getFiducialId();
-        double height = 1;
-        for (int i = 0; i < tagAngles.length; i++) {
-            if (tag == i) {
-                height = tagAngles[i];
-            }
-        }
-        return height;
-    }
+                for (PhotonTrackedTarget target : result.getTargets()) {
+                    if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11)
+                            || (target.getFiducialId() >= 17 && target.getFiducialId() <= 22)) {
+                        double distance = PhotonUtils.calculateDistanceToTargetMeters(
+                                Constants.Vision.CAMERA_POSE.getZ(), .31,
+                                Constants.Vision.CAMERA_POSE.getRotation().getY(),
+                                Units.degreesToRadians(target.getPitch()));
 
-    public int closestTarget() {
-        var results = camera.getAllUnreadResults();
-        Pair<Double, Integer> closest = new Pair(100000000, 0);
-        Pair<Double, Integer> closest2 = new Pair(100000, 0);
-
-
-        for (int i = 0; i < results.size(); i++) {
-            for (int z = 0; i < results.get(i).getTargets().size(); z++) {
-                if (getTargetAngle(results.get(i).getTargets().get(z)) != 1)
-                    closest2 = new Pair(PhotonUtils.calculateDistanceToTargetMeters(Vision.CAMERA_POSE.getZ(), .308, Units.degreesToRadians(Vision.CAMERA_POSE.getRotation().getMeasureY().baseUnitMagnitude()), getTargetAngle(results.get(i).getTargets().get(z))), results.get(i).getTargets().get(z).getFiducialId());
-            }
-            if (closest2.getFirst() < closest.getFirst()) {
-                closest = closest2;
-            }
-        }
-        return closest.getSecond();
-    }
-
-    public List<Double> alignValues(int tag) {
-        double x = 80, y = 80, z = 80;
-        List<Double> targetValue = new ArrayList<Double>();
-        targetValue.add(x);
-        targetValue.add(y);
-        targetValue.add(z);
-
-
-        var results = camera.getAllUnreadResults();
-
-        if (tag != 0 || tag != -1) {
-            for (int i = 0; i < results.size(); i++) {
-                for (int p = 0; p < results.size(); p++) {
-                    if (results.get(i).getTargets().get(p).getFiducialId() == tag) {
-                        x = results.get(i).getTargets().get(p).getPitch();
-                        y = results.get(i).getTargets().get(p).getYaw();
-                        z = getTargetAngle(results.get(i).getTargets().get(p)) + 180;
-
+                        if (distance < smallestDistance) {
+                            bestTarget = target;
+                            smallestDistance = distance;
+                        }
                     }
                 }
             }
         }
 
-        return targetValue;
-
+        if (bestTarget != null) closestTagID = bestTarget.getFiducialId();
+        return closestTagID;
     }
+
+    public double getRotationToAlign(int id) {
+        if (id == -1) return 0;
+        return -180 - tagAngles[id] + commandSwerveDrivetrain.getPose().getRotation().getDegrees();
+    }
+
+    public double getRotationToAlign() {
+        if (closestTagID == -1) return 0;
+        return -180 - tagAngles[closestTagID] + commandSwerveDrivetrain.getPose().getRotation().getDegrees();
+    }
+//
+//    public double getTargetHeight(PhotonTrackedTarget target) {
+//        double tag = target.getFiducialId();
+//        double height = 1;
+//        for (int i = 0; i < tagAngles.length; i++) {
+//            if (tag == i) {
+//                height = tagAngles[i];
+//            }
+//        }
+//        return height;
+//    }
+//
+//    public int closestTarget() {
+//        Pair<Double, Integer> closest = new Pair(100000000, 0);
+//        Pair<Double, Integer> closest2 = new Pair(100000, 0);
+//
+//
+//        for (int i = 0; i < results.size(); i++) {
+//            for (int z = 0; i < results.get(i).getTargets().size(); z++) {
+//                if (getTargetAngle(results.get(i).getTargets().get(z)) != 1)
+//                    closest2 = new Pair(PhotonUtils.calculateDistanceToTargetMeters(Vision.CAMERA_POSE.getZ(), .308, Units.degreesToRadians(Vision.CAMERA_POSE.getRotation().getMeasureY().baseUnitMagnitude()), getTargetAngle(results.get(i).getTargets().get(z))), results.get(i).getTargets().get(z).getFiducialId());
+//            }
+//            if (closest2.getFirst() < closest.getFirst()) {
+//                closest = closest2;
+//            }
+//        }
+//        return closest.getSecond();
+//    }
+//
+//    public List<Double> alignValues(int tag) {
+//        double x = 80, y = 80, z = 80;
+//        List<Double> targetValue = new ArrayList<Double>();
+//        targetValue.add(x);
+//        targetValue.add(y);
+//        targetValue.add(z);
+//
+//        if (tag != 0 || tag != -1) {
+//            for (int i = 0; i < results.size(); i++) {
+//                for (int p = 0; p < results.size(); p++) {
+//                    if (results.get(i).getTargets().get(p).getFiducialId() == tag) {
+//                        x = results.get(i).getTargets().get(p).getPitch();
+//                        y = results.get(i).getTargets().get(p).getYaw();
+//                        z = getTargetAngle(results.get(i).getTargets().get(p)) + 180;
+//
+//                    }
+//                }
+//            }
+//        }
+//
+//        return targetValue;
+//
+//    }
 
 
     public double[] getClosestTagXYYaw() {
-        List<PhotonPipelineResult> results = camera.getAllUnreadResults();
         if (!results.isEmpty()) {
             PhotonPipelineResult result = results.get(results.size() - 1);
             if (result.hasTargets()) {
-
                 double smallestDistance = Double.MAX_VALUE;
                 PhotonTrackedTarget bestTarget = null;
+
                 for (PhotonTrackedTarget target : result.getTargets()) {
-                    if (target.getFiducialId() != 14 || target.getFiducialId() != 15) { //check for other side too (probably switch to make sure its only looking at reef tags)
+                    if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11)
+                            || (target.getFiducialId() >= 17 && target.getFiducialId() <= 22)) {
                         double distance = PhotonUtils.calculateDistanceToTargetMeters(
                                 Constants.Vision.CAMERA_POSE.getZ(), .31,
                                 Constants.Vision.CAMERA_POSE.getRotation().getY(),
@@ -227,17 +262,23 @@ public class AprilTagSubsystem extends SubsystemBase {
                     return new double[]{0.0, 0.0, 0.0};
                 }
 
-                closestTagX = Math.cos(Math.toRadians(bestTarget.getYaw())) * smallestDistance;
-                closestTagY = Math.sin(Math.toRadians(bestTarget.getYaw())) * smallestDistance;
 
-                closestTagX = closestTagX > 0 ? closestTagX - Constants.Vision.CAMERA_TO_FRONT_DISTANCE
-                        : closestTagX + Constants.Vision.CAMERA_TO_FRONT_DISTANCE;
-                closestTagX = bestTarget.getFiducialId() == 17
-                        || bestTarget.getFiducialId() == 18
-                        || bestTarget.getFiducialId() == 19 ? -closestTagX : closestTagX;
+                closestTagID = bestTarget.getFiducialId();
+
+                closestTagX = -(Math.cos(Math.toRadians(bestTarget.getYaw())) * smallestDistance);
+                closestTagY = Math.sin(Math.toRadians(bestTarget.getYaw())) * smallestDistance;
+                closestTagID = bestTarget.getFiducialId();
+
+//                closestTagX = closestTagX > 0 ? closestTagX - Constants.Vision.CAMERA_TO_FRONT_DISTANCE
+//                        : closestTagX + Constants.Vision.CAMERA_TO_FRONT_DISTANCE;
+
+                closestTagX += Vision.CAMERA_TO_FRONT_DISTANCE;
+
                 closestTagYaw = bestTarget.getYaw();
 
-//                System.out.println("X: " + closestTagX + " Y: " + closestTagY);
+                System.out.println("Id: " + bestTarget.getFiducialId()
+                        + " X: " + closestTagX + " Y: " + closestTagY + " Yaw: " + closestTagYaw +
+                        " Rotation: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};

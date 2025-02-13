@@ -52,9 +52,9 @@ public final class Constants {
         public static final PID ELEVATOR_PID = new PID(0, 0, 0);
         public static final FeedForward ELEVATOR_FF = new FeedForward(0.08, 0.25, 0.127429);
         public static final double ELEVATOR_MIN = 0;
-        public static final double ELEVATOR_MAX = 1; //fix
-        public static final double ELEVATOR_LOWER_TOLERANCE = 0.05;
-        public static final double ELEVATOR_UPPER_TOLERANCE = 0.05;
+        public static final double ELEVATOR_MAX = .93;
+        public static final double ELEVATOR_LOWER_TOLERANCE = 0.1;
+        public static final double ELEVATOR_UPPER_TOLERANCE = 0.1;
         public static final double[][] ELEVATOR_GEARING = new double[][]{{3, 1}};
         public static final boolean INVERT = true;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
@@ -307,6 +307,7 @@ public final class Constants {
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(5), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .48895;
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.0, 0.0, 999.0);
+        public static final String LIMELIGHT_NAME = null;
 
     }
 }

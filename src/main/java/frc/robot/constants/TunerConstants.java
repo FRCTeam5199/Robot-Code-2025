@@ -33,6 +33,7 @@ public class TunerConstants {
             .withKP(0.1).withKI(0).withKD(0)
             .withKS(0.1138).withKV(0.124);
 
+
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
     private static final ClosedLoopOutputType kSteerClosedLoopOutput = ClosedLoopOutputType.Voltage;
@@ -85,6 +86,8 @@ public class TunerConstants {
     // This needs to be tuned to your individual robot
     public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(5.91);
 
+    public static final double kRotationAt12Volts = 1.5 * Math.PI;
+
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
     // This may need to be tuned to your individual robot
     private static final double kCoupleRatio = 4.5;
@@ -97,6 +100,11 @@ public class TunerConstants {
     private static final boolean kInvertRightSide = true;
 
     private static final int kPigeonId = 13;
+
+    public static final double
+            kLockOnP = 0.00,
+            kLockOnI = 0.00,
+            kLockOnD = 0.00;
 
     // These are only used for simulation
     private static final MomentOfInertia kSteerInertia = KilogramSquareMeters.of(0.01);

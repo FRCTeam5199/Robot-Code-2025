@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 
+import com.ctre.phoenix6.Utils;
+
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -39,13 +41,16 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
+        UserInterface.init();
+
+        commandSwerveDrivetrain.configureAutoBuilder();
+
+        commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
+
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
-
-//    exampleSubsystem.init();
-
         robotContainer = new RobotContainer();
-        commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
+        commandSwerveDrivetrain.seedFieldCentric();
     }
 
     /**
@@ -57,22 +62,25 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
-        // commands, running already-scheduled commands, removing finished or interrupted commands,
-        // and running subsystem periodic() methods.  This must be called from the robot's periodic
-        // block in order for anything in the Command-based framework to work.
-        CommandScheduler.getInstance().run();
+        UserInterface.update();
+
         estimatePose = aprilTagSubsystem.getEstimatedGlobalPose();
         if (estimatePose.getFirst().isPresent()) {
             Pose2d robotPose2d = estimatePose.getFirst().get().estimatedPose.toPose2d();
             Pose2d modify = new Pose2d(robotPose2d.getX(), robotPose2d.getY(),
                     commandSwerveDrivetrain.getPose().getRotation());
 
-            commandSwerveDrivetrain.addVisionMeasurement(modify, estimatePose.getSecond(),
+            commandSwerveDrivetrain.addVisionMeasurement(modify, Utils.getCurrentTimeSeconds(),
                     Constants.Vision.kSingleTagStdDevs);
 //            commandSwerveDrivetrain.resetPose(modify);
         }
 
+        // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+        // commands, running already-scheduled commands, removing finished or interrupted commands,
+        // and running subsystem periodic() methods.  This must be called from the robot's periodic
+        // block in order for anything in the Command-based framework to work.
+        CommandScheduler.getInstance().run();
+        RobotContainer.periodic();
     }
 
     /**
@@ -93,7 +101,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
 
-        // schedule the autonomous command (example)
+        // Schedule the autonomous command (example)
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
