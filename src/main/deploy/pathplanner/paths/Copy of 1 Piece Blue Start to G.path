@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.968,
-        "y": 2.808
+        "x": 7.297576530612246,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.2382913702600327,
-        "y": 2.1696055257935223
+        "x": 6.379510213558946,
+        "y": 4.0
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Start Blue"
     },
     {
       "anchor": {
-        "x": 1.52,
-        "y": 0.72
+        "x": 5.827614795918367,
+        "y": 3.8421874999999996
       },
       "prevControl": {
-        "x": 2.0334843699035225,
-        "y": 1.1629370927282623
+        "x": 6.596209690547304,
+        "y": 3.8421874999999996
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "G Blue"
     }
   ],
   "rotationTargets": [],
@@ -33,10 +33,15 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ARMHP",
-      "waypointRelativePos": 0.37661870503596695,
+      "name": "up",
+      "waypointRelativePos": 0.380896226415095,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L1"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -49,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.82270389511714
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "1 Piece Blue L1 Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 58.52056429782151
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

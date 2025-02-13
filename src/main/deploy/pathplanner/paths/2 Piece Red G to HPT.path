@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.204610655737704,
-        "y": 3.8272028688524586
+        "x": 11.744770408163266,
+        "y": 4.207812499999999
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.028134082849366,
-        "y": 3.8198774384795033
+        "x": 10.782206632653063,
+        "y": 5.528539540816325
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "G Red"
     },
     {
       "anchor": {
-        "x": 5.782,
-        "y": 3.827
+        "x": 16.25,
+        "y": 7.125
       },
       "prevControl": {
-        "x": 6.816102128307317,
-        "y": 3.829062239327244
+        "x": 15.25,
+        "y": 7.125
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "HP Red Top"
     }
   ],
   "rotationTargets": [],
@@ -33,10 +33,15 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ARML4",
+      "name": "Down",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "HP"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -49,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -125.8159256349378
   },
   "reversed": false,
-  "folder": "processor side L4 paths",
+  "folder": "2 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
