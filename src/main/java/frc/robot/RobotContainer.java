@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
@@ -86,6 +87,7 @@ public class RobotContainer {
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
+    public static final Autos autos = Autos.getInstance();
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
@@ -118,7 +120,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
         NamedCommands.registerCommand("ALIGNL", ScoreCommands.alignLeft());
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.alignRight());
-
 
 
         configureBindings();
@@ -221,8 +222,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        // return Autos.exampleAuto(armSubsystem);
-        // return autoChooser.getSelected();
         return new PathPlannerAuto("1 Piece Blue HPB L4");
     }
 
@@ -232,7 +231,7 @@ public class RobotContainer {
 
     public static void periodic() {
         if (!timer.isRunning()) timer.start();
-        
+
         if ((Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) > .15
                 || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(autoAlignYOffset) > .15)) {
             currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
@@ -252,16 +251,16 @@ public class RobotContainer {
         }
     }
 
- 
+
     public void toggleAutoAlignOffsetLeft() {
-        if(autoAlignYOffset > 0){
-                autoAlignYOffset = -autoAlignYOffset;
+        if (autoAlignYOffset > 0) {
+            autoAlignYOffset = -autoAlignYOffset;
         }
-    }   
-    
+    }
+
     public void toggleAutoAlignOffsetRight() {
-        if(autoAlignYOffset < 0){
-                autoAlignYOffset = -autoAlignYOffset;
+        if (autoAlignYOffset < 0) {
+            autoAlignYOffset = -autoAlignYOffset;
         }
     }
 
@@ -269,5 +268,5 @@ public class RobotContainer {
         autoAlignYOffset = -autoAlignYOffset;
     }
 
-    
+
 }

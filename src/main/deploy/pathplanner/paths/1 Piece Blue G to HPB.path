@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.2230867346938785,
-        "y": 2.267761479591836
+        "x": 6.437397540983607,
+        "y": 1.561526639344263
       },
       "isLocked": false,
       "linkedName": "G Blue"
@@ -20,8 +20,8 @@
         "y": 0.9992665816326519
       },
       "prevControl": {
-        "x": 3.70848214285715,
-        "y": 1.6185905612244875
+        "x": 3.716188524590163,
+        "y": 1.3817110655737712
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -50,5 +50,5 @@
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
