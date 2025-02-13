@@ -102,7 +102,7 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .1, 20, 50), //36, 180
+                                new PositionCommand(elevatorSubsystem, .1, 20, 50),
                                 new PositionCommand(wristSubsystem, 66.37),
                                 new InstantCommand(() -> intakeSubsystem.setPercent(.1))
                         ),
@@ -111,7 +111,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 64.71),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .1, 20, 50), //105, 180
+                                new PositionCommand(elevatorSubsystem, .1, 20, 50),
                                 new PositionCommand(wristSubsystem, 66.37),
                                 new InstantCommand(() -> intakeSubsystem.setPercent(.1))
                         )
@@ -125,7 +125,7 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .4, 36, 20), //36, 180
+                                new PositionCommand(elevatorSubsystem, .4, 36, 20),
                                 new PositionCommand(wristSubsystem, 65.8), //30
                                 new InstantCommand(() -> intakeSubsystem.setPercent(.1))
                         ),
@@ -134,7 +134,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 72.21),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .4, 60, 20), //75, 360
+                                new PositionCommand(elevatorSubsystem, .4, 60, 20),
                                 new PositionCommand(wristSubsystem, 65.8),
                                 new InstantCommand(() -> intakeSubsystem.setPercent(.1))
                         )
@@ -145,10 +145,10 @@ public class ScoreCommands {
 
     public static Command scoreL4() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 82),
+                new PositionCommand(armSubsystem, 80),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0.905, 90, 40),//120, 360
-                        new PositionCommand(wristSubsystem, 72.5),
+                        new PositionCommand(elevatorSubsystem, 0.93, 90, 40),
+                        new PositionCommand(wristSubsystem, 76),
                         new InstantCommand(() -> intakeSubsystem.setPercent(.1))
                 )
         );
@@ -163,7 +163,7 @@ public class ScoreCommands {
     }
 
     public static Command armL4() {
-        return new PositionCommand(armSubsystem, 82);
+        return new PositionCommand(armSubsystem, 80);
     }
 
 
