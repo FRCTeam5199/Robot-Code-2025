@@ -11,15 +11,35 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ALIGNL"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.1
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ALIGNL"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -29,15 +49,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "1 Piece Blue G to HPB"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 Piece Blue G to HPB"
           }
         }
       ]

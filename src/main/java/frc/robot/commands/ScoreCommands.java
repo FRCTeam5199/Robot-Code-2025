@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
-
+import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
@@ -21,26 +21,26 @@ public class ScoreCommands {
     private static WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static Timer timer = new Timer();
-    
+
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
     public static double MaxAngularRate = TunerConstants.kRotationAt12Volts;
-        
+
     private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
-                                                                .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
-                                                                .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
+            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
+            .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     public static Command intakeHP() {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.21, 36, 180),
+                                new PositionCommand(elevatorSubsystem, 0.25, 30, 150),
                                 new PositionCommand(wristSubsystem, 0.7)
                         ),
                         new PositionCommand(armSubsystem, 74.48)
                 ),
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 74.48),
-                        new PositionCommand(elevatorSubsystem, 0.21, 105, 180),
+                        new PositionCommand(elevatorSubsystem, 0.25, 105, 180),
                         new PositionCommand(wristSubsystem, 0.63)
                 ),
                 () -> elevatorSubsystem.getMechM() > .25
@@ -140,11 +140,13 @@ public class ScoreCommands {
 
     public static Command scoreL4() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 80),
+                new PositionCommand(armSubsystem, 82),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0.9, 60, 20),//120, 360
-                        new PositionCommand(wristSubsystem, 69)
-                )
+                        new PositionCommand(elevatorSubsystem, 0.905, 90, 40),//120, 360
+                        new PositionCommand(wristSubsystem, 72.5),
+                        new InstantCommand(() -> intakeSubsystem.setPercent(.1))
+                ),
+                new InstantCommand(() -> intakeSubsystem.setPercent(0))
         );
     }
 
@@ -266,7 +268,7 @@ public class ScoreCommands {
     }
 
 
-                                        
+
         public static Command alignLeft(){
                 return new FunctionalCommand(
                         ()->{
@@ -274,7 +276,7 @@ public class ScoreCommands {
                                         RobotContainer.autoAlignYOffset = -RobotContainer.autoAlignYOffset;
                                 }
 
-                        }, 
+                        },
                         ()->{
                                 new SequentialCommandGroup(
                                         new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
@@ -285,25 +287,25 @@ public class ScoreCommands {
                                             .withRotationalRate(RobotContainer.turnPIDController.calculate(
                                                     RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))));
 
-            }, 
+            },
             (isdone)->{
                     new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain
                             .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
                             .getPigeon2().getRotation2d().getDegrees()))));
 
-            }, 
-            ()-> Math.abs(Math.abs(RobotContainer.aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(RobotContainer.autoAlignYOffset)) > .01, 
+            },
+            ()-> Math.abs(Math.abs(RobotContainer.aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(RobotContainer.autoAlignYOffset)) > .01,
             RobotContainer.commandSwerveDrivetrain);
 
         }
-        
+
         public static Command alignRight(){
                 return new FunctionalCommand(
                         ()->{
                                 if(RobotContainer.autoAlignYOffset > 0){
                                         RobotContainer.autoAlignYOffset = -RobotContainer.autoAlignYOffset;
                                 }
-                        }, 
+                        },
                         ()->{
                                 new SequentialCommandGroup(
                                         new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
@@ -314,21 +316,31 @@ public class ScoreCommands {
                                             .withRotationalRate(RobotContainer.turnPIDController.calculate(
                                                     RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))));
 
-            }, 
+            },
             (isdone)->{
                     new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain
                             .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
                             .getPigeon2().getRotation2d().getDegrees()))));
 
-            }, 
-            ()-> Math.abs(Math.abs(RobotContainer.aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(RobotContainer.autoAlignYOffset)) > .01, 
+            },
+            ()-> Math.abs(Math.abs(RobotContainer.aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(RobotContainer.autoAlignYOffset)) > .01,
             RobotContainer.commandSwerveDrivetrain);
 
         }
 
-        
+        //Mi casa? me encanta mi casa. No creo que tenga una casa de mejor de mi casa. Vivida en muchas casas, pero  este
+        //casa es mi favorito. Mi casa es cerca de la playa, solo seis minutos a ir, cerca de mis amigos, y cerca de mi
+        //escuela. Me gusta la playa, porque la agua es bien a ver, y me encanta caminar en la playa. Pero, me encanta
+        //las montanas mejor de las playas, porque tiene snowboarding. en la semana pasado,
+        //fui a la montana Big Bear, y me encanta. Si viva en las montanas, haria muy disfrutar. Y mi dias? Pues, no
+        //tengo muchos tiempos ahora, porque estoy ir a clase de roboticos. Por dos semanas, fui a la clase por cico a once
+        //todos los dias! Pero, cuando estoy en mi casa, me gusta jugar videojuegos con mis amigos. Ahora, estoy jugar un
+        //videojuego de muy dificiles. Solo veinti por ciento de las personas finalizan uno nivel, y la juego tiene seisenta!
+        //No creo que la videojuega sea facil.
+        //Pero, porque de roboticas, mi vida de dias no es interesante, porque yo solo estudia, y dormir.
 
-        
 
-        
+
+
+
 }

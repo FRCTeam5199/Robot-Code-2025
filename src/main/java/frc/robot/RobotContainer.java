@@ -223,7 +223,7 @@ public class RobotContainer {
         // An example command will be run in autonomous
         // return Autos.exampleAuto(armSubsystem);
         // return autoChooser.getSelected();
-        return new PathPlannerAuto("1 Piece Blue Bottom L1");
+        return new PathPlannerAuto("1 Piece Blue HPB L4");
     }
 
     // public static Command threePieceProcessor() {
