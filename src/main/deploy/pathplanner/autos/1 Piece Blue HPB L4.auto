@@ -21,18 +21,6 @@
           "data": {
             "name": "OUTTAKE"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "HP"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "1 Piece Blue G to HPB"
-          }
         }
       ]
     }

@@ -68,7 +68,7 @@ public class WristSubsystem extends TemplateSubsystem {
 
         }
 
-        // System.out.println(getDegrees());
+        // System.out.println("Wrist Degrees: " + getDegrees());
     }
 
 

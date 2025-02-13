@@ -145,11 +145,11 @@ public class ScoreCommands {
 
     public static Command scoreL4() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 80),
+                new PositionCommand(armSubsystem, 84),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0.93, 90, 40),
-                        new PositionCommand(wristSubsystem, 76),
-                        new InstantCommand(() -> intakeSubsystem.setPercent(.1))
+                        new PositionCommand(elevatorSubsystem, .955, 90, 40),
+                        new PositionCommand(wristSubsystem, 78),
+                        new InstantCommand(() -> intakeSubsystem.setPercent(.2))
                 )
         );
     }
@@ -159,11 +159,12 @@ public class ScoreCommands {
     }
 
     public static Command armL3() {
+
         return new PositionCommand(armSubsystem, 72.21);
     }
 
     public static Command armL4() {
-        return new PositionCommand(armSubsystem, 80);
+        return new PositionCommand(armSubsystem, 84);
     }
 
 
