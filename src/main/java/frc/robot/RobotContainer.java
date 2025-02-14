@@ -43,14 +43,14 @@ import frc.robot.subsystems.template.VelocityCommand;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
-    private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
-
-
-    /* Setting up bindings for necessary control of the swerve drive platform */
-    private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
-            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
+    private static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
+        private static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+    
+    
+        /* Setting up bindings for necessary control of the swerve drive platform */
+        private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
+        public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
+                .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
 
 
@@ -65,7 +65,7 @@ public class RobotContainer {
     public static double xVelocity = 0;
     public static double yVelocity = 0;
 
-    private static double autoAlignXOffset = 0.06;
+    public static double autoAlignXOffset = 0.06;
     public static double autoAlignYOffset = -.17;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
@@ -224,7 +224,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        return Autos.OnePiece.Blue.onePieceBlueHPBL4();
+        return Autos.TwoPiece.Blue.twoPieceBlueTL4();
     }
 
     // public static Command threePieceProcessor() {

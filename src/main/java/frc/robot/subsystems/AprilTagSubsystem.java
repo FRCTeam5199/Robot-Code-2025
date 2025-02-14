@@ -126,7 +126,7 @@ public class AprilTagSubsystem extends SubsystemBase {
                 // One or more tags visible, run the full heuristic.
                 avgDist /= numTags;
                 // Decrease std devs if multiple targets are visible
-                if (numTags > 1) estStdDevs = Constants.Vision.kSingleTagStdDevs;
+                if (numTags > 1) estStdDevs = Constants.Vision.kMultiTagStdDevs;
                 // Increase std devs based on (average) distance
                 if (numTags == 1 && avgDist > 4)
                     estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
@@ -276,9 +276,9 @@ public class AprilTagSubsystem extends SubsystemBase {
 
                 closestTagYaw = bestTarget.getYaw();
 
-                System.out.println("Id: " + bestTarget.getFiducialId()
-                        + " X: " + closestTagX + " Y: " + closestTagY + " Yaw: " + closestTagYaw +
-                        " Rotation: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
+            //     System.out.println("Id: " + bestTarget.getFiducialId()
+            //             + " X: " + closestTagX + " Y: " + closestTagY + " Yaw: " + closestTagYaw +
+            //             " Rotation: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};

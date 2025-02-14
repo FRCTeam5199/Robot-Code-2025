@@ -25,8 +25,7 @@ public class ScoreCommands {
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
     public static double MaxAngularRate = TunerConstants.kRotationAt12Volts;
 
-    private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
-            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
+    private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     public static Command intakeHP() {
@@ -276,20 +275,24 @@ public class ScoreCommands {
     public static Command alignLeft() {
         return new FunctionalCommand(
                 () -> {
+                        System.out.println("Starting");
+
                     if (RobotContainer.autoAlignYOffset < 0) {
                         RobotContainer.autoAlignYOffset = -RobotContainer.autoAlignYOffset;
                     }
 
                 },
                 () -> {
-                    new SequentialCommandGroup(
-                            new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                                    Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))))),
-                            RobotContainer.commandSwerveDrivetrain.applyRequest(
-                                    () -> drive.withVelocityX(RobotContainer.xVelocity)
-                                            .withVelocityY(RobotContainer.yVelocity)
-                                            .withRotationalRate(RobotContainer.turnPIDController.calculate(
-                                                    RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))));
+
+                        RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))));
+                        
+                        RobotContainer.commandSwerveDrivetrain.applyRequest(
+                                ()-> RobotContainer.drive.withVelocityX(RobotContainer.xVelocity)
+                                .withVelocityY(RobotContainer.yVelocity)
+                                .withRotationalRate(RobotContainer.turnPIDController.calculate(RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0)));
+                
+
+                        System.out.println("X: " + RobotContainer.xVelocity + "Y: " + RobotContainer.yVelocity);
 
                 },
                 (isdone) -> {
@@ -298,7 +301,7 @@ public class ScoreCommands {
                                     .getPigeon2().getRotation2d().getDegrees()))));
 
                 },
-                () -> Math.abs(Math.abs(RobotContainer.aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(RobotContainer.autoAlignYOffset)) > .01,
+                () -> RobotContainer.xVelocity == 0 && RobotContainer.yVelocity == 0,
                 RobotContainer.commandSwerveDrivetrain);
 
     }
@@ -306,19 +309,23 @@ public class ScoreCommands {
     public static Command alignRight() {
         return new FunctionalCommand(
                 () -> {
+                        System.out.println("Starting");
+
                     if (RobotContainer.autoAlignYOffset > 0) {
                         RobotContainer.autoAlignYOffset = -RobotContainer.autoAlignYOffset;
                     }
                 },
                 () -> {
-                    new SequentialCommandGroup(
-                            new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                                    Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))))),
-                            RobotContainer.commandSwerveDrivetrain.applyRequest(
-                                    () -> drive.withVelocityX(RobotContainer.xVelocity)
-                                            .withVelocityY(RobotContainer.yVelocity)
-                                            .withRotationalRate(RobotContainer.turnPIDController.calculate(
-                                                    RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))));
+                        RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))));
+                        
+                        RobotContainer.commandSwerveDrivetrain.applyRequest(
+                                ()-> RobotContainer.drive.withVelocityX(RobotContainer.xVelocity)
+                                .withVelocityY(RobotContainer.yVelocity)
+                                .withRotationalRate(RobotContainer.turnPIDController.calculate(RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0)));
+                
+
+                        System.out.println("X: " + RobotContainer.xVelocity + "Y: " + RobotContainer.yVelocity);
+
 
                 },
                 (isdone) -> {
@@ -327,7 +334,8 @@ public class ScoreCommands {
                                     .getPigeon2().getRotation2d().getDegrees()))));
 
                 },
-                () -> Math.abs(Math.abs(RobotContainer.aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(RobotContainer.autoAlignYOffset)) > .01,
+                () -> RobotContainer.xVelocity == 0 && RobotContainer.yVelocity == 0,
+
                 RobotContainer.commandSwerveDrivetrain);
 
     }

@@ -100,7 +100,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        commandSwerveDrivetrain.setVisionMeasurementStdDevs(Vision.autonStdDevs);
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         // Schedule the autonomous command (example)
