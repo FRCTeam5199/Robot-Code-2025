@@ -33,6 +33,8 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
     public void periodic() {
         super.periodic();
+
+        
     }
 
     public static IntakeSubsystem getInstance() {

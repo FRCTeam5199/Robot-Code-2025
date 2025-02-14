@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.Vision;
 import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -71,7 +72,7 @@ public class Robot extends TimedRobot {
                     commandSwerveDrivetrain.getPose().getRotation());
 
             commandSwerveDrivetrain.addVisionMeasurement(modify, Utils.getCurrentTimeSeconds(),
-                    Constants.Vision.kSingleTagStdDevs);
+                    aprilTagSubsystem.getEstimationStdDevs());
 //            commandSwerveDrivetrain.resetPose(modify);
         }
 
@@ -99,6 +100,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        commandSwerveDrivetrain.setVisionMeasurementStdDevs(Vision.autonStdDevs);
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         // Schedule the autonomous command (example)

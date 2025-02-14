@@ -21,6 +21,12 @@
           "data": {
             "name": "OUTTAKE"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 Piece Blue G to HPB"
+          }
         }
       ]
     }

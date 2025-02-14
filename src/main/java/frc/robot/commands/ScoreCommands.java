@@ -77,7 +77,7 @@ public class ScoreCommands {
                 (bool) -> intakeSubsystem.stopIntake(),
                 () -> {
                     timer.start();
-                    if (timer.hasElapsed(.2)) {
+                    if (timer.hasElapsed(.3)) {
                         timer.stop();
                         return true;
 
@@ -136,7 +136,7 @@ public class ScoreCommands {
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .4, 60, 20),
                                 new PositionCommand(wristSubsystem, 65.8),
-                                new InstantCommand(() -> intakeSubsystem.setPercent(.1))
+                                new InstantCommand(() -> intakeSubsystem.setPercent(.5))
                         )
                 ),
                 () -> elevatorSubsystem.getMechM() > .4
@@ -145,11 +145,11 @@ public class ScoreCommands {
 
     public static Command scoreL4() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 84),
+                new PositionCommand(armSubsystem, 82),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, .955, 90, 40),
-                        new PositionCommand(wristSubsystem, 78),
-                        new InstantCommand(() -> intakeSubsystem.setPercent(.2))
+                        new PositionCommand(wristSubsystem, 76),
+                        new InstantCommand(() -> intakeSubsystem.setPercent(.5))
                 )
         );
     }
