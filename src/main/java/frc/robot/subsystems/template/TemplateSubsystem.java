@@ -90,6 +90,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     private Timer timer;
     private Type type;
+    private String name;
 
     NetworkTableInstance inst;
 
@@ -143,7 +144,11 @@ public class TemplateSubsystem extends SubsystemBase {
         systemPose = systemStateTable.getDoubleTopic("Position").publish();
         systemSpeeds = systemStateTable.getDoubleTopic("Speeds").publish();
         systemTimestamp = systemStateTable.getDoubleTopic("Timestamp").publish();
+        this.name = SubsystemName;
+    }
 
+    public String getName() {
+        return name;
     }
 
     //Configurations

@@ -3,38 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.4,
-        "y": 4.1779655612244895
+        "x": 7.329119318181817,
+        "y": 3.842
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.481933682946701,
-        "y": 4.1779655612244895
+        "x": 6.411053001128518,
+        "y": 3.842
       },
       "isLocked": false,
-      "linkedName": "Start Blue"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.827614795918367,
-        "y": 3.8421874999999996
+        "x": 5.35,
+        "y": 3.842
       },
       "prevControl": {
-        "x": 6.596209690547304,
-        "y": 3.8421874999999996
+        "x": 6.118594894628936,
+        "y": 3.842
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "G Blue"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "armL4",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "armL4"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -50,5 +62,5 @@
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

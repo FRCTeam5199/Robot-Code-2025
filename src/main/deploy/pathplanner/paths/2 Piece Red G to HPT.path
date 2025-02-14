@@ -3,35 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.607,
-        "y": 2.806
+        "x": 11.744770408163266,
+        "y": 4.207812499999999
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6672499999999997,
-        "y": 1.1877500000000003
+        "x": 10.782206632653063,
+        "y": 5.528539540816325
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "G Red"
     },
     {
       "anchor": {
-        "x": 1.714,
-        "y": 1.238
+        "x": 16.25,
+        "y": 7.125
       },
       "prevControl": {
-        "x": 3.3519999999999994,
-        "y": 2.6124999999999994
+        "x": 15.25,
+        "y": 7.125
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "HP Red Top"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Down",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "HP"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.0
+    "rotation": -125.8159256349378
   },
   "reversed": false,
-  "folder": "Bottom Blue Example",
+  "folder": "2 Piece Red Paths",
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": -119.99999999999999
+    "velocity": 0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

@@ -48,13 +48,13 @@ public final class Constants {
         public static final int ELEVATOR2_ID = 18;
 
         public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS
-                = new TrapezoidProfile.Constraints(150, 300);
+                = new TrapezoidProfile.Constraints(90, 40);
         public static final PID ELEVATOR_PID = new PID(0, 0, 0);
         public static final FeedForward ELEVATOR_FF = new FeedForward(0.08, 0.25, 0.127429);
         public static final double ELEVATOR_MIN = 0;
-        public static final double ELEVATOR_MAX = .93;
-        public static final double ELEVATOR_LOWER_TOLERANCE = 0.1;
-        public static final double ELEVATOR_UPPER_TOLERANCE = 0.1;
+        public static final double ELEVATOR_MAX = .96;
+        public static final double ELEVATOR_LOWER_TOLERANCE = 0.03;
+        public static final double ELEVATOR_UPPER_TOLERANCE = 0.03;
         public static final double[][] ELEVATOR_GEARING = new double[][]{{3, 1}};
         public static final boolean INVERT = true;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
@@ -272,8 +272,8 @@ public final class Constants {
 
         public static final FeedForward WRIST_FF = new FeedForward(.243, 0.02, 0.117, 0.0);
         //degrees
-        public static final double WRIST_LOWER_TOLERANCE = .75;
-        public static final double WRIST_UPPER_TOLERANCE = 0.75;
+        public static final double WRIST_LOWER_TOLERANCE = 1;
+        public static final double WRIST_UPPER_TOLERANCE = 1;
         //Degrees
         public static final double WRIST_MIN = 0.0;
         public static final double WRIST_MAX = 200;
@@ -307,6 +307,8 @@ public final class Constants {
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(5), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .48895;
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.0, 0.0, 999.0);
+        public static final Matrix<N3, N1> autonStdDevs = VecBuilder.fill(999.0, 999.0, 999.0);
+
         public static final String LIMELIGHT_NAME = null;
 
     }

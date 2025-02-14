@@ -32,8 +32,8 @@ public class ElevatorSubsystem extends TemplateSubsystem {
                 ElevatorConstants.ELEVATOR1_ID,
                 ElevatorConstants.ELEVATOR_CONSTRAINTS,
                 ElevatorConstants.ELEVATOR_FF,
-                ElevatorConstants.ELEVATOR_MIN,
-                ElevatorConstants.ELEVATOR_MAX,
+                ElevatorConstants.ELEVATOR_LOWER_TOLERANCE,
+                ElevatorConstants.ELEVATOR_UPPER_TOLERANCE,
                 ElevatorConstants.ELEVATOR_GEARING,
                 "Elevator"
         );
@@ -49,8 +49,8 @@ public class ElevatorSubsystem extends TemplateSubsystem {
                 ElevatorConstants.FOLLOWER_OPPOSE_MASTER_DIRECTION);
 
         configureLinearMech(ElevatorConstants.DRUM_CIRCUMFERENCE,
-                ElevatorConstants.ELEVATOR_LOWER_TOLERANCE,
-                ElevatorConstants.ELEVATOR_UPPER_TOLERANCE);
+                ElevatorConstants.ELEVATOR_MIN,
+                ElevatorConstants.ELEVATOR_MAX);
     }
 
     public void periodic() {
