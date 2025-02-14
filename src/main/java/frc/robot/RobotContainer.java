@@ -87,7 +87,6 @@ public class RobotContainer {
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
-    public static final Autos autos = Autos.getInstance();
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
@@ -118,6 +117,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
         NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
         NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
+        NamedCommands.registerCommand("armL2", ScoreCommands.armL2());
+        NamedCommands.registerCommand("armL3", ScoreCommands.armL3());
+        NamedCommands.registerCommand("armL4", ScoreCommands.armL4());
         NamedCommands.registerCommand("ALIGNL", ScoreCommands.alignLeft());
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.alignRight());
 
@@ -222,7 +224,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        return new PathPlannerAuto("1 Piece Blue HPB L4");
+        return Autos.OnePiece.Blue.onePieceBlueHPBL4();
     }
 
     // public static Command threePieceProcessor() {

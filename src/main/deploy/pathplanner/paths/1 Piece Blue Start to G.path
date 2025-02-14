@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 7.329119318181817,
-        "y": 3.8421874999999996
+        "y": 3.842
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.411053001128518,
-        "y": 3.8421874999999996
+        "y": 3.842
       },
       "isLocked": false,
-      "linkedName": "Start Blue"
+      "linkedName": null
     },
     {
       "anchor": {
         "x": 5.673835227272727,
-        "y": 3.8421874999999996
+        "y": 3.842
       },
       "prevControl": {
         "x": 6.442430121901664,
-        "y": 3.8421874999999996
+        "y": 3.842
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "G Blue"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "up",
+      "name": "armL4",
       "waypointRelativePos": 0.1562746645619579,
       "endWaypointRelativePos": null,
       "command": {
