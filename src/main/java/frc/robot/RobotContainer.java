@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -46,8 +47,6 @@ public class RobotContainer {
     private static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
         private static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
     
-    public static boolean alignLeft;
-    public static boolean alignRight;
         /* Setting up bindings for necessary control of the swerve drive platform */
         private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
         public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
@@ -89,6 +88,14 @@ public class RobotContainer {
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
+
+    static boolean alignL = false;
+        static boolean alignR = true;
+                public static final Trigger alignLeft = new Trigger(()->alignL);
+            public static final Trigger alignRight = new Trigger(()->alignR);
+
+
+
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
 
@@ -121,8 +128,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("armL2", ScoreCommands.armL2());
         NamedCommands.registerCommand("armL3", ScoreCommands.armL3());
         NamedCommands.registerCommand("armL4", ScoreCommands.armL4());
-        NamedCommands.registerCommand("ALIGNL", new InstantCommand(()-> alignLeft = true));
-        NamedCommands.registerCommand("ALIGNR", new InstantCommand(()-> alignRight = true));
+        NamedCommands.registerCommand("ALIGNL", new InstantCommand(()-> alignL = true));
+        NamedCommands.registerCommand("ALIGNR", new InstantCommand(()-> alignR = true));
 
 
         configureBindings();
@@ -170,6 +177,42 @@ public class RobotContainer {
                                 .withRotationalRate(turnPIDController.calculate(
                                         commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
                 .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.1)))
+        ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
+                .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
+                        .getPigeon2().getRotation2d().getDegrees()))))
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0))));
+
+        
+        alignLeft.whileTrue(new SequentialCommandGroup(
+                new InstantCommand(()-> {if(autoAlignYOffset > 0){autoAlignYOffset = -autoAlignYOffset;}}),
+
+                new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
+                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                .getClosestTagID()))))),
+                commandSwerveDrivetrain.applyRequest(
+                        () -> drive.withVelocityX(xVelocity)
+                                .withVelocityY(yVelocity)
+                                .withRotationalRate(turnPIDController.calculate(
+                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.1)))
+                .alongWith(new InstantCommand(()-> {if(xVelocity == 0 && yVelocity == 0){alignL = false;}}))
+        ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
+                .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
+                        .getPigeon2().getRotation2d().getDegrees()))))
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0))));
+
+        alignRight.whileTrue(new SequentialCommandGroup(
+                new InstantCommand(()-> {if(autoAlignYOffset > 0){autoAlignYOffset = -autoAlignYOffset;}}),
+                new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
+                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                .getClosestTagID()))))),
+                commandSwerveDrivetrain.applyRequest(
+                        () -> drive.withVelocityX(xVelocity)
+                                .withVelocityY(yVelocity)
+                                .withRotationalRate(turnPIDController.calculate(
+                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.1)))
+                .alongWith(new InstantCommand(()-> {if(xVelocity == 0 && yVelocity == 0){alignR = false;}}))
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees()))))

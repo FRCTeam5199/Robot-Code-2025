@@ -114,13 +114,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-        if(RobotContainer.alignLeft){
-            ScoreCommands.alignLeft();
-        }
-
-        if(RobotContainer.alignRight){
-            ScoreCommands.alignRight();
-        }
+    
     }
 
     @Override
