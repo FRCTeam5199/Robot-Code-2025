@@ -54,18 +54,18 @@ public class RobotContainer {
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
 
 
-    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(2, 0.0, .1, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(5.25, 0, .15, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(2.25, 0.0, .1, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(5.5, 0, .15, new TrapezoidProfile.Constraints(100, 200));
 
     private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(2.25, 0.0, .05, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(5, 0, .15, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(6.5, 0, .15, new TrapezoidProfile.Constraints(100, 200));
 
-    public static final PIDController turnPIDController = new PIDController(0.125, 0.0, 0.0);
+    public static final PIDController turnPIDController = new PIDController(0.14, 0.0, 0.0);
 
     public static double xVelocity = 0;
     public static double yVelocity = 0;
 
-    private static double autoAlignXOffset = -.02;
+    private static double autoAlignXOffset = 0.06;
     public static double autoAlignYOffset = -.17;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
@@ -234,22 +234,22 @@ public class RobotContainer {
     public static void periodic() {
         if (!timer.isRunning()) timer.start();
 
+        currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
+        currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
+
+        goalStateX.position = autoAlignXOffset;
+        goalStateY.position = autoAlignYOffset;
+
+        TrapezoidProfile.State nextStateX = profileX.calculate(timer.get(), currentStateX, goalStateX);
+        TrapezoidProfile.State nextStateY = profileY.calculate(timer.get(), currentStateY, goalStateY);
+
         if ((Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) > .15
                 || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(autoAlignYOffset) > .15)) {
-            currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
-            currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
-
-            goalStateX.position = autoAlignXOffset;
-            goalStateY.position = autoAlignYOffset;
-
-            TrapezoidProfile.State nextStateX = profileX.calculate(timer.get(), currentStateX, goalStateX);
-            TrapezoidProfile.State nextStateY = profileY.calculate(timer.get(), currentStateY, goalStateY);
-
             xVelocity = drivePIDControllerX.calculate(currentStateX.position, nextStateX);
             yVelocity = drivePIDControllerY.calculate(currentStateY.position, nextStateY);
         } else {
-            xVelocity = drivePIDControllerXClose.calculate(aprilTagSubsystem.getClosestTagXYYaw()[0], autoAlignXOffset);
-            yVelocity = drivePIDControllerYClose.calculate(aprilTagSubsystem.getClosestTagXYYaw()[1], autoAlignYOffset);
+            xVelocity = drivePIDControllerXClose.calculate(currentStateX.position, nextStateX);
+            yVelocity = drivePIDControllerYClose.calculate(currentStateY.position, nextStateY);
         }
     }
 

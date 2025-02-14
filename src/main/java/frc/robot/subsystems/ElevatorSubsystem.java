@@ -49,8 +49,8 @@ public class ElevatorSubsystem extends TemplateSubsystem {
                 ElevatorConstants.FOLLOWER_OPPOSE_MASTER_DIRECTION);
 
         configureLinearMech(ElevatorConstants.DRUM_CIRCUMFERENCE,
-                ElevatorConstants.ELEVATOR_MAX,
-                ElevatorConstants.ELEVATOR_MIN);
+                ElevatorConstants.ELEVATOR_MIN,
+                ElevatorConstants.ELEVATOR_MAX);
     }
 
     public void periodic() {
@@ -58,7 +58,7 @@ public class ElevatorSubsystem extends TemplateSubsystem {
         // System.out.println("is at goal position: " + isMechAtGoal(false));
         // System.out.println("meters: " + getMechM());
 
-    //    System.out.println("Elevator Mech M: " + getMechM());
+//        System.out.println("Elevator Mech M: " + getMechM());
 
         if (getSupplyCurrent() > 25) currentSpike++;
         else noCurrentSpike++;

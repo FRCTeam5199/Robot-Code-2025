@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 5.673835227272727,
+        "x": 5.35,
         "y": 3.842
       },
       "prevControl": {
-        "x": 6.442430121901664,
+        "x": 6.118594894628936,
         "y": 3.842
       },
       "nextControl": null,
@@ -34,12 +34,12 @@
   "eventMarkers": [
     {
       "name": "armL4",
-      "waypointRelativePos": 0.1562746645619579,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "L4"
+          "name": "armL4"
         }
       }
     }

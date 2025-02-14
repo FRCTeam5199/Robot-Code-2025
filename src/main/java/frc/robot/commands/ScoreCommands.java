@@ -125,21 +125,21 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .4, 36, 20),
-                                new PositionCommand(wristSubsystem, 65.8), //30
+                                new PositionCommand(elevatorSubsystem, .35, 36, 20),
+                                new PositionCommand(wristSubsystem, 67), //30
                                 new InstantCommand(() -> intakeSubsystem.setPercent(.1))
                         ),
-                        new PositionCommand(armSubsystem, 72.21)
+                        new PositionCommand(armSubsystem, 70)
                 ),
                 new SequentialCommandGroup( //Going up
-                        new PositionCommand(armSubsystem, 72.21),
+                        new PositionCommand(armSubsystem, 70),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .4, 60, 20),
-                                new PositionCommand(wristSubsystem, 65.8),
+                                new PositionCommand(elevatorSubsystem, .35, 60, 20),
+                                new PositionCommand(wristSubsystem, 67),
                                 new InstantCommand(() -> intakeSubsystem.setPercent(.5))
                         )
                 ),
-                () -> elevatorSubsystem.getMechM() > .4
+                () -> elevatorSubsystem.getMechM() > .35
         );
     }
 
@@ -148,23 +148,25 @@ public class ScoreCommands {
                 new PositionCommand(armSubsystem, 82),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, .955, 90, 40),
-                        new PositionCommand(wristSubsystem, 76),
+                        new PositionCommand(wristSubsystem, 75),
                         new InstantCommand(() -> intakeSubsystem.setPercent(.5))
                 )
         );
     }
 
     public static Command armL2() {
-        return new PositionCommand(armSubsystem, 64.71);
+        return new PositionCommand(armSubsystem, 64.71)
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.5)));
     }
 
     public static Command armL3() {
-
-        return new PositionCommand(armSubsystem, 72.21);
+        return new PositionCommand(armSubsystem, 70)
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.5)));
     }
 
     public static Command armL4() {
-        return new PositionCommand(armSubsystem, 84);
+        return new PositionCommand(armSubsystem, 84)
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.5)));
     }
 
 
@@ -174,12 +176,16 @@ public class ScoreCommands {
                         new ParallelCommandGroup(
                                 new PositionCommand(wristSubsystem, 0),
                                 new PositionCommand(elevatorSubsystem, 0, 40, 20)
+                                        .until(elevatorSubsystem::isAtBottom)
                         ),
+                        new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                         new PositionCommand(armSubsystem, 0.5)
                 ),
                 new SequentialCommandGroup( //Will clip elevator
                         new PositionCommand(wristSubsystem, 0),
-                        new PositionCommand(elevatorSubsystem, 0, 40, 20),
+                        new PositionCommand(elevatorSubsystem, 0, 40, 20)
+                                .until(elevatorSubsystem::isAtBottom),
+                        new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                         new PositionCommand(armSubsystem, 0.5)
                 ),
                 () -> wristSubsystem.getDegrees() < 50
@@ -325,17 +331,4 @@ public class ScoreCommands {
                 RobotContainer.commandSwerveDrivetrain);
 
     }
-
-    //Mi casa? me encanta mi casa. No creo que tenga una casa de mejor de mi casa. Vivida en muchas casas, pero  este
-    //casa es mi favorito. Mi casa es cerca de la playa, solo seis minutos a ir, cerca de mis amigos, y cerca de mi
-    //escuela. Me gusta la playa, porque la agua es bien a ver, y me encanta caminar en la playa. Pero, me encanta
-    //las montanas mejor de las playas, porque tiene snowboarding. en la semana pasado,
-    //fui a la montana Big Bear, y me encanta. Si viva en las montanas, haria muy disfrutar. Y mi dias? Pues, no
-    //tengo muchos tiempos ahora, porque estoy ir a clase de roboticos. Por dos semanas, fui a la clase por cico a once
-    //todos los dias! Pero, cuando estoy en mi casa, me gusta jugar videojuegos con mis amigos. Ahora, estoy jugar un
-    //videojuego de muy dificiles. Solo veinti por ciento de las personas finalizan uno nivel, y la juego tiene seisenta!
-    //No creo que la videojuega sea facil.
-    //Pero, porque de roboticas, mi vida de dias no es interesante, porque yo solo estudia, y dormir.
-
-
 }
