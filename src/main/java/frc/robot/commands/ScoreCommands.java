@@ -300,6 +300,9 @@ public class ScoreCommands {
                             .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
                                     .getPigeon2().getRotation2d().getDegrees()))));
 
+                                    RobotContainer.alignLeft = false;
+
+
                 },
                 () -> RobotContainer.xVelocity == 0 && RobotContainer.yVelocity == 0,
                 RobotContainer.commandSwerveDrivetrain);
@@ -332,6 +335,8 @@ public class ScoreCommands {
                     new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain
                             .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
                                     .getPigeon2().getRotation2d().getDegrees()))));
+
+                        RobotContainer.alignRight = false;
 
                 },
                 () -> RobotContainer.xVelocity == 0 && RobotContainer.yVelocity == 0,
