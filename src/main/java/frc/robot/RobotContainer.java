@@ -372,6 +372,7 @@ public class RobotContainer {
                         if(autoAlignYOffset > 0){
                                 autoAlignYOffset = -autoAlignYOffset;
                         }
+                        System.out.println("Starting");
 
                 },
                 ()->{
@@ -385,11 +386,14 @@ public class RobotContainer {
                                         .withRotationalRate(turnPIDController.calculate(
                                                 commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0)))
                                                 .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.2)));
+
+                        System.out.println("Going");
                 },
                 (bool)->{
                         commandSwerveDrivetrain
                         .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees())));
+                        System.out.println("ending");
 
                         intakeSubsystem.setPercent(0);
 
