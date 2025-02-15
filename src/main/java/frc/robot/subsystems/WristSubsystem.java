@@ -1,28 +1,11 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.WristConstants;
-import frc.robot.constants.Constants.WristConstants;
-import frc.robot.tagalong.WristParser;
-import frc.robot.tagalong.PivotAugment;
-import frc.robot.tagalong.PivotParser;
-import frc.robot.tagalong.TagalongPivot;
-import frc.robot.tagalong.WristParser;
-import frc.robot.tagalong.WristParser;
 import frc.robot.utility.Type;
 
 import frc.robot.subsystems.template.TemplateSubsystem;
@@ -33,6 +16,8 @@ import static edu.wpi.first.units.Units.Volts;
 
 public class WristSubsystem extends TemplateSubsystem {
     private static WristSubsystem wristSubsystem;
+    private int currentSpike = 0;
+    private int noCurrentSpike = 0;
 
     public WristSubsystem(){
 
@@ -68,7 +53,15 @@ public class WristSubsystem extends TemplateSubsystem {
 
         }
 
-        // System.out.println("Wrist Degrees: " + getDegrees());
+        if (getSupplyCurrent() > 25) currentSpike++;
+        else noCurrentSpike++;
+
+        if (noCurrentSpike >= 3) {
+            currentSpike = 0;
+            noCurrentSpike = 0;
+        }
+
+        // System.out.println(getDegrees());
     }
 
 
@@ -147,6 +140,10 @@ public class WristSubsystem extends TemplateSubsystem {
                 sysIdRoutineWrist
                         .dynamic(SysIdRoutine.Direction.kReverse)
                         .until(() -> (getMotorRot() < 3)));
+    }
+
+    public boolean isAtBottom() {
+        return currentSpike >= 10;
     }
 
 

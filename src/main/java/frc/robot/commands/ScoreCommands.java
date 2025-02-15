@@ -271,6 +271,21 @@ public class ScoreCommands {
         );
     }
 
+    public static Command zeroWrist() {
+        return new FunctionalCommand(
+                () -> wristSubsystem.setVelocity(-10),
+                () -> {
+                },
+                interrupted -> {
+                    wristSubsystem.setVelocity(0);
+                    wristSubsystem.getMotor().setPosition(0);
+                },
+                wristSubsystem::isAtBottom,
+                wristSubsystem
+        );
+    }
+
+
 
     public static Command alignLeft() {
         return new FunctionalCommand(
