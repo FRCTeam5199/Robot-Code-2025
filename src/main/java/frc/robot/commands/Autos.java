@@ -93,6 +93,11 @@ public final class Autos {
                 return new PathPlannerAuto("2 Piece Blue Top L4");
             }
 
+            public static Command twoPieceBlueFrontCL4() {
+                return new PathPlannerAuto("2 Piece Blue Front C L4");
+            }
+
+
         }
 
         public static class Red {

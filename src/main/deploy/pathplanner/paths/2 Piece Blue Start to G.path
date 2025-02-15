@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8590056818181817,
-        "y": 2.6289772727272727
+        "x": 7.329,
+        "y": 3.842
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1576026205936922,
-        "y": 2.1738114564007422
+        "x": 6.4109336829467,
+        "y": 3.842
       },
       "isLocked": false,
-      "linkedName": "D Blue"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.0071306818181818,
-        "y": 0.874
+        "x": 5.8,
+        "y": 3.842
       },
       "prevControl": {
-        "x": 1.7234572124304268,
-        "y": 1.3664744897959187
+        "x": 6.568594894628936,
+        "y": 3.842
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HP Blue Bottom"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,19 +33,19 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "HP",
+      "name": "armL3",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "HP"
+          "name": "armL3"
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -54,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.144771653784304
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "2 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.620873988631644
+    "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

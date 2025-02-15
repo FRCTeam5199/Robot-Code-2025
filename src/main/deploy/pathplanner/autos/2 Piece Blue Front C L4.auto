@@ -7,79 +7,79 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": null
+            "pathName": "2 Piece Blue Start to G"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ALIGN"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": null
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": null
+            "name": "alignL"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ALIGN"
+            "name": "L3"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "dunk"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "2 Piece Blue G to HPB"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.5
+            "name": "INTAKE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue HPB to C"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "alignL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "dunk"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "2 Piece L1",
+  "folder": "2 Piece L4",
   "choreoAuto": false
 }

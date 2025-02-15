@@ -5,45 +5,39 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "3 Piece Red Start to H"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2 Piece Red H to HPB"
+            "name": "armL3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ALIGN"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2 Piece Red HPB to K"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Red K to HPB"
+            "name": "alignR"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ALIGN"
+            "name": "L3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "dunk"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
           }
         }
       ]
     }
   },
-  "resetOdom": true,
-  "folder": "2 Piece L4",
+  "resetOdom": false,
+  "folder": null,
   "choreoAuto": false
 }

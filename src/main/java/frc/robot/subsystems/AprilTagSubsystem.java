@@ -269,16 +269,12 @@ public class AprilTagSubsystem extends SubsystemBase {
                 closestTagY = Math.sin(Math.toRadians(bestTarget.getYaw())) * smallestDistance;
                 closestTagID = bestTarget.getFiducialId();
 
-//                closestTagX = closestTagX > 0 ? closestTagX - Constants.Vision.CAMERA_TO_FRONT_DISTANCE
-//                        : closestTagX + Constants.Vision.CAMERA_TO_FRONT_DISTANCE;
-
                 closestTagX += Vision.CAMERA_TO_FRONT_DISTANCE;
 
                 closestTagYaw = bestTarget.getYaw();
 
-                 System.out.println("Id: " + bestTarget.getFiducialId()
-                         + " X: " + closestTagX + " Y: " + closestTagY + " Yaw: " + closestTagYaw +
-                         " Rotation: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
+//                System.out.println("Id: " + bestTarget.getFiducialId()
+//                        + " X: " + closestTagX + " Y: " + closestTagY);
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};

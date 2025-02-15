@@ -19,7 +19,7 @@ public class WristSubsystem extends TemplateSubsystem {
     private int currentSpike = 0;
     private int noCurrentSpike = 0;
 
-    public WristSubsystem(){
+    public WristSubsystem() {
 
         super(
                 Type.PIVOT,
@@ -49,48 +49,15 @@ public class WristSubsystem extends TemplateSubsystem {
 
     public void periodic() {
         super.periodic();
-        if (isProfileFinished()) {
 
-        }
-
-        if (getSupplyCurrent() > 25) currentSpike++;
+        if (getSupplyCurrent() > 6) currentSpike++;
         else noCurrentSpike++;
 
         if (noCurrentSpike >= 3) {
             currentSpike = 0;
             noCurrentSpike = 0;
         }
-
-        // System.out.println(getDegrees());
     }
-
-
-    public Command setGround(){
-        return new InstantCommand(()-> setPosition(WristConstants.GROUND));
-    }
-
-    public Command setHP(){
-        return new InstantCommand(()-> setPosition(WristConstants.HP));
-
-    }
-
-    public Command setL1(){
-        return new InstantCommand(()-> setPosition(WristConstants.L1));
-    }
-    public Command setL2(){
-        return new InstantCommand(()-> setPosition(WristConstants.L2));
-    }
-    public Command setL3(){
-        return new InstantCommand(()-> setPosition(WristConstants.L3));
-    }
-    public Command setL4(){
-        return new InstantCommand(()-> setPosition(WristConstants.L4));
-    }
-
-    public Command setDunk(){
-        return new InstantCommand(()-> setPosition(WristConstants.L4));
-    }
-    
 
 
     public static WristSubsystem getInstance() {

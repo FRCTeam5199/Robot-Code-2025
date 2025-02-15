@@ -3,38 +3,52 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8590056818181817,
-        "y": 2.6289772727272727
+        "x": 6.0,
+        "y": 3.842
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.1576026205936922,
-        "y": 2.1738114564007422
+        "x": 6.1017418032786885,
+        "y": 1.6334528688524586
       },
       "isLocked": false,
-      "linkedName": "D Blue"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.0071306818181818,
+        "x": 1.007,
         "y": 0.874
       },
       "prevControl": {
-        "x": 1.7234572124304268,
-        "y": 1.3664744897959187
+        "x": 2.913012295081967,
+        "y": 1.046055327868852
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HP Blue Bottom"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "slow",
+      "minWaypointRelativePos": 0.8507765023632663,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 6.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "HP",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -54,13 +68,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.144771653784304
+    "rotation": 52.63261788758481
   },
   "reversed": false,
   "folder": "2 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.620873988631644
+    "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
