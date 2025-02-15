@@ -193,7 +193,7 @@ public class RobotContainer {
                         () -> drive.withVelocityX(xVelocity)
                                 .withVelocityY(yVelocity)
                                 .withRotationalRate(turnPIDController.calculate(
-                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
+                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))).alongWith(new InstantCommand(()->{if(aligned()) alignL = false;})))
                 .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.1)))
                 .alongWith(new InstantCommand(()-> {if(xVelocity == 0 && yVelocity == 0){alignL = false;}}))
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
@@ -210,9 +210,8 @@ public class RobotContainer {
                         () -> drive.withVelocityX(xVelocity)
                                 .withVelocityY(yVelocity)
                                 .withRotationalRate(turnPIDController.calculate(
-                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
+                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))).alongWith(new InstantCommand(()->{if(aligned()) alignR = false;})))
                 .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.1)))
-                .alongWith(new InstantCommand(()-> {if(xVelocity == 0 && yVelocity == 0){alignR = false;}}))
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees()))))
@@ -312,6 +311,14 @@ public class RobotContainer {
 
     public void toggleAutoAlignOffset() {
         autoAlignYOffset = -autoAlignYOffset;
+    }
+
+    public boolean aligned(){
+        if(Math.abs(Math.abs(goalStateY.position) - Math.abs(currentStateY.position)) < .01 && Math.abs(Math.abs(goalStateX.position) - Math.abs(currentStateX.position)) < .01){
+                return true;
+        }else{
+                return false;
+        }
     }
 
 
