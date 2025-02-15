@@ -276,9 +276,9 @@ public class AprilTagSubsystem extends SubsystemBase {
 
                 closestTagYaw = bestTarget.getYaw();
 
-            //     System.out.println("Id: " + bestTarget.getFiducialId()
-            //             + " X: " + closestTagX + " Y: " + closestTagY + " Yaw: " + closestTagYaw +
-            //             " Rotation: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
+                 System.out.println("Id: " + bestTarget.getFiducialId()
+                         + " X: " + closestTagX + " Y: " + closestTagY + " Yaw: " + closestTagYaw +
+                         " Rotation: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};

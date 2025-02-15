@@ -15,6 +15,8 @@ import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
 
+import javax.swing.*;
+
 public class ScoreCommands {
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private static ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
@@ -32,17 +34,17 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.25, 30, 150),
+                                new PositionCommand(elevatorSubsystem, 0.3, 30, 150),
                                 new PositionCommand(wristSubsystem, 0.7)
                         ),
                         new PositionCommand(armSubsystem, 74.48)
                 ),
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 74.48),
-                        new PositionCommand(elevatorSubsystem, 0.25, 105, 180),
+                        new PositionCommand(elevatorSubsystem, 0.3, 105, 180),
                         new PositionCommand(wristSubsystem, 0.63)
                 ),
-                () -> elevatorSubsystem.getMechM() > .25
+                () -> elevatorSubsystem.getMechM() > .3
         ).alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
     }
 
@@ -101,22 +103,22 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .1, 20, 50),
-                                new PositionCommand(wristSubsystem, 66.37),
+                                new PositionCommand(elevatorSubsystem, .07, 20, 50),
+                                new PositionCommand(wristSubsystem, 70),
                                 new InstantCommand(() -> intakeSubsystem.setPercent(.1))
                         ),
-                        new PositionCommand(armSubsystem, 64.71)
+                        new PositionCommand(armSubsystem, 68)
                 ),
                 new SequentialCommandGroup( //Going up
-                        new PositionCommand(armSubsystem, 64.71),
+                        new PositionCommand(armSubsystem, 68),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .1, 20, 50),
-                                new PositionCommand(wristSubsystem, 66.37),
+                                new PositionCommand(elevatorSubsystem, .07, 20, 50),
+                                new PositionCommand(wristSubsystem, 70),
                                 new InstantCommand(() -> intakeSubsystem.setPercent(.1))
                         )
 
                 ),
-                () -> elevatorSubsystem.getMechM() > .06
+                () -> elevatorSubsystem.getMechM() > .07
         );
     }
 
@@ -124,8 +126,8 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .35, 36, 20),
-                                new PositionCommand(wristSubsystem, 67), //30
+                                new PositionCommand(elevatorSubsystem, .37, 36, 20),
+                                new PositionCommand(wristSubsystem, 67),
                                 new InstantCommand(() -> intakeSubsystem.setPercent(.1))
                         ),
                         new PositionCommand(armSubsystem, 70)
@@ -133,12 +135,12 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 70),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .35, 60, 20),
+                                new PositionCommand(elevatorSubsystem, .37, 60, 20),
                                 new PositionCommand(wristSubsystem, 67),
                                 new InstantCommand(() -> intakeSubsystem.setPercent(.5))
                         )
                 ),
-                () -> elevatorSubsystem.getMechM() > .35
+                () -> elevatorSubsystem.getMechM() > .37
         );
     }
 
@@ -154,7 +156,7 @@ public class ScoreCommands {
     }
 
     public static Command armL2() {
-        return new PositionCommand(armSubsystem, 64.71)
+        return new PositionCommand(armSubsystem, 68)
                 .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.5)));
     }
 
@@ -286,11 +288,25 @@ public class ScoreCommands {
     }
 
 
+    public static Command zeroArm() {
+        return new FunctionalCommand(
+                () -> armSubsystem.setVoltage(-.6),
+                () -> {
+                },
+                interrupted -> {
+                    armSubsystem.setVelocity(0);
+                    armSubsystem.getMotor().setPosition(-1);
+                },
+                armSubsystem::isAtBottom,
+                armSubsystem
+        );
+    }
+
 
     public static Command alignLeft() {
         return new FunctionalCommand(
                 () -> {
-                        System.out.println("Starting");
+                    System.out.println("Starting");
 
                     if (RobotContainer.autoAlignYOffset < 0) {
                         RobotContainer.autoAlignYOffset = -RobotContainer.autoAlignYOffset;
@@ -299,23 +315,21 @@ public class ScoreCommands {
                 },
                 () -> {
 
-                        RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))));
-                        
-                        RobotContainer.commandSwerveDrivetrain.applyRequest(
-                                ()-> RobotContainer.drive.withVelocityX(RobotContainer.xVelocity)
-                                .withVelocityY(RobotContainer.yVelocity)
-                                .withRotationalRate(RobotContainer.turnPIDController.calculate(RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0)));
-                
+                    RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))));
 
-                        System.out.println("X: " + RobotContainer.xVelocity + "Y: " + RobotContainer.yVelocity);
+                    RobotContainer.commandSwerveDrivetrain.applyRequest(
+                            () -> RobotContainer.drive.withVelocityX(RobotContainer.xVelocity)
+                                    .withVelocityY(RobotContainer.yVelocity)
+                                    .withRotationalRate(RobotContainer.turnPIDController.calculate(RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0)));
+
+
+                    System.out.println("X: " + RobotContainer.xVelocity + "Y: " + RobotContainer.yVelocity);
 
                 },
                 (isdone) -> {
                     new InstantCommand(() -> RobotContainer.commandSwerveDrivetrain
                             .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
                                     .getPigeon2().getRotation2d().getDegrees()))));
-
-                                
 
 
                 },
@@ -327,22 +341,22 @@ public class ScoreCommands {
     public static Command alignRight() {
         return new FunctionalCommand(
                 () -> {
-                        System.out.println("Starting");
+                    System.out.println("Starting");
 
                     if (RobotContainer.autoAlignYOffset > 0) {
                         RobotContainer.autoAlignYOffset = -RobotContainer.autoAlignYOffset;
                     }
                 },
                 () -> {
-                        RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))));
-                        
-                        RobotContainer.commandSwerveDrivetrain.applyRequest(
-                                ()-> RobotContainer.drive.withVelocityX(RobotContainer.xVelocity)
-                                .withVelocityY(RobotContainer.yVelocity)
-                                .withRotationalRate(RobotContainer.turnPIDController.calculate(RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0)));
-                
+                    RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(RobotContainer.aprilTagSubsystem.getRotationToAlign(RobotContainer.aprilTagSubsystem.getClosestTagID()))));
 
-                        System.out.println("X: " + RobotContainer.xVelocity + "Y: " + RobotContainer.yVelocity);
+                    RobotContainer.commandSwerveDrivetrain.applyRequest(
+                            () -> RobotContainer.drive.withVelocityX(RobotContainer.xVelocity)
+                                    .withVelocityY(RobotContainer.yVelocity)
+                                    .withRotationalRate(RobotContainer.turnPIDController.calculate(RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0)));
+
+
+                    System.out.println("X: " + RobotContainer.xVelocity + "Y: " + RobotContainer.yVelocity);
 
 
                 },

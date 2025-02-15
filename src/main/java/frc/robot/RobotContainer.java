@@ -45,28 +45,31 @@ import frc.robot.subsystems.template.VelocityCommand;
  */
 public class RobotContainer {
     private static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
-        private static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
-    
-        /* Setting up bindings for necessary control of the swerve drive platform */
-        private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
-        public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
-                .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
-            .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
+    private static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
+    /* Setting up bindings for necessary control of the swerve drive platform */
+    private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
+    public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
+            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05)
+            .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
+    ; // Add a 10% deadband
 
-    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(2.25, 0.0, .1, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(5.5, 0, .15, new TrapezoidProfile.Constraints(100, 200));
+    /* Setting up bindings for necessary control of the swerve drive platform */
 
-    private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(2.25, 0.0, .05, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(6.5, 0, .15, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(2.5, 0, .1, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(5.5, 0.05, .15, new TrapezoidProfile.Constraints(100, 200));
+
+    private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(2.5, 0, .05, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(4.5, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerYVeryClose = new ProfiledPIDController(6.5, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
 
     public static final PIDController turnPIDController = new PIDController(0.14, 0.0, 0.0);
 
     public static double xVelocity = 0;
     public static double yVelocity = 0;
 
-    public static double autoAlignXOffset = 0.06;
-    public static double autoAlignYOffset = -.17;
+    public static double autoAlignXOffset = 0.015;
+    public static double autoAlignYOffset = -.165;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -90,10 +93,9 @@ public class RobotContainer {
 
 
     static boolean alignL = false;
-        static boolean alignR = true;
-                public static final Trigger alignLeft = new Trigger(()->alignL);
-            public static final Trigger alignRight = new Trigger(()->alignR);
-
+    static boolean alignR = true;
+    public static final Trigger alignLeft = new Trigger(() -> alignL);
+    public static final Trigger alignRight = new Trigger(() -> alignR);
 
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
@@ -128,8 +130,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("armL2", ScoreCommands.armL2());
         NamedCommands.registerCommand("armL3", ScoreCommands.armL3());
         NamedCommands.registerCommand("armL4", ScoreCommands.armL4());
-        NamedCommands.registerCommand("ALIGNL", new InstantCommand(()-> alignL = true));
-        NamedCommands.registerCommand("ALIGNR", new InstantCommand(()-> alignR = true));
+        NamedCommands.registerCommand("ALIGNL", new InstantCommand(() -> alignL = true));
+        NamedCommands.registerCommand("ALIGNR", new InstantCommand(() -> alignR = true));
 
 
         configureBindings();
@@ -182,9 +184,13 @@ public class RobotContainer {
                         .getPigeon2().getRotation2d().getDegrees()))))
                 .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0))));
 
-        
+
         alignLeft.whileTrue(new SequentialCommandGroup(
-                new InstantCommand(()-> {if(autoAlignYOffset > 0){autoAlignYOffset = -autoAlignYOffset;}}),
+                new InstantCommand(() -> {
+                    if (autoAlignYOffset > 0) {
+                        autoAlignYOffset = -autoAlignYOffset;
+                    }
+                }),
 
                 new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
                         Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
@@ -193,16 +199,26 @@ public class RobotContainer {
                         () -> drive.withVelocityX(xVelocity)
                                 .withVelocityY(yVelocity)
                                 .withRotationalRate(turnPIDController.calculate(
-                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))).alongWith(new InstantCommand(()->{if(aligned()) alignL = false;})))
+                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))).alongWith(new InstantCommand(() -> {
+                    if (aligned()) alignL = false;
+                })))
                 .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.1)))
-                .alongWith(new InstantCommand(()-> {if(xVelocity == 0 && yVelocity == 0){alignL = false;}}))
+                .alongWith(new InstantCommand(() -> {
+                    if (xVelocity == 0 && yVelocity == 0) {
+                        alignL = false;
+                    }
+                }))
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees()))))
                 .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0))));
 
         alignRight.whileTrue(new SequentialCommandGroup(
-                new InstantCommand(()-> {if(autoAlignYOffset > 0){autoAlignYOffset = -autoAlignYOffset;}}),
+                new InstantCommand(() -> {
+                    if (autoAlignYOffset > 0) {
+                        autoAlignYOffset = -autoAlignYOffset;
+                    }
+                }),
                 new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
                         Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
                                 .getClosestTagID()))))),
@@ -210,16 +226,21 @@ public class RobotContainer {
                         () -> drive.withVelocityX(xVelocity)
                                 .withVelocityY(yVelocity)
                                 .withRotationalRate(turnPIDController.calculate(
-                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))).alongWith(new InstantCommand(()->{if(aligned()) alignR = false;})))
+                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))).alongWith(new InstantCommand(() -> {
+                    if (aligned()) alignR = false;
+                })))
                 .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.1)))
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees()))))
                 .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0))));
 //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
+        //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
 //                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
 
 
+        commandXboxController.button(7).onTrue(ScoreCommands.zeroArm())
+                .onFalse(new VelocityCommand(armSubsystem, 0));
         commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
         commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
 
@@ -279,6 +300,8 @@ public class RobotContainer {
 
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
+        currentStateX.velocity = commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond;
+        currentStateY.velocity = commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond;
 
         goalStateX.position = autoAlignXOffset;
         goalStateY.position = autoAlignYOffset;
@@ -287,12 +310,15 @@ public class RobotContainer {
         TrapezoidProfile.State nextStateY = profileY.calculate(timer.get(), currentStateY, goalStateY);
 
         if ((Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) > .15
-                || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(autoAlignYOffset) > .15)) {
+                || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(autoAlignYOffset) > .075)) {
             xVelocity = drivePIDControllerX.calculate(currentStateX.position, nextStateX);
             yVelocity = drivePIDControllerY.calculate(currentStateY.position, nextStateY);
-        } else {
+        } else if (Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(autoAlignYOffset) > .04) {
             xVelocity = drivePIDControllerXClose.calculate(currentStateX.position, nextStateX);
             yVelocity = drivePIDControllerYClose.calculate(currentStateY.position, nextStateY);
+        } else {
+            xVelocity = drivePIDControllerXClose.calculate(currentStateX.position, nextStateX);
+            yVelocity = drivePIDControllerYVeryClose.calculate(currentStateY.position, nextStateY);
         }
     }
 
@@ -313,11 +339,11 @@ public class RobotContainer {
         autoAlignYOffset = -autoAlignYOffset;
     }
 
-    public boolean aligned(){
-        if(Math.abs(Math.abs(goalStateY.position) - Math.abs(currentStateY.position)) < .01 && Math.abs(Math.abs(goalStateX.position) - Math.abs(currentStateX.position)) < .01){
-                return true;
-        }else{
-                return false;
+    public boolean aligned() {
+        if (Math.abs(Math.abs(goalStateY.position) - Math.abs(currentStateY.position)) < .01 && Math.abs(Math.abs(goalStateX.position) - Math.abs(currentStateX.position)) < .01) {
+            return true;
+        } else {
+            return false;
         }
     }
 
