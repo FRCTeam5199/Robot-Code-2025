@@ -135,7 +135,7 @@ public class ArmSubsystem extends TemplateSubsystem {
     }
 
     public boolean isAtBottom() {
-        return currentSpike >= .6;
+        return currentSpike >= .3;
     }
 
 
