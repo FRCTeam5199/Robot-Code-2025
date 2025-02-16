@@ -79,7 +79,7 @@ public class ArmSubsystem extends TemplateSubsystem {
             noCurrentSpike = 0;
         }
 
-//         System.out.println("Arm: " + getDegrees());
+        // System.out.println("Arm: " + getDegrees());
 
     }
 

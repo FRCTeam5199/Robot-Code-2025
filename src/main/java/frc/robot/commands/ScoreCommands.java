@@ -8,10 +8,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.TunerConstants;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
@@ -19,11 +16,18 @@ import frc.robot.utility.State;
 import javax.swing.*;
 import java.util.Map;
 
+import static frc.robot.RobotContainer.turnPIDController;
+import static frc.robot.RobotContainer.yVelocity;
+
 public class ScoreCommands {
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private static ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     private static WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+
+    private static AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
+
+    static CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain();
     private static Timer timer = new Timer();
 
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
@@ -138,7 +142,7 @@ public class ScoreCommands {
                         new PositionCommand(armSubsystem, 80),
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .33, 60, 20),
-                                new PositionCommand(wristSubsystem, 69),
+                                new PositionCommand(wristSubsystem, 72),
                                 new InstantCommand(() -> intakeSubsystem.setPercent(.5))
                         )
                 ),
@@ -314,5 +318,92 @@ public class ScoreCommands {
                 zeroArm(),
                 zeroWrist()
         );
+    }
+
+
+    public static Command autoAlignL() {
+        Rotation2d og = RobotContainer.commandSwerveDrivetrain.getPose().getRotation().plus(new Rotation2d(Math.PI));
+
+        return new FunctionalCommand(
+                () -> {
+
+                    if (RobotContainer.autoAlignYOffset < 0) {
+                        RobotContainer.autoAlignYOffset = -RobotContainer.autoAlignYOffset;
+                    }
+                    System.out.println("Starting");
+
+                    RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
+                            Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                    .getClosestTagID()))));
+
+                },
+                () -> {
+
+
+                    RobotContainer.commandSwerveDrivetrain.setControl(
+                            drive.withVelocityX(RobotContainer.xVelocity)
+                                    .withVelocityY(yVelocity)
+                                    .withRotationalRate(turnPIDController.calculate(
+                                            RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0)));
+
+                    System.out.println("Going");
+
+                },
+                (bool) -> {
+
+                    RobotContainer.commandSwerveDrivetrain
+                            .resetRotation(og);
+                    // commandSwerveDrivetrain
+                    // .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
+                    // .getPigeon2().getRotation2d().getDegrees())));
+
+                    intakeSubsystem.setPercent(0);
+
+                    System.out.println("ending");
+
+
+                }, RobotContainer::aligned,
+                RobotContainer.commandSwerveDrivetrain);
+    }
+
+    public static Command autoAlignR() {
+        Rotation2d og = RobotContainer.commandSwerveDrivetrain.getPose().getRotation().plus(new Rotation2d(Math.PI));
+
+        return new FunctionalCommand(
+                () -> {
+                    System.out.println("Starting");
+
+                    RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
+                            Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                    .getClosestTagID()))));
+
+                },
+                () -> {
+
+
+                    RobotContainer.commandSwerveDrivetrain.setControl(
+                            drive.withVelocityX(RobotContainer.xVelocity)
+                                    .withVelocityY(yVelocity)
+                                    .withRotationalRate(turnPIDController.calculate(
+                                            RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0)));
+
+                    System.out.println("Going");
+
+                },
+                (bool) -> {
+
+                    RobotContainer.commandSwerveDrivetrain
+                            .resetRotation(og);
+                    // commandSwerveDrivetrain
+                    // .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
+                    // .getPigeon2().getRotation2d().getDegrees())));
+
+                    intakeSubsystem.setPercent(0);
+
+                    System.out.println("ending");
+
+
+                }, RobotContainer::aligned,
+                RobotContainer.commandSwerveDrivetrain);
     }
 }
