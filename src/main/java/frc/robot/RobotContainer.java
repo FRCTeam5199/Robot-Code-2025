@@ -89,10 +89,6 @@ public class RobotContainer {
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
 
-    static boolean alignL = false;
-    static boolean alignR = false;
-    public static final Trigger alignLeft = new Trigger(() -> alignL);
-    public static final Trigger alignRight = new Trigger(() -> alignR);
 
     public static State state = State.L1;
 
@@ -130,32 +126,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("armL3", ScoreCommands.armL3());
         NamedCommands.registerCommand("armL4", ScoreCommands.armL4());
         NamedCommands.registerCommand("dunk", ScoreCommands.dunk());
-//        NamedCommands.registerCommand("alignL", autoAlignL());
-//        NamedCommands.registerCommand("alignR", autoAlignR());
-
-        //    NamedCommands.registerCommand("alignL", new SequentialCommandGroup(new InstantCommand(() -> autoAlignL().initialize()), new RepeatCommand(new InstantCommand(() -> alignL = true))));
         NamedCommands.registerCommand("alignL", ScoreCommands.autoAlignL());
         NamedCommands.registerCommand("alignR", ScoreCommands.autoAlignR());
-        NamedCommands.registerCommand("end", new WaitUntilCommand(HELLLLP()).alongWith(new PrintCommand("HEEEEEEELLLLLP")));
-//        NamedCommands.registerCommand("alignL", new FunctionalCommand(
-//                () -> alignL = true,
-//                () -> {
-//                },
-//                (interrupted) -> {
-//                    alignL = false;
-//                    System.out.println("ending");
-//                },
-//                RobotContainer::aligned,
-//                intakeSubsystem
-//        ).until(RobotContainer::aligned).andThen(new InstantCommand(() -> System.out.println("actually ending"))));
-        NamedCommands.registerCommand("alignR", new FunctionalCommand(
-                () -> alignR = true,
-                () -> {
-                },
-                (interrupted) -> alignR = false,
-                RobotContainer::aligned,
-                intakeSubsystem
-        ).until(RobotContainer::aligned));
+
 
 
         configureBindings();
@@ -204,45 +177,7 @@ public class RobotContainer {
                         .getPigeon2().getRotation2d().getDegrees())))));
 
 
-        alignLeft.whileTrue(new SequentialCommandGroup(
-                new InstantCommand(() -> {
-                    if (autoAlignYOffset < 0) {
-                        autoAlignYOffset = -autoAlignYOffset;
-                    }
-                }),
-
-                new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-                                .getClosestTagID()))))),
-                commandSwerveDrivetrain.applyRequest(
-                        () -> drive.withVelocityX(xVelocity)
-                                .withVelocityY(yVelocity)
-                                .withRotationalRate(turnPIDController.calculate(
-                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
-        ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
-                .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-                        .getPigeon2().getRotation2d().getDegrees()))))
-                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0))));
-
-        alignRight.whileTrue(new SequentialCommandGroup(
-                new InstantCommand(() -> {
-                    if (autoAlignYOffset > 0) {
-                        autoAlignYOffset = -autoAlignYOffset;
-                    }
-                }),
-                new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-                                .getClosestTagID()))))),
-                commandSwerveDrivetrain.applyRequest(
-                        () -> drive.withVelocityX(xVelocity)
-                                .withVelocityY(yVelocity)
-                                .withRotationalRate(turnPIDController.calculate(
-                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
-                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.2)))
-        ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
-                .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-                        .getPigeon2().getRotation2d().getDegrees()))))
-                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0))));
+  
 //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
         //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
 //                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
@@ -332,140 +267,10 @@ public class RobotContainer {
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
     }
 
-    public Command sejoifejoi() {
-        return new RepeatCommand(
-                new ConditionalCommand(
-                        new InstantCommand(() -> alignL = false),
-                        new InstantCommand(() -> alignL = true),
-                        () -> aligned()));
-
-    }
-
-    public Command efnsofgoie() {
-        return new InstantCommand(() -> sejoifejoi().end(aligned()));
-    }
-
-    public Rotation2d og;
-
-    public Command runAutoAlignL() {
-        og = commandSwerveDrivetrain.getPose().getRotation().plus(new Rotation2d(Math.PI));
-        System.out.println("Going");
 
 
-        return new RunCommand(
-                () -> commandSwerveDrivetrain.applyRequest(
-                                () -> drive.withVelocityX(xVelocity)
-                                        .withVelocityY(yVelocity)
-                                        .withRotationalRate(turnPIDController.calculate(
-                                                commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0)))
-                        .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.2)))
-        );
+  
 
-    }
-
-    public Command autoL() {
-        return new FunctionalCommand(
-                () -> {
-                    alignL = true;
-                },
-                () -> {
-                    System.out.println("running");
-                },
-                (bool) -> {
-                    alignL = false;
-                },
-                () -> aligned()
-        );
-
-
-    }
-
-
-    public Command autoAlignL() {
-        Rotation2d og = commandSwerveDrivetrain.getPose().getRotation().plus(new Rotation2d(Math.PI));
-
-        return new FunctionalCommand(
-                () -> {
-
-                    if (autoAlignYOffset < 0) {
-                        autoAlignYOffset = -autoAlignYOffset;
-                    }
-                    System.out.println("Starting");
-
-                },
-                () -> {
-                    commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                            Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-                                    .getClosestTagID()))));
-
-                    commandSwerveDrivetrain.applyRequest(
-                                    () -> drive.withVelocityX(xVelocity)
-                                            .withVelocityY(yVelocity)
-                                            .withRotationalRate(turnPIDController.calculate(
-                                                    commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0)))
-                            .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.2)));
-
-                    System.out.println("Going");
-
-                },
-                (bool) -> {
-
-                    commandSwerveDrivetrain
-                            .resetRotation(og);
-                    // commandSwerveDrivetrain
-                    // .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-                    // .getPigeon2().getRotation2d().getDegrees())));
-
-                    intakeSubsystem.setPercent(0);
-
-                    System.out.println("ending");
-
-
-                }, RobotContainer::aligned,
-                commandSwerveDrivetrain);
-    }
-
-    public Command autoAlignR() {
-        Rotation2d og = commandSwerveDrivetrain.getPose().getRotation();
-
-        return new FunctionalCommand(
-                () -> {
-                    if (autoAlignYOffset > 0) {
-                        autoAlignYOffset = -autoAlignYOffset;
-                    }
-                    System.out.println("Starting");
-
-                },
-                () -> {
-                    commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                            Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-                                    .getClosestTagID()))));
-
-                    commandSwerveDrivetrain.applyRequest(
-                                    () -> drive.withVelocityX(xVelocity)
-                                            .withVelocityY(yVelocity)
-                                            .withRotationalRate(turnPIDController.calculate(
-                                                    commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0)))
-                            .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.2)));
-
-                    System.out.println("Going");
-                },
-                (bool) -> {
-
-
-                    commandSwerveDrivetrain
-                            .resetRotation(og);
-                    // commandSwerveDrivetrain
-                    // .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-                    // .getPigeon2().getRotation2d().getDegrees())));
-                    System.out.println("ending");
-
-                    intakeSubsystem.setPercent(0);
-
-
-                }, () -> aligned(),
-                commandSwerveDrivetrain);
-    }
 
 
     public void toggleAutoAlignOffsetLeft() {
@@ -484,21 +289,13 @@ public class RobotContainer {
         autoAlignYOffset = -autoAlignYOffset;
     }
 
-    public static BooleanSupplier HELLLLP() {
-        System.out.println("makingsdpfeopfkewopkfpo");
-        return () -> Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .7
-                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .7
-                && commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond <= .01
-                && commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond <= .01;
-    }
+
 
     public static boolean aligned() {
-        System.out.println("GOOOOOOOO");
         return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .7
                 && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .7
                 && commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond <= .01
                 && commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond <= .01;
-
 
     }
 

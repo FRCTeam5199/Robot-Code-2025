@@ -27,7 +27,6 @@ public class ScoreCommands {
 
     private static AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
-    static CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain();
     private static Timer timer = new Timer();
 
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
@@ -322,7 +321,7 @@ public class ScoreCommands {
 
 
     public static Command autoAlignL() {
-        Rotation2d og = RobotContainer.commandSwerveDrivetrain.getPose().getRotation().plus(new Rotation2d(Math.PI));
+    //    Rotation2d og = RobotContainer.commandSwerveDrivetrain.getPose().getRotation().plus(new Rotation2d(Math.PI));
 
         return new FunctionalCommand(
                 () -> {
@@ -351,11 +350,11 @@ public class ScoreCommands {
                 },
                 (bool) -> {
 
+                //     RobotContainer.commandSwerveDrivetrain
+                //             .resetRotation(og);
                     RobotContainer.commandSwerveDrivetrain
-                            .resetRotation(og);
-                    // commandSwerveDrivetrain
-                    // .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-                    // .getPigeon2().getRotation2d().getDegrees())));
+                    .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
+                    .getPigeon2().getRotation2d().getDegrees())));
 
                     intakeSubsystem.setPercent(0);
 
@@ -367,7 +366,6 @@ public class ScoreCommands {
     }
 
     public static Command autoAlignR() {
-        Rotation2d og = RobotContainer.commandSwerveDrivetrain.getPose().getRotation().plus(new Rotation2d(Math.PI));
 
         return new FunctionalCommand(
                 () -> {
@@ -392,8 +390,9 @@ public class ScoreCommands {
                 },
                 (bool) -> {
 
-                    RobotContainer.commandSwerveDrivetrain
-                            .resetRotation(og);
+                        RobotContainer.commandSwerveDrivetrain
+                        .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
+                        .getPigeon2().getRotation2d().getDegrees())));
                     // commandSwerveDrivetrain
                     // .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                     // .getPigeon2().getRotation2d().getDegrees())));
