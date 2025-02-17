@@ -132,7 +132,7 @@ public class TemplateSubsystem extends SubsystemBase {
         this.upperTolerance = upperTolerance;
 
         for (double[] ratio : gearRatios) {
-            this.gearRatio *= ratio[1] / ratio[0];
+            this.gearRatio *= (ratio[1] / ratio[0]);
         }
 
         timer = new Timer();
@@ -380,7 +380,7 @@ public class TemplateSubsystem extends SubsystemBase {
             }
         }
     }
-    
+
     public double getGoal() {
         return goal;
     }

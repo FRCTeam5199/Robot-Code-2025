@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.Constants.WristConstants;
 import frc.robot.utility.Type;
@@ -28,7 +27,7 @@ public class WristSubsystem extends TemplateSubsystem {
                 WristConstants.WRIST_FF,
                 WristConstants.WRIST_LOWER_TOLERANCE,
                 WristConstants.WRIST_UPPER_TOLERANCE,
-                WristConstants.MOTOR_TO_MECH_GEAR_RATIO,
+                WristConstants.WRIST_GEAR_RATIO,
                 "Wrist"
         );
 
@@ -57,6 +56,8 @@ public class WristSubsystem extends TemplateSubsystem {
             currentSpike = 0;
             noCurrentSpike = 0;
         }
+
+//        System.out.println("wrist degrees: " + wristSubsystem.getDegrees());
     }
 
 

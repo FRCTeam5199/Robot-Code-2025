@@ -34,7 +34,8 @@ public class IntakeSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
 
-        
+//        System.out.println("Intake: " + getMechVelocity());
+
     }
 
     public static IntakeSubsystem getInstance() {
@@ -44,15 +45,15 @@ public class IntakeSubsystem extends TemplateSubsystem {
         return intakeSubsystem;
     }
 
-    public void intake(){
+    public void intake() {
         setPercent(1);
     }
 
-    public void stopIntake(){
+    public void stopIntake() {
         setPercent(0);
     }
 
-    public void outtake(){
+    public void outtake() {
         setPercent(-1);
     }
 }

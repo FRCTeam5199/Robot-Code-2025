@@ -13,10 +13,8 @@ import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -44,17 +42,17 @@ public final class Constants {
     }
 
     public static class ElevatorConstants {
-        public static final int ELEVATOR1_ID = 17;
-        public static final int ELEVATOR2_ID = 18;
+        public static final int ELEVATOR_LEFT_ID = 17;
+        public static final int ELEVATOR_RIGHT_ID = 18;
 
         public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS
                 = new TrapezoidProfile.Constraints(90, 40);
         public static final PID ELEVATOR_PID = new PID(0, 0, 0);
-        public static final FeedForward ELEVATOR_FF = new FeedForward(0.08, 0.25, 0.127429);
+        public static final FeedForward ELEVATOR_FF = new FeedForward(.33, .17, .1333333333333333);
         public static final double ELEVATOR_MIN = 0;
-        public static final double ELEVATOR_MAX = .96;
-        public static final double ELEVATOR_LOWER_TOLERANCE = 0.03;
-        public static final double ELEVATOR_UPPER_TOLERANCE = 0.03;
+        public static final double ELEVATOR_MAX = 1.007;
+        public static final double ELEVATOR_LOWER_TOLERANCE = 0.01;
+        public static final double ELEVATOR_UPPER_TOLERANCE = 0.01;
         public static final double[][] ELEVATOR_GEARING = new double[][]{{3, 1}};
         public static final boolean INVERT = true;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
@@ -120,9 +118,9 @@ public final class Constants {
 
 
 // kg = .348, ks = .14816, Kv = 6.16786
-        // These are the values that will be factored into the arm ff equation. There is a separate documet to find these.
+        // These are the values that will be factored into the arm ff equmnzation. There is a separate documet to find these.
 
-        public static final FeedForward ARM_FF = new FeedForward(0.14, 0, .123407);
+        public static final FeedForward ARM_FF = new FeedForward(0.2, 0, .1098901098901099);
 
         //degrees. check super for template subsystem
         public static final double ARM_LOWER_TOLERANCE = 1;
@@ -139,7 +137,7 @@ public final class Constants {
         public static final double ARM_MOTOR_TO_SENSOR_GEAR_RATIO = 42.4286;
         public static final double ARM_SENSOR_TO_MECH_GEAR_RATIO = 1;
 
-        public static final double[][] MOTOR_TO_MECH_GEAR_RATIO = {{240, 1}};
+        public static final double[][] ARM_GEAR_RATIO = {{240, 1}};
 
         //Value the arm should move to for a wanted position.
         public static final double GROUND = 5;
@@ -172,10 +170,9 @@ public final class Constants {
         public static final Type INTAKE_TYPE = Type.LINEAR;
         public static final int INTAKE_ID = 20;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
-        public static final PID INTAKE_PID = new PID(0, 0, 0);
-        public static final FeedForward INTAKE_FEEDFORWARD = new FeedForward(0, 0, 0);
-        public static final double INTAKE_lowerTOLERANCE = 0.0;
-        public static final double INTAKE_upperTOLERANCE = 0.0;
+        public static final FeedForward INTAKE_FEEDFORWARD = new FeedForward(0.2, 0, 0.1162790697674419);
+        public static final double INTAKE_lowerTOLERANCE = 5;
+        public static final double INTAKE_upperTOLERANCE = 5;
         public static final double[][] INTAKE_gearRatios = {{1, 1}};
 
         public static final boolean INTAKE_INVERT = true;
@@ -186,7 +183,7 @@ public final class Constants {
         public static final FeedForward INTAKE_FF = new FeedForward(0.14, 0, .123407);
 
         public static final Slot0Configs INTAKE_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(5)
+                .withKP(0.5)
                 .withKI(0)
                 .withKD(0)
                 .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
@@ -234,7 +231,7 @@ public final class Constants {
         public static final TalonFXConfiguration TALON_FX_CONFIGURATION = new TalonFXConfiguration();
         public static final double WRIST_STATOR_CURRENT_LIMIT = 80;
         public static final double WRIST_SUPPLY_CURRENT_LIMIT = 80;
-        public static final boolean WRIST_INVERTED = true;
+        public static final boolean WRIST_INVERTED = false;
 
         public static final boolean WRIST_BRAKE = true;
 
@@ -270,7 +267,7 @@ public final class Constants {
         //TODO: CHANGE
         public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(50, 100);
 
-        public static final FeedForward WRIST_FF = new FeedForward(.243, 0.02, 0.117, 0.0);
+        public static final FeedForward WRIST_FF = new FeedForward(.08, .13, .1075268817204301);
         //degrees
         public static final double WRIST_LOWER_TOLERANCE = 1;
         public static final double WRIST_UPPER_TOLERANCE = 1;
@@ -278,14 +275,7 @@ public final class Constants {
         public static final double WRIST_MIN = 0.0;
         public static final double WRIST_MAX = 200;
 
-        public static final double WRIST_MAX_VELOCITY = 500;
-        public static final double WRIST_MAX_ACCELERATION = 750;
-        public static final double WRIST_MOTOR_TO_MECH_GEAR_RATIO = 42.4286;
-        public static final double WRIST_MOTOR_TO_SENSOR_GEAR_RATIO = 1;
-        public static final double WRIST_SENSOR_TO_MECH_GEAR_RATIO = 42.4286;
-
-        //TODO: CHANGE
-        public static final double[][] MOTOR_TO_MECH_GEAR_RATIO = {{125, 1}};
+        public static final double[][] WRIST_GEAR_RATIO = {{72, 10}, {72, 20}, {48, 24}};
 
 
         public static final double

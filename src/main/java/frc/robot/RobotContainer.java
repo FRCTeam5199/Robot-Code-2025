@@ -27,6 +27,7 @@ import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
 
@@ -85,14 +86,13 @@ public class RobotContainer {
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
 
-
     public static State state = State.L1;
 
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
 
-    private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
+    // private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     private Boolean algaeControls = false;
 
@@ -167,7 +167,6 @@ public class RobotContainer {
                         .getPigeon2().getRotation2d().getDegrees())))));
 
 
-
 //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
         //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
 //                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
@@ -193,16 +192,16 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
 
-        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-1))) //Outtake
-                .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
-        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(1))) //Intake
-                .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0))
-                        // Lock on with limelight thing, if breaking comment the entire andThen statement
+        commandXboxController.leftTrigger().onTrue(new VelocityCommand(intakeSubsystem, -75)) //Outtake
+                .onFalse(new VelocityCommand(intakeSubsystem, 0));
+        commandXboxController.rightTrigger().onTrue(new VelocityCommand(intakeSubsystem, 75)) //Intake
+                .onFalse(new VelocityCommand(intakeSubsystem, 0));
+        // Lock on with limelight thing, if breaking comment the entire andThen statement
 //                    .andThen(new InstantCommand(() -> drivetrain.applyRequest(() -> drive
 //                            .withVelocityX(0.0)
 //                            .withVelocityY(0.0)
 //                            .withRotationalRate(objectDetectionSubsystem.lockOn()))))
-                );
+
 
 //        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 //        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
@@ -210,7 +209,7 @@ public class RobotContainer {
 
         commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
         // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
-        commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
+//        commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
     }
