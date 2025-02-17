@@ -16,6 +16,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
@@ -81,6 +85,7 @@ public class RobotContainer {
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
 
+
     public static State state = State.L1;
 
 
@@ -94,11 +99,6 @@ public class RobotContainer {
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
-    //    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-//    public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
-//    public static final LinearTestSubsystem linearTestSubsystem = new LinearTestSubsystem();
-    //  public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
-    // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -165,6 +165,8 @@ public class RobotContainer {
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees())))));
+
+
 
 //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
         //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
