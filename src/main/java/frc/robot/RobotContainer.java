@@ -192,7 +192,7 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
 
-        commandXboxController.leftTrigger().onTrue(new VelocityCommand(intakeSubsystem, 75)) //Outtake
+        commandXboxController.leftTrigger().onTrue(new VelocityCommand(intakeSubsystem, -75)) //Outtake
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
         commandXboxController.rightTrigger().onTrue(new VelocityCommand(intakeSubsystem, 75)) //Intake
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
