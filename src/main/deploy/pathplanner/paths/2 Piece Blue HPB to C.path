@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0071306818181818,
-        "y": 0.874
+        "x": 0.8870901639344262,
+        "y": 0.7943135245901636
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1040056818181814,
-        "y": 1.7768698979591844
+        "x": 1.9839651639344258,
+        "y": 1.697183422549348
       },
       "isLocked": false,
       "linkedName": "HP Blue Bottom"
     },
     {
       "anchor": {
-        "x": 3.5483606557377048,
-        "y": 2.84421106557377
+        "x": 3.512397540983606,
+        "y": 2.8801741803278684
       },
       "prevControl": {
-        "x": 2.593261655487533,
-        "y": 2.1502655541971913
+        "x": 2.5572985407334343,
+        "y": 2.1862286689512898
       },
       "nextControl": null,
       "isLocked": false,
@@ -59,7 +59,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

@@ -8,20 +8,16 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -29,10 +25,6 @@ import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
-
-import javax.naming.Name;
-import java.time.InstantSource;
-import java.util.function.BooleanSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -53,8 +45,8 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
 
-    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(2.5, 0, .1, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(5.5, 0.05, .15, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(3, 0, .1, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(6, 0.05, .15, new TrapezoidProfile.Constraints(100, 200));
 
     private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(2.5, 0, .05, new TrapezoidProfile.Constraints(100, 200));
     private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(5, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
@@ -65,7 +57,7 @@ public class RobotContainer {
     public static double xVelocity = 0;
     public static double yVelocity = 0;
 
-    public static double autoAlignXOffset = 0;
+    public static double autoAlignXOffset = 0.0;
     public static double autoAlignYOffset = -.165;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
@@ -87,7 +79,6 @@ public class RobotContainer {
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
-
 
 
     public static State state = State.L1;
@@ -126,10 +117,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("armL3", ScoreCommands.armL3());
         NamedCommands.registerCommand("armL4", ScoreCommands.armL4());
         NamedCommands.registerCommand("dunk", ScoreCommands.dunk());
-        NamedCommands.registerCommand("alignL", ScoreCommands.autoAlignL());
-        NamedCommands.registerCommand("alignR", ScoreCommands.autoAlignR());
-
-
+        NamedCommands.registerCommand("alignL", ScoreCommands.autoAlignLAuton());
+        NamedCommands.registerCommand("alignR", ScoreCommands.autoAlignRAuton());
+        NamedCommands.registerCommand("moveIntake", ScoreCommands.autoMoveForward());
 
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
@@ -176,8 +166,6 @@ public class RobotContainer {
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees())))));
 
-
-  
 //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
         //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
 //                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
@@ -233,7 +221,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
 //        return Autos.ThreePiece.Blue.threePieceBlueBL4();
-        return Autos.TwoPiece.Blue.twoPieceBlueFrontCL4();
+        return Autos.ThreePiece.Blue.threePieceBlueBL4();
         //return new PathPlannerAuto("test");
     }
 
@@ -269,11 +257,6 @@ public class RobotContainer {
     }
 
 
-
-  
-
-
-
     public void toggleAutoAlignOffsetLeft() {
         if (autoAlignYOffset > 0) {
             autoAlignYOffset = -autoAlignYOffset;
@@ -291,12 +274,11 @@ public class RobotContainer {
     }
 
 
-
     public static boolean aligned() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .7
-                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .7
-                && commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond <= .01
-                && commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond <= .01;
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .05
+                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .04
+                && Math.abs(commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond) <= .01
+                && Math.abs(commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond) <= .01;
 
     }
 

@@ -1,19 +1,15 @@
 package frc.robot.commands;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.template.PositionCommand;
-import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
 
-import javax.swing.*;
 import java.util.Map;
 
 import static frc.robot.RobotContainer.turnPIDController;
@@ -39,17 +35,17 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.26, 30, 150),
+                                new PositionCommand(elevatorSubsystem, 0.24, 30, 150),
                                 new PositionCommand(wristSubsystem, 0.7)
                         ),
                         new PositionCommand(armSubsystem, 74.48)
                 ),
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 74.48),
-                        new PositionCommand(elevatorSubsystem, 0.26, 105, 180),
+                        new PositionCommand(elevatorSubsystem, 0.24, 105, 180),
                         new PositionCommand(wristSubsystem, 0.63)
                 ),
-                () -> elevatorSubsystem.getMechM() > .28
+                () -> elevatorSubsystem.getMechM() > .24
         ).alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
     }
 
@@ -61,9 +57,9 @@ public class ScoreCommands {
                 () -> intakeSubsystem.intake(),
                 (interrupted) -> intakeSubsystem.stopIntake(),
                 () -> {
-                    if (intakeSubsystem.getStatorCurrent() > 40) {
+                    if (intakeSubsystem.getStatorCurrent() > 25) {
                         timer.start();
-                        if (timer.hasElapsed(.5)) {
+                        if (timer.hasElapsed(.1)) {
                             timer.stop();
                             return true;
                         }
@@ -132,17 +128,17 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .33, 36, 20),
-                                new PositionCommand(wristSubsystem, 69),
-                                new InstantCommand(() -> intakeSubsystem.setPercent(.1))
+                                new PositionCommand(wristSubsystem, 73),
+                                new InstantCommand(() -> intakeSubsystem.setPercent(.8))
                         ),
-                        new PositionCommand(armSubsystem, 80)
+                        new PositionCommand(armSubsystem, 84)
                 ),
                 new SequentialCommandGroup( //Going up
-                        new PositionCommand(armSubsystem, 80),
+                        new PositionCommand(armSubsystem, 84),
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .33, 60, 20),
-                                new PositionCommand(wristSubsystem, 72),
-                                new InstantCommand(() -> intakeSubsystem.setPercent(.5))
+                                new PositionCommand(wristSubsystem, 73),
+                                new InstantCommand(() -> intakeSubsystem.setPercent(.8))
                         )
                 ),
                 () -> elevatorSubsystem.getMechM() > .33
@@ -166,7 +162,7 @@ public class ScoreCommands {
     }
 
     public static Command armL3() {
-        return new PositionCommand(armSubsystem, 80)
+        return new PositionCommand(armSubsystem, 84)
                 .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.5)));
     }
 
@@ -320,8 +316,8 @@ public class ScoreCommands {
     }
 
 
-    public static Command autoAlignL() {
-    //    Rotation2d og = RobotContainer.commandSwerveDrivetrain.getPose().getRotation().plus(new Rotation2d(Math.PI));
+    public static Command autoAlignLAuton() {
+        //    Rotation2d og = RobotContainer.commandSwerveDrivetrain.getPose().getRotation().plus(new Rotation2d(Math.PI));
 
         return new FunctionalCommand(
                 () -> {
@@ -350,13 +346,12 @@ public class ScoreCommands {
                 },
                 (bool) -> {
 
-                //     RobotContainer.commandSwerveDrivetrain
-                //             .resetRotation(og);
+                    //     RobotContainer.commandSwerveDrivetrain
+                    //             .resetRotation(og);
                     RobotContainer.commandSwerveDrivetrain
-                    .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
-                    .getPigeon2().getRotation2d().getDegrees())));
+                            .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
+                                    .getPigeon2().getRotation2d().getDegrees() + 180)));
 
-                    intakeSubsystem.setPercent(0);
 
                     System.out.println("ending");
 
@@ -365,10 +360,13 @@ public class ScoreCommands {
                 RobotContainer.commandSwerveDrivetrain);
     }
 
-    public static Command autoAlignR() {
+    public static Command autoAlignRAuton() {
 
         return new FunctionalCommand(
                 () -> {
+                    if (RobotContainer.autoAlignYOffset > 0) {
+                        RobotContainer.autoAlignYOffset = -RobotContainer.autoAlignYOffset;
+                    }
                     System.out.println("Starting");
 
                     RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
@@ -390,19 +388,53 @@ public class ScoreCommands {
                 },
                 (bool) -> {
 
-                        RobotContainer.commandSwerveDrivetrain
-                        .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
-                        .getPigeon2().getRotation2d().getDegrees())));
+                    RobotContainer.commandSwerveDrivetrain
+                            .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
+                                    .getPigeon2().getRotation2d().getDegrees() + 180)));
                     // commandSwerveDrivetrain
                     // .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                     // .getPigeon2().getRotation2d().getDegrees())));
 
-                    intakeSubsystem.setPercent(0);
 
                     System.out.println("ending");
 
 
                 }, RobotContainer::aligned,
+                RobotContainer.commandSwerveDrivetrain);
+    }
+
+    public static Command autoMoveForward() {
+
+        return new FunctionalCommand(
+                () -> {
+                    System.out.println("Forward Start");
+                },
+                () -> {
+                    RobotContainer.commandSwerveDrivetrain.setControl(
+                            drive.withVelocityX(-.4)
+                                    .withVelocityY(-.4));
+
+                    System.out.println("Going Forward");
+
+                },
+                (bool) -> {
+                    RobotContainer.commandSwerveDrivetrain.setControl(
+                            drive.withVelocityX(0)
+                                    .withVelocityY(0));
+
+                    System.out.println("ending");
+                },
+                () -> {
+                    if (intakeSubsystem.getStatorCurrent() > 25) {
+                        timer.start();
+                        if (timer.hasElapsed(.1)) {
+                            timer.stop();
+                            return true;
+                        }
+                        return false;
+                    }
+                    return false;
+                },
                 RobotContainer.commandSwerveDrivetrain);
     }
 }

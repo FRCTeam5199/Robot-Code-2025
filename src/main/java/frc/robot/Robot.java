@@ -101,6 +101,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        commandSwerveDrivetrain.getPigeon2().setYaw(Math.toRadians(180));
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         // Schedule the autonomous command (example)
@@ -114,7 +115,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-    
+
     }
 
     @Override

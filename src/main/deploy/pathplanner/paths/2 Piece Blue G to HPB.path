@@ -3,40 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.75,
-        "y": 3.8421874999999996
+        "x": 5.814036885245901,
+        "y": 3.8631659836065575
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.8517418032786885,
-        "y": 1.6336403688524581
+        "x": 6.6651639344262295,
+        "y": 2.436629098360655
       },
       "isLocked": false,
       "linkedName": "G Blue"
     },
     {
       "anchor": {
-        "x": 1.1148565573770493,
-        "y": 0.9141905737704917
+        "x": 0.8870901639344262,
+        "y": 0.7943135245901636
       },
       "prevControl": {
-        "x": 3.0208688524590164,
-        "y": 1.0862459016393435
+        "x": 2.793102459016393,
+        "y": 0.9663688524590142
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "HP Blue Bottom"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "slow",
-      "minWaypointRelativePos": 0.5779878460499609,
-      "maxWaypointRelativePos": 1.0,
+      "name": "slow (mid)",
+      "minWaypointRelativePos": 0.7,
+      "maxWaypointRelativePos": 0.9,
       "constraints": {
         "maxVelocity": 2.0,
-        "maxAcceleration": 3.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "extra slow (end)",
+      "minWaypointRelativePos": 0.9,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 2.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -74,7 +87,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 52.63261788758481
+    "rotation": 54.144771653784304
   },
   "reversed": false,
   "folder": "2 Piece Blue Paths",

@@ -11,15 +11,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "alignL"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "alignL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L3"
+                }
+              }
+            ]
           }
         },
         {
@@ -41,9 +48,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "INTAKE"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "INTAKE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "moveIntake"
+                }
+              }
+            ]
           }
         },
         {
@@ -53,15 +73,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "alignL"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L3"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "alignL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L3"
+                }
+              }
+            ]
           }
         },
         {

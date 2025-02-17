@@ -43,8 +43,6 @@ public class AprilTagSubsystem extends SubsystemBase {
     private static CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
 
     double[] tagAngles = {1, 1, 1, 1, 1, 1, 300, 0, 60, 120, 180, 240, 1, 1, 1, 1, 1, 240, 180, 120, 60, 0, 300};
-    double[] tagHeights = {1, 1, 1, 1, 1, 1, .308, .308, .308, .308, .308, .308, 1, 1, 1, 1, 1, .308, .308, .308, .308, .308, .308};
-
 
     public AprilTagSubsystem() {
         camera = new PhotonCamera(Constants.Vision.CAMERA_NAME);
@@ -273,8 +271,8 @@ public class AprilTagSubsystem extends SubsystemBase {
 
                 closestTagYaw = bestTarget.getYaw();
 
-//                System.out.println("Id: " + bestTarget.getFiducialId()
-//                        + " X: " + closestTagX + " Y: " + closestTagY);
+                System.out.println("Id: " + bestTarget.getFiducialId()
+                        + " X: " + closestTagX + " Y: " + closestTagY);
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};

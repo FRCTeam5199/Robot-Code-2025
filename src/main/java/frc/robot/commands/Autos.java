@@ -131,7 +131,7 @@ public final class Autos {
             }
 
             public static Command threePieceBlueBL4() {
-                return new PathPlannerAuto("3 Piece Blue Bottom L4");
+                return new PathPlannerAuto("3 Piece Blue Bottom 2 L4");
             }
 
             public static Command robertdBlueThreePcTest() {
