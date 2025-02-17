@@ -92,7 +92,7 @@ public class RobotContainer {
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
 
-    private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
+    // private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     private Boolean algaeControls = false;
 

@@ -26,7 +26,7 @@ public class ScoreCommands {
     private static Timer timer = new Timer();
 
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
-    public static double MaxAngularRate = TunerConstants.kRotationAt12Volts;
+    // public static double MaxAngularRate = TunerConstants.kRotationAt12Volts;
 
     private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
