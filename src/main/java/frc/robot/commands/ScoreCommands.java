@@ -8,6 +8,7 @@ import frc.robot.RobotContainer;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.template.PositionCommand;
+import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
 
 import java.util.Map;
@@ -35,18 +36,18 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.24, 30, 150),
-                                new PositionCommand(wristSubsystem, 0.7)
+                                new PositionCommand(elevatorSubsystem, 0.2, 30, 150),
+                                new PositionCommand(wristSubsystem, 0)
                         ),
                         new PositionCommand(armSubsystem, 74.48)
                 ),
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 74.48),
-                        new PositionCommand(elevatorSubsystem, 0.24, 105, 180),
-                        new PositionCommand(wristSubsystem, 0.63)
+                        new PositionCommand(elevatorSubsystem, 0.2, 105, 180),
+                        new PositionCommand(wristSubsystem, 0)
                 ),
-                () -> elevatorSubsystem.getMechM() > .24
-        ).alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
+                () -> elevatorSubsystem.getMechM() > .2
+        ).alongWith(new VelocityCommand(intakeSubsystem, 50));
     }
 
     public static Command intake() {
@@ -94,8 +95,8 @@ public class ScoreCommands {
                 new PositionCommand(armSubsystem, 0),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 0, 50, 100),
-                        new PositionCommand(wristSubsystem, 25),
-                        new InstantCommand(() -> intakeSubsystem.setPercent(.5))
+                        new PositionCommand(wristSubsystem, 50),
+                        new VelocityCommand(intakeSubsystem, 50)
                 )
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1)));
     }
@@ -105,8 +106,8 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .05, 20, 50),
-                                new PositionCommand(wristSubsystem, 71),
-                                new InstantCommand(() -> intakeSubsystem.setPercent(.1))
+                                new PositionCommand(wristSubsystem, 140),
+                                new VelocityCommand(intakeSubsystem, 50)
                         ),
                         new PositionCommand(armSubsystem, 71)
                 ),
@@ -114,8 +115,8 @@ public class ScoreCommands {
                         new PositionCommand(armSubsystem, 71),
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .05, 20, 50),
-                                new PositionCommand(wristSubsystem, 71),
-                                new InstantCommand(() -> intakeSubsystem.setPercent(.5))
+                                new PositionCommand(wristSubsystem, 140),
+                                new VelocityCommand(intakeSubsystem, 50)
                         )
 
                 ),
@@ -128,8 +129,8 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .33, 36, 20),
-                                new PositionCommand(wristSubsystem, 73),
-                                new InstantCommand(() -> intakeSubsystem.setPercent(.8))
+                                new PositionCommand(wristSubsystem, 146),
+                                new VelocityCommand(intakeSubsystem, 50)
                         ),
                         new PositionCommand(armSubsystem, 84)
                 ),
@@ -137,8 +138,8 @@ public class ScoreCommands {
                         new PositionCommand(armSubsystem, 84),
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .33, 60, 20),
-                                new PositionCommand(wristSubsystem, 73),
-                                new InstantCommand(() -> intakeSubsystem.setPercent(.8))
+                                new PositionCommand(wristSubsystem, 146),
+                                new VelocityCommand(intakeSubsystem, 50)
                         )
                 ),
                 () -> elevatorSubsystem.getMechM() > .33
@@ -149,26 +150,26 @@ public class ScoreCommands {
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 82),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, .955, 90, 40),
-                        new PositionCommand(wristSubsystem, 77),
-                        new InstantCommand(() -> intakeSubsystem.setPercent(.5))
+                        new PositionCommand(elevatorSubsystem, 1.007, 90, 40),
+                        new PositionCommand(wristSubsystem, 154),
+                        new VelocityCommand(intakeSubsystem, 50)
                 )
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
 
     public static Command armL2() {
         return new PositionCommand(armSubsystem, 71)
-                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.5)));
+                .alongWith(new VelocityCommand(intakeSubsystem, 50));
     }
 
     public static Command armL3() {
         return new PositionCommand(armSubsystem, 84)
-                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.5)));
+                .alongWith(new VelocityCommand(intakeSubsystem, 50));
     }
 
     public static Command armL4() {
         return new PositionCommand(armSubsystem, 84)
-                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.5)));
+                .alongWith(new VelocityCommand(intakeSubsystem, 50));
     }
 
 
@@ -210,7 +211,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup(
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .2, 20, 50),
-                                new PositionCommand(wristSubsystem, 66.37)
+                                new PositionCommand(wristSubsystem, 132)
                         ),
                         new PositionCommand(armSubsystem, 64.71)
                 ),
@@ -218,7 +219,7 @@ public class ScoreCommands {
                         new PositionCommand(armSubsystem, 64.71),
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .2, 20, 50),
-                                new PositionCommand(wristSubsystem, 66.37)
+                                new PositionCommand(wristSubsystem, 132)
                         )
 
                 ),
@@ -231,7 +232,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, 0.5, 36, 20),
-                                new PositionCommand(wristSubsystem, 65.8)
+                                new PositionCommand(wristSubsystem, 140)
                         ),
                         new PositionCommand(armSubsystem, 72.21)
                 ),
@@ -239,7 +240,7 @@ public class ScoreCommands {
                         new PositionCommand(armSubsystem, 72.21),
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, 0.5, 60, 20),
-                                new PositionCommand(wristSubsystem, 65.8)
+                                new PositionCommand(wristSubsystem, 140)
                         )
                 ),
                 () -> elevatorSubsystem.getMechM() > .4
@@ -250,13 +251,13 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Won't clip elevator
                         new ParallelCommandGroup(
-                                new PositionCommand(wristSubsystem, 28),
+                                new PositionCommand(wristSubsystem, 56),
                                 new PositionCommand(elevatorSubsystem, 0, 40, 20)
                         ),
                         new PositionCommand(armSubsystem, 0.5)
                 ),
                 new SequentialCommandGroup( //Will clip elevator
-                        new PositionCommand(wristSubsystem, 28),
+                        new PositionCommand(wristSubsystem, 56),
                         new PositionCommand(elevatorSubsystem, 0, 40, 20),
                         new PositionCommand(armSubsystem, 0.5)
                 ),
