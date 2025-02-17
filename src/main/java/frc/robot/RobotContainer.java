@@ -8,7 +8,6 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -20,6 +19,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
@@ -27,14 +27,8 @@ import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.AprilTagSubsystem;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.VelocityCommand;
+import frc.robot.utility.State;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -43,30 +37,32 @@ import frc.robot.subsystems.template.VelocityCommand;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
-    private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
-
+    private static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
+    private static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
-            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
-            .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage); // I want field-centric
+    public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
+            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05)
+            .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
+    ; // Add a 10% deadband
 
+    /* Setting up bindings for necessary control of the swerve drive platform */
 
-    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(2.25, 0.0, .1, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(5.5, 0, .15, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(3, 0, .1, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(6, 0.05, .15, new TrapezoidProfile.Constraints(100, 200));
 
-    private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(2.25, 0.0, .05, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(6.5, 0, .15, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(2.5, 0, .05, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(5, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerYVeryClose = new ProfiledPIDController(7, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
 
     public static final PIDController turnPIDController = new PIDController(0.14, 0.0, 0.0);
 
     public static double xVelocity = 0;
     public static double yVelocity = 0;
 
-    private static double autoAlignXOffset = 0.06;
-    public static double autoAlignYOffset = -.17;
+    public static double autoAlignXOffset = 0.0;
+    public static double autoAlignYOffset = -.165;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -80,13 +76,18 @@ public class RobotContainer {
 
     private static Timer timer = new Timer();
 
-    public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain(); // My commandSwerveDrivetrain
+    public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain();
     private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
+
+
+
+    public static State state = State.L1;
+
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
@@ -98,11 +99,6 @@ public class RobotContainer {
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
-    //    public static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-//    public static final RollerTestSubsystem rollerTestSubsystem = RollerTestSubsystem.getInstance();
-//    public static final LinearTestSubsystem linearTestSubsystem = new LinearTestSubsystem();
-    //  public static final PivotTestSubsystem pivotTestSubsystem = new PivotTestSubsystem();
-    // private final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -120,18 +116,16 @@ public class RobotContainer {
         NamedCommands.registerCommand("armL2", ScoreCommands.armL2());
         NamedCommands.registerCommand("armL3", ScoreCommands.armL3());
         NamedCommands.registerCommand("armL4", ScoreCommands.armL4());
-        NamedCommands.registerCommand("ALIGNL", ScoreCommands.alignLeft());
-        NamedCommands.registerCommand("ALIGNR", ScoreCommands.alignRight());
-
+        NamedCommands.registerCommand("dunk", ScoreCommands.dunk());
+        NamedCommands.registerCommand("alignL", ScoreCommands.autoAlignLAuton());
+        NamedCommands.registerCommand("alignR", ScoreCommands.autoAlignRAuton());
+        NamedCommands.registerCommand("moveIntake", ScoreCommands.autoMoveForward());
 
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
     }
 
     private void configureBindings() {
-        commandSwerveDrivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-                commandSwerveDrivetrain.applyRequest(() -> drive.withVelocityX(-commandXboxController.getLeftY() * MaxSpeed))); // Drive forward with negative Y (forward)
-
 //        commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
 //        commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
 //
@@ -168,15 +162,19 @@ public class RobotContainer {
                                 .withVelocityY(yVelocity)
                                 .withRotationalRate(turnPIDController.calculate(
                                         commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
-                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.1)))
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-                        .getPigeon2().getRotation2d().getDegrees()))))
-                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0))));
+                        .getPigeon2().getRotation2d().getDegrees())))));
+
+
+
 //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
+        //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
 //                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
 
 
+        commandXboxController.button(7).onTrue(ScoreCommands.zeroArm())
+                .onFalse(new VelocityCommand(armSubsystem, 0));
         commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
         commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
 
@@ -206,11 +204,11 @@ public class RobotContainer {
 //                            .withRotationalRate(objectDetectionSubsystem.lockOn()))))
                 );
 
-        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+//        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+//        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        commandXboxController.povDown().onTrue(ScoreCommands.dunk());
 
-        commandXboxController.povRight().onTrue(ScoreCommands.zeroElevator())
-                .onFalse(new VelocityCommand(elevatorSubsystem, 0));
+        commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
         // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
         commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
 
@@ -224,18 +222,18 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        return Autos.OnePiece.Blue.onePieceBlueHPBL4();
+//        return Autos.ThreePiece.Blue.threePieceBlueBL4();
+        return Autos.ThreePiece.Blue.threePieceBlueBL4();
+        //return new PathPlannerAuto("test");
     }
-
-    // public static Command threePieceProcessor() {
-    //     return AutoBuilder.buildAuto("Lfue");
-    // }
 
     public static void periodic() {
         if (!timer.isRunning()) timer.start();
 
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
+        currentStateX.velocity = commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond;
+        currentStateY.velocity = commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond;
 
         goalStateX.position = autoAlignXOffset;
         goalStateY.position = autoAlignYOffset;
@@ -244,13 +242,20 @@ public class RobotContainer {
         TrapezoidProfile.State nextStateY = profileY.calculate(timer.get(), currentStateY, goalStateY);
 
         if ((Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) > .15
-                || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1]) - Math.abs(autoAlignYOffset) > .15)) {
+                || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) > .075)) {
             xVelocity = drivePIDControllerX.calculate(currentStateX.position, nextStateX);
             yVelocity = drivePIDControllerY.calculate(currentStateY.position, nextStateY);
-        } else {
+        } else if (Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) > .04) {
             xVelocity = drivePIDControllerXClose.calculate(currentStateX.position, nextStateX);
             yVelocity = drivePIDControllerYClose.calculate(currentStateY.position, nextStateY);
+        } else {
+            xVelocity = drivePIDControllerXClose.calculate(currentStateX.position, nextStateX);
+            yVelocity = drivePIDControllerYVeryClose.calculate(currentStateY.position, nextStateY);
         }
+
+//        System.out.println("aligned: " + aligned());
+//        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
+//                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
     }
 
 
@@ -271,4 +276,19 @@ public class RobotContainer {
     }
 
 
+    public static boolean aligned() {
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .05
+                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .04
+                && Math.abs(commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond) <= .01
+                && Math.abs(commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond) <= .01;
+
+    }
+
+    public static void setState(State state) {
+        RobotContainer.state = state;
+    }
+
+    public static State getState() {
+        return state;
+    }
 }

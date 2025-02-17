@@ -58,35 +58,36 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         try {
             RobotConfig config = RobotConfig.fromGUISettings();
 
-        // Configure AutoBuilder last
-        AutoBuilder.configure(
-            () -> getState().Pose, // Robot pose supplier
-            (pose)-> this.resetPose(pose), // Method to reset odometry (will be called if your auto has a starting pose)
-            () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds,  feedforwards) -> setControl(
-                  m_pathApplyRobotSpeeds.withSpeeds(speeds)
-                    .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
-                    .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
-            ), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(13.1, 0.05, 0.1), // Translation PID constants  P = 10
-                    new PIDConstants(1.14, 0.01, .004) // Rotation PID constants  P = 1.13 D = 0.003
-            ),
-            config,
-            () -> {
-                // Boolean supplier that controls when the path will be mirrored for the red alliance
-                // This will flip the path being followed to the red side of the field.
-                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+            // Configure AutoBuilder last
+            AutoBuilder.configure(
+                    () -> getState().Pose, // Robot pose supplier
+                    (pose) -> this.resetPose(pose), // Method to reset odometry (will be called if your auto has a starting pose)
+                    () -> getState().Speeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                    (speeds, feedforwards) -> setControl(
+                            m_pathApplyRobotSpeeds.withSpeeds(speeds)
+                                    .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                                    .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+                    ), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+                    new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                            new PIDConstants(13.1, 0.05, 0.1), // Translation PID constants  P = 10
+                            new PIDConstants(1.14, 0.01, .004) // Rotation PID constants  P = 1.13 D = 0.003
+                    ),
+                    config,
+                    () -> {
+                        // Boolean supplier that controls when the path will be mirrored for the red alliance
+                        // This will flip the path being followed to the red side of the field.
+                        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                var alliance = DriverStation.getAlliance();
-                if (alliance.isPresent()) {
-                    return alliance.get() == Alliance.Red;
-                }
-                return false;
-            },
-            this // Reference to this subsystem to set requirements
-        );
-        } catch (Exception e) {}
+                        var alliance = DriverStation.getAlliance();
+                        if (alliance.isPresent()) {
+                            return alliance.get() == Alliance.Red;
+                        }
+                        return false;
+                    },
+                    this // Reference to this subsystem to set requirements
+            );
+        } catch (Exception e) {
+        }
     }
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.75,
-        "y": 3.8421874999999996
+        "x": 5.814036885245901,
+        "y": 3.8631659836065575
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.261001275510204,
-        "y": 2.4123325892857146
+        "x": 7.3250381607561055,
+        "y": 2.4333110728922724
       },
       "isLocked": false,
       "linkedName": "G Blue"
     },
     {
       "anchor": {
-        "x": 0.9590163934426229,
-        "y": 0.746362704918032
+        "x": 0.8870901639344262,
+        "y": 0.7943135245901636
       },
       "prevControl": {
-        "x": 3.6471063169120104,
-        "y": 1.519584962571094
+        "x": 3.5751800874038135,
+        "y": 1.5675357822432257
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,10 +31,22 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "HP",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "HP"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -50,5 +62,5 @@
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

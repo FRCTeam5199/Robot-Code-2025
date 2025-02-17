@@ -268,7 +268,7 @@ public final class Constants {
 
         //The speed and acceleration the wrist should move at.
         //TODO: CHANGE
-        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(100, 200);
+        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(50, 100);
 
         public static final FeedForward WRIST_FF = new FeedForward(.243, 0.02, 0.117, 0.0);
         //degrees
@@ -304,9 +304,11 @@ public final class Constants {
     public static class Vision {
         public static final String CAMERA_NAME = "Camera";
         public static final Transform3d CAMERA_POSE =
-                new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(5), 0));
-        public static final double CAMERA_TO_FRONT_DISTANCE = .48895;
-        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.0, 0.0, 999.0);
+                new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(4), 0));
+        public static final double CAMERA_TO_FRONT_DISTANCE = .47625;
+        public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.4, 0.4, 10.0);
+
+        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(9.0, 9.0, 30.0);
         public static final Matrix<N3, N1> autonStdDevs = VecBuilder.fill(999.0, 999.0, 999.0);
 
         public static final String LIMELIGHT_NAME = null;

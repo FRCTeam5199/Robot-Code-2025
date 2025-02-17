@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.2095088240214125,
-        "y": 2.288739963198394
+        "x": 6.6651639344262295,
+        "y": 2.436629098360655
       },
       "isLocked": false,
       "linkedName": "G Blue"
@@ -20,8 +20,8 @@
         "y": 0.7943135245901636
       },
       "prevControl": {
-        "x": 3.3793095516895164,
-        "y": 1.413637504181997
+        "x": 2.793102459016393,
+        "y": 0.9663688524590142
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,12 +31,25 @@
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8615800135043873,
+      "name": "slow (mid)",
+      "minWaypointRelativePos": 0.7,
+      "maxWaypointRelativePos": 0.9,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "extra slow (end)",
+      "minWaypointRelativePos": 0.9,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.75,
-        "maxAcceleration": 3.0,
+        "maxVelocity": 1.0,
+        "maxAcceleration": 2.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -48,26 +61,25 @@
   "eventMarkers": [
     {
       "name": "HP",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "sequential",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "HP"
-              }
-            }
-          ]
+          "name": "HP"
         }
       }
+    },
+    {
+      "name": "INTAKE",
+      "waypointRelativePos": 0.8993923024983057,
+      "endWaypointRelativePos": null,
+      "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -78,10 +90,10 @@
     "rotation": 54.144771653784304
   },
   "reversed": false,
-  "folder": "1 Piece Blue Paths",
+  "folder": "2 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

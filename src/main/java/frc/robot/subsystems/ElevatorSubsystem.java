@@ -55,18 +55,19 @@ public class ElevatorSubsystem extends TemplateSubsystem {
 
     public void periodic() {
         super.periodic();
-        // System.out.println("is at goal position: " + isMechAtGoal(false));
-        // System.out.println("meters: " + getMechM());
 
-//        System.out.println("Elevator Mech M: " + getMechM());
-
-        if (getSupplyCurrent() > 25) currentSpike++;
+        if (getSupplyCurrent() > 8) currentSpike++;
         else noCurrentSpike++;
 
         if (noCurrentSpike >= 3) {
             currentSpike = 0;
             noCurrentSpike = 0;
         }
+
+        // System.out.println("is at goal position: " + isMechAtGoal(false));
+        // System.out.println("meters: " + getMechM());
+
+//        System.out.println("Elevator Mech M: " + getMechM());
     }
 
     public static ElevatorSubsystem getInstance() {
@@ -77,6 +78,6 @@ public class ElevatorSubsystem extends TemplateSubsystem {
     }
 
     public boolean isAtBottom() {
-        return currentSpike >= 10;
+        return currentSpike >= 5;
     }
 }

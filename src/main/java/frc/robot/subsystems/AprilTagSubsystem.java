@@ -43,8 +43,6 @@ public class AprilTagSubsystem extends SubsystemBase {
     private static CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
 
     double[] tagAngles = {1, 1, 1, 1, 1, 1, 300, 0, 60, 120, 180, 240, 1, 1, 1, 1, 1, 240, 180, 120, 60, 0, 300};
-    double[] tagHeights = {1, 1, 1, 1, 1, 1, .308, .308, .308, .308, .308, .308, 1, 1, 1, 1, 1, .308, .308, .308, .308, .308, .308};
-
 
     public AprilTagSubsystem() {
         camera = new PhotonCamera(Constants.Vision.CAMERA_NAME);
@@ -126,7 +124,7 @@ public class AprilTagSubsystem extends SubsystemBase {
                 // One or more tags visible, run the full heuristic.
                 avgDist /= numTags;
                 // Decrease std devs if multiple targets are visible
-                if (numTags > 1) estStdDevs = Constants.Vision.kSingleTagStdDevs;
+                if (numTags > 1) estStdDevs = Constants.Vision.kMultiTagStdDevs;
                 // Increase std devs based on (average) distance
                 if (numTags == 1 && avgDist > 4)
                     estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
@@ -269,16 +267,12 @@ public class AprilTagSubsystem extends SubsystemBase {
                 closestTagY = Math.sin(Math.toRadians(bestTarget.getYaw())) * smallestDistance;
                 closestTagID = bestTarget.getFiducialId();
 
-//                closestTagX = closestTagX > 0 ? closestTagX - Constants.Vision.CAMERA_TO_FRONT_DISTANCE
-//                        : closestTagX + Constants.Vision.CAMERA_TO_FRONT_DISTANCE;
-
                 closestTagX += Vision.CAMERA_TO_FRONT_DISTANCE;
 
                 closestTagYaw = bestTarget.getYaw();
 
                 System.out.println("Id: " + bestTarget.getFiducialId()
-                        + " X: " + closestTagX + " Y: " + closestTagY + " Yaw: " + closestTagYaw +
-                        " Rotation: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
+                        + " X: " + closestTagX + " Y: " + closestTagY);
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};

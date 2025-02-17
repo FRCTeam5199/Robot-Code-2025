@@ -17,6 +17,9 @@ import edu.wpi.first.math.util.Units;
 
 public class ArmSubsystem extends TemplateSubsystem {
     private static ArmSubsystem armSubsystem;
+    private int currentSpike = 0;
+    private int noCurrentSpike = 0;
+
 
     //.08, .5438
     public ArmSubsystem() {
@@ -68,38 +71,16 @@ public class ArmSubsystem extends TemplateSubsystem {
             //   setVoltage((ArmConstants.ARM_FF.getkG()) / Math.cos(Units.rotationsToRadians(getEncoderRot())));
 
         }
+        if (getSupplyCurrent() > 5.5) currentSpike++;
+        else noCurrentSpike++;
 
-        // System.out.println(getDegrees());
+        if (noCurrentSpike >= 3) {
+            currentSpike = 0;
+            noCurrentSpike = 0;
+        }
 
-    }
+        // System.out.println("Arm: " + getDegrees());
 
-
-    public Command setGround() {
-        return new InstantCommand(() -> setPosition(ArmConstants.GROUND));
-    }
-
-    public Command setHP() {
-        return new InstantCommand(() -> setPosition(ArmConstants.HP));
-    }
-
-    public Command setL1() {
-        return new InstantCommand(() -> setPosition(ArmConstants.L1));
-    }
-
-    public Command setL2() {
-        return new InstantCommand(() -> setPosition(ArmConstants.L2));
-    }
-
-    public Command setL3() {
-        return new InstantCommand(() -> setPosition(ArmConstants.L3));
-    }
-
-    public Command setL4() {
-        return new InstantCommand(() -> setPosition(ArmConstants.L4));
-    }
-
-    public Command setDunk() {
-        return new InstantCommand(() -> setPosition(ArmConstants.DUNK));
     }
 
 
@@ -151,6 +132,10 @@ public class ArmSubsystem extends TemplateSubsystem {
                 sysIdRoutineArm
                         .dynamic(SysIdRoutine.Direction.kReverse)
                         .until(() -> (getMotorRot() < 3)));
+    }
+
+    public boolean isAtBottom() {
+        return currentSpike >= .3;
     }
 
 

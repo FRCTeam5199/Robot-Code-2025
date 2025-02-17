@@ -232,10 +232,12 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     public void setPercent(double percent) {
+        followLastMechProfile = false;
         motor.set(percent);
     }
 
     public void setVoltage(double output) {
+        followLastMechProfile = false;
         motor.setVoltage(output);
     }
 
@@ -378,25 +380,7 @@ public class TemplateSubsystem extends SubsystemBase {
             }
         }
     }
-
-
-    public Command zero(Subsystem subsystem) {
-        return new FunctionalCommand(
-                () -> {
-                },
-                () -> {
-                    motor.setVoltage(-.1);
-
-                },
-                (onend) -> {
-                    motor.setVoltage(0);
-                    zero = motor.getRotorPosition().getValueAsDouble();
-                },
-                () -> motor.getSupplyCurrent().getValueAsDouble() > 50,
-                subsystem
-        );
-    }
-
+    
     public double getGoal() {
         return goal;
     }

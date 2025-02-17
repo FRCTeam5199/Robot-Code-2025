@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "start to reefside 4"
+            "pathName": null
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "reefside 4 to HP"
+            "pathName": null
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HP to reefside 5"
+            "pathName": null
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "reefside 5 to HP"
+            "pathName": null
           }
         },
         {
@@ -55,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HP to reefside 5"
+            "pathName": null
           }
         }
       ]

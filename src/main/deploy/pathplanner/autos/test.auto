@@ -5,15 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "1 Piece Blue Start to H"
+            "name": "armL3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "L1"
+            "name": "alignL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "dunk"
           }
         },
         {
@@ -21,23 +33,11 @@
           "data": {
             "name": "OUTTAKE"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": null
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "HP"
-          }
         }
       ]
     }
   },
-  "resetOdom": true,
-  "folder": "1 Piece L1",
+  "resetOdom": false,
+  "folder": null,
   "choreoAuto": false
 }
