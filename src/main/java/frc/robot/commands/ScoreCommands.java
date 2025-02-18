@@ -36,17 +36,17 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.2, 30, 150),
+                                new PositionCommand(elevatorSubsystem, 0.225),
                                 new PositionCommand(wristSubsystem, 0)
                         ),
-                        new PositionCommand(armSubsystem, 74.48)
+                        new PositionCommand(armSubsystem, 78)
                 ),
                 new SequentialCommandGroup( //Going up
-                        new PositionCommand(armSubsystem, 74.48),
-                        new PositionCommand(elevatorSubsystem, 0.2, 105, 180),
+                        new PositionCommand(armSubsystem, 78), //76,    .1
+                        new PositionCommand(elevatorSubsystem, 0.225),
                         new PositionCommand(wristSubsystem, 0)
                 ),
-                () -> elevatorSubsystem.getMechM() > .2
+                () -> elevatorSubsystem.getMechM() > .15
         ).alongWith(new VelocityCommand(intakeSubsystem, 50));
     }
 
@@ -94,7 +94,7 @@ public class ScoreCommands {
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 0),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0, 50, 100),
+                        new PositionCommand(elevatorSubsystem, 0),
                         new PositionCommand(wristSubsystem, 50),
                         new VelocityCommand(intakeSubsystem, 50)
                 )
@@ -105,7 +105,7 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .05, 20, 50),
+                                new PositionCommand(elevatorSubsystem, .05),
                                 new PositionCommand(wristSubsystem, 140),
                                 new VelocityCommand(intakeSubsystem, 50)
                         ),
@@ -114,7 +114,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 71),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .05, 20, 50),
+                                new PositionCommand(elevatorSubsystem, .05),
                                 new PositionCommand(wristSubsystem, 140),
                                 new VelocityCommand(intakeSubsystem, 50)
                         )
@@ -128,7 +128,7 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .33, 36, 20),
+                                new PositionCommand(elevatorSubsystem, .33),
                                 new PositionCommand(wristSubsystem, 146),
                                 new VelocityCommand(intakeSubsystem, 50)
                         ),
@@ -137,7 +137,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 84),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .33, 60, 20),
+                                new PositionCommand(elevatorSubsystem, .33),
                                 new PositionCommand(wristSubsystem, 146),
                                 new VelocityCommand(intakeSubsystem, 50)
                         )
@@ -148,9 +148,9 @@ public class ScoreCommands {
 
     public static Command scoreL4() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 82),
+                new PositionCommand(armSubsystem, 87),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 1.007, 90, 40),
+                        new PositionCommand(elevatorSubsystem, 1.003),
                         new PositionCommand(wristSubsystem, 154),
                         new VelocityCommand(intakeSubsystem, 50)
                 )
@@ -178,7 +178,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Won't clip elevator
                         new ParallelCommandGroup(
                                 new PositionCommand(wristSubsystem, 0),
-                                new PositionCommand(elevatorSubsystem, 0, 40, 20)
+                                new PositionCommand(elevatorSubsystem, 0)
                                         .until(() -> elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .1)
                         ),
                         new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
@@ -186,7 +186,7 @@ public class ScoreCommands {
                 ),
                 new SequentialCommandGroup( //Will clip elevator
                         new PositionCommand(wristSubsystem, 0),
-                        new PositionCommand(elevatorSubsystem, 0, 40, 20)
+                        new PositionCommand(elevatorSubsystem, 0)
                                 .until(() -> elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .1),
                         new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                         new PositionCommand(armSubsystem, 0.5)
@@ -201,6 +201,15 @@ public class ScoreCommands {
                 Map.ofEntries(
                         Map.entry(State.L2, new PositionCommand(armSubsystem, 65)),
                         Map.entry(State.L3, new PositionCommand(armSubsystem, 73))
+                ),
+                RobotContainer::getState
+        );
+    }
+
+    public static Command wristDunk() {
+        return new SelectCommand<>(
+                Map.ofEntries(
+                        Map.entry(State.L4, new PositionCommand(wristSubsystem, 170))
                 ),
                 RobotContainer::getState
         );
@@ -272,7 +281,6 @@ public class ScoreCommands {
                 },
                 (interrupted) -> {
                     elevatorSubsystem.setVoltage(0);
-                    elevatorSubsystem.getMotor().setPosition(0);
                 },
                 elevatorSubsystem::isAtBottom,
                 elevatorSubsystem
@@ -286,7 +294,6 @@ public class ScoreCommands {
                 },
                 (interrupted) -> {
                     wristSubsystem.setVoltage(0);
-                    wristSubsystem.getMotor().setPosition(0);
                 },
                 wristSubsystem::isAtBottom,
                 wristSubsystem
@@ -301,7 +308,6 @@ public class ScoreCommands {
                 },
                 (interrupted) -> {
                     armSubsystem.setVelocity(0);
-                    armSubsystem.getMotor().setPosition(-1);
                 },
                 armSubsystem::isAtBottom,
                 armSubsystem
@@ -309,10 +315,23 @@ public class ScoreCommands {
     }
 
     public static Command zeroSubsystems() {
-        return new ParallelCommandGroup(
-                zeroElevator(),
-                zeroArm(),
-                zeroWrist()
+        return new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                        zeroElevator(),
+                        zeroArm(),
+                        zeroWrist()
+                ),
+                new WaitCommand(.75),
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
+                        new InstantCommand(() -> armSubsystem.getMotor().setPosition(0)),
+                        new InstantCommand(() -> wristSubsystem.getMotor().setPosition(0))
+                ),
+                new ParallelCommandGroup(
+                        new PositionCommand(elevatorSubsystem, 0),
+                        new PositionCommand(armSubsystem, 0),
+                        new PositionCommand(wristSubsystem, 0)
+                )
         );
     }
 

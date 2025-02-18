@@ -46,7 +46,7 @@ public final class Constants {
         public static final int ELEVATOR_RIGHT_ID = 18;
 
         public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS
-                = new TrapezoidProfile.Constraints(90, 40);
+                = new TrapezoidProfile.Constraints(100, 200);
         public static final PID ELEVATOR_PID = new PID(0, 0, 0);
         public static final FeedForward ELEVATOR_FF = new FeedForward(.33, .17, .1333333333333333);
         public static final double ELEVATOR_MIN = 0;
