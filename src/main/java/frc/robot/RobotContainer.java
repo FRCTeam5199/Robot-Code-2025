@@ -149,9 +149,9 @@ public class RobotContainer {
 
         }
 
-        commandXboxController.b().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
-                .andThen(new InstantCommand(() -> System.out.println("Elevator Centimeters: " + elevatorSubsystem.getMechM())))
-                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wristSubsystem.getDegrees()))));
+//        commandXboxController.b().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
+//                .andThen(new InstantCommand(() -> System.out.println("Elevator Centimeters: " + elevatorSubsystem.getMechM())))
+//                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wristSubsystem.getDegrees()))));
 
         commandXboxController.rightBumper().whileTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
@@ -178,7 +178,7 @@ public class RobotContainer {
         commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
 
         commandXboxController.a().onTrue(ScoreCommands.intakeHP());
-//        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
+        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
         commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeL2(), ScoreCommands.scoreL3(), () -> algaeControls));
         commandXboxController.y().onTrue(ScoreCommands.scoreL4());
 
@@ -206,7 +206,6 @@ public class RobotContainer {
 //        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 //        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandXboxController.povDown().onTrue(ScoreCommands.dunk());
-        commandXboxController.povUp().onTrue(ScoreCommands.wristDunk());
 
         commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
         // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());

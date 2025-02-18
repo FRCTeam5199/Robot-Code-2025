@@ -106,7 +106,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .05),
-                                new PositionCommand(wristSubsystem, 140),
+                                new PositionCommand(wristSubsystem, 167),
                                 new VelocityCommand(intakeSubsystem, 50)
                         ),
                         new PositionCommand(armSubsystem, 71)
@@ -115,7 +115,7 @@ public class ScoreCommands {
                         new PositionCommand(armSubsystem, 71),
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .05),
-                                new PositionCommand(wristSubsystem, 140),
+                                new PositionCommand(wristSubsystem, 167),
                                 new VelocityCommand(intakeSubsystem, 50)
                         )
 
@@ -128,8 +128,8 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .33),
-                                new PositionCommand(wristSubsystem, 146),
+                                new PositionCommand(elevatorSubsystem, .36),
+                                new PositionCommand(wristSubsystem, 153),
                                 new VelocityCommand(intakeSubsystem, 50)
                         ),
                         new PositionCommand(armSubsystem, 84)
@@ -137,8 +137,8 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 84),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .33),
-                                new PositionCommand(wristSubsystem, 146),
+                                new PositionCommand(elevatorSubsystem, .36),
+                                new PositionCommand(wristSubsystem, 153),
                                 new VelocityCommand(intakeSubsystem, 50)
                         )
                 ),
@@ -200,15 +200,7 @@ public class ScoreCommands {
         return new SelectCommand<>(
                 Map.ofEntries(
                         Map.entry(State.L2, new PositionCommand(armSubsystem, 65)),
-                        Map.entry(State.L3, new PositionCommand(armSubsystem, 73))
-                ),
-                RobotContainer::getState
-        );
-    }
-
-    public static Command wristDunk() {
-        return new SelectCommand<>(
-                Map.ofEntries(
+                        Map.entry(State.L3, new PositionCommand(armSubsystem, 73)),
                         Map.entry(State.L4, new PositionCommand(wristSubsystem, 170))
                 ),
                 RobotContainer::getState
