@@ -106,7 +106,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .05),
-                                new PositionCommand(wristSubsystem, 167),
+                                new PositionCommand(wristSubsystem, 152),
                                 new VelocityCommand(intakeSubsystem, 50)
                         ),
                         new PositionCommand(armSubsystem, 71)
@@ -115,7 +115,7 @@ public class ScoreCommands {
                         new PositionCommand(armSubsystem, 71),
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .05),
-                                new PositionCommand(wristSubsystem, 167),
+                                new PositionCommand(wristSubsystem, 152),
                                 new VelocityCommand(intakeSubsystem, 50)
                         )
 
@@ -129,7 +129,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .36),
-                                new PositionCommand(wristSubsystem, 153),
+                                new PositionCommand(wristSubsystem, 157),
                                 new VelocityCommand(intakeSubsystem, 50)
                         ),
                         new PositionCommand(armSubsystem, 84)
@@ -138,7 +138,7 @@ public class ScoreCommands {
                         new PositionCommand(armSubsystem, 84),
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .36),
-                                new PositionCommand(wristSubsystem, 153),
+                                new PositionCommand(wristSubsystem, 157),
                                 new VelocityCommand(intakeSubsystem, 50)
                         )
                 ),
@@ -148,10 +148,10 @@ public class ScoreCommands {
 
     public static Command scoreL4() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 87),
+                new PositionCommand(armSubsystem, 85),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 1.003),
-                        new PositionCommand(wristSubsystem, 154),
+                        new PositionCommand(wristSubsystem, 152),
                         new VelocityCommand(intakeSubsystem, 50)
                 )
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
