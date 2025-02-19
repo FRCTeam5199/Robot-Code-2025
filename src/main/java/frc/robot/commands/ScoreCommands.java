@@ -151,7 +151,7 @@ public class ScoreCommands {
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 85),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 1.003),
+                        new PositionCommand(elevatorSubsystem, 1.003, true),
                         new PositionCommand(wristSubsystem, 152),
                         new VelocityCommand(intakeSubsystem, 50)
                 )
@@ -193,7 +193,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Won't clip elevator
                         new ParallelCommandGroup(
                                 new PositionCommand(wristSubsystem, 0),
-                                new PositionCommand(elevatorSubsystem, 0)
+                                new PositionCommand(elevatorSubsystem, 0, false)
                                         .until(() -> elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .1)
                         ),
                         new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
@@ -201,7 +201,7 @@ public class ScoreCommands {
                 ),
                 new SequentialCommandGroup( //Will clip elevator
                         new PositionCommand(wristSubsystem, 0),
-                        new PositionCommand(elevatorSubsystem, 0)
+                        new PositionCommand(elevatorSubsystem, 0, false)
                                 .until(() -> elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .1),
                         new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                         new PositionCommand(armSubsystem, 0.5)
@@ -226,7 +226,7 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup(
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .2, 20, 50),
+//                                new PositionCommand(elevatorSubsystem, .2, 20, 50),
                                 new PositionCommand(wristSubsystem, 132)
                         ),
                         new PositionCommand(armSubsystem, 64.71)
@@ -234,7 +234,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup(
                         new PositionCommand(armSubsystem, 64.71),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .2, 20, 50),
+//                                new PositionCommand(elevatorSubsystem, .2, 20, 50),
                                 new PositionCommand(wristSubsystem, 132)
                         )
 
@@ -247,7 +247,7 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.5, 36, 20),
+//                                new PositionCommand(elevatorSubsystem, 0.5, 36, 20),
                                 new PositionCommand(wristSubsystem, 140)
                         ),
                         new PositionCommand(armSubsystem, 72.21)
@@ -255,7 +255,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 72.21),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.5, 60, 20),
+//                                new PositionCommand(elevatorSubsystem, 0.5, 60, 20),
                                 new PositionCommand(wristSubsystem, 140)
                         )
                 ),
@@ -267,14 +267,14 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Won't clip elevator
                         new ParallelCommandGroup(
-                                new PositionCommand(wristSubsystem, 56),
-                                new PositionCommand(elevatorSubsystem, 0, 40, 20)
+                                new PositionCommand(wristSubsystem, 56)
+//                                new PositionCommand(elevatorSubsystem, 0, 40, 20)
                         ),
                         new PositionCommand(armSubsystem, 0.5)
                 ),
                 new SequentialCommandGroup( //Will clip elevator
                         new PositionCommand(wristSubsystem, 56),
-                        new PositionCommand(elevatorSubsystem, 0, 40, 20),
+//                        new PositionCommand(elevatorSubsystem, 0, 40, 20),
                         new PositionCommand(armSubsystem, 0.5)
                 ),
                 () -> wristSubsystem.getDegrees() < 50
@@ -335,7 +335,7 @@ public class ScoreCommands {
                         new InstantCommand(() -> wristSubsystem.getMotor().setPosition(0))
                 ),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0),
+                        new PositionCommand(elevatorSubsystem, 0, true),
                         new PositionCommand(armSubsystem, 0),
                         new PositionCommand(wristSubsystem, 0)
                 )

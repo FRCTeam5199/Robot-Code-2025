@@ -209,7 +209,7 @@ public class RobotContainer {
 
         commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
         // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
-//        commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
+        commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
     }
