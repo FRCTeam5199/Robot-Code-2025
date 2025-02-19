@@ -14,17 +14,25 @@ public class PositionCommand extends Command {
         this.templateSubsystem = templateSubsystem;
         this.goal = goal;
         updateGoalPosition = false;
+        changeConstraint = false;
 
         addRequirements(templateSubsystem);
     }
 
     //Used for if the velocity/acceleration constraint needs to be changed
-    public PositionCommand(TemplateSubsystem templateSubsystem, double goal, double vel, double acc) {
+    public PositionCommand(TemplateSubsystem templateSubsystem, double goal, boolean isGoingUp) {
         this.templateSubsystem = templateSubsystem;
         this.goal = goal;
         updateGoalPosition = false;
-        this.vel = vel;
-        this.acc = acc;
+        if (isGoingUp) {
+            //Up
+            this.vel = 100;
+            this.acc = 200;
+        } else {
+            //Down
+            this.vel = 70;
+            this.acc = 140;
+        }
         changeConstraint = true;
 
         addRequirements(templateSubsystem);
@@ -48,7 +56,6 @@ public class PositionCommand extends Command {
             updateGoalPosition = false;
         }
     }
-
 
 
     @Override
