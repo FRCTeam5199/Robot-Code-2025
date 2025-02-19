@@ -36,14 +36,14 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.038, 70, 140),
+                                new PositionCommand(elevatorSubsystem, 0.038, false),
                                 new PositionCommand(wristSubsystem, 0.004)
                         ),
                         new PositionCommand(armSubsystem, 56.56)
                 ),
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 56.56), //76,    .1
-                        new PositionCommand(elevatorSubsystem, 0.038),
+                        new PositionCommand(elevatorSubsystem, 0.038, true),
                         new PositionCommand(wristSubsystem, 0.004)
                 ),
                 () -> elevatorSubsystem.getMechM() > .15
@@ -95,7 +95,7 @@ public class ScoreCommands {
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 0),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 0),
+                        new PositionCommand(elevatorSubsystem, 0, true),
                         new PositionCommand(wristSubsystem, 50)
                         // new VelocityCommand(intakeSubsystem, 50)
                 )
@@ -106,7 +106,7 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .08, 70, 140),
+                                new PositionCommand(elevatorSubsystem, .08, false),
                                 new PositionCommand(wristSubsystem, 152)
                                 // new VelocityCommand(intakeSubsystem, 50)
                         ),
@@ -115,7 +115,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 71),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .08),
+                                new PositionCommand(elevatorSubsystem, .08, true),
                                 new PositionCommand(wristSubsystem, 152)
                                 // new VelocityCommand(intakeSubsystem, 50)
                         )
@@ -129,7 +129,7 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .396, 70, 140),
+                                new PositionCommand(elevatorSubsystem, .396, false),
                                 new PositionCommand(wristSubsystem, 157)
                                 // new VelocityCommand(intakeSubsystem, 50)
                         ),
@@ -138,7 +138,7 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 84),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .396),
+                                new PositionCommand(elevatorSubsystem, .396, true),
                                 new PositionCommand(wristSubsystem, 157)
                                 // new VelocityCommand(intakeSubsystem, 50)
                         )
@@ -165,7 +165,7 @@ public class ScoreCommands {
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 85),
                 new ParallelCommandGroup(
-                        new PositionCommand(elevatorSubsystem, 1.003),
+                        new PositionCommand(elevatorSubsystem, 1.003, true),
                         new PositionCommand(wristSubsystem, 161)
                         // new VelocityCommand(intakeSubsystem, 50)
                 )
