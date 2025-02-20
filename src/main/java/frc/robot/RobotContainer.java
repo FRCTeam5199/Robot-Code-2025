@@ -17,17 +17,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
 
@@ -126,13 +123,9 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-//        commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
-//        commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
-//
-//        commandXboxController.povLeft().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-//        commandXboxController.povRight().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-//        commandXboxController.povUp().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-//        commandXboxController.povDown().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        //    commandXboxController.b().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
+        //            .andThen(new InstantCommand(() -> System.out.println("Elevator Centimeters: " + elevatorSubsystem.getMechM())))
+        //            .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wristSubsystem.getDegrees()))));
 
         commandSwerveDrivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 commandSwerveDrivetrain.applyRequest(() -> drive.withVelocityX(-commandXboxController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
@@ -146,14 +139,28 @@ public class RobotContainer {
 
         if (Utils.isSimulation()) {
             commandSwerveDrivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
-
         }
 
-    //    commandXboxController.b().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
-    //            .andThen(new InstantCommand(() -> System.out.println("Elevator Centimeters: " + elevatorSubsystem.getMechM())))
-    //            .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wristSubsystem.getDegrees()))));
+//        commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
+//        commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
 
-        commandXboxController.rightBumper().whileTrue(new SequentialCommandGroup(
+        commandXboxController.a().onTrue(new InstantCommand(() -> RobotContainer.setState(State.L1)));
+        commandXboxController.b().onTrue(ScoreCommands.armL2());
+        commandXboxController.x().onTrue(ScoreCommands.armL3());
+        commandXboxController.y().onTrue(ScoreCommands.armL4());
+//        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
+//        commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeL2(), ScoreCommands.scoreL3(), () -> algaeControls));
+
+        commandXboxController.leftTrigger().onTrue(ScoreCommands.score())
+                .onFalse(new VelocityCommand(intakeSubsystem, 0)
+                        .alongWith(ScoreCommands.stable()));
+        commandXboxController.rightTrigger().onTrue(new VelocityCommand(intakeSubsystem, 75)
+                        .alongWith(ScoreCommands.intakeHP()))
+                .onFalse(new VelocityCommand(intakeSubsystem, 0)
+                        .alongWith(ScoreCommands.stable()));
+
+
+        commandXboxController.leftBumper().whileTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
                         Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
                                 .getClosestTagID()))))),
@@ -165,46 +172,11 @@ public class RobotContainer {
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees())))));
-
-
-//        commandXboxController.rightBumper().onTrue(new InstantCommand(()
-        //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
-//                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
-
-
-        commandXboxController.button(7).onTrue(ScoreCommands.zeroArm())
-                .onFalse(new VelocityCommand(armSubsystem, 0));
-        commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
-        commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
-
-        commandXboxController.a().onTrue(ScoreCommands.intakeHP());
-        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
-        commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeL2(), ScoreCommands.scoreL3(), () -> algaeControls));
-        commandXboxController.y().onTrue(ScoreCommands.NDscoreL4());
-
-        /*
-        arm - , elevator - , wrist - hp
-        arm - , elevator - , wrist - l1
-        arm - , elevator - , wrist - l2
-        arm - , elevator - , wrist - l3
-        arm - , elevator - , wrist - l4
-         */
-
-        commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
-
-        commandXboxController.leftTrigger().onTrue(new VelocityCommand(intakeSubsystem, -75)) //Outtake
+        commandXboxController.rightBumper().onTrue(new VelocityCommand(intakeSubsystem, -75))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
-        commandXboxController.rightTrigger().onTrue(new VelocityCommand(intakeSubsystem, 75)) //Intake
-                .onFalse(new VelocityCommand(intakeSubsystem, 0));
-        // Lock on with limelight thing, if breaking comment the entire andThen statement
-//                    .andThen(new InstantCommand(() -> drivetrain.applyRequest(() -> drive
-//                            .withVelocityX(0.0)
-//                            .withVelocityY(0.0)
-//                            .withRotationalRate(objectDetectionSubsystem.lockOn()))))
 
-
-       commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-       commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         // commandXboxController.povDown().onTrue(ScoreCommands.dunk());
 
         commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
