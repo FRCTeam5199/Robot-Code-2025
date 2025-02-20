@@ -143,6 +143,7 @@ public class RobotContainer {
                         .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
+
         // reset the field-centric heading on menu button press
         commandXboxController.button(8).onTrue(commandSwerveDrivetrain
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
@@ -150,12 +151,7 @@ public class RobotContainer {
 
         if (Utils.isSimulation()) {
             commandSwerveDrivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
-
         }
-
-//        commandXboxController.rightBumper().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
-//                .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
-//                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
 
         commandXboxController.rightBumper().whileTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
@@ -166,13 +162,10 @@ public class RobotContainer {
                                 .withVelocityY(yVelocity)
                                 .withRotationalRate(turnPIDController.calculate(
                                         commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
+
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees())))));
-
-//        commandXboxController.rightBumper().onTrue(new InstantCommand(()
-        //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
-//                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
 
         commandXboxController.button(7).onTrue(ScoreCommands.zeroArm())
                 .onFalse(new VelocityCommand(armSubsystem, 0));
@@ -204,15 +197,16 @@ public class RobotContainer {
 //                            .withVelocityY(0.0)
 //                            .withRotationalRate(objectDetectionSubsystem.lockOn()))))
 
-//        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-//        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandXboxController.povDown().onTrue(ScoreCommands.dunk());
-
+                
         commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
-        // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
-//        commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
+
+        buttonPanel.button(ButtonPanelButtons.MOVE_CLIMB_INCREASE).onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        buttonPanel.button(ButtonPanelButtons.MOVE_CLIMB_DECREASE).onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         
-        // TODO
+        // buttonPanel.button(ButtonPanelButtons.MOVE_WRIST_INCREASE).onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        // buttonPanel.button(ButtonPanelButtons.MOVE_WRIST_DECREASE).onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+
         // buttonPanel.button(ButtonPanelButtons.REEF_A).onTrue(GoToCommand());
         // buttonPanel.button(ButtonPanelButtons.REEF_B);
         // buttonPanel.button(ButtonPanelButtons.REEF_C);
