@@ -432,8 +432,8 @@ public class ScoreCommands {
                 },
                 () -> {
                     RobotContainer.commandSwerveDrivetrain.setControl(
-                            drive.withVelocityX(-.4)
-                                    .withVelocityY(-.4));
+                            drive.withVelocityX(-0.2)
+                                    .withVelocityY(-0.2));
 
                     System.out.println("Going Forward");
 
