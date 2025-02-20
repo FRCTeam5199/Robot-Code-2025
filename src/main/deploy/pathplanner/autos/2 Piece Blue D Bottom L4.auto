@@ -7,7 +7,69 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1 Piece Red Start to G"
+            "pathName": "2 Piece Blue Start to D"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNR"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DUNK"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue D to HPB"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "INTAKE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "moveIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue HPB to C"
           }
         },
         {
@@ -44,32 +106,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1 Piece Red G to HPT"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "INTAKE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "DRIVE"
-                }
-              }
-            ]
+            "pathName": "2 Piece Blue C to HPB"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "1 Piece L4",
+  "folder": "2 Piece L4",
   "choreoAuto": false
 }

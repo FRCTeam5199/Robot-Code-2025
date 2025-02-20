@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.729464285714286,
-        "y": 6.229942602040816
+        "x": 14.894579226561946,
+        "y": 6.1516071363023705
       },
       "isLocked": false,
       "linkedName": "D Red"
@@ -20,8 +20,8 @@
         "y": 7.125
       },
       "prevControl": {
-        "x": 14.951658163265304,
-        "y": 6.304209183673469
+        "x": 15.033816619327759,
+        "y": 6.237938413719328
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,30 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "HP",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "HP"
+        }
+      }
+    },
+    {
+      "name": "INTAKE",
+      "waypointRelativePos": 0.849002849002849,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKE"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
