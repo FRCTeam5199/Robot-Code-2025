@@ -20,14 +20,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
-import frc.robot.subsystems.*;
-import frc.robot.subsystems.template.PositionCommand;
+import frc.robot.controls.ButtonPanelButtons;
+import frc.robot.controls.CommandButtonPanel;
+import frc.robot.subsystems.AprilTagSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
 
@@ -42,7 +48,9 @@ public class RobotContainer {
     private static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
-    private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
+    private static final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
+    private static final CommandButtonPanel buttonPanel = new CommandButtonPanel(OperatorConstants.buttonPanelPort);
+    
     public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05)
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
@@ -75,8 +83,6 @@ public class RobotContainer {
     private static TrapezoidProfile.State currentStateY = new TrapezoidProfile.State(0, 0);
     private static TrapezoidProfile.State goalStateY = new TrapezoidProfile.State(0, 0);
 
-    private static Timer timer = new Timer();
-
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain();
     private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
@@ -85,17 +91,15 @@ public class RobotContainer {
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
+    private static Timer timer = new Timer();
 
     public static State state = State.L1;
 
-
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
-
 
     // private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     private Boolean algaeControls = false;
-
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -128,7 +132,7 @@ public class RobotContainer {
     private void configureBindings() {
 //        commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
 //        commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
-//
+
 //        commandXboxController.povLeft().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
 //        commandXboxController.povRight().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 //        commandXboxController.povUp().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
@@ -155,8 +159,8 @@ public class RobotContainer {
 
         commandXboxController.rightBumper().whileTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-                                .getClosestTagID()))))),
+                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(//TODO: add setTagMode
+                                aprilTagSubsystem.getClosestTagID()))))),
                 commandSwerveDrivetrain.applyRequest(
                         () -> drive.withVelocityX(xVelocity)
                                 .withVelocityY(yVelocity)
@@ -166,11 +170,9 @@ public class RobotContainer {
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees())))));
 
-
 //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
         //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
 //                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
-
 
         commandXboxController.button(7).onTrue(ScoreCommands.zeroArm())
                 .onFalse(new VelocityCommand(armSubsystem, 0));
@@ -202,7 +204,6 @@ public class RobotContainer {
 //                            .withVelocityY(0.0)
 //                            .withRotationalRate(objectDetectionSubsystem.lockOn()))))
 
-
 //        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 //        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandXboxController.povDown().onTrue(ScoreCommands.dunk());
@@ -210,6 +211,19 @@ public class RobotContainer {
         commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
         // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
 //        commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
+        
+        // TODO
+        // buttonPanel.button(ButtonPanelButtons.REEF_A).onTrue(GoToCommand());
+        // buttonPanel.button(ButtonPanelButtons.REEF_B);
+        // buttonPanel.button(ButtonPanelButtons.REEF_C);
+        // buttonPanel.button(ButtonPanelButtons.REEF_D);
+        // buttonPanel.button(ButtonPanelButtons.REEF_E);
+        // buttonPanel.button(ButtonPanelButtons.REEF_F);
+        // buttonPanel.button(ButtonPanelButtons.REEF_G);
+        // buttonPanel.button(ButtonPanelButtons.REEF_H);
+        // buttonPanel.button(ButtonPanelButtons.REEF_I);
+        // buttonPanel.button(ButtonPanelButtons.REEF_J);
+        // buttonPanel.button(ButtonPanelButtons.REEF_K);
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
     }

@@ -33,12 +33,12 @@ import frc.robot.utility.Type;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-
     public static final double LOOP_PERIOD_MS = 20.0;
     public static final double LOOP_PERIOD_S = Units.millisecondsToSeconds(LOOP_PERIOD_MS);
 
     public static class OperatorConstants {
         public static final int driverControllerPort = 0;
+        public static final int buttonPanelPort = 1;
     }
 
     public static class ElevatorConstants {
