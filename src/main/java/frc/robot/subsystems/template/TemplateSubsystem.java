@@ -1,7 +1,5 @@
 package frc.robot.subsystems.template;
 
-import javax.xml.transform.Templates;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -10,41 +8,20 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
-
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
-import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants.ArmConstants;
-import frc.robot.tagalong.GeometricUtils;
-import frc.robot.tagalong.MathUtils;
 import frc.robot.utility.FeedForward;
-import frc.robot.utility.PID;
 import frc.robot.utility.Type;
 
 public class TemplateSubsystem extends SubsystemBase {
@@ -102,6 +79,17 @@ public class TemplateSubsystem extends SubsystemBase {
     DoublePublisher systemVoltage;
     DoublePublisher systemStatorVoltage;
 
+    /**
+     * Creates a motor based subsystem and configures a single motor
+     * @param type The type of the subsystem, AFFECTS THE UNITS OF THE SUBSYSTEM TO MATCH THE TYPE.
+     * @param id The motor ID to be controlled by the subsystem
+     * @param constraints The motion constraints of the motor
+     * @param feedForward The feedforward configuration of the motor
+     * @param lowerTolerance (Degrees or Meters) The lower limit of the motor to be considered at it's goal
+     * @param upperTolerance (Degrees or Meters) The lower limit of the motor to be considered at it's goal
+     * @param gearRatios A matrix of gear ratios with two columns and many rows, in the format gearRatios[x][0] : gearRatios[x][1]
+     * @param SubsystemName The name of the subsystem
+     */
     public TemplateSubsystem(Type type, int id, TrapezoidProfile.Constraints constraints, FeedForward feedForward,
                              double lowerTolerance, double upperTolerance,
                              double[][] gearRatios, String SubsystemName) {
@@ -147,11 +135,15 @@ public class TemplateSubsystem extends SubsystemBase {
         this.name = SubsystemName;
     }
 
+    /**
+     * @return The subsystem's name set at configuration.
+     */
     public String getName() {
         return name;
     }
 
-    //Configurations
+    //Configurations:
+
     public void configureMotor(boolean isInverted, boolean isBrakeMode,
                                double supplyCurrentLimit, double statorCurrentLimit,
                                Slot0Configs slot0Configs) {
@@ -168,7 +160,9 @@ public class TemplateSubsystem extends SubsystemBase {
         motor.setPosition(0);
     }
 
-
+    /**
+     * Configures the subsystem for use as a linear mech
+     */
     public void configureLinearMech(double drumCircumference, double mechMinM, double mechMaxM) {
         this.drumCircumference = drumCircumference;
         this.mechMin = mechMinM;
@@ -180,6 +174,12 @@ public class TemplateSubsystem extends SubsystemBase {
 
     }
 
+    /**
+     * Configures the subsystem to work as a Pivot.
+     * @param mechMinDegrees
+     * @param mechMaxDegrees
+     * @param ffOffset
+     */
     public void configurePivot(double mechMinDegrees, double mechMaxDegrees, double ffOffset) {
         this.mechMin = mechMinDegrees;
         this.mechMax = mechMaxDegrees;
@@ -283,45 +283,34 @@ public class TemplateSubsystem extends SubsystemBase {
 //            }
 //        }
 //    }
+
+    /**
+     * Sets the position, and holds it.
+     * @param goal Degrees or Meters based on the Subsystem's {@link frc.robot.utility.Type}
+     */
     public void setPosition(double goal) {
-        if (type == Type.ROLLER) return;
-
-        switch (type) {
-            case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
-            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
-            default -> goalState.position = getMotorRotFromMechRot(goal);
-        }
-
-        goalState.velocity = 0;
-        this.goal = goal;
-        currentState = profile.calculate(0, currentState, goalState);
-        if (encoder == null) currentState.position = getMotorRot();
-        else currentState.position = getEncoderRot();
-
-        followLastMechProfile = true;
+        setPosition(goal, true);
     }
 
-    //Used if velocity/acceleration constraint needs to be changed
+    /**
+     * Use if velocity/acceleration constraint needs to be changed. DOESN'T DO ANYTHING WITH ROLLERS!
+     * @param goal Goal in either degrees or meters
+     * @param holdPosition Whether the mech should hold the position it is set to
+     * @param vel Goal velocity (RPS or MPS based on the Subsystem's {@link frc.robot.utility.Type})
+     * @param acc Goal acceleration (RPS^2 or MPS^2 based on the Subsystem's {@link frc.robot.utility.Type})
+     */
     public void setPosition(double goal, boolean holdPosition, double vel, double acc) {
         if (type == Type.ROLLER) return;
-
-        switch (type) {
-            case LINEAR -> goalState.position = getMotorRotFromMechM(goal) + zero;
-            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal) + zero;
-            default -> goalState.position = getMotorRotFromMechRot(goal) + zero;
-        }
-
         profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(vel, acc));
-
-        goalState.velocity = 0;
-        this.goal = goal;
-        currentState = profile.calculate(0, currentState, goalState);
-        if (encoder == null) currentState.position = getMotorRot();
-        else currentState.position = getEncoderRot();
-
-        followLastMechProfile = holdPosition;
+        setPosition(goal, holdPosition);
     }
-
+    /**
+     * DOESN'T DO ANYTHING WITH ROLLERS!
+     * @param goal Goal in either degrees or meters
+     * @param holdPosition Whether the mech should hold the position it is set to
+     * @param vel Goal velocity (RPS or MPS based on the Subsystem's {@link frc.robot.utility.Type})
+     * @param acc Goal acceleration (RPS^2 or MPS^2 based on the Subsystem's {@link frc.robot.utility.Type})
+     */
     public void setPosition(double goal, boolean holdPosition) {
         if (type == Type.ROLLER) return;
 
@@ -340,9 +329,11 @@ public class TemplateSubsystem extends SubsystemBase {
 
         followLastMechProfile = holdPosition;
     }
-
+    /**
+     * Used to hold the mech profile's after it is set.
+     */
     public void followLastMechProfile() {
-        if (type == Type.ROLLER) return;
+        if (type == Type.ROLLER) return;  
 
         TrapezoidProfile.State nextState = profile.calculate(timer.get(), currentState, goalState);
         motor.setControl(
@@ -353,11 +344,16 @@ public class TemplateSubsystem extends SubsystemBase {
         currentState = nextState;
         timer.restart();
     }
-
+    /**
+     * @return A boolean telling you if the mech has reached the exact goal.
+     */
     public boolean isProfileFinished() {
         return currentState.position == goalState.position && currentState.velocity == goalState.velocity;
     }
-
+    /**
+     * @param isVelocity if the goal is a velocity
+     * @return if the mech is within the tolerance limits 
+     */
     public boolean isMechAtGoal(boolean isVelocity) {
         switch (type) {
             case LINEAR -> {
@@ -384,7 +380,10 @@ public class TemplateSubsystem extends SubsystemBase {
     public double getGoal() {
         return goal;
     }
-
+    /**
+     * Sets the periodic method to hold the mech profile
+     * @param followLastMechProfile should the subsystem periodic method hold the mech profile
+     */
     public void setFollowLastMechProfile(boolean followLastMechProfile) {
         this.followLastMechProfile = followLastMechProfile;
     }
@@ -392,7 +391,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     //Unit Conversions
     public double getDegrees() {
-        return motor.getRotorPosition().getValueAsDouble() * gearRatio * 360d;
+        return getMotorRot() * gearRatio * 360d;
     }
 
     public double getMotorRot() {
@@ -400,7 +399,7 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     public double getMechRot() {
-        return motor.getRotorPosition().getValueAsDouble() * gearRatio;
+        return getMotorRot() * gearRatio;
     }
 
     public double getDegreesFromMechRot(double mechRot) {
@@ -427,6 +426,9 @@ public class TemplateSubsystem extends SubsystemBase {
         return mechRot / gearRatio;
     }
 
+    /**
+     * @return The position of the mech in Meters, returns 0 if there the subsystem's type is not linear.
+     */
     public double getMechM() {
         if (type != Type.LINEAR) return 0;
         return motor.getRotorPosition().getValueAsDouble() * drumCircumference * gearRatio;
