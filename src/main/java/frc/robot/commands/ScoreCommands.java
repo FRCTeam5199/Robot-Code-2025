@@ -81,7 +81,7 @@ public class ScoreCommands {
                 () -> intakeSubsystem.intake(),
                 (interrupted) -> intakeSubsystem.stopIntake(),
                 () -> {
-                    if (intakeSubsystem.getStatorCurrent() > 25) {
+                    if (intakeSubsystem.getStatorCurrent() > 35) {
                         timer.start();
                         if (timer.hasElapsed(.1)) {
                             timer.stop();
@@ -170,7 +170,7 @@ public class ScoreCommands {
 
     public static Command scoreL4() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 85),
+                new PositionCommand(armSubsystem, 87),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 1.003, true),
                         new PositionCommand(wristSubsystem, 152)

@@ -153,11 +153,11 @@ public class RobotContainer {
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.score())
                 .onFalse(new VelocityCommand(intakeSubsystem, 0)
-                        .alongWith(ScoreCommands.stable()));
+                        .alongWith(ScoreCommands.intakeHP()));
         commandXboxController.rightTrigger().onTrue(new VelocityCommand(intakeSubsystem, 75)
                         .alongWith(ScoreCommands.intakeHP()))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0)
-                        .alongWith(ScoreCommands.stable()));
+                        .alongWith(ScoreCommands.intakeHP()));
 
 
         commandXboxController.leftBumper().whileTrue(new SequentialCommandGroup(
@@ -194,7 +194,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
 //        return Autos.ThreePiece.Blue.threePieceBlueBL4();
-        return Autos.ThreePiece.Blue.threePieceBlueBL4();
+        return Autos.TwoPiece.Blue.twoPieceBlueGBottomL4();
         //return new PathPlannerAuto("test");
     }
 
