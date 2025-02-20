@@ -47,16 +47,16 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
 
-    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(3, 0, .1, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(6, 0.05, .15, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(4.5, 0, .1, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(8, 0.05, .15, new TrapezoidProfile.Constraints(100, 200));
 
-    private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(2.5, 0, .05, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(3, 0, .05, new TrapezoidProfile.Constraints(100, 200));
     private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(5, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
     private static final ProfiledPIDController drivePIDControllerYVeryClose = new ProfiledPIDController(7, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
 
     public static final PIDController turnPIDController = new PIDController(0.14, 0.0, 0.0);
 
-    public static double xVelocity = 0;
+    public static double xVelocity = 0.03;
     public static double yVelocity = 0;
 
     public static double autoAlignXOffset = 0.0;
@@ -175,8 +175,8 @@ public class RobotContainer {
         commandXboxController.rightBumper().onTrue(new VelocityCommand(intakeSubsystem, -75))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
-        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-//        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+//        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandXboxController.povDown().onTrue(ScoreCommands.dunk());
 
         commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
