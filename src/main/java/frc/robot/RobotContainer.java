@@ -195,7 +195,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
 //        return Autos.ThreePiece.Blue.threePieceBlueBL4();
-        return Autos.OnePiece.Blue.onePieceBlueHPBL4NoAlign();
+        return Autos.TwoPiece.Blue.twoPieceBlueHTopL4();
         //return new PathPlannerAuto("test");
     }
 

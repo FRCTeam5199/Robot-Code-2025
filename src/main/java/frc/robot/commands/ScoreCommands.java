@@ -98,9 +98,9 @@ public class ScoreCommands {
                 () -> intakeSubsystem.intake(),
                 (interrupted) -> intakeSubsystem.stopIntake(),
                 () -> {
-                    if (intakeSubsystem.getStatorCurrent() > 35) {
+                    if (intakeSubsystem.getStatorCurrent() > 45) {
                         timer.start();
-                        if (timer.hasElapsed(.1)) {
+                        if (timer.hasElapsed(.2)) {
                             timer.stop();
                             return true;
                         }

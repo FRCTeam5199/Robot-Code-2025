@@ -72,7 +72,7 @@ public final class Autos {
             }
 
             public static Command twoPieceBlueHTopL4() {
-                return new PathPlannerAuto("2 Piece Blue H Top L4");
+                return new PathPlannerAuto("2 Piece Blue H to Top L4");
             }
 
             public static Command twoPieceBlueDBottomL4() {
