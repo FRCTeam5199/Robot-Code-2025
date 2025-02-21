@@ -5,10 +5,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
+import frc.robot.constants.Constants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.template.PositionCommand;
-import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
 
 import java.util.Map;
@@ -357,6 +357,8 @@ public class ScoreCommands {
                     RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
                             Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
                                     .getClosestTagID()))));
+                    RobotContainer.commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kAutonStdDevs);
+                    RobotContainer.aprilTagSubsystem.setStdDevs(Constants.Vision.kAutonStdDevs);
 
                 },
                 () -> {
@@ -378,6 +380,8 @@ public class ScoreCommands {
                                     .getPigeon2().getRotation2d().getDegrees() + 180)));
 
 
+                    RobotContainer.commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
+                    RobotContainer.aprilTagSubsystem.setStdDevs(Constants.Vision.kSingleTagStdDevs);
                     System.out.println("ending");
 
 
@@ -397,6 +401,8 @@ public class ScoreCommands {
                             Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
                                     .getClosestTagID()))));
 
+                    RobotContainer.commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kAutonStdDevs);
+                    RobotContainer.aprilTagSubsystem.setStdDevs(Constants.Vision.kAutonStdDevs);
                 },
                 () -> {
                     RobotContainer.commandSwerveDrivetrain.setControl(
@@ -416,6 +422,8 @@ public class ScoreCommands {
                     // .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                     // .getPigeon2().getRotation2d().getDegrees())));
 
+                    RobotContainer.commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
+                    RobotContainer.aprilTagSubsystem.setStdDevs(Constants.Vision.kSingleTagStdDevs);
 
                     System.out.println("ending");
 
@@ -432,8 +440,8 @@ public class ScoreCommands {
                 },
                 () -> {
                     RobotContainer.commandSwerveDrivetrain.setControl(
-                            drive.withVelocityX(-0.2)
-                                    .withVelocityY(-0.2));
+                            drive.withVelocityX(-0.5)
+                                    .withVelocityY(-0.5));
 
                     System.out.println("Going Forward");
 
