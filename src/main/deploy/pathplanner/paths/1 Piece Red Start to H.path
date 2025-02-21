@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 9.991262755102042,
-        "y": 4.006345663265305
+        "y": 3.887
       },
       "prevControl": null,
       "nextControl": {
-        "x": 11.028443877551021,
-        "y": 3.8944196428571423
+        "x": 10.267315758735883,
+        "y": 3.8898961114877215
       },
       "isLocked": false,
-      "linkedName": "Start Red"
+      "linkedName": null
     },
     {
       "anchor": {
         "x": 11.722385204081634,
-        "y": 3.8869579081632644
+        "y": 3.887
       },
       "prevControl": {
-        "x": 10.722385204081634,
-        "y": 3.8869579081632644
+        "x": 10.749557083373011,
+        "y": 3.885872166445793
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "H Red"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,13 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "up",
+      "name": "ARML4",
       "waypointRelativePos": 0.7004716981132062,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "L1"
+          "name": "ARML4"
         }
       }
     }

@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1 Piece Red Start to G"
+            "pathName": "2 Piece Blue Start to H"
           }
         },
         {
@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNL"
+                  "name": "ALIGNR"
                 }
               },
               {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1 Piece Red G to HPT"
+            "pathName": "2 Piece Blue H to HPT"
           }
         },
         {
@@ -65,11 +65,54 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue HPT to L"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNR"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DUNK"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue L to HPT"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "1 Piece L4",
+  "folder": "2 Piece L4",
   "choreoAuto": false
 }

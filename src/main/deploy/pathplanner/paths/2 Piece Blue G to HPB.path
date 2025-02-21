@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.814036885245901,
+        "x": 5.87,
         "y": 3.8631659836065575
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.6651639344262295,
-        "y": 2.436629098360655
+        "x": 6.1624431818181815,
+        "y": 1.7564630681818185
       },
       "isLocked": false,
-      "linkedName": "G Blue"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.8870901639344262,
-        "y": 0.7943135245901636
+        "x": 1.367,
+        "y": 0.71
       },
       "prevControl": {
-        "x": 2.793102459016393,
-        "y": 0.9663688524590142
+        "x": 3.2730122950819673,
+        "y": 0.8820553278688507
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,21 +31,8 @@
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "slow (mid)",
-      "minWaypointRelativePos": 0.7,
-      "maxWaypointRelativePos": 0.9,
-      "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    },
-    {
       "name": "extra slow (end)",
-      "minWaypointRelativePos": 0.9,
+      "minWaypointRelativePos": 0.85,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
@@ -72,9 +59,14 @@
     },
     {
       "name": "INTAKE",
-      "waypointRelativePos": 0.8993923024983057,
+      "waypointRelativePos": 0.7466456195737952,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKE"
+        }
+      }
     }
   ],
   "globalConstraints": {

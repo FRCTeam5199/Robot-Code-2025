@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red Start to D"
+            "pathName": "2 Piece Red Start to H"
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "named",
           "data": {
-            "name": "dunk"
+            "name": "DUNK"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red D to HPT"
+            "pathName": "2 Piece Red H to HPB"
           }
         },
         {
@@ -60,7 +60,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "moveIntake"
+                  "name": "DRIVE"
                 }
               }
             ]
@@ -69,7 +69,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red HPT to C"
+            "pathName": "2 Piece Red HPB to K"
           }
         },
         {
@@ -79,7 +79,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNL"
+                  "name": "ALIGNR"
                 }
               },
               {
@@ -94,7 +94,7 @@
         {
           "type": "named",
           "data": {
-            "name": "dunk"
+            "name": "DUNK"
           }
         },
         {
@@ -106,26 +106,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red C to HPT"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "INTAKE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "moveIntake"
-                }
-              }
-            ]
+            "pathName": "2 Piece Red K to HPB"
           }
         }
       ]

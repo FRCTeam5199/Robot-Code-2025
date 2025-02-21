@@ -46,7 +46,7 @@ public final class Constants {
         public static final int ELEVATOR_RIGHT_ID = 18;
 
         public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS
-                = new TrapezoidProfile.Constraints(90, 40);
+                = new TrapezoidProfile.Constraints(100, 200);
         public static final PID ELEVATOR_PID = new PID(0, 0, 0);
         public static final FeedForward ELEVATOR_FF = new FeedForward(.33, .17, .1333333333333333);
         public static final double ELEVATOR_MIN = 0;
@@ -175,7 +175,7 @@ public final class Constants {
         public static final double INTAKE_upperTOLERANCE = 5;
         public static final double[][] INTAKE_gearRatios = {{1, 1}};
 
-        public static final boolean INTAKE_INVERT = true;
+        public static final boolean INTAKE_INVERT = false;
         public static final boolean INTAKE_BRAKE = true;
         public static final double INTAKE_STATOR_CURRENT_LIMIT = 100;
         public static final double INTAKE_SUPPLY_CURRENT_LIMIT = 100;
@@ -294,8 +294,8 @@ public final class Constants {
     public static class Vision {
         public static final String CAMERA_NAME = "Camera";
         public static final Transform3d CAMERA_POSE =
-                new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(4), 0));
-        public static final double CAMERA_TO_FRONT_DISTANCE = .47625;
+                new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(7), 0));
+        public static final double CAMERA_TO_FRONT_DISTANCE = .441325;
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.4, 0.4, 10.0);
 
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(9.0, 9.0, 30.0);

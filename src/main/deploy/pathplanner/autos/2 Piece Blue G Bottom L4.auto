@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue Start to D"
+            "pathName": "2 Piece Blue Start to G"
           }
         },
         {
@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "ALIGNL"
                 }
               },
               {
@@ -32,7 +32,7 @@
         {
           "type": "named",
           "data": {
-            "name": "dunk"
+            "name": "DUNK"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue D to HPB"
+            "pathName": "2 Piece Blue G to HPB"
           }
         },
         {
@@ -60,7 +60,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "moveIntake"
+                  "name": "DRIVE"
                 }
               }
             ]
@@ -94,7 +94,7 @@
         {
           "type": "named",
           "data": {
-            "name": "dunk"
+            "name": "DUNK"
           }
         },
         {

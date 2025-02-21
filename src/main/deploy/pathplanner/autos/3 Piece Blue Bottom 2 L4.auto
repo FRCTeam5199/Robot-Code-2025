@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "alignL"
+                  "name": "ALIGNL"
                 }
               },
               {
@@ -32,7 +32,7 @@
         {
           "type": "named",
           "data": {
-            "name": "dunk"
+            "name": "DUNK"
           }
         },
         {
@@ -60,7 +60,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "moveIntake"
+                  "name": "DRIVE"
                 }
               }
             ]
@@ -79,7 +79,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "alignR"
+                  "name": "ALIGNR"
                 }
               },
               {
@@ -94,7 +94,7 @@
         {
           "type": "named",
           "data": {
-            "name": "dunk"
+            "name": "DUNK"
           }
         },
         {
@@ -122,7 +122,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "moveIntake"
+                  "name": "DRIVE"
                 }
               }
             ]
@@ -141,7 +141,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "alignL"
+                  "name": "ALIGNL"
                 }
               },
               {
@@ -156,7 +156,7 @@
         {
           "type": "named",
           "data": {
-            "name": "dunk"
+            "name": "DUNK"
           }
         },
         {

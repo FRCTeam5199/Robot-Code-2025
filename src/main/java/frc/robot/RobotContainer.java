@@ -17,7 +17,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -25,15 +24,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
-import frc.robot.controls.ButtonPanelButtons;
-import frc.robot.controls.CommandButtonPanel;
-import frc.robot.subsystems.AprilTagSubsystem;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
 
@@ -48,9 +39,7 @@ public class RobotContainer {
     private static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
-    private static final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
-    private static final CommandButtonPanel buttonPanel = new CommandButtonPanel(OperatorConstants.buttonPanelPort);
-    
+    private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
     public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05)
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
@@ -58,16 +47,16 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
 
-    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(3, 0, .1, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(6, 0.05, .15, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(4.5, 0, .1, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(8, 0.05, .15, new TrapezoidProfile.Constraints(100, 200));
 
-    private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(2.5, 0, .05, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(3, 0, .05, new TrapezoidProfile.Constraints(100, 200));
     private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(5, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
     private static final ProfiledPIDController drivePIDControllerYVeryClose = new ProfiledPIDController(7, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
 
     public static final PIDController turnPIDController = new PIDController(0.14, 0.0, 0.0);
 
-    public static double xVelocity = 0;
+    public static double xVelocity = 0.03;
     public static double yVelocity = 0;
 
     public static double autoAlignXOffset = 0.0;
@@ -83,6 +72,8 @@ public class RobotContainer {
     private static TrapezoidProfile.State currentStateY = new TrapezoidProfile.State(0, 0);
     private static TrapezoidProfile.State goalStateY = new TrapezoidProfile.State(0, 0);
 
+    private static Timer timer = new Timer();
+
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain();
     private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
@@ -91,15 +82,17 @@ public class RobotContainer {
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
-    private static Timer timer = new Timer();
 
     public static State state = State.L1;
 
+
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
+
 
     // private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     private Boolean algaeControls = false;
+
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -117,33 +110,28 @@ public class RobotContainer {
         NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
         NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
         NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
-        NamedCommands.registerCommand("armL2", ScoreCommands.armL2());
-        NamedCommands.registerCommand("armL3", ScoreCommands.armL3());
-        NamedCommands.registerCommand("armL4", ScoreCommands.armL4());
-        NamedCommands.registerCommand("dunk", ScoreCommands.dunk());
-        NamedCommands.registerCommand("alignL", ScoreCommands.autoAlignLAuton());
-        NamedCommands.registerCommand("alignR", ScoreCommands.autoAlignRAuton());
-        NamedCommands.registerCommand("moveIntake", ScoreCommands.autoMoveForward());
+        NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
+        NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
+        NamedCommands.registerCommand("ARML4", ScoreCommands.armL4());
+        NamedCommands.registerCommand("DUNK", ScoreCommands.dunk());
+        NamedCommands.registerCommand("ALIGNL", ScoreCommands.autoAlignLAuton());
+        NamedCommands.registerCommand("ALIGNR", ScoreCommands.autoAlignRAuton());
+        NamedCommands.registerCommand("DRIVE", ScoreCommands.autoMoveForward());
 
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
     }
 
     private void configureBindings() {
-//        commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
-//        commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
-
-//        commandXboxController.povLeft().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-//        commandXboxController.povRight().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-//        commandXboxController.povUp().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-//        commandXboxController.povDown().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        //    commandXboxController.b().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
+        //            .andThen(new InstantCommand(() -> System.out.println("Elevator Centimeters: " + elevatorSubsystem.getMechM())))
+        //            .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wristSubsystem.getDegrees()))));
 
         commandSwerveDrivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 commandSwerveDrivetrain.applyRequest(() -> drive.withVelocityX(-commandXboxController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                         .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
-
         // reset the field-centric heading on menu button press
         commandXboxController.button(8).onTrue(commandSwerveDrivetrain
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
@@ -153,71 +141,47 @@ public class RobotContainer {
             commandSwerveDrivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
         }
 
-        commandXboxController.rightBumper().whileTrue(new SequentialCommandGroup(
+//        commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
+//        commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
+
+        commandXboxController.a().onTrue(new InstantCommand(() -> RobotContainer.setState(State.L1)));
+        commandXboxController.b().onTrue(ScoreCommands.armL2());
+        commandXboxController.x().onTrue(ScoreCommands.armL3());
+        commandXboxController.y().onTrue(ScoreCommands.armL4());
+//        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
+//        commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeL2(), ScoreCommands.scoreL3(), () -> algaeControls));
+
+        commandXboxController.leftTrigger().onTrue(ScoreCommands.score())
+                .onFalse(new VelocityCommand(intakeSubsystem, 0)
+                        .alongWith(ScoreCommands.intakeHP()));
+        commandXboxController.rightTrigger().onTrue(new VelocityCommand(intakeSubsystem, 75)
+                        .alongWith(ScoreCommands.intakeHP()))
+                .onFalse(new VelocityCommand(intakeSubsystem, 0)
+                        .alongWith(ScoreCommands.intakeHP()));
+
+
+        commandXboxController.leftBumper().whileTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(//TODO: add setTagMode
-                                aprilTagSubsystem.getClosestTagID()))))),
+                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                .getClosestTagID()))))),
                 commandSwerveDrivetrain.applyRequest(
                         () -> drive.withVelocityX(xVelocity)
                                 .withVelocityY(yVelocity)
                                 .withRotationalRate(turnPIDController.calculate(
                                         commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
-
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees())))));
-
-        commandXboxController.button(7).onTrue(ScoreCommands.zeroArm())
-                .onFalse(new VelocityCommand(armSubsystem, 0));
-        commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
-        commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
-
-        commandXboxController.a().onTrue(ScoreCommands.intakeHP());
-        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
-        commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeL2(), ScoreCommands.scoreL3(), () -> algaeControls));
-        commandXboxController.y().onTrue(ScoreCommands.scoreL4());
-
-        /*
-        arm - , elevator - , wrist - hp
-        arm - , elevator - , wrist - l1
-        arm - , elevator - , wrist - l2
-        arm - , elevator - , wrist - l3
-        arm - , elevator - , wrist - l4
-         */
-
-        commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
-
-        commandXboxController.leftTrigger().onTrue(new VelocityCommand(intakeSubsystem, -75)) //Outtake
+        commandXboxController.rightBumper().onTrue(new VelocityCommand(intakeSubsystem, -75))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
-        commandXboxController.rightTrigger().onTrue(new VelocityCommand(intakeSubsystem, 75)) //Intake
-                .onFalse(new VelocityCommand(intakeSubsystem, 0));
-        // Lock on with limelight thing, if breaking comment the entire andThen statement
-//                    .andThen(new InstantCommand(() -> drivetrain.applyRequest(() -> drive
-//                            .withVelocityX(0.0)
-//                            .withVelocityY(0.0)
-//                            .withRotationalRate(objectDetectionSubsystem.lockOn()))))
 
+        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+//        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandXboxController.povDown().onTrue(ScoreCommands.dunk());
-                
+
         commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
-
-        buttonPanel.button(ButtonPanelButtons.MOVE_CLIMB_INCREASE).onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-        buttonPanel.button(ButtonPanelButtons.MOVE_CLIMB_DECREASE).onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-        
-        // buttonPanel.button(ButtonPanelButtons.MOVE_WRIST_INCREASE).onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-        // buttonPanel.button(ButtonPanelButtons.MOVE_WRIST_DECREASE).onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-
-        // buttonPanel.button(ButtonPanelButtons.REEF_A).onTrue(GoToCommand());
-        // buttonPanel.button(ButtonPanelButtons.REEF_B);
-        // buttonPanel.button(ButtonPanelButtons.REEF_C);
-        // buttonPanel.button(ButtonPanelButtons.REEF_D);
-        // buttonPanel.button(ButtonPanelButtons.REEF_E);
-        // buttonPanel.button(ButtonPanelButtons.REEF_F);
-        // buttonPanel.button(ButtonPanelButtons.REEF_G);
-        // buttonPanel.button(ButtonPanelButtons.REEF_H);
-        // buttonPanel.button(ButtonPanelButtons.REEF_I);
-        // buttonPanel.button(ButtonPanelButtons.REEF_J);
-        // buttonPanel.button(ButtonPanelButtons.REEF_K);
+        // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
+        commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
     }
@@ -230,7 +194,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
 //        return Autos.ThreePiece.Blue.threePieceBlueBL4();
-        return Autos.ThreePiece.Blue.threePieceBlueBL4();
+        return Autos.TwoPiece.Blue.twoPieceBlueGBottomL4();
         //return new PathPlannerAuto("test");
     }
 
@@ -284,8 +248,8 @@ public class RobotContainer {
 
 
     public static boolean aligned() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .05
-                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .04
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .09
+                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .07
                 && Math.abs(commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond) <= .01
                 && Math.abs(commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond) <= .01;
 

@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue Start to G"
+            "pathName": "2 Piece Blue Start to K"
           }
         },
         {
@@ -17,13 +17,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "alignL"
+                  "name": "ALIGNL"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "L3"
+                  "name": "L4"
                 }
               }
             ]
@@ -32,7 +32,7 @@
         {
           "type": "named",
           "data": {
-            "name": "dunk"
+            "name": "DUNK"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue G to HPB"
+            "pathName": "2 Piece Blue K to HPT"
           }
         },
         {
@@ -60,7 +60,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "moveIntake"
+                  "name": "DRIVE"
                 }
               }
             ]
@@ -69,7 +69,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue HPB to C"
+            "pathName": "2 Piece Blue HPT to L"
           }
         },
         {
@@ -79,13 +79,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "alignL"
+                  "name": "ALIGNR"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "L3"
+                  "name": "L4"
                 }
               }
             ]
@@ -94,13 +94,19 @@
         {
           "type": "named",
           "data": {
-            "name": "dunk"
+            "name": "DUNK"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue L to HPT"
           }
         }
       ]

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 10.028571428571428,
-        "y": 5.274840561224489
+        "x": 9.991262755102042,
+        "y": 3.887
       },
       "prevControl": null,
       "nextControl": {
-        "x": 11.155293367346939,
-        "y": 5.506154336734694
+        "x": 10.267315758735883,
+        "y": 3.8898961114877215
       },
       "isLocked": false,
-      "linkedName": "Start2 Top Red"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 13.602742346938776,
-        "y": 5.274840561224489
+        "x": 11.722385204081634,
+        "y": 3.887
       },
       "prevControl": {
-        "x": 12.923724489795921,
-        "y": 5.864317602040816
+        "x": 10.749557083373011,
+        "y": 3.885872166445793
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "D Red"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "ARML4",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.7004716981132062,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -54,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -120.30268072048808
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "2 Piece Red Paths",

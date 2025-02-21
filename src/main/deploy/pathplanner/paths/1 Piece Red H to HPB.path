@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Down",
+      "name": "HP",
       "waypointRelativePos": 0.03419811320754717,
       "endWaypointRelativePos": null,
       "command": {
@@ -47,6 +47,17 @@
               }
             }
           ]
+        }
+      }
+    },
+    {
+      "name": "INTAKE",
+      "waypointRelativePos": 0.9135802469135802,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKE"
         }
       }
     }

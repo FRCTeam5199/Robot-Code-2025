@@ -32,7 +32,7 @@
         {
           "type": "named",
           "data": {
-            "name": "dunk"
+            "name": "DUNK"
           }
         },
         {
@@ -60,7 +60,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "moveIntake"
+                  "name": "DRIVE"
                 }
               }
             ]
@@ -94,13 +94,19 @@
         {
           "type": "named",
           "data": {
-            "name": "dunk"
+            "name": "DUNK"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Red L to HPB"
           }
         }
       ]

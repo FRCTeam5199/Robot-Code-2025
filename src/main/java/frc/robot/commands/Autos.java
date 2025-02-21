@@ -33,83 +33,62 @@ public final class Autos {
     public static class OnePiece {
 
         public static class Blue {
-            public static Command onePieceBlueHPTL1() {
-                return new PathPlannerAuto("1 Piece Blue HPT L1");
-            }
-
-            public static Command onePieceBlueHPBL1() {
-                return new PathPlannerAuto("1 Piece Blue HPB L1");
+            public static Command onePieceBlueHPBL4() {
+                return new PathPlannerAuto("1 Piece Blue HPB L4");
             }
 
             public static Command onePieceBlueHPTL4() {
                 return new PathPlannerAuto("1 Piece Blue HPT L4");
             }
-
-            public static Command onePieceBlueHPBL4() {
-                return new PathPlannerAuto("1 Piece Blue HPB L4");
-            }
         }
 
         public static class Red {
-            public static Command onePieceRedHPTL1() {
-                return new PathPlannerAuto("1 Piece Red HPT L1");
-            }
-
-            public static Command onePieceRedHPBL1() {
-                return new PathPlannerAuto("1 Piece Red HPB L1");
+            public static Command onePieceRedHPBL4() {
+                return new PathPlannerAuto("1 Piece Red HPB L4");
             }
 
             public static Command onePieceRedHPTL4() {
                 return new PathPlannerAuto("1 Piece Red HPT L4");
             }
 
-            public static Command onePieceRedHPBL4() {
-                return new PathPlannerAuto("1 Piece Red HPB L4");
-            }
         }
     }
 
 
     public static class TwoPiece {
         public static class Blue {
-            public static Command twoPieceBlueBL1() {
-                return new PathPlannerAuto("2 Piece Blue Bottom L1");
+            public static Command twoPieceBlueGBottomL4() {
+                return new PathPlannerAuto("2 Piece Blue G Bottom L4");
             }
 
-            public static Command twoPieceBlueTL1() {
-                return new PathPlannerAuto("2 Piece Blue Top L1");
+            public static Command twoPieceBlueHTopL4() {
+                return new PathPlannerAuto("2 Piece Blue H Top L4");
             }
 
-            public static Command twoPieceBlueBL4() {
-                return new PathPlannerAuto("2 Piece Blue Bottom L4");
+            public static Command twoPieceBlueDBottomL4() {
+                return new PathPlannerAuto("2 Piece Blue D Bottom L4");
             }
 
-            public static Command twoPieceBlueTL4() {
-                return new PathPlannerAuto("2 Piece Blue Top L4");
+            public static Command twoPieceBlueKTopL4() {
+                return new PathPlannerAuto("2 Piece Blue K Top L4");
             }
-
-            public static Command twoPieceBlueFrontCL4() {
-                return new PathPlannerAuto("2 Piece Blue Front C L4");
-            }
-
-
         }
 
         public static class Red {
-            public static Command twoPieceRedBL1() {
-                return new PathPlannerAuto("2 Piece Red Bottom L1");
+            public static Command twoPieceRedHBottomL4() {
+                return new PathPlannerAuto("2 Piece Red H Bottom L4");
             }
 
-            public static Command twoPieceRedTL1() {
-                return new PathPlannerAuto("2 Piece Red Top L1");
+            public static Command twoPieceRedGTopL4() {
+                return new PathPlannerAuto("2 Piece Red G Top L4");
             }
 
-            public static Command twoPieceRedBL4() {
-                return new PathPlannerAuto("2 Piece Red Bottom L4");
+            public static Command twoPieceRedKBottomL4() {
+                return new PathPlannerAuto("2 Piece K Red Bottom L4");
             }
 
-            public static Command twoPieceRedTL4() {
-                return new PathPlannerAuto("2 Piece Red Top L4");
+            public static Command twoPieceRedDTopL4() {
+                return new PathPlannerAuto("2 Piece D Red Top L4");
             }
         }
     }
