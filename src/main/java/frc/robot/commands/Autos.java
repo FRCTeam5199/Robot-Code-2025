@@ -42,6 +42,11 @@ public final class Autos {
                 return new PathPlannerAuto("1 Piece Blue HPB L4");
             }
 
+            public static Command onePieceBlueHPBL4NoAlign() {
+                return new PathPlannerAuto("1 Piece Blue HPB L4 NO ALIGN");
+            }
+
+
             public static Command onePieceBlueHPTL4() {
                 return new PathPlannerAuto("1 Piece Blue HPT L4");
             }
@@ -181,6 +186,13 @@ public final class Autos {
             }
         }
 
+
+    }
+
+    public static class Test {
+        public static Command testBlue() {
+            return new PathPlannerAuto("test");
+        }
     }
 
 

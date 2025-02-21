@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -153,7 +154,7 @@ public class RobotContainer {
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.score())
                 .onFalse(new VelocityCommand(intakeSubsystem, 0)
-                        .alongWith(ScoreCommands.intakeHP()));
+                        .alongWith(ScoreCommands.elevatorHP()));
         commandXboxController.rightTrigger().onTrue(new VelocityCommand(intakeSubsystem, 75)
                         .alongWith(ScoreCommands.intakeHP()))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0)
@@ -175,9 +176,9 @@ public class RobotContainer {
         commandXboxController.rightBumper().onTrue(new VelocityCommand(intakeSubsystem, -75))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
-        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-//        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-        commandXboxController.povDown().onTrue(ScoreCommands.dunk());
+        Trigger trigger = commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        //commandXboxController.povDown().onTrue(ScoreCommands.dunk());
 
         commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
         // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
@@ -194,7 +195,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
 //        return Autos.ThreePiece.Blue.threePieceBlueBL4();
-        return Autos.TwoPiece.Blue.twoPieceBlueGBottomL4();
+        return Autos.OnePiece.Blue.onePieceBlueHPBL4NoAlign();
         //return new PathPlannerAuto("test");
     }
 
@@ -248,8 +249,8 @@ public class RobotContainer {
 
 
     public static boolean aligned() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .09
-                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .07
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .05
+                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .05
                 && Math.abs(commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond) <= .01
                 && Math.abs(commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond) <= .01;
 

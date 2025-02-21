@@ -16,34 +16,25 @@
     },
     {
       "anchor": {
-        "x": 1.367,
-        "y": 0.71
+        "x": 1.1867827868852459,
+        "y": 1.1299692622950817
       },
       "prevControl": {
-        "x": 3.8592193877550907,
-        "y": 1.3293239795918335
+        "x": 3.6790021746403365,
+        "y": 1.7492932418869156
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "HP Blue Bottom"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [
+  "rotationTargets": [
     {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8615800135043873,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 1.75,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
+      "waypointRelativePos": 0.6805922792173433,
+      "rotationDegrees": 58.25317208346221
     }
   ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
@@ -56,21 +47,10 @@
           "name": "HP"
         }
       }
-    },
-    {
-      "name": "INTAKE",
-      "waypointRelativePos": 0.8608736942070272,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKE"
-        }
-      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 2.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -78,7 +58,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": 54.144771653784304
   },
   "reversed": false,
@@ -87,5 +67,5 @@
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

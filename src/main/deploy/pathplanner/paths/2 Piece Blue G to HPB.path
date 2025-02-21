@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.87,
+        "x": 5.814036885245901,
         "y": 3.8631659836065575
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.1624431818181815,
+        "x": 6.106480067064083,
         "y": 1.7564630681818185
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "G Blue"
     },
     {
       "anchor": {
-        "x": 1.367,
-        "y": 0.71
+        "x": 1.1867827868852459,
+        "y": 1.1299692622950817
       },
       "prevControl": {
-        "x": 3.2730122950819673,
-        "y": 0.8820553278688507
+        "x": 3.092795081967213,
+        "y": 1.3020245901639325
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "HP Blue Bottom"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 57.859341724411
+    }
+  ],
   "constraintZones": [
     {
       "name": "extra slow (end)",
@@ -54,17 +59,6 @@
         "type": "named",
         "data": {
           "name": "HP"
-        }
-      }
-    },
-    {
-      "name": "INTAKE",
-      "waypointRelativePos": 0.7466456195737952,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKE"
         }
       }
     }
