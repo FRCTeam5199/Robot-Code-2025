@@ -144,6 +144,10 @@ public class AprilTagSubsystem extends SubsystemBase {
         return curStdDevs;
     }
 
+    public void setStdDevs(Matrix<N3, N1> stdDevs) {
+        curStdDevs = stdDevs;
+    }
+
     public int updateClosestTagID() {
         PhotonTrackedTarget bestTarget = null;
         if (!results.isEmpty()) {

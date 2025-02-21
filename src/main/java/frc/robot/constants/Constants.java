@@ -299,7 +299,7 @@ public final class Constants {
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.4, 0.4, 10.0);
 
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(9.0, 9.0, 30.0);
-        public static final Matrix<N3, N1> autonStdDevs = VecBuilder.fill(999.0, 999.0, 999.0);
+        public static final Matrix<N3, N1> kAutonStdDevs = VecBuilder.fill(999.0, 999.0, 999.0);
 
         public static final String LIMELIGHT_NAME = null;
 
