@@ -21,6 +21,7 @@ public class ScoreCommands {
     private static ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     private static WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+    private static ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
 
     private static AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
@@ -477,6 +478,23 @@ public class ScoreCommands {
                 RobotContainer.commandSwerveDrivetrain);
     }
 
+    public static Command drop() {
+        return new FunctionalCommand(
+            () -> {
+                timer.reset();
+            },
+            () -> climberSubsystem.drop(),
+            (bool) -> climberSubsystem.stopDrop(),
+            () -> {
+                timer.start();
+                if (timer.hasElapsed(0.45)) {
+                    timer.stop();
+                    return true;
+                }
+                return false;
+            },
+            climberSubsystem);
+    }
     public static Command autoMoveForwardTop() {
 
         return new FunctionalCommand(

@@ -106,11 +106,13 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
         NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
+        NamedCommands.registerCommand("DROP", ScoreCommands.drop());
         NamedCommands.registerCommand("HP", ScoreCommands.intakeHP());
         NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
         NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
         NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
         NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
+        NamedCommands.registerCommand("INTAKE_HP", ScoreCommands.intakeHP());
         NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
         NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
         NamedCommands.registerCommand("ARML4", ScoreCommands.armL4());
@@ -125,9 +127,10 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        //    commandXboxController.b().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
-        //            .andThen(new InstantCommand(() -> System.out.println("Elevator Centimeters: " + elevatorSubsystem.getMechM())))
-        //            .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wristSubsystem.getDegrees()))));
+           commandXboxController.b().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
+                   .andThen(new InstantCommand(() -> System.out.println("Elevator Centimeters: " + elevatorSubsystem.getMechM())))
+                   .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wristSubsystem.getDegrees())))
+                   .andThen(new InstantCommand(() -> System.out.println("Climb Position: " + climberSubsystem.getDegrees()))));
 
         commandSwerveDrivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 commandSwerveDrivetrain.applyRequest(() -> drive.withVelocityX(-commandXboxController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
@@ -145,9 +148,9 @@ public class RobotContainer {
 
 //        commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
 //        commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
-
-        commandXboxController.a().onTrue(new InstantCommand(() -> RobotContainer.setState(State.L1)));
-        commandXboxController.b().onTrue(ScoreCommands.armL2());
+        commandXboxController.a().onTrue(ScoreCommands.drop());
+        // commandXboxController.a().onTrue(new InstantCommand(() -> RobotContainer.setState(State.L1)));
+        // commandXboxController.b().onTrue(ScoreCommands.armL2());
         commandXboxController.x().onTrue(ScoreCommands.armL3());
         commandXboxController.y().onTrue(ScoreCommands.armL4());
 //        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
@@ -196,7 +199,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
 //        return Autos.ThreePiece.Blue.threePieceBlueBL4();
-        return Autos.OnePiece.Blue.onePieceBlueHPTL4();
+        return Autos.OnePiece.Blue.driveBy();
         //return new PathPlannerAuto("test");
     }
 

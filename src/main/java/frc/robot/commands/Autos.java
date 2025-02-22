@@ -50,6 +50,10 @@ public final class Autos {
             public static Command onePieceBlueHPTL4() {
                 return new PathPlannerAuto("1 Piece Blue HPT L4");
             }
+
+            public static Command driveBy() {
+                return new PathPlannerAuto("Drive By");
+            }
         }
 
         public static class Red {

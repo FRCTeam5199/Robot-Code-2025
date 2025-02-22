@@ -42,4 +42,14 @@ public class ClimberSubsystem extends TemplateSubsystem {
         }
         return climber;
     }
+
+    public void drop() {
+        setPercent(0.45);
+    }
+    public void stopDrop() {
+        setPercent(0);
+    }
+    public void retract() {
+        setPercent(-0.3);
+    }
 }
