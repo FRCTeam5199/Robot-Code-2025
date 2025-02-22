@@ -73,21 +73,14 @@ public class ScoreCommands {
         // ).alongWith(new VelocityCommand(intakeSubsystem, 50));
     }
 
+    //Also zero's the elevator
     public static Command elevatorHP() {
-        return new ConditionalCommand(
-                new SequentialCommandGroup( //Going down
-                        new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.038, false),
-                                new PositionCommand(wristSubsystem, 0.004)
-                        )
-                ),
-                new SequentialCommandGroup( //Going up
-                        new PositionCommand(elevatorSubsystem, 0.038, true),
-                        new PositionCommand(wristSubsystem, 0.004)
-                ),
-                () -> elevatorSubsystem.getMechM() > .15
+        return new ParallelCommandGroup(
+                new PositionCommand(elevatorSubsystem, 0, false)
+                        .until(() -> elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .05),
+                new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
+                new PositionCommand(wristSubsystem, 0.0)
         );
-        // ).alongWith(new VelocityCommand(intakeSubsystem, 50));
     }
 
     public static Command intake() {
@@ -98,7 +91,7 @@ public class ScoreCommands {
                 () -> intakeSubsystem.intake(),
                 (interrupted) -> intakeSubsystem.stopIntake(),
                 () -> {
-                    if (intakeSubsystem.getStatorCurrent() > 45) {
+                    if (intakeSubsystem.isIntooken()) {
                         timer.start();
                         if (timer.hasElapsed(.2)) {
                             timer.stop();
@@ -120,7 +113,7 @@ public class ScoreCommands {
                 (bool) -> intakeSubsystem.stopIntake(),
                 () -> {
                     timer.start();
-                    if (timer.hasElapsed(.3)) {
+                    if (timer.hasElapsed(.15)) {
                         timer.stop();
                         return true;
 
@@ -449,7 +442,7 @@ public class ScoreCommands {
                 RobotContainer.commandSwerveDrivetrain);
     }
 
-    public static Command autoMoveForward() {
+    public static Command autoMoveForwardBottom() {
 
         return new FunctionalCommand(
                 () -> {
@@ -471,9 +464,44 @@ public class ScoreCommands {
                     System.out.println("ending");
                 },
                 () -> {
-                    if (intakeSubsystem.getStatorCurrent() > 25) {
+                    if (intakeSubsystem.isIntooken()) {
                         timer.start();
-                        if (timer.hasElapsed(.1)) {
+                        if (timer.hasElapsed(.2)) {
+                            timer.stop();
+                            return true;
+                        }
+                        return false;
+                    }
+                    return false;
+                },
+                RobotContainer.commandSwerveDrivetrain);
+    }
+
+    public static Command autoMoveForwardTop() {
+
+        return new FunctionalCommand(
+                () -> {
+                    System.out.println("Forward Start");
+                },
+                () -> {
+                    RobotContainer.commandSwerveDrivetrain.setControl(
+                            drive.withVelocityX(-0.2)
+                                    .withVelocityY(0.2));
+
+                    System.out.println("Going Forward");
+
+                },
+                (bool) -> {
+                    RobotContainer.commandSwerveDrivetrain.setControl(
+                            drive.withVelocityX(0)
+                                    .withVelocityY(0));
+
+                    System.out.println("ending");
+                },
+                () -> {
+                    if (intakeSubsystem.isIntooken()) {
+                        timer.start();
+                        if (timer.hasElapsed(.2)) {
                             timer.stop();
                             return true;
                         }

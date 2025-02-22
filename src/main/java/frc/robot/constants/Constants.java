@@ -296,7 +296,7 @@ public final class Constants {
         public static final Transform3d CAMERA_POSE =
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(7), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .441325;
-        public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.2, 0.2, 10.0);
+        public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.1, 0.1, 10.0); //.2, .2, 10
 
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(9.0, 9.0, 30.0);
         public static final Matrix<N3, N1> kAutonStdDevs = VecBuilder.fill(999.0, 999.0, 999.0);

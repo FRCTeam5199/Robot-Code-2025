@@ -73,12 +73,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "L4"
                 }
               }

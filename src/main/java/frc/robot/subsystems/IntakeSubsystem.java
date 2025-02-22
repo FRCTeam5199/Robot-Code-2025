@@ -56,4 +56,9 @@ public class IntakeSubsystem extends TemplateSubsystem {
     public void outtake() {
         setPercent(-1);
     }
+
+    //Peak naming :fire:
+    public boolean isIntooken() {
+        return getStatorCurrent() > 50;
+    }
 }
