@@ -21,6 +21,7 @@ public class ScoreCommands {
     private static ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
     private static WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+    private static ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
 
     private static AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
@@ -411,6 +412,94 @@ public class ScoreCommands {
                     if (intakeSubsystem.getStatorCurrent() > 25) {
                         timer.start();
                         if (timer.hasElapsed(.1)) {
+                            timer.stop();
+                            return true;
+                        }
+                        return false;
+                    }
+                    return false;
+                },
+                RobotContainer.commandSwerveDrivetrain);
+    }
+
+    public static Command autoMoveForwardBottom() {
+
+        return new FunctionalCommand(
+                () -> {
+                    System.out.println("Forward Start");
+                },
+                () -> {
+                    RobotContainer.commandSwerveDrivetrain.setControl(
+                            drive.withVelocityX(-0.2)
+                                    .withVelocityY(-0.2));
+
+                    System.out.println("Going Forward");
+
+                },
+                (bool) -> {
+                    RobotContainer.commandSwerveDrivetrain.setControl(
+                            drive.withVelocityX(0)
+                                    .withVelocityY(0));
+
+                    System.out.println("ending");
+                },
+                () -> {
+                    if (intakeSubsystem.isIntooken()) {
+                        timer.start();
+                        if (timer.hasElapsed(.2)) {
+                            timer.stop();
+                            return true;
+                        }
+                        return false;
+                    }
+                    return false;
+                },
+                RobotContainer.commandSwerveDrivetrain);
+    }
+
+    public static Command drop() {
+        return new FunctionalCommand(
+                () -> {
+                    timer.reset();
+                },
+                () -> climberSubsystem.drop(),
+                (bool) -> climberSubsystem.stopDrop(),
+                () -> {
+                    timer.start();
+                    if (timer.hasElapsed(0.45)) {
+                        timer.stop();
+                        return true;
+                    }
+                    return false;
+                },
+                climberSubsystem);
+    }
+
+    public static Command autoMoveForwardTop() {
+
+        return new FunctionalCommand(
+                () -> {
+                    System.out.println("Forward Start");
+                },
+                () -> {
+                    RobotContainer.commandSwerveDrivetrain.setControl(
+                            drive.withVelocityX(-0.2)
+                                    .withVelocityY(0.2));
+
+                    System.out.println("Going Forward");
+
+                },
+                (bool) -> {
+                    RobotContainer.commandSwerveDrivetrain.setControl(
+                            drive.withVelocityX(0)
+                                    .withVelocityY(0));
+
+                    System.out.println("ending");
+                },
+                () -> {
+                    if (intakeSubsystem.isIntooken()) {
+                        timer.start();
+                        if (timer.hasElapsed(.2)) {
                             timer.stop();
                             return true;
                         }
