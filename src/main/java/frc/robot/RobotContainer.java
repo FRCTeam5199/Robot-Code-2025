@@ -91,9 +91,8 @@ public class RobotContainer {
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
-
     public static State state = State.L1;
-
+    //    private static final Command auto = Autos.OnePiece.Blue.onePieceBlueHPBL4();
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
     // private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
@@ -129,6 +128,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("DRIVEBOTTOM", ScoreCommands.autoMoveForwardBottom());
         NamedCommands.registerCommand("DRIVETOP", ScoreCommands.autoMoveForwardTop());
         NamedCommands.registerCommand("DROP", ScoreCommands.drop());
+
+        Autos.initializeAutos();
 
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
@@ -209,8 +210,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-//        return Autos.OnePiece.Blue.onePieceBlueHPBL4();
-        return new PathPlannerAuto("test");
+        return Autos.OnePiece.Blue.onePieceBlueHPBL4();
     }
 
     public static void periodic() {
@@ -242,6 +242,9 @@ public class RobotContainer {
 //        System.out.println("aligned: " + aligned());
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
+
+        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
+        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
     }
 
 

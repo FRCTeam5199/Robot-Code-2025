@@ -19,19 +19,18 @@ public final class Autos {
     PathConstraints pathConstraints = new PathConstraints(
             4, 2, 2, 2);
 
-    private static final PathPlannerAuto onePieceBlueHPBL4 = new PathPlannerAuto("1 Piece Blue HPB L4");
-    private static final PathPlannerAuto onePieceBlueHPTL4 = new PathPlannerAuto("1 Piece Blue HPT L4");
-    private static final PathPlannerAuto onePieceRedHPBL4 = new PathPlannerAuto("1 Piece Red HPB L4");
-    private static final PathPlannerAuto onePieceRedHPTL4 = new PathPlannerAuto("1 Piece Red HPT L4");
-
-    private static final PathPlannerAuto twoPieceBlueGHPBL4 = new PathPlannerAuto("2 Piece Blue G Bottom L4");
-    private static final PathPlannerAuto twoPieceBlueHHPTL4 = new PathPlannerAuto("2 Piece Blue H Top L4");
-    private static final PathPlannerAuto twoPieceBlueDHPBL4 = new PathPlannerAuto("2 Piece Blue D Bottom L4");
-    private static final PathPlannerAuto twoPieceBlueKHPTL4 = new PathPlannerAuto("2 Piece Blue K Top L4");
-    private static final PathPlannerAuto twoPieceRedHHPBL4 = new PathPlannerAuto("2 Piece Red H Bottom L4");
-    private static final PathPlannerAuto twoPieceRedGHPTL4 = new PathPlannerAuto("2 Piece Red G Top L4");
-    private static final PathPlannerAuto twoPieceRedKHPBL4 = new PathPlannerAuto("2 Piece K Red Bottom L4");
-    private static final PathPlannerAuto twoPieceRedDHPTL4 = new PathPlannerAuto("2 Piece D Red Top L4");
+    private static PathPlannerAuto onePieceBlueHPBL4;
+    private static PathPlannerAuto onePieceBlueHPTL4;
+    private static PathPlannerAuto onePieceRedHPBL4;
+    private static PathPlannerAuto onePieceRedHPTL4;
+    private static PathPlannerAuto twoPieceBlueGHPBL4;
+    private static PathPlannerAuto twoPieceBlueHHPTL4;
+    private static PathPlannerAuto twoPieceBlueDHPBL4;
+    private static PathPlannerAuto twoPieceBlueKHPTL4;
+    private static PathPlannerAuto twoPieceRedHHPBL4;
+    private static PathPlannerAuto twoPieceRedGHPTL4;
+    private static PathPlannerAuto twoPieceRedKHPBL4;
+    private static PathPlannerAuto twoPieceRedDHPTL4;
 
     /**
      * Gets or creates the AutoChooser (Singleton Method)
@@ -43,6 +42,22 @@ public final class Autos {
         }
 
         return autoChooser;
+    }
+
+    public static void initializeAutos() {
+        onePieceBlueHPBL4 = new PathPlannerAuto("1 Piece Blue HPB L4");
+        onePieceBlueHPTL4 = new PathPlannerAuto("1 Piece Blue HPT L4");
+        onePieceRedHPBL4 = new PathPlannerAuto("1 Piece Red HPB L4");
+        onePieceRedHPTL4 = new PathPlannerAuto("1 Piece Red HPT L4");
+        
+        twoPieceBlueGHPBL4 = new PathPlannerAuto("2 Piece Blue G Bottom L4");
+        twoPieceBlueHHPTL4 = new PathPlannerAuto("2 Piece Blue H Top L4");
+        twoPieceBlueDHPBL4 = new PathPlannerAuto("2 Piece Blue D Bottom L4");
+        twoPieceBlueKHPTL4 = new PathPlannerAuto("2 Piece Blue K Top L4");
+        twoPieceRedHHPBL4 = new PathPlannerAuto("2 Piece Red H Bottom L4");
+        twoPieceRedGHPTL4 = new PathPlannerAuto("2 Piece Red G Top L4");
+        twoPieceRedKHPBL4 = new PathPlannerAuto("2 Piece K Red Bottom L4");
+        twoPieceRedDHPTL4 = new PathPlannerAuto("2 Piece D Red Top L4");
     }
 
     public static class OnePiece {

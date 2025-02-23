@@ -39,7 +39,7 @@ public class ScoreCommands {
                         new ParallelCommandGroup(
                                 new PositionCommand(wristSubsystem, 0),
                                 new PositionCommand(elevatorSubsystem, 0, false)
-                                        .until(() -> elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .1)
+                                        .until(() -> elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .05)
                         ),
                         new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                         armStable()
@@ -194,7 +194,7 @@ public class ScoreCommands {
     public static Command scoreL4() {
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 88),
-                new PositionCommand(elevatorSubsystem, 1.003, true),
+                new PositionCommand(elevatorSubsystem, 1.002, true),
                 new PositionCommand(wristSubsystem, 164)
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
@@ -403,8 +403,8 @@ public class ScoreCommands {
                 () -> {
                 },
                 () -> RobotContainer.commandSwerveDrivetrain.setControl(
-                        drive.withVelocityX(-0.5)
-                                .withVelocityY(-0.5)),
+                        drive.withVelocityX(-0.25)
+                                .withVelocityY(-0.25)),
                 (interrupted) -> RobotContainer.commandSwerveDrivetrain.setControl(
                         drive.withVelocityX(0)
                                 .withVelocityY(0)),
