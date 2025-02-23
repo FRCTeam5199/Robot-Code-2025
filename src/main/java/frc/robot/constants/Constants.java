@@ -57,8 +57,8 @@ public final class Constants {
         public static final boolean INVERT = true;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
         public static final boolean ELEVATOR_BRAKE = true;
-        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 120;
-        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 120;
+        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 80;
+        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 80;
         public static final double DRUM_CIRCUMFERENCE = .119694706;
 
         public static final double ARM_MM_CV = 80;

@@ -68,7 +68,7 @@ public class ArmSubsystem extends TemplateSubsystem {
             //   setVoltage((ArmConstants.ARM_FF.getkG()) / Math.cos(Units.rotationsToRadians(getEncoderRot())));
 
         }
-        if (getSupplyCurrent() > 5.5) currentSpike++;
+        if (getSupplyCurrent() > 3.5) currentSpike++;
         else noCurrentSpike++;
 
         if (noCurrentSpike >= 3) {

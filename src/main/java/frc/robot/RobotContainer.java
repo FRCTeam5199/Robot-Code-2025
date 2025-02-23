@@ -113,6 +113,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
         NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
+        NamedCommands.registerCommand("DROP", ScoreCommands.drop());
         NamedCommands.registerCommand("HP", ScoreCommands.intakeHP());
         NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
         NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
@@ -125,8 +126,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("ALIGNL", ScoreCommands.autoAlignLAuton());
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.autoAlignRAuton());
         NamedCommands.registerCommand("DRIVE", ScoreCommands.autoMoveForward());
-
-        AutoBuilder.buildAuto("1 Piece Blue HPB L4");
+        NamedCommands.registerCommand("DRIVEBOTTOM", ScoreCommands.autoMoveForwardBottom());
+        NamedCommands.registerCommand("DRIVETOP", ScoreCommands.autoMoveForwardTop());
+        NamedCommands.registerCommand("DROP", ScoreCommands.drop());
 
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
@@ -205,7 +207,6 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
 
-
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
 //        return Autos.OnePiece.Blue.onePieceBlueHPBL4();
@@ -242,6 +243,7 @@ public class RobotContainer {
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
     }
+
 
     public void toggleAutoAlignOffsetLeft() {
         if (autoAlignYOffset > 0) {
