@@ -94,12 +94,11 @@ public class ScoreCommands {
                 new PositionCommand(armSubsystem, 0),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 0, 50, 100),
-                        new PositionCommand(wristSubsystem, 25),
-                        new InstantCommand(() -> intakeSubsystem.setPercent(.5))
+                        new PositionCommand(wristSubsystem, 50)
                 )
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1)));
     }
-
+    
     public static Command scoreL2() {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down

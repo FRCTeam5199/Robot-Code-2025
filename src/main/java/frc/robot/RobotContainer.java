@@ -140,7 +140,8 @@ public class RobotContainer {
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
         // reset the field-centric heading on menu button press
-        commandXboxController.button(8).onTrue(commandSwerveDrivetrain
+        // Window button
+        commandXboxController.button(7).onTrue(commandSwerveDrivetrain
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
                 .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0))));
 
@@ -166,21 +167,18 @@ public class RobotContainer {
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees())))));
 
-
-
 //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
         //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
-//                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));
+//                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));/
 
-
-        commandXboxController.button(7).onTrue(ScoreCommands.zeroArm())
+        // commandXboxController.`.onTrue(ScoreCommands.zeroArm())
                 .onFalse(new VelocityCommand(armSubsystem, 0));
         commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
         commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
 
-        commandXboxController.a().onTrue(ScoreCommands.intakeHP());
-        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
-        commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeL2(), ScoreCommands.scoreL3(), () -> algaeControls));
+        commandXboxController.a().onTrue(ScoreCommands.scoreL1());
+        commandXboxController.b().onTrue(ScoreCommands.scoreL2());
+        commandXboxController.x().onTrue(ScoreCommands.scoreL3());
         commandXboxController.y().onTrue(ScoreCommands.scoreL4());
 
         /*
@@ -208,7 +206,7 @@ public class RobotContainer {
 //        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandXboxController.povDown().onTrue(ScoreCommands.dunk());
 
-        commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
+        commandXboxController.povRight().onTrue(ScoreCommands.intakeHP());
         // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
         commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
 
