@@ -29,7 +29,7 @@ public class AprilTagSubsystem extends SubsystemBase {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimator;
     private Matrix<N3, N1> curStdDevs;
-    private AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    private AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     private double closestTagX = 0, closestTagY = 0, closestTagYaw = 0;
 
     private boolean isAutoAligning = false;
