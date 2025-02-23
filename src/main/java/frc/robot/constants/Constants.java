@@ -50,8 +50,8 @@ public final class Constants {
         public static final PID ELEVATOR_PID = new PID(0, 0, 0);
         public static final FeedForward ELEVATOR_FF = new FeedForward(.33, .17, .1333333333333333);
         public static final double ELEVATOR_MIN = 0;
-        public static final double ELEVATOR_MAX = 1.007;
-        public static final double ELEVATOR_LOWER_TOLERANCE = 0.01;
+        public static final double ELEVATOR_MAX = 1.001;
+        public static final double ELEVATOR_LOWER_TOLERANCE = 0.03;
         public static final double ELEVATOR_UPPER_TOLERANCE = 0.01;
         public static final double[][] ELEVATOR_GEARING = new double[][]{{3, 1}};
         public static final boolean INVERT = true;
@@ -298,8 +298,8 @@ public final class Constants {
         public static final double CAMERA_TO_FRONT_DISTANCE = .441325;
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.2, 0.2, 999.0);
 
-        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(9.0, 9.0, 999.0);
-        public static final Matrix<N3, N1> kAutonStdDevs = VecBuilder.fill(999.0, 999.0, 999.0);
+        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.2, 0.2, 999.0);
+        public static final Matrix<N3, N1> kAutonStdDevs = VecBuilder.fill(0.2, 0.2, 999.0);
 
         public static final String LIMELIGHT_NAME = null;
     }

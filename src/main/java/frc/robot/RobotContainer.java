@@ -60,12 +60,12 @@ public class RobotContainer {
     private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(7, 0, .15, new TrapezoidProfile.Constraints(100, 200));
 
     private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(3, 0, .05, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(9, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(8, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
     private static final ProfiledPIDController drivePIDControllerYVeryClose = new ProfiledPIDController(11, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
 
     public static final PIDController turnPIDController = new PIDController(0.14, 0.0, 0.0);
 
-    public static double xVelocity = -0.01;
+    public static double xVelocity = 0.01;
     public static double yVelocity = 0;
 
     public static double autoAlignXOffset = 0.0;
@@ -170,7 +170,7 @@ public class RobotContainer {
         commandXboxController.rightTrigger().onTrue(new VelocityCommand(intakeSubsystem, 75)
                         .alongWith(ScoreCommands.intakeHP()))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0)
-                        .alongWith(ScoreCommands.stable()));
+                        .alongWith(ScoreCommands.intakeStable()));
 
 
         commandXboxController.leftBumper().whileTrue(new SequentialCommandGroup(
@@ -243,8 +243,8 @@ public class RobotContainer {
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
 
-        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
-        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
+//        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
+//        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
     }
 
 
@@ -266,10 +266,8 @@ public class RobotContainer {
 
 
     public static boolean aligned() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .04
-                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .04
-                && Math.abs(commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond) <= .01
-                && Math.abs(commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond) <= .01;
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .01
+                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .02;
 
     }
 

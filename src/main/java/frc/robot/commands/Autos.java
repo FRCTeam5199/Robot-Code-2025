@@ -16,8 +16,6 @@ import frc.robot.UserInterface;
 public final class Autos {
     private SendableChooser<Command> autoChooser;
     private static Autos autos;
-    PathConstraints pathConstraints = new PathConstraints(
-            4, 2, 2, 2);
 
     private static PathPlannerAuto onePieceBlueHPBL4;
     private static PathPlannerAuto onePieceBlueHPTL4;
@@ -49,7 +47,7 @@ public final class Autos {
         onePieceBlueHPTL4 = new PathPlannerAuto("1 Piece Blue HPT L4");
         onePieceRedHPBL4 = new PathPlannerAuto("1 Piece Red HPB L4");
         onePieceRedHPTL4 = new PathPlannerAuto("1 Piece Red HPT L4");
-        
+
         twoPieceBlueGHPBL4 = new PathPlannerAuto("2 Piece Blue G Bottom L4");
         twoPieceBlueHHPTL4 = new PathPlannerAuto("2 Piece Blue H Top L4");
         twoPieceBlueDHPBL4 = new PathPlannerAuto("2 Piece Blue D Bottom L4");
