@@ -55,6 +55,14 @@ public class ScoreCommands {
         );
     }
 
+    public static Command intakeStable() {
+        return new ParallelCommandGroup(
+                new PositionCommand(armSubsystem, 56.56),
+                new PositionCommand(elevatorSubsystem, 0, false),
+                new PositionCommand(wristSubsystem, 0)
+        );
+    }
+
     public static Command stableWithArm() {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Won't clip elevator
@@ -86,8 +94,8 @@ public class ScoreCommands {
                         ),
                         new PositionCommand(armSubsystem, 56.56)
                 ),
-                new SequentialCommandGroup( //Going up
-                        new PositionCommand(armSubsystem, 56.56), //76,    .1
+                new ParallelCommandGroup( //Going up
+                        new PositionCommand(armSubsystem, 56.56),
                         new PositionCommand(elevatorSubsystem, 0.038, true),
                         new PositionCommand(wristSubsystem, 0.004)
                 ),
@@ -194,7 +202,7 @@ public class ScoreCommands {
     public static Command scoreL4() {
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 88),
-                new PositionCommand(elevatorSubsystem, 1.002, true),
+                new PositionCommand(elevatorSubsystem, 1.001, true),
                 new PositionCommand(wristSubsystem, 164)
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
@@ -430,8 +438,8 @@ public class ScoreCommands {
                 },
                 () -> {
                     RobotContainer.commandSwerveDrivetrain.setControl(
-                            drive.withVelocityX(-0.2)
-                                    .withVelocityY(-0.2));
+                            drive.withVelocityX(-0.5)
+                                    .withVelocityY(-0.5));
 
                     System.out.println("Going Forward");
 
@@ -483,8 +491,8 @@ public class ScoreCommands {
                 },
                 () -> {
                     RobotContainer.commandSwerveDrivetrain.setControl(
-                            drive.withVelocityX(-0.2)
-                                    .withVelocityY(0.2));
+                            drive.withVelocityX(-0.5)
+                                    .withVelocityY(0.5));
 
                     System.out.println("Going Forward");
 
