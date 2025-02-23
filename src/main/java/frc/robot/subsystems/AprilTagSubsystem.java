@@ -32,6 +32,8 @@ public class AprilTagSubsystem extends SubsystemBase {
     private AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
     private double closestTagX = 0, closestTagY = 0, closestTagYaw = 0;
 
+    private boolean isAutoAligning = false;
+
     public int getClosestTagID() {
         return closestTagID;
     }
@@ -78,10 +80,9 @@ public class AprilTagSubsystem extends SubsystemBase {
         for (var change : results) {
             visionEst = photonEstimator.update(change);
             updateEstimationStdDevs(visionEst, change.getTargets());
-
-
         }
-        if (visionEst.isPresent()) return new Pair<>(visionEst, visionEst.get().timestampSeconds);
+        if (visionEst.isPresent() && !isAutoAligning)
+            return new Pair<>(visionEst, visionEst.get().timestampSeconds);
         else return new Pair<>(Optional.empty(), 0.0);
     }
 
@@ -238,7 +239,6 @@ public class AprilTagSubsystem extends SubsystemBase {
 //
 //    }
 
-
     public double[] getClosestTagXYYaw() {
         if (!results.isEmpty()) {
             PhotonPipelineResult result = results.get(results.size() - 1);
@@ -275,8 +275,8 @@ public class AprilTagSubsystem extends SubsystemBase {
 
                 closestTagYaw = bestTarget.getYaw();
 
-          //      System.out.println("Id: " + bestTarget.getFiducialId()
-                 //       + " X: " + closestTagX + " Y: " + closestTagY);
+                System.out.println("Id: " + bestTarget.getFiducialId()
+                        + " X: " + closestTagX + " Y: " + closestTagY);
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};
@@ -288,5 +288,13 @@ public class AprilTagSubsystem extends SubsystemBase {
             aprilTagSubsystem = new AprilTagSubsystem();
         }
         return aprilTagSubsystem;
+    }
+
+    public boolean isAutoAligning() {
+        return isAutoAligning;
+    }
+
+    public void setAutoAligning(boolean autoAligning) {
+        isAutoAligning = autoAligning;
     }
 }

@@ -64,7 +64,6 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         UserInterface.update();
 
-        //this line
         estimatePose = aprilTagSubsystem.getEstimatedGlobalPose();
         if (estimatePose.getFirst().isPresent()) {
             Pose2d robotPose2d = estimatePose.getFirst().get().estimatedPose.toPose2d();
@@ -74,7 +73,6 @@ public class Robot extends TimedRobot {
             commandSwerveDrivetrain.addVisionMeasurement(modify, Utils.getCurrentTimeSeconds(),
                     aprilTagSubsystem.getEstimationStdDevs());
         }
-        //to this line
 
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
@@ -144,6 +142,15 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+//        estimatePose = aprilTagSubsystem.getEstimatedGlobalPose();
+//        if (estimatePose.getFirst().isPresent()) {
+//            Pose2d robotPose2d = estimatePose.getFirst().get().estimatedPose.toPose2d();
+//            Pose2d modify = new Pose2d(robotPose2d.getX(), robotPose2d.getY(),
+//                    commandSwerveDrivetrain.getPose().getRotation());
+//
+//            commandSwerveDrivetrain.addVisionMeasurement(modify, Utils.getCurrentTimeSeconds(),
+//                    aprilTagSubsystem.getEstimationStdDevs());
+//        }
     }
 
     @Override

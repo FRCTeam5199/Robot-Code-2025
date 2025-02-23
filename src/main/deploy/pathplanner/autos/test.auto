@@ -5,33 +5,28 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "armL3"
+            "pathName": "test"
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "alignL"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "dunk"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "OUTTAKE"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
           }
         }
       ]

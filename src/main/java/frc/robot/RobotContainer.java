@@ -7,8 +7,10 @@ package frc.robot;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,11 +21,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
+import frc.robot.controls.ButtonPanelButtons;
+import frc.robot.controls.CommandButtonPanel;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
@@ -40,6 +45,7 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
+    private final CommandButtonPanel commandButtonPanel = new CommandButtonPanel(1);
     public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05)
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
@@ -47,16 +53,16 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
 
-    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(4.5, 0, .1, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(8, 0.05, .15, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(4, 0, .1, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(7, 0, .15, new TrapezoidProfile.Constraints(100, 200));
 
     private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(3, 0, .05, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(5, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerYVeryClose = new ProfiledPIDController(7, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(9, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerYVeryClose = new ProfiledPIDController(11, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
 
     public static final PIDController turnPIDController = new PIDController(0.14, 0.0, 0.0);
 
-    public static double xVelocity = 0.03;
+    public static double xVelocity = -0.01;
     public static double yVelocity = 0;
 
     public static double autoAlignXOffset = 0.0;
@@ -118,6 +124,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.autoAlignRAuton());
         NamedCommands.registerCommand("DRIVE", ScoreCommands.autoMoveForward());
 
+        AutoBuilder.buildAuto("1 Piece Blue HPB L4");
+
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
     }
@@ -153,11 +161,11 @@ public class RobotContainer {
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.score())
                 .onFalse(new VelocityCommand(intakeSubsystem, 0)
-                        .alongWith(ScoreCommands.intakeHP()));
+                        .alongWith(ScoreCommands.stable()));
         commandXboxController.rightTrigger().onTrue(new VelocityCommand(intakeSubsystem, 75)
                         .alongWith(ScoreCommands.intakeHP()))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0)
-                        .alongWith(ScoreCommands.intakeHP()));
+                        .alongWith(ScoreCommands.stable()));
 
 
         commandXboxController.leftBumper().whileTrue(new SequentialCommandGroup(
@@ -172,12 +180,15 @@ public class RobotContainer {
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees())))));
-        commandXboxController.rightBumper().onTrue(new VelocityCommand(intakeSubsystem, -75))
+        commandXboxController.rightBumper().onTrue(ScoreCommands.dunk().andThen(new WaitCommand(0.1))
+                        .andThen(new VelocityCommand(intakeSubsystem, -75)))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
-        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-//        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-        commandXboxController.povDown().onTrue(ScoreCommands.dunk());
+        commandButtonPanel.button(ButtonPanelButtons.MOVE_CLIMB_INCREASE)
+                .onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        commandButtonPanel.button(ButtonPanelButtons.MOVE_CLIMB_DECREASE)
+                .onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+//        commandXboxController.povDown().onTrue(ScoreCommands.dunk());
 
         commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
         // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
@@ -191,15 +202,12 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
+
+
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-//        return Autos.ThreePiece.Blue.threePieceBlueBL4();
-<<<<<<< Updated upstream
-        return Autos.TwoPiece.Blue.twoPieceBlueGBottomL4();
-=======
-        return Autos.OnePiece.Blue.onePieceBlueHPBL4();
->>>>>>> Stashed changes
-        //return new PathPlannerAuto("test");
+//        return Autos.OnePiece.Blue.onePieceBlueHPBL4();
+        return new PathPlannerAuto("test");
     }
 
     public static void periodic() {
@@ -217,7 +225,7 @@ public class RobotContainer {
         TrapezoidProfile.State nextStateY = profileY.calculate(timer.get(), currentStateY, goalStateY);
 
         if ((Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) > .15
-                || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) > .075)) {
+                || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) > .1)) {
             xVelocity = drivePIDControllerX.calculate(currentStateX.position, nextStateX);
             yVelocity = drivePIDControllerY.calculate(currentStateY.position, nextStateY);
         } else if (Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) > .04) {
@@ -252,8 +260,8 @@ public class RobotContainer {
 
 
     public static boolean aligned() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .09
-                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .07
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .04
+                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .04
                 && Math.abs(commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond) <= .01
                 && Math.abs(commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond) <= .01;
 

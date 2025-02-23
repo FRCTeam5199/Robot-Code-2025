@@ -16,7 +16,22 @@ import frc.robot.UserInterface;
 public final class Autos {
     private SendableChooser<Command> autoChooser;
     private static Autos autos;
-    PathConstraints pathConstraints = new PathConstraints(4, 2, 2, 2);
+    PathConstraints pathConstraints = new PathConstraints(
+            4, 2, 2, 2);
+
+    private static final PathPlannerAuto onePieceBlueHPBL4 = new PathPlannerAuto("1 Piece Blue HPB L4");
+    private static final PathPlannerAuto onePieceBlueHPTL4 = new PathPlannerAuto("1 Piece Blue HPT L4");
+    private static final PathPlannerAuto onePieceRedHPBL4 = new PathPlannerAuto("1 Piece Red HPB L4");
+    private static final PathPlannerAuto onePieceRedHPTL4 = new PathPlannerAuto("1 Piece Red HPT L4");
+
+    private static final PathPlannerAuto twoPieceBlueGHPBL4 = new PathPlannerAuto("2 Piece Blue G Bottom L4");
+    private static final PathPlannerAuto twoPieceBlueHHPTL4 = new PathPlannerAuto("2 Piece Blue H Top L4");
+    private static final PathPlannerAuto twoPieceBlueDHPBL4 = new PathPlannerAuto("2 Piece Blue D Bottom L4");
+    private static final PathPlannerAuto twoPieceBlueKHPTL4 = new PathPlannerAuto("2 Piece Blue K Top L4");
+    private static final PathPlannerAuto twoPieceRedHHPBL4 = new PathPlannerAuto("2 Piece Red H Bottom L4");
+    private static final PathPlannerAuto twoPieceRedGHPTL4 = new PathPlannerAuto("2 Piece Red G Top L4");
+    private static final PathPlannerAuto twoPieceRedKHPBL4 = new PathPlannerAuto("2 Piece K Red Bottom L4");
+    private static final PathPlannerAuto twoPieceRedDHPTL4 = new PathPlannerAuto("2 Piece D Red Top L4");
 
     /**
      * Gets or creates the AutoChooser (Singleton Method)
@@ -34,21 +49,21 @@ public final class Autos {
 
         public static class Blue {
             public static Command onePieceBlueHPBL4() {
-                return new PathPlannerAuto("1 Piece Blue HPB L4");
+                return onePieceBlueHPBL4;
             }
 
             public static Command onePieceBlueHPTL4() {
-                return new PathPlannerAuto("1 Piece Blue HPT L4");
+                return onePieceBlueHPTL4;
             }
         }
 
         public static class Red {
             public static Command onePieceRedHPBL4() {
-                return new PathPlannerAuto("1 Piece Red HPB L4");
+                return onePieceRedHPBL4;
             }
 
             public static Command onePieceRedHPTL4() {
-                return new PathPlannerAuto("1 Piece Red HPT L4");
+                return onePieceRedHPTL4;
             }
 
         }
@@ -58,37 +73,37 @@ public final class Autos {
     public static class TwoPiece {
         public static class Blue {
             public static Command twoPieceBlueGBottomL4() {
-                return new PathPlannerAuto("2 Piece Blue G Bottom L4");
+                return twoPieceBlueGHPBL4;
             }
 
             public static Command twoPieceBlueHTopL4() {
-                return new PathPlannerAuto("2 Piece Blue H Top L4");
+                return twoPieceBlueHHPTL4;
             }
 
             public static Command twoPieceBlueDBottomL4() {
-                return new PathPlannerAuto("2 Piece Blue D Bottom L4");
+                return twoPieceBlueDHPBL4;
             }
 
             public static Command twoPieceBlueKTopL4() {
-                return new PathPlannerAuto("2 Piece Blue K Top L4");
+                return twoPieceBlueKHPTL4;
             }
         }
 
         public static class Red {
             public static Command twoPieceRedHBottomL4() {
-                return new PathPlannerAuto("2 Piece Red H Bottom L4");
+                return twoPieceRedHHPBL4;
             }
 
             public static Command twoPieceRedGTopL4() {
-                return new PathPlannerAuto("2 Piece Red G Top L4");
+                return twoPieceRedGHPTL4;
             }
 
             public static Command twoPieceRedKBottomL4() {
-                return new PathPlannerAuto("2 Piece K Red Bottom L4");
+                return twoPieceRedKHPBL4;
             }
 
             public static Command twoPieceRedDTopL4() {
-                return new PathPlannerAuto("2 Piece D Red Top L4");
+                return twoPieceRedDHPTL4;
             }
         }
     }

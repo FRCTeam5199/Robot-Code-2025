@@ -57,8 +57,8 @@ public final class Constants {
         public static final boolean INVERT = true;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
         public static final boolean ELEVATOR_BRAKE = true;
-        public static final double SUPPLY_CURRENT_LIMIT = 120;
-        public static final double STATOR_CURRENT_LIMIT = 120;
+        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 120;
+        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 120;
         public static final double DRUM_CIRCUMFERENCE = .119694706;
 
         public static final double ARM_MM_CV = 80;
@@ -269,8 +269,8 @@ public final class Constants {
 
         public static final FeedForward WRIST_FF = new FeedForward(.08, .13, .1075268817204301);
         //degrees
-        public static final double WRIST_LOWER_TOLERANCE = 1;
-        public static final double WRIST_UPPER_TOLERANCE = 1;
+        public static final double WRIST_LOWER_TOLERANCE = 2;
+        public static final double WRIST_UPPER_TOLERANCE = 2;
         //Degrees
         public static final double WRIST_MIN = 0.0;
         public static final double WRIST_MAX = 200;
@@ -294,13 +294,9 @@ public final class Constants {
     public static class Vision {
         public static final String CAMERA_NAME = "Camera";
         public static final Transform3d CAMERA_POSE =
-                new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(7), 0));
+                new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .441325;
-<<<<<<< Updated upstream
-        public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.4, 0.4, 10.0);
-=======
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.2, 0.2, 999.0);
->>>>>>> Stashed changes
 
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(9.0, 9.0, 999.0);
         public static final Matrix<N3, N1> kAutonStdDevs = VecBuilder.fill(999.0, 999.0, 999.0);
