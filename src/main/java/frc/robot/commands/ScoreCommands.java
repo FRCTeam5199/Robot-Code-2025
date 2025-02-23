@@ -114,7 +114,7 @@ public class ScoreCommands {
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .05, 20, 50),
                                 new PositionCommand(wristSubsystem, 71),
-                                new InstantCommand(() -> intakeSubsystem.setPercent(.5))
+                                new InstantCommand(() -> intakeSubsystem.setPercent(0.5))
                         )
 
                 ),
@@ -128,7 +128,7 @@ public class ScoreCommands {
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .33, 36, 20),
                                 new PositionCommand(wristSubsystem, 73),
-                                new InstantCommand(() -> intakeSubsystem.setPercent(.8))
+                                new InstantCommand(() -> intakeSubsystem.setPercent(0.8))
                         ),
                         new PositionCommand(armSubsystem, 84)
                 ),
@@ -137,7 +137,7 @@ public class ScoreCommands {
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .33, 60, 20),
                                 new PositionCommand(wristSubsystem, 73),
-                                new InstantCommand(() -> intakeSubsystem.setPercent(.8))
+                                new InstantCommand(() -> intakeSubsystem.setPercent(0.8))
                         )
                 ),
                 () -> elevatorSubsystem.getMechM() > .33
@@ -150,24 +150,24 @@ public class ScoreCommands {
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, .955, 90, 40),
                         new PositionCommand(wristSubsystem, 77),
-                        new InstantCommand(() -> intakeSubsystem.setPercent(.5))
+                        new InstantCommand(() -> intakeSubsystem.setPercent(0.5))
                 )
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
 
     public static Command armL2() {
         return new PositionCommand(armSubsystem, 71)
-                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.5)));
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0.5)));
     }
 
     public static Command armL3() {
         return new PositionCommand(armSubsystem, 84)
-                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.5)));
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0.5)));
     }
 
     public static Command armL4() {
         return new PositionCommand(armSubsystem, 84)
-                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(.5)));
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0.5)));
     }
 
 

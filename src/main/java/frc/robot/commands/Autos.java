@@ -5,28 +5,22 @@
 package frc.robot.commands;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.path.PathConstraints;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.UserInterface;
 
 public final class Autos {
-    private SendableChooser<Command> autoChooser;
-    private static Autos autos;
+    private static SendableChooser<Command> autoChooser;
     PathConstraints pathConstraints = new PathConstraints(4, 2, 2, 2);
 
     /**
      * Gets or creates the AutoChooser (Singleton Method)
      */
-    public SendableChooser<Command> getAutoChooser() {
+    public static  SendableChooser<Command> setupAutoChooser() {
         if (autoChooser == null) {
             autoChooser = AutoBuilder.buildAutoChooser();
             UserInterface.getTab("Auton").add("AutoChooser", autoChooser).withWidget(BuiltInWidgets.kComboBoxChooser).withSize(1, 1).withPosition(0, 0);
@@ -203,10 +197,4 @@ public final class Autos {
         }
 
     }
-
-
-    public static class GO_TO {
-
-    }
-
 }

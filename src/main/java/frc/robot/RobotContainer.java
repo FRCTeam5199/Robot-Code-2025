@@ -16,18 +16,23 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
-import frc.robot.subsystems.*;
-import frc.robot.subsystems.template.VelocityCommand;
+import frc.robot.subsystems.AprilTagSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ObjectDetectionSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 import frc.robot.utility.State;
 
 /**
@@ -45,7 +50,8 @@ public class RobotContainer {
     public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05)
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
-    ; // Add a 10% deadband
+
+    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
     /* Setting up bindings for necessary control of the swerve drive platform */
 
@@ -89,7 +95,7 @@ public class RobotContainer {
     public static State state = State.L1;
 
 
-    // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
+    private static final SendableChooser<Command> autoChooser = Autos.setupAutoChooser();
 
 
     private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
@@ -126,14 +132,6 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-//        commandXboxController.leftBumper().onTrue(Commands.runOnce(SignalLogger::start).alongWith(new PrintCommand("Start")));
-//        commandXboxController.rightBumper().onTrue(Commands.runOnce(SignalLogger::stop).alongWith(new PrintCommand("End")));
-//
-//        commandXboxController.povLeft().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-//        commandXboxController.povRight().onTrue(drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-//        commandXboxController.povUp().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
-//        commandXboxController.povDown().onTrue(drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
         commandSwerveDrivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 commandSwerveDrivetrain.applyRequest(() -> drive.withVelocityX(-commandXboxController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                         .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
@@ -145,70 +143,32 @@ public class RobotContainer {
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
                 .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0))));
 
-        if (Utils.isSimulation()) {
-            commandSwerveDrivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
-
-        }
-
-//        commandXboxController.rightBumper().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
-//                .andThen(new InstantCommand(() -> System.out.println("Elevator Meters: " + elevatorSubsystem.getMechM())))
-//                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wrist.getDegrees()))));
-
-        commandXboxController.rightBumper().whileTrue(new SequentialCommandGroup(
-                new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-                                .getClosestTagID()))))),
-                commandSwerveDrivetrain.applyRequest(
-                        () -> drive.withVelocityX(xVelocity)
-                                .withVelocityY(yVelocity)
-                                .withRotationalRate(turnPIDController.calculate(
-                                        commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))))
-        ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
-                .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-                        .getPigeon2().getRotation2d().getDegrees())))));
-
-//        commandXboxController.rightBumper().onTrue(new InstantCommand(()
-        //        commandXboxController.rightBumper().onTrue(new InstantCommand(()
-//                -> commandSwerveDrivetrain.resetRotation(new Rotation2d(Math.toRadians(-180 - 240 + commandSwerveDrivetrain.getPose().getRotation().getDegrees())))));/
-
-        // commandXboxController.`.onTrue(ScoreCommands.zeroArm())
-                .onFalse(new VelocityCommand(armSubsystem, 0));
-        commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
-        commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
+        commandXboxController.button(8).toggleOnTrue(commandSwerveDrivetrain.applyRequest(() -> brake));
 
         commandXboxController.a().onTrue(ScoreCommands.scoreL1());
-        commandXboxController.b().onTrue(ScoreCommands.scoreL2());
-        commandXboxController.x().onTrue(ScoreCommands.scoreL3());
+        commandXboxController.x().onTrue(ScoreCommands.scoreL2());
+        commandXboxController.b().onTrue(ScoreCommands.scoreL3());
         commandXboxController.y().onTrue(ScoreCommands.scoreL4());
-
-        /*
-        arm - , elevator - , wrist - hp
-        arm - , elevator - , wrist - l1
-        arm - , elevator - , wrist - l2
-        arm - , elevator - , wrist - l3
-        arm - , elevator - , wrist - l4
-         */
 
         commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
 
-        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-1))) //Outtake
-                .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
-        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(1))) //Intake
-                .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0))
-                        // Lock on with limelight thing, if breaking comment the entire andThen statement
-//                    .andThen(new InstantCommand(() -> drivetrain.applyRequest(() -> drive
-//                            .withVelocityX(0.0)
-//                            .withVelocityY(0.0)
-//                            .withRotationalRate(objectDetectionSubsystem.lockOn()))))
-                );
+        commandXboxController.rightBumper().onTrue(ScoreCommands.dunk());
 
-//        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-//        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-        commandXboxController.povDown().onTrue(ScoreCommands.dunk());
+        commandXboxController.leftTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(1)))
+                .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
+        commandXboxController.rightTrigger().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(-1)))
+                .onFalse(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
+
+        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 
         commandXboxController.povRight().onTrue(ScoreCommands.intakeHP());
-        // commandXboxController.povLeft().onTrue(ScoreCommands.scoreL1());
         commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
+
+        
+        if (Utils.isSimulation()) {
+            commandSwerveDrivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+        }
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
     }
@@ -219,10 +179,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An example command will be run in autonomous
-//        return Autos.ThreePiece.Blue.threePieceBlueBL4();
-        return Autos.ThreePiece.Blue.threePieceBlueBL4();
-        //return new PathPlannerAuto("test");
+        return autoChooser.getSelected();
     }
 
     public static void periodic() {
