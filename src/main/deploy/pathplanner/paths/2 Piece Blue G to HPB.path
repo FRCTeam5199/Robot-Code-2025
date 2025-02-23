@@ -3,6 +3,7 @@
   "waypoints": [
     {
       "anchor": {
+<<<<<<< Updated upstream
         "x": 5.87,
         "y": 3.8631659836065575
       },
@@ -10,6 +11,15 @@
       "nextControl": {
         "x": 6.1624431818181815,
         "y": 1.7564630681818185
+=======
+        "x": 5.8134375,
+        "y": 3.8554829545454536
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.105880681818181,
+        "y": 1.7487800391207147
+>>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": null
