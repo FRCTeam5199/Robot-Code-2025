@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,8 +25,12 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.AprilTagSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.template.VelocityCommand;
+import frc.robot.utility.AprilTags;
 import frc.robot.utility.State;
 
 /**
@@ -41,11 +46,8 @@ public class RobotContainer {
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
     public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
-            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05)
+            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
-    ; // Add a 10% deadband
-
-    /* Setting up bindings for necessary control of the swerve drive platform */
 
     private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(4.5, 0, .1, new TrapezoidProfile.Constraints(100, 200));
     private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(8, 0.05, .15, new TrapezoidProfile.Constraints(100, 200));
@@ -72,12 +74,12 @@ public class RobotContainer {
     private static TrapezoidProfile.State currentStateY = new TrapezoidProfile.State(0, 0);
     private static TrapezoidProfile.State goalStateY = new TrapezoidProfile.State(0, 0);
 
-    private static Timer timer = new Timer();
-
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain();
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
+
+    private static Timer timer = new Timer();
 
     public static State state = State.L1;
 
@@ -85,6 +87,8 @@ public class RobotContainer {
 
     // private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
+    private Boolean lockOnMode = false;
+    private AprilTags selectedTag = null; 
     // private Boolean algaeControls = false;
 
     // The robot's subsystems and commands are defined here...
@@ -155,8 +159,8 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().whileTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-                                .getClosestTagID()))))),
+                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(lockOnMode ? selectedTag.value() : aprilTagSubsystem
+                        .getClosestTagID()))))),
                 commandSwerveDrivetrain.applyRequest(
                         () -> drive.withVelocityX(xVelocity)
                                 .withVelocityY(yVelocity)
@@ -168,8 +172,15 @@ public class RobotContainer {
         commandXboxController.rightBumper().onTrue(new VelocityCommand(intakeSubsystem, -75))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
+        // TODO: Map LockOn mode to button
+        // commandXboxController.button(0).onTrue(new InstantCommand(() -> selectedTag = AprilTags.get(aprilTagSubsystem.getClosestTagID()))).toggleOnTrue(new FunctionalCommand(
+        //         () -> new InstantCommand(() -> lockOnMode = true),
+        //         () -> {},
+        //         (interrupted) -> new InstantCommand(() -> lockOnMode = false),
+        //         null));
+
         commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-//        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        // commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandXboxController.povDown().onTrue(ScoreCommands.dunk());
 
         commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
@@ -187,11 +198,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
 //        return Autos.ThreePiece.Blue.threePieceBlueBL4();
-<<<<<<< Updated upstream
-        return Autos.TwoPiece.Blue.twoPieceBlueGBottomL4();
-=======
         return Autos.OnePiece.Blue.onePieceBlueHPBL4();
->>>>>>> Stashed changes
         //return new PathPlannerAuto("test");
     }
 
@@ -225,7 +232,6 @@ public class RobotContainer {
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
     }
-
 
     public void toggleAutoAlignOffsetLeft() {
         if (autoAlignYOffset > 0) {
