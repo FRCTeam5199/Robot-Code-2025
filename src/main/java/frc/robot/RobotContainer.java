@@ -75,24 +75,17 @@ public class RobotContainer {
     private static Timer timer = new Timer();
 
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain();
-    private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-    private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-    private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
-
     public static State state = State.L1;
-
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
-
     // private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
-    private Boolean algaeControls = false;
-
+    // private Boolean algaeControls = false;
 
     // The robot's subsystems and commands are defined here...
     private final Telemetry logger = new Telemetry(MaxSpeed);

@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
+
         commandSwerveDrivetrain.seedFieldCentric();
     }
 
@@ -122,9 +123,7 @@ public class Robot extends TimedRobot {
      * This function is called periodically during autonomous.
      */
     @Override
-    public void autonomousPeriodic() {
-
-    }
+    public void autonomousPeriodic() {}
 
     @Override
     public void teleopInit() {

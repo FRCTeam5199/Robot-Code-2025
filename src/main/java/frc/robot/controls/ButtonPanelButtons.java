@@ -28,7 +28,6 @@ public enum ButtonPanelButtons {
     REEF_SIDE_J(1, 4),
     REEF_SIDE_K(1, 4),
     REEF_SIDE_L(1, 4);
-    //TODO: Add buttons
 
     final int arduinoID;
     final int buttonID;
