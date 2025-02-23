@@ -17,12 +17,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "L4"
                 }
               }
@@ -76,12 +70,6 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ALIGNR"
-                }
-              },
               {
                 "type": "named",
                 "data": {

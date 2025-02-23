@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.626,
-        "y": 5.232
+        "x": 3.938778409090909,
+        "y": 5.261477272727273
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.248611116485983,
-        "y": 5.582239084815884
+        "x": 3.561389525576892,
+        "y": 5.611716357543156
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "L Blue"
     },
     {
       "anchor": {
@@ -71,7 +71,7 @@
   "folder": "2 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": -59.99999999999999
+    "rotation": -57.7243556854224
   },
   "useDefaultConstraints": true
 }
