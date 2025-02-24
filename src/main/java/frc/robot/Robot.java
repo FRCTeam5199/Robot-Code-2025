@@ -7,6 +7,7 @@ package frc.robot;
 import java.util.Optional;
 
 import frc.robot.commands.Autos;
+import frc.robot.commands.ScoreCommands;
 import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.Utils;
@@ -117,6 +118,7 @@ public class Robot extends TimedRobot {
             autonomousCommand.schedule();
         }
     }
+    
 
     /**
      * This function is called periodically during autonomous.
@@ -134,6 +136,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
+
+        ScoreCommands.wristandElevatorHP();
 
         CommandScheduler.getInstance().cancelAll();
     }

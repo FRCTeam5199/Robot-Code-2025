@@ -66,8 +66,7 @@ public class ScoreCommands {
 
     public static Command intakeStable() {
         return new ParallelCommandGroup(
-                new PositionCommand(armSubsystem, 56.56),
-                new PositionCommand(elevatorSubsystem, 0, false),
+                new PositionCommand(elevatorSubsystem, 0, false).andThen(new PositionCommand(armSubsystem, 56.56)),
                 new PositionCommand(wristSubsystem, 0)
         );
     }
@@ -94,19 +93,23 @@ public class ScoreCommands {
         );
     }
 
+    public static Command wristandElevatorHP() {
+        return new PositionCommand(wristSubsystem, .004).andThen(new PositionCommand(elevatorSubsystem, .006, false));
+    }
+
     public static Command intakeHP() {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.06, false),
+                                new PositionCommand(elevatorSubsystem, 0.06, false).andThen(new PositionCommand(armSubsystem, 56.56)),
                                 new PositionCommand(wristSubsystem, 0.004)
-                        ),
-                        new PositionCommand(armSubsystem, 56.56)
+                        )
                 ),
-                new ParallelCommandGroup( //Going up
-                        new PositionCommand(armSubsystem, 56.56),
-                        new PositionCommand(elevatorSubsystem, 0.06, true),
-                        new PositionCommand(wristSubsystem, 0.004)
+                new SequentialCommandGroup(
+                        new ParallelCommandGroup( //Going up
+                                new PositionCommand(elevatorSubsystem, 0.06, true).andThen(new PositionCommand(armSubsystem, 56.56)),
+                                new PositionCommand(wristSubsystem, 0.004)
+                        )
                 ),
                 () -> elevatorSubsystem.getMechM() > .06
         );

@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 2.6225284090909096,
-        "y": 6.473025568181818
+        "x": 1.234733606557377,
+        "y": 7.051895491803278
       },
       "prevControl": {
-        "x": 3.1709659090909095,
-        "y": 6.3533664772727265
+        "x": 1.7831711065573759,
+        "y": 6.932236400894187
       },
       "nextControl": null,
       "isLocked": false,
@@ -80,12 +80,12 @@
     },
     {
       "name": "INTAKE_HP",
-      "waypointRelativePos": 0.918705603788473,
+      "waypointRelativePos": 0.9344919786096244,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "INTAKE_HP"
+          "name": "HP"
         }
       }
     }
@@ -100,7 +100,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -8.914926957147895
+    "rotation": -52.00126755749532
   },
   "reversed": false,
   "folder": "1 Piece Blue L1 Paths",
