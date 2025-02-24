@@ -45,6 +45,8 @@ public class UserInterface {
         createAutonComponent("Game Message", "", BuiltInWidgets.kTextView, 4, 0, 4, 1, null);
         createAutonComponent("Location", 0, BuiltInWidgets.kTextView, 8, 0, 1, 1, null);
         createAutonComponent("Alliance", false, BuiltInWidgets.kBooleanBox, 9, 0, 1, 1, null);
+        createAutonComponent("Enabled", false, BuiltInWidgets.kBooleanBox, 10, 0, 1, 1, null);
+        createAutonComponent("EStop", false, BuiltInWidgets.kBooleanBox, 11, 0, 1, 1, null);
         createAutonComponent("Match Type", "", BuiltInWidgets.kTextView, 0, 1, 2, 1, null);
         createAutonComponent("Match Number", 0, BuiltInWidgets.kTextView, 2, 1, 1, 1, null);
         createAutonComponent("Replay Match Number", 0, BuiltInWidgets.kTextView, 3, 1, 1, 1, null);
@@ -54,6 +56,8 @@ public class UserInterface {
         createTeleopComponent("Game Message", "", BuiltInWidgets.kTextView, 4, 0, 4, 1, null);
         createTeleopComponent("Location", 0, BuiltInWidgets.kTextView, 8, 0, 1, 1, null);
         createTeleopComponent("Alliance", false, BuiltInWidgets.kBooleanBox, 9, 0, 1, 1, null);
+        createTeleopComponent("Enabled", false, BuiltInWidgets.kBooleanBox, 10, 0, 1, 1, null);
+        createTeleopComponent("EStop", false, BuiltInWidgets.kBooleanBox, 11, 0, 1, 1, null);
         createTeleopComponent("Match Type", "", BuiltInWidgets.kTextView, 0, 1, 2, 1, null);
         createTeleopComponent("Match Number", 0, BuiltInWidgets.kTextView, 2, 1, 1, 1, null);
         createTeleopComponent("Replay Match Number", 0, BuiltInWidgets.kTextView, 3, 1, 1, 1, null);

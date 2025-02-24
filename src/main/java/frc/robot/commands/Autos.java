@@ -23,7 +23,7 @@ public final class Autos {
     public static  SendableChooser<Command> setupAutoChooser() {
         if (autoChooser == null) {
             autoChooser = AutoBuilder.buildAutoChooser();
-            UserInterface.addSendableChooserComponent("AutoChooser", autoChooser, BuiltInWidgets.kComboBoxChooser, 7, 1, 2, 1, null);
+            UserInterface.addSendableChooserComponent("AutoChooser", autoChooser, BuiltInWidgets.kComboBoxChooser, 7, 1, 3, 1, null);
         }
 
         return autoChooser;

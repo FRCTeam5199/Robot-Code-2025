@@ -151,7 +151,6 @@ public class RobotContainer {
         commandXboxController.y().onTrue(ScoreCommands.scoreL4());
 
         commandXboxController.leftBumper().onTrue(ScoreCommands.intakeHP());
-        // commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.dunk());
 
@@ -164,6 +163,7 @@ public class RobotContainer {
         commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 
         commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
+        commandXboxController.povRight().onTrue(ScoreCommands.scoreL1());
 
 
         if (Utils.isSimulation()) {
@@ -229,19 +229,23 @@ public class RobotContainer {
         UserInterface.setAutonComponent("Event", DriverStation.getEventName());
         UserInterface.setAutonComponent("Game Message", DriverStation.getGameSpecificMessage());
         UserInterface.setAutonComponent("Location", DriverStation.getLocation().getAsInt());
-        UserInterface.setAutonComponent("Match Type", DriverStation.getMatchType().toString());
-        UserInterface.setAutonComponent("Replay Match Number", DriverStation.getReplayNumber());
-        UserInterface.setAutonComponent("Match Number", DriverStation.getMatchNumber());
         UserInterface.setAutonComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
+        UserInterface.setAutonComponent("Enabled", DriverStation.isEnabled());
+        UserInterface.setAutonComponent("EStop", DriverStation.isEStopped());
+        UserInterface.setAutonComponent("Match Type", DriverStation.getMatchType().toString());
+        UserInterface.setAutonComponent("Match Number", DriverStation.getMatchNumber());
+        UserInterface.setAutonComponent("Replay Match Number", DriverStation.getReplayNumber());
         UserInterface.setAutonComponent("Match Time", DriverStation.getMatchTime());
-       
+
         UserInterface.setTeleopComponent("Event", DriverStation.getEventName());
         UserInterface.setTeleopComponent("Game Message", DriverStation.getGameSpecificMessage());
         UserInterface.setTeleopComponent("Location", DriverStation.getLocation().getAsInt());
-        UserInterface.setTeleopComponent("Match Type", DriverStation.getMatchType().toString());
-        UserInterface.setTeleopComponent("Replay Match Number", DriverStation.getReplayNumber());
-        UserInterface.setTeleopComponent("Match Number", DriverStation.getMatchNumber());
+        UserInterface.setTeleopComponent("Enabled", DriverStation.isEnabled());
+        UserInterface.setTeleopComponent("EStop", DriverStation.isEStopped());
         UserInterface.setTeleopComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
+        UserInterface.setTeleopComponent("Match Type", DriverStation.getMatchType().toString());
+        UserInterface.setTeleopComponent("Match Number", DriverStation.getMatchNumber());
+        UserInterface.setTeleopComponent("Replay Match Number", DriverStation.getReplayNumber());
         UserInterface.setTeleopComponent("Match Time", DriverStation.getMatchTime());
     }
 
