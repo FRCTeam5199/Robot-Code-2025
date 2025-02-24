@@ -41,10 +41,23 @@ public class UserInterface {
     }
 
     private static void initalizeComponents() {
-        Map<String, Object> allianceComponentProperties = new HashMap<>();
-        allianceComponentProperties.put("True Color", "#0050FF");
-        
-        createAutonComponent("Alliance", false, BuiltInWidgets.kBooleanBox, 0, 0, 1, 1, allianceComponentProperties);
+        createAutonComponent("Event", "", BuiltInWidgets.kTextView, 0, 0, 4, 1, null);
+        createAutonComponent("Game Message", "", BuiltInWidgets.kTextView, 4, 0, 4, 1, null);
+        createAutonComponent("Location", 0, BuiltInWidgets.kTextView, 8, 0, 1, 1, null);
+        createAutonComponent("Alliance", false, BuiltInWidgets.kBooleanBox, 9, 0, 1, 1, null);
+        createAutonComponent("Match Type", "", BuiltInWidgets.kTextView, 0, 1, 2, 1, null);
+        createAutonComponent("Match Number", 0, BuiltInWidgets.kTextView, 2, 1, 1, 1, null);
+        createAutonComponent("Replay Match Number", 0, BuiltInWidgets.kTextView, 3, 1, 1, 1, null);
+        createAutonComponent("Match Time", 0, BuiltInWidgets.kTextView, 4, 1, 3, 1, null);
+
+        createTeleopComponent("Event", "", BuiltInWidgets.kTextView, 0, 0, 4, 1, null);
+        createTeleopComponent("Game Message", "", BuiltInWidgets.kTextView, 4, 0, 4, 1, null);
+        createTeleopComponent("Location", 0, BuiltInWidgets.kTextView, 8, 0, 1, 1, null);
+        createTeleopComponent("Alliance", false, BuiltInWidgets.kBooleanBox, 9, 0, 1, 1, null);
+        createTeleopComponent("Match Type", "", BuiltInWidgets.kTextView, 0, 1, 2, 1, null);
+        createTeleopComponent("Match Number", 0, BuiltInWidgets.kTextView, 2, 1, 1, 1, null);
+        createTeleopComponent("Replay Match Number", 0, BuiltInWidgets.kTextView, 3, 1, 1, 1, null);
+        createTeleopComponent("Match Time", 0, BuiltInWidgets.kTextView, 4, 1, 3, 1, null);
 
         createControlComponent("Reset All", false, BuiltInWidgets.kToggleButton, 0, 0, 1, 1, null);
         createControlComponent("Reset Elevator", false, BuiltInWidgets.kToggleButton, 0, 1, 1, 1, null);

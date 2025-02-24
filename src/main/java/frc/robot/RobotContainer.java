@@ -15,7 +15,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -223,6 +225,24 @@ public class RobotContainer {
             CommandScheduler.getInstance().schedule(ScoreCommands.zeroWrist());
             UserInterface.setControlComponent("Reset Wrist", false);
         }
+
+        UserInterface.setAutonComponent("Event", DriverStation.getEventName());
+        UserInterface.setAutonComponent("Game Message", DriverStation.getGameSpecificMessage());
+        UserInterface.setAutonComponent("Location", DriverStation.getLocation().getAsInt());
+        UserInterface.setAutonComponent("Match Type", DriverStation.getMatchType().toString());
+        UserInterface.setAutonComponent("Replay Match Number", DriverStation.getReplayNumber());
+        UserInterface.setAutonComponent("Match Number", DriverStation.getMatchNumber());
+        UserInterface.setAutonComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
+        UserInterface.setAutonComponent("Match Time", DriverStation.getMatchTime());
+       
+        UserInterface.setTeleopComponent("Event", DriverStation.getEventName());
+        UserInterface.setTeleopComponent("Game Message", DriverStation.getGameSpecificMessage());
+        UserInterface.setTeleopComponent("Location", DriverStation.getLocation().getAsInt());
+        UserInterface.setTeleopComponent("Match Type", DriverStation.getMatchType().toString());
+        UserInterface.setTeleopComponent("Replay Match Number", DriverStation.getReplayNumber());
+        UserInterface.setTeleopComponent("Match Number", DriverStation.getMatchNumber());
+        UserInterface.setTeleopComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
+        UserInterface.setTeleopComponent("Match Time", DriverStation.getMatchTime());
     }
 
 
