@@ -41,9 +41,15 @@ public class UserInterface {
     }
 
     private static void initalizeComponents() {
-        Map<String, Object> resetSubsystemComponentProperties = new HashMap<String, Object>();
-        resetSubsystemComponentProperties.put("Title", "Start");
-        createControlComponent("Reset Subsystems", false, BuiltInWidgets.kToggleButton, 0, 0, 1, 1, resetSubsystemComponentProperties);
+        Map<String, Object> allianceComponentProperties = new HashMap<>();
+        allianceComponentProperties.put("True Color", "#0050FF");
+        
+        createAutonComponent("Alliance", false, BuiltInWidgets.kBooleanBox, 0, 0, 1, 1, allianceComponentProperties);
+
+        createControlComponent("Reset All", false, BuiltInWidgets.kToggleButton, 0, 0, 1, 1, null);
+        createControlComponent("Reset Elevator", false, BuiltInWidgets.kToggleButton, 0, 1, 1, 1, null);
+        createControlComponent("Reset Arm", false, BuiltInWidgets.kToggleButton, 0, 2, 1, 1, null);
+        createControlComponent("Reset Wrist", false, BuiltInWidgets.kToggleButton, 0, 3, 1, 1, null);
     }
 
     public static void setTab(String key) {

@@ -207,9 +207,21 @@ public class RobotContainer {
             yVelocity = drivePIDControllerYVeryClose.calculate(currentStateY.position, nextStateY);
         }
 
-        if (UserInterface.getControlComponent("Reset Subsystems").getBoolean(false)) {
+        if (UserInterface.getControlComponent("Reset All").getBoolean(false)) {
             CommandScheduler.getInstance().schedule(ScoreCommands.zeroSubsystems());
-            UserInterface.setControlComponent("Reset Subsystems", false);
+            UserInterface.setControlComponent("Reset All", false);
+        }
+        if (UserInterface.getControlComponent("Reset Elevator").getBoolean(false)) {
+            CommandScheduler.getInstance().schedule(ScoreCommands.zeroElevator());
+            UserInterface.setControlComponent("Reset Elevator", false);
+        }
+        if (UserInterface.getControlComponent("Reset Arm").getBoolean(false)) {
+            CommandScheduler.getInstance().schedule(ScoreCommands.zeroArm());
+            UserInterface.setControlComponent("Reset Arm", false);
+        }
+        if (UserInterface.getControlComponent("Reset Wrist").getBoolean(false)) {
+            CommandScheduler.getInstance().schedule(ScoreCommands.zeroWrist());
+            UserInterface.setControlComponent("Reset Wrist", false);
         }
     }
 
