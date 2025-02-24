@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4998086734693878,
-        "y": 7.215
+        "x": 1.163,
+        "y": 6.98
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3056760204081637,
-        "y": 6.379285714285714
+        "x": 2.309192440722865,
+        "y": 6.274462967324704
       },
       "isLocked": false,
-      "linkedName": "HP Blue Top"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 5.261477272727273
       },
       "prevControl": {
-        "x": 3.244837082560297,
-        "y": 5.895724721706864
+        "x": 3.145432752507239,
+        "y": 5.7325884645413
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "L Blue"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

@@ -17,6 +17,12 @@
               {
                 "type": "named",
                 "data": {
+                  "name": "ALIGNR"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
                   "name": "L4"
                 }
               }
@@ -54,7 +60,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVE"
+                  "name": "DRIVETOP"
                 }
               }
             ]
@@ -70,6 +76,12 @@
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNL"
+                }
+              },
               {
                 "type": "named",
                 "data": {

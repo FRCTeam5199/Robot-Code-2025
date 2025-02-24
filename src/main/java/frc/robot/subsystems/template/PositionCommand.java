@@ -26,12 +26,12 @@ public class PositionCommand extends Command {
         updateGoalPosition = false;
         if (isGoingUp) { //100, 150
             //Up
-            this.vel = 75;
-            this.acc = 150;
-        } else { //80,100
-            //Down
             this.vel = 50;
             this.acc = 100;
+        } else { //80,100
+            //Down
+            this.vel = 35;
+            this.acc = 70;
         }
         changeConstraint = true;
 

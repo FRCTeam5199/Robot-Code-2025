@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.1345389507154215,
-        "y": 6.808585055643879
+        "x": 1.2587090163934425,
+        "y": 7.123821721311475
       },
       "prevControl": {
-        "x": 3.9177659915317484,
-        "y": 6.495192198501022
+        "x": 4.04193605720977,
+        "y": 6.810428864168618
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.6213643574828092,
-      "rotationDegrees": -62.862160998032955
+      "rotationDegrees": -54.364
     }
   ],
   "constraintZones": [],
@@ -59,7 +59,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -54.36449228680642
+    "rotation": -54.364
   },
   "reversed": false,
   "folder": "1 Piece Blue Paths",

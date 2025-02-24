@@ -9,6 +9,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.UserInterface;
@@ -16,6 +17,10 @@ import frc.robot.UserInterface;
 public final class Autos {
     private SendableChooser<Command> autoChooser;
     private static Autos autos;
+
+
+    public static SendableChooser<Command> autonChooserRed = new SendableChooser<>();
+    public static SendableChooser<Command> autonChooserBlue = new SendableChooser<>();
 
     private static PathPlannerAuto onePieceBlueHPBL4;
     private static PathPlannerAuto onePieceBlueHPTL4;
@@ -56,6 +61,21 @@ public final class Autos {
         twoPieceRedGHPTL4 = new PathPlannerAuto("2 Piece Red G Top L4");
         twoPieceRedKHPBL4 = new PathPlannerAuto("2 Piece K Red Bottom L4");
         twoPieceRedDHPTL4 = new PathPlannerAuto("2 Piece D Red Top L4");
+
+        Shuffleboard.getTab("Autons").add("Red Autons", autonChooserRed).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(2, 1);
+        Shuffleboard.getTab("Autons").add("Blue Autons", autonChooserBlue).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(2, 1);
+
+        autonChooserRed.addOption("1 Piece Red Left", onePieceRedHPTL4);
+        autonChooserRed.addOption("1 Piece Red Right", onePieceRedHPBL4);
+        autonChooserRed.addOption("2 Piece Red Left", twoPieceRedHHPBL4);
+        autonChooserRed.addOption("2 Piece Red Right", twoPieceBlueHHPTL4);
+
+        autonChooserBlue.addOption("1 Piece blue Left", onePieceBlueHPTL4);
+        autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueHPBL4);
+        autonChooserBlue.addOption("2 Piece Blue Left", twoPieceBlueHHPTL4);
+        autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueGHPBL4);
+
+
     }
 
     public static class OnePiece {

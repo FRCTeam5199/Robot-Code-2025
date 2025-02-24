@@ -2,10 +2,10 @@ package frc.robot.commands;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
-import frc.robot.constants.Constants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.template.PositionCommand;
@@ -13,8 +13,7 @@ import frc.robot.utility.State;
 
 import java.util.Map;
 
-import static frc.robot.RobotContainer.turnPIDController;
-import static frc.robot.RobotContainer.yVelocity;
+import static frc.robot.RobotContainer.*;
 
 public class ScoreCommands {
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -34,24 +33,34 @@ public class ScoreCommands {
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     public static Command stable() {
-        return new ConditionalCommand(
-                new SequentialCommandGroup( //Won't clip elevator
-                        new ParallelCommandGroup(
-                                new PositionCommand(wristSubsystem, 0),
-                                new PositionCommand(elevatorSubsystem, 0, false)
-                                        .until(() -> elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .05)
-                        ),
-                        new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
-                        armStable()
-                ),
-                new SequentialCommandGroup( //Will clip elevator
+//        return new ConditionalCommand(
+//                new SequentialCommandGroup( //Won't clip elevator
+//                        new ParallelCommandGroup(
+//                                new PositionCommand(wristSubsystem, 0),
+//                                new PositionCommand(elevatorSubsystem, 0, false)
+//                                        .until(() -> elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .05)
+//                        ),
+//                        new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
+//                        armStable()
+//                ),
+//                new SequentialCommandGroup( //Will clip elevator
+//                        new PositionCommand(wristSubsystem, 0),
+//                        new PositionCommand(elevatorSubsystem, 0, false)
+//                                .until(() -> elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .1),
+//                        new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
+//                        armStable()
+//                ),
+//                () -> wristSubsystem.getDegrees() < 50
+//        );
+        return new SequentialCommandGroup(
+                new ParallelCommandGroup(
                         new PositionCommand(wristSubsystem, 0),
                         new PositionCommand(elevatorSubsystem, 0, false)
-                                .until(() -> elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .1),
-                        new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
-                        armStable()
+                                .until(() -> elevatorSubsystem.isAtBottom()
+                                        && elevatorSubsystem.getMechM() < .05)
                 ),
-                () -> wristSubsystem.getDegrees() < 50
+                new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
+                armStable()
         );
     }
 
@@ -89,17 +98,17 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.038, false),
+                                new PositionCommand(elevatorSubsystem, 0.06, false),
                                 new PositionCommand(wristSubsystem, 0.004)
                         ),
                         new PositionCommand(armSubsystem, 56.56)
                 ),
                 new ParallelCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 56.56),
-                        new PositionCommand(elevatorSubsystem, 0.038, true),
+                        new PositionCommand(elevatorSubsystem, 0.06, true),
                         new PositionCommand(wristSubsystem, 0.004)
                 ),
-                () -> elevatorSubsystem.getMechM() > .15
+                () -> elevatorSubsystem.getMechM() > .06
         );
         // ).alongWith(new VelocityCommand(intakeSubsystem, 50));
     }
@@ -201,8 +210,8 @@ public class ScoreCommands {
 
     public static Command scoreL4() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 88),
-                new PositionCommand(elevatorSubsystem, 1.001, true),
+                new PositionCommand(armSubsystem, 87),
+                new PositionCommand(elevatorSubsystem, 1.002, true),
                 new PositionCommand(wristSubsystem, 164)
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
@@ -213,7 +222,9 @@ public class ScoreCommands {
                         Map.entry(State.L1, scoreL1()),
                         Map.entry(State.L2, scoreL2()),
                         Map.entry(State.L3, scoreL3()),
-                        Map.entry(State.L4, scoreL4())
+                        Map.entry(State.L4, scoreL4()),
+                        Map.entry(State.ALGAE_HIGH, removeAlgaeHigh()),
+                        Map.entry(State.ALGAE_LOW, removeAlgaeLow())
                 ),
                 RobotContainer::getState
         );
@@ -242,7 +253,7 @@ public class ScoreCommands {
     }
 
     public static Command armL4() {
-        return new PositionCommand(armSubsystem, 88)
+        return new PositionCommand(armSubsystem, 87)
                 .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
 
@@ -251,7 +262,7 @@ public class ScoreCommands {
                 Map.ofEntries(
                         Map.entry(State.L2, new PositionCommand(armSubsystem, 65)),
                         Map.entry(State.L3, new PositionCommand(armSubsystem, 73)),
-                        Map.entry(State.L4, new PositionCommand(wristSubsystem, 174))
+                        Map.entry(State.L4, new PositionCommand(wristSubsystem, 165))
                 ),
                 RobotContainer::getState
         );
@@ -265,6 +276,46 @@ public class ScoreCommands {
                         Map.entry(State.L4, new PositionCommand(wristSubsystem, 164))
                 ),
                 RobotContainer::getState
+        );
+    }
+
+    public static Command removeAlgaeHigh() {
+        return new ConditionalCommand(
+                new SequentialCommandGroup( //Going down
+                        new ParallelCommandGroup(
+                                new PositionCommand(elevatorSubsystem, .55, false),
+                                new PositionCommand(wristSubsystem, 163)
+                        ),
+                        new PositionCommand(armSubsystem, 74)
+                ),
+                new SequentialCommandGroup( //Going up
+                        new PositionCommand(armSubsystem, 74),
+                        new ParallelCommandGroup(
+                                new PositionCommand(elevatorSubsystem, .55, true),
+                                new PositionCommand(wristSubsystem, 163)
+                        )
+                ),
+                () -> elevatorSubsystem.getMechM() > .545
+        );
+    }
+
+    public static Command removeAlgaeLow() {
+        return new ConditionalCommand(
+                new SequentialCommandGroup( //Going down
+                        new ParallelCommandGroup(
+                                new PositionCommand(elevatorSubsystem, .25, false),
+                                new PositionCommand(wristSubsystem, 163)
+                        ),
+                        new PositionCommand(armSubsystem, 69)
+                ),
+                new SequentialCommandGroup( //Going up
+                        new PositionCommand(armSubsystem, 69),
+                        new ParallelCommandGroup(
+                                new PositionCommand(elevatorSubsystem, .25, true),
+                                new PositionCommand(wristSubsystem, 163)
+                        )
+                ),
+                () -> elevatorSubsystem.getMechM() > .545
         );
     }
 
@@ -315,11 +366,16 @@ public class ScoreCommands {
                         zeroArm(),
                         zeroWrist()
                 ),
-                new WaitCommand(.75),
+                new WaitCommand(.3),
                 new ParallelCommandGroup(
                         new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                         new InstantCommand(() -> armSubsystem.getMotor().setPosition(0)),
                         new InstantCommand(() -> wristSubsystem.getMotor().setPosition(0))
+                ),
+                new ParallelCommandGroup(
+                        new PositionCommand(elevatorSubsystem, 0.05, true),
+                        new PositionCommand(armSubsystem, 7),
+                        new PositionCommand(wristSubsystem, 7)
                 ),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 0, true),
@@ -347,8 +403,7 @@ public class ScoreCommands {
                 () -> RobotContainer.commandSwerveDrivetrain.setControl(
                         drive.withVelocityX(RobotContainer.xVelocity)
                                 .withVelocityY(yVelocity)
-                                .withRotationalRate(turnPIDController.calculate(
-                                        RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))),
+                                .withRotationalRate(rotationVelocity)),
                 (interrupted) -> {
                     RobotContainer.commandSwerveDrivetrain
                             .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
@@ -386,8 +441,7 @@ public class ScoreCommands {
                         RobotContainer.commandSwerveDrivetrain.setControl(
                                 drive.withVelocityX(RobotContainer.xVelocity)
                                         .withVelocityY(yVelocity)
-                                        .withRotationalRate(turnPIDController.calculate(
-                                                RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getDegrees(), 0))),
+                                        .withRotationalRate(rotationVelocity)),
                 (interrupted) -> {
                     RobotContainer.commandSwerveDrivetrain
                             .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
@@ -406,13 +460,21 @@ public class ScoreCommands {
                 RobotContainer.commandSwerveDrivetrain);
     }
 
-    public static Command autoMoveForward() {
+    public static Command autoMoveForwardBottom() {
         return new FunctionalCommand(
                 () -> {
                 },
-                () -> RobotContainer.commandSwerveDrivetrain.setControl(
-                        drive.withVelocityX(-0.25)
-                                .withVelocityY(-0.25)),
+                () -> {
+                    if (DriverStation.getAlliance().isPresent()
+                            && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue))
+                        RobotContainer.commandSwerveDrivetrain.setControl(
+                                drive.withVelocityX(-.5)
+                                        .withVelocityY(-.5));
+                    else
+                        RobotContainer.commandSwerveDrivetrain.setControl(
+                                drive.withVelocityX(.5)
+                                        .withVelocityY(-.5));
+                },
                 (interrupted) -> RobotContainer.commandSwerveDrivetrain.setControl(
                         drive.withVelocityX(0)
                                 .withVelocityY(0)),
@@ -420,41 +482,6 @@ public class ScoreCommands {
                     if (intakeSubsystem.getStatorCurrent() > 25) {
                         timer.start();
                         if (timer.hasElapsed(.1)) {
-                            timer.stop();
-                            return true;
-                        }
-                        return false;
-                    }
-                    return false;
-                },
-                RobotContainer.commandSwerveDrivetrain);
-    }
-
-    public static Command autoMoveForwardBottom() {
-
-        return new FunctionalCommand(
-                () -> {
-                    System.out.println("Forward Start");
-                },
-                () -> {
-                    RobotContainer.commandSwerveDrivetrain.setControl(
-                            drive.withVelocityX(-0.5)
-                                    .withVelocityY(-0.5));
-
-                    System.out.println("Going Forward");
-
-                },
-                (bool) -> {
-                    RobotContainer.commandSwerveDrivetrain.setControl(
-                            drive.withVelocityX(0)
-                                    .withVelocityY(0));
-
-                    System.out.println("ending");
-                },
-                () -> {
-                    if (intakeSubsystem.isIntooken()) {
-                        timer.start();
-                        if (timer.hasElapsed(.2)) {
                             timer.stop();
                             return true;
                         }
@@ -490,9 +517,15 @@ public class ScoreCommands {
                     System.out.println("Forward Start");
                 },
                 () -> {
-                    RobotContainer.commandSwerveDrivetrain.setControl(
-                            drive.withVelocityX(-0.5)
-                                    .withVelocityY(0.5));
+                    if (DriverStation.getAlliance().isPresent()
+                            && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue))
+                        RobotContainer.commandSwerveDrivetrain.setControl(
+                                drive.withVelocityX(-0.5)
+                                        .withVelocityY(0.5));
+                    else
+                        RobotContainer.commandSwerveDrivetrain.setControl(
+                                drive.withVelocityX(0.5)
+                                        .withVelocityY(0.5));
 
                     System.out.println("Going Forward");
 
@@ -571,80 +604,92 @@ public class ScoreCommands {
 //                ),
 //                new SequentialCommandGroup( //Will clip elevator
 //                        new PositionCommand(wristSubsystem, 56),
-////                        new PositionCommand(elevatorSubsystem, 0, 40, 20),
+
+    /// /                        new PositionCommand(elevatorSubsystem, 0, 40, 20),
 //                        new PositionCommand(armSubsystem, 0.5)
 //                ),
 //                () -> wristSubsystem.getDegrees() < 50
 //        );
 //    }
+    public static Command scoreL2NoDunk() {
+        return new ConditionalCommand(
+                new SequentialCommandGroup( //Going down
+                        new ParallelCommandGroup(
+                                new PositionCommand(elevatorSubsystem, .16, false),
+                                new PositionCommand(wristSubsystem, 152)
+                                // new VelocityCommand(intakeSubsystem, 50)
+                        ),
+                        new PositionCommand(armSubsystem, 65)
+                ),
+                new SequentialCommandGroup( //Going up
+                        new PositionCommand(armSubsystem, 65),
+                        new ParallelCommandGroup(
+                                new PositionCommand(elevatorSubsystem, .16, true),
+                                new PositionCommand(wristSubsystem, 152)
+                                // new VelocityCommand(intakeSubsystem, 50)
+                        )
 
+                ),
+                () -> elevatorSubsystem.getMechM() > .07
+        ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L2)));
+    }
 
-//    public static Command scoreL2NoDunk() {
-//        return new ConditionalCommand(
-//                new SequentialCommandGroup( //Going down
-//                        new ParallelCommandGroup(
-//                                new PositionCommand(elevatorSubsystem, .08, false),
-//                                new PositionCommand(wristSubsystem, 152)
-//                                // new VelocityCommand(intakeSubsystem, 50)
-//                        ),
-//                        new PositionCommand(armSubsystem, 65)
-//                ),
-//                new SequentialCommandGroup( //Going up
-//                        new PositionCommand(armSubsystem, 65),
-//                        new ParallelCommandGroup(
-//                                new PositionCommand(elevatorSubsystem, .08, true),
-//                                new PositionCommand(wristSubsystem, 152)
-//                                // new VelocityCommand(intakeSubsystem, 50)
-//                        )
-//
-//                ),
-//                () -> elevatorSubsystem.getMechM() > .07
-//        ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L2)));
-//    }
-//
-//    public static Command scoreL3NoDunk() {
-//        return new ConditionalCommand(
-//                new SequentialCommandGroup( //Going down
-//                        new ParallelCommandGroup(
-//                                new PositionCommand(elevatorSubsystem, .396, false),
-//                                new PositionCommand(wristSubsystem, 155)
-//                                // new VelocityCommand(intakeSubsystem, 50)
-//                        ),
-//                        new PositionCommand(armSubsystem, 73)
-//                ),
-//                new SequentialCommandGroup( //Going up
-//                        new PositionCommand(armSubsystem, 73),
-//                        new ParallelCommandGroup(
-//                                new PositionCommand(elevatorSubsystem, .396, true),
-//                                new PositionCommand(wristSubsystem, 155)
-//                                // new VelocityCommand(intakeSubsystem, 50)
-//                        )
-//                ),
-//                () -> elevatorSubsystem.getMechM() > .33
-//        ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)));
-//    }
-//
-//    public static Command scoreL4NoDunk() {
-//        return new SequentialCommandGroup(
-//                new PositionCommand(armSubsystem, 85),
-//                new ParallelCommandGroup(
-//                        new PositionCommand(elevatorSubsystem, 1.003, true),
-//                        new PositionCommand(wristSubsystem, 168)
-//                        // new VelocityCommand(intakeSubsystem, 50)
-//                )
-//        ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
-//    }
-//
-//    public static Command scoreNoDunk() {
-//        return new SelectCommand<>(
-//                Map.ofEntries(
-//                        Map.entry(State.L1, scoreL1()),
-//                        Map.entry(State.L2, scoreL2NoDunk()),
-//                        Map.entry(State.L3, scoreL3NoDunk()),
-//                        Map.entry(State.L4, scoreL4NoDunk())
-//                ),
-//                RobotContainer::getState
-//        );
-//    }
+    public static Command scoreL3NoDunk() {
+        return new ConditionalCommand(
+                new SequentialCommandGroup( //Going down
+                        new ParallelCommandGroup(
+                                new PositionCommand(elevatorSubsystem, .46, false),
+                                new PositionCommand(wristSubsystem, 152)
+                                // new VelocityCommand(intakeSubsystem, 50)
+                        ),
+                        new PositionCommand(armSubsystem, 71)
+                ),
+                new SequentialCommandGroup( //Going up
+                        new PositionCommand(armSubsystem, 71),
+                        new ParallelCommandGroup(
+                                new PositionCommand(elevatorSubsystem, .46, true),
+                                new PositionCommand(wristSubsystem, 152)
+                                // new VelocityCommand(intakeSubsystem, 50)
+                        )
+                ),
+                () -> elevatorSubsystem.getMechM() > .33
+        ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)));
+    }
+
+    public static Command scoreL4NoDunk() {
+        return new SequentialCommandGroup(
+                new PositionCommand(armSubsystem, 85),
+                new ParallelCommandGroup(
+                        new PositionCommand(elevatorSubsystem, 1.003, true),
+                        new PositionCommand(wristSubsystem, 165)
+                        // new VelocityCommand(intakeSubsystem, 50)
+                )
+        ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
+    }
+
+    public static Command scoreNoDunk() {
+        SelectCommand<State> stateSelectCommand = new SelectCommand<>(
+                Map.ofEntries(
+                        Map.entry(State.L1, scoreL1()),
+                        Map.entry(State.L2, scoreL2NoDunk()),
+                        Map.entry(State.L3, scoreL3NoDunk()),
+                        Map.entry(State.L4, scoreL4NoDunk()),
+                        Map.entry(State.ALGAE_HIGH, removeAlgaeHigh()),
+                        Map.entry(State.ALGAE_LOW, removeAlgaeLow())
+                ),
+                RobotContainer::getState
+        );
+        return stateSelectCommand;
+    }
+
+    public static Command armL2NoDunk() {
+        return new PositionCommand(armSubsystem, 65).alongWith(
+                new InstantCommand(() -> RobotContainer.setState(State.L2)));
+    }
+
+    public static Command armL3NoDunk() {
+        return new PositionCommand(armSubsystem, 73)
+                .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)));
+    }
 
 }
