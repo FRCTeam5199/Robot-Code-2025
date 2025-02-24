@@ -91,11 +91,11 @@ public class ScoreCommands {
 
     public static Command scoreL1() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 0),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 0, 50, 100),
                         new PositionCommand(wristSubsystem, 50)
-                )
+                ),
+                new PositionCommand(armSubsystem, 0)
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1)));
     }
     

@@ -18,8 +18,10 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
@@ -83,22 +85,18 @@ public class RobotContainer {
     private static Timer timer = new Timer();
 
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain();
-    private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-    private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
-    private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
+    // private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
+    // private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+    // private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final ClimberSubsystem climberSubsystem = ClimberSubsystem.getInstance();
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
-
-
     public static State state = State.L1;
 
+    // private static final SendableChooser<Command> autoChooser = Autos.setupAutoChooser();
 
-    private static final SendableChooser<Command> autoChooser = Autos.setupAutoChooser();
-
-
-    private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
+    // private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     private Boolean algaeControls = false;
 
@@ -145,12 +143,13 @@ public class RobotContainer {
 
         commandXboxController.button(8).toggleOnTrue(commandSwerveDrivetrain.applyRequest(() -> brake));
 
-        commandXboxController.a().onTrue(ScoreCommands.scoreL1());
+        commandXboxController.a().onTrue(ScoreCommands.stable());
         commandXboxController.x().onTrue(ScoreCommands.scoreL2());
         commandXboxController.b().onTrue(ScoreCommands.scoreL3());
         commandXboxController.y().onTrue(ScoreCommands.scoreL4());
 
-        commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
+        commandXboxController.leftBumper().onTrue(ScoreCommands.intakeHP());
+        // commandXboxController.leftBumper().onTrue(new ConditionalCommand(ScoreCommands.algaeStable(), ScoreCommands.stable(), () -> algaeControls));
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.dunk());
 
@@ -162,10 +161,9 @@ public class RobotContainer {
         commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.3))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 
-        commandXboxController.povRight().onTrue(ScoreCommands.intakeHP());
         commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
 
-        
+
         if (Utils.isSimulation()) {
             commandSwerveDrivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
         }
@@ -179,7 +177,8 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
+        // return autoChooser.getSelected();
+        return null;
     }
 
     public static void periodic() {
@@ -208,9 +207,10 @@ public class RobotContainer {
             yVelocity = drivePIDControllerYVeryClose.calculate(currentStateY.position, nextStateY);
         }
 
-//        System.out.println("aligned: " + aligned());
-//        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
-//                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
+        if (UserInterface.getControlComponent("Reset Subsystems").getBoolean(false)) {
+            CommandScheduler.getInstance().schedule(ScoreCommands.zeroSubsystems());
+            UserInterface.setControlComponent("Reset Subsystems", false);
+        }
     }
 
 
