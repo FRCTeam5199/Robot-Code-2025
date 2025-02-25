@@ -113,12 +113,13 @@ public class Robot extends TimedRobot {
         commandSwerveDrivetrain.getPigeon2().setYaw(Math.toRadians(180));
         autonomousCommand = robotContainer.getAutonomousCommand();
 
+
         // Schedule the autonomous command (example)
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
     }
-    
+
 
     /**
      * This function is called periodically during autonomous.

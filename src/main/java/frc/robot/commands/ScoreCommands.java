@@ -213,7 +213,7 @@ public class ScoreCommands {
 
     public static Command scoreL4() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 87),
+                new PositionCommand(armSubsystem, 88),
                 new PositionCommand(elevatorSubsystem, 1.002, true),
                 new PositionCommand(wristSubsystem, 164)
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));

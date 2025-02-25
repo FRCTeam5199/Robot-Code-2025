@@ -35,6 +35,8 @@ public final class Autos {
     private static PathPlannerAuto twoPieceRedKHPBL4;
     private static PathPlannerAuto twoPieceRedDHPTL4;
 
+    private static PathPlannerAuto threePieceBlueBottomL4;
+
 
     private static PathPlannerAuto driveByTopBlue;
     private static PathPlannerAuto twoPieceDriveByTopBlue;
@@ -69,6 +71,8 @@ public final class Autos {
         twoPieceRedKHPBL4 = new PathPlannerAuto("2 Piece K Red Bottom L4");
         twoPieceRedDHPTL4 = new PathPlannerAuto("2 Piece D Red Top L4");
 
+        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom 2 L4");
+
         driveByTopBlue = new PathPlannerAuto("Drive By");
         twoPieceDriveByTopBlue = new PathPlannerAuto("Drive By L4");
 
@@ -92,6 +96,7 @@ public final class Autos {
         autonChooserBlue.addOption("2 Piece Drive By Top", twoPieceDriveByTopBlue);
         autonChooserBlue.addOption("Drive By Right", driveByBottomBlue);
         autonChooserBlue.addOption("2 Piece Drive By Right", twoPieceDriveByBottomBlue);
+        autonChooserBlue.addOption("3 Piece Right", threePieceBlueBottomL4);
 
 
     }
