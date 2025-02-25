@@ -17,9 +17,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
@@ -27,11 +27,13 @@ import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.controls.ButtonPanelButtons;
 import frc.robot.controls.CommandButtonPanel;
-import frc.robot.subsystems.*;
 import frc.robot.subsystems.AprilTagSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.AprilTags;
 import frc.robot.utility.State;
@@ -177,8 +179,7 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().whileTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-                                .getClosestTagID()))))),
+                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(lockOnMode ? selectedTag.value() : aprilTagSubsystem.getClosestTagID()))))),
                 commandSwerveDrivetrain.applyRequest(
                         () -> drive.withVelocityX(xVelocity)
                                 .withVelocityY(yVelocity)
@@ -186,6 +187,15 @@ public class RobotContainer {
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees())))));
+
+        commandXboxController.button(0).onTrue(new InstantCommand(() -> selectedTag = AprilTags.get(aprilTagSubsystem.getClosestTagID()))).toggleOnTrue(new FunctionalCommand(
+                () -> new SequentialCommandGroup(
+                    new InstantCommand(() -> selectedTag = null),
+                    new InstantCommand(() -> lockOnMode = true))
+                () -> {},
+                (interrupted) -> new InstantCommand(() -> lockOnMode = false),
+                null));
+
         commandXboxController.rightBumper().onTrue(new VelocityCommand(intakeSubsystem, -75))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
