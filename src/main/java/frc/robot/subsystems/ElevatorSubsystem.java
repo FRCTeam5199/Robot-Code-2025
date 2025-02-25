@@ -38,7 +38,7 @@ public class ElevatorSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
 
-        if (getSupplyCurrent() > 8) currentSpike++;
+        if (getSupplyCurrent() > 2.75) currentSpike++;
         else noCurrentSpike++;
 
         if (noCurrentSpike >= 3) {

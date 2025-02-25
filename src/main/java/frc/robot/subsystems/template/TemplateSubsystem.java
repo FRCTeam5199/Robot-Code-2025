@@ -40,9 +40,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants.ArmConstants;
-import frc.robot.tagalong.GeometricUtils;
-import frc.robot.tagalong.MathUtils;
 import frc.robot.utility.FeedForward;
 import frc.robot.utility.PID;
 import frc.robot.utility.Type;
@@ -78,6 +75,8 @@ public class TemplateSubsystem extends SubsystemBase {
     private double mechMin;
     private double mechMax;
     private double sensorToMechRatio;
+    private double offset;
+    private boolean changedOffset = false;
 
     private double gearRatio = 1d;
     private double drumCircumference;
@@ -287,8 +286,8 @@ public class TemplateSubsystem extends SubsystemBase {
         if (type == Type.ROLLER) return;
 
         switch (type) {
-            case LINEAR -> goalState.position = getMotorRotFromMechM(goal);
-            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal);
+            case LINEAR -> goalState.position = getMotorRotFromMechM(goal + offset);
+            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal + offset);
             default -> goalState.position = getMotorRotFromMechRot(goal);
         }
 
@@ -306,9 +305,9 @@ public class TemplateSubsystem extends SubsystemBase {
         if (type == Type.ROLLER) return;
 
         switch (type) {
-            case LINEAR -> goalState.position = getMotorRotFromMechM(goal) + zero;
-            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal) + zero;
-            default -> goalState.position = getMotorRotFromMechRot(goal) + zero;
+            case LINEAR -> goalState.position = getMotorRotFromMechM(goal + offset);
+            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal + offset);
+            default -> goalState.position = getMotorRotFromMechRot(goal);
         }
 
         profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(vel, acc));
@@ -326,9 +325,9 @@ public class TemplateSubsystem extends SubsystemBase {
         if (type == Type.ROLLER) return;
 
         switch (type) {
-            case LINEAR -> goalState.position = getMotorRotFromMechM(goal) + zero;
-            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal) + zero;
-            default -> goalState.position = getMotorRotFromMechRot(goal) + zero;
+            case LINEAR -> goalState.position = getMotorRotFromMechM(goal + offset);
+            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal + offset);
+            default -> goalState.position = getMotorRotFromMechRot(goal);
         }
 
         goalState.velocity = 0;
@@ -379,6 +378,20 @@ public class TemplateSubsystem extends SubsystemBase {
                         && getMechRot() <= goal + upperTolerance;
             }
         }
+    }
+
+    public void setOffset(double offset) {
+        this.offset = offset;
+        changedOffset = true;
+    }
+
+    public void setOffset(double offset, boolean changedOffset) {
+        this.offset = offset;
+        this.changedOffset = changedOffset;
+    }
+
+    public double getOffset() {
+        return offset;
     }
 
     public double getGoal() {
@@ -490,6 +503,11 @@ public class TemplateSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (changedOffset) {
+            setPosition(goal);
+            changedOffset = false;
+            System.out.println("Goal: " + goal + offset);
+        }
         if (followLastMechProfile) followLastMechProfile();
 
         systemPose.set(getMotorRot());

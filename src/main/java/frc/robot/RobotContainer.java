@@ -32,6 +32,7 @@ import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.AprilTags;
 import frc.robot.utility.State;
@@ -48,6 +49,7 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
+    private final CommandXboxController operatorXboxController = new CommandXboxController(2); // My joystick
     private final CommandButtonPanel commandButtonPanel = new CommandButtonPanel(1);
     public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
@@ -66,7 +68,7 @@ public class RobotContainer {
     public static double yVelocity = 0;
     public static double rotationVelocity = 0;
 
-    public static double autoAlignXOffset = 0.02;
+    public static double autoAlignXOffset = 0.035;
     public static double autoAlignYOffset = -.165;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
@@ -185,20 +187,45 @@ public class RobotContainer {
                                 .withRotationalRate(rotationVelocity)))
         ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-                        .getPigeon2().getRotation2d().getDegrees())))));
+                        .getPigeon2().getRotation2d().getDegrees() + (DriverStation.getAlliance().isPresent()
+                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 0 : 180))))));
         commandXboxController.rightBumper().onTrue(new VelocityCommand(intakeSubsystem, -75))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
         commandButtonPanel.button(ButtonPanelButtons.MOVE_CLIMB_INCREASE)
-                .onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+                .onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6)))
+                .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandButtonPanel.button(ButtonPanelButtons.MOVE_CLIMB_DECREASE)
-                .onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+                .onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6)))
+                .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 
         commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
         commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
 
         commandXboxController.povUp().onTrue(new InstantCommand(() -> setState(State.ALGAE_HIGH)));
         commandXboxController.povDown().onTrue(new InstantCommand(() -> setState(State.ALGAE_LOW)));
+
+        operatorXboxController.y().onTrue(new InstantCommand(()
+                -> armSubsystem.setOffset(armSubsystem.getOffset() + 1)));
+        operatorXboxController.x().onTrue(new InstantCommand(()
+                -> armSubsystem.setOffset(armSubsystem.getOffset() - 1)));
+
+        operatorXboxController.rightBumper().onTrue(new InstantCommand(()
+                -> elevatorSubsystem.setOffset(armSubsystem.getOffset() + .01)));
+        operatorXboxController.leftBumper().onTrue(new InstantCommand(()
+                -> elevatorSubsystem.setOffset(armSubsystem.getOffset() - .01)));
+
+        operatorXboxController.b().onTrue(new InstantCommand(()
+                -> wristSubsystem.setOffset(armSubsystem.getOffset() + 1)));
+        operatorXboxController.a().onTrue(new InstantCommand(()
+                -> wristSubsystem.setOffset(armSubsystem.getOffset() - 1)));
+
+        operatorXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6)))
+                .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        operatorXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6)))
+                .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        operatorXboxController.povRight().onTrue(new PositionCommand(wristSubsystem, 30));
+        operatorXboxController.povLeft().onTrue(new PositionCommand(wristSubsystem, 0));
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
     }
@@ -221,6 +248,9 @@ public class RobotContainer {
 
     public static void periodic() {
         if (!timer.isRunning()) timer.start();
+        if (autoAlignXOffset > 0 && DriverStation.getAlliance().isPresent() &&
+                DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
+            autoAlignXOffset = -autoAlignXOffset;
 
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
@@ -258,9 +288,9 @@ public class RobotContainer {
 //        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
 //        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
-        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
-        System.out.println("Arm: " + armSubsystem.getDegrees());
-        System.out.println("Wrist: " + wristSubsystem.getDegrees());
+//        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
+//        System.out.println("Arm: " + armSubsystem.getDegrees());
+//        System.out.println("Wrist: " + wristSubsystem.getDegrees());
     }
 
 
@@ -282,7 +312,7 @@ public class RobotContainer {
 
 
     public static boolean aligned() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .02
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .03
                 && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .02;
 
     }

@@ -46,17 +46,17 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS
                 = new TrapezoidProfile.Constraints(75, 150);
         public static final PID ELEVATOR_PID = new PID(0, 0, 0);
-        public static final FeedForward ELEVATOR_FF = new FeedForward(.33, .17, .1333333333333333);
+        public static final FeedForward ELEVATOR_FF = new FeedForward(.42, .18, .16666666666666666666666666666667);
         public static final double ELEVATOR_MIN = 0;
         public static final double ELEVATOR_MAX = 1.002;
         public static final double ELEVATOR_LOWER_TOLERANCE = 0.03;
-        public static final double ELEVATOR_UPPER_TOLERANCE = 0.01;
+        public static final double ELEVATOR_UPPER_TOLERANCE = 0.03;
         public static final double[][] ELEVATOR_GEARING = new double[][]{{3, 1}};
         public static final boolean INVERT = true;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
         public static final boolean ELEVATOR_BRAKE = true;
-        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 80;
-        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 80;
+        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 45;
+        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 45;
         public static final double DRUM_CIRCUMFERENCE = .119694706;
 
         public static final double ARM_MM_CV = 80;
@@ -64,7 +64,7 @@ public final class Constants {
         public static final double ARM_MM_J = 1600;
 
         public static final Slot0Configs ELEVATOR_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(5)
+                .withKP(15)
                 .withKI(0)
                 .withKD(0)
                 .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
@@ -235,7 +235,7 @@ public final class Constants {
 
 
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(15)
+                .withKP(10)
                 .withKI(0)
                 .withKD(0)
                 .withKS(0)
@@ -263,7 +263,7 @@ public final class Constants {
 
         //The speed and acceleration the wrist should move at.
         //TODO: CHANGE
-        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(30, 60);
+        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(75, 150);
 
         public static final FeedForward WRIST_FF = new FeedForward(.08, .13, .1075268817204301);
         //degrees
@@ -293,7 +293,7 @@ public final class Constants {
         public static final String CAMERA_NAME = "Camera";
         public static final Transform3d CAMERA_POSE =
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
-        public static final double CAMERA_TO_FRONT_DISTANCE = .441325;
+        public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.6, 0.6, 999.0);
 
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.6, 0.6, 999.0);

@@ -214,8 +214,11 @@ public class ScoreCommands {
     public static Command scoreL4() {
         return new SequentialCommandGroup(
                 new PositionCommand(armSubsystem, 88),
-                new PositionCommand(elevatorSubsystem, 1.002, true),
-                new PositionCommand(wristSubsystem, 164)
+                new ParallelCommandGroup(
+                        new PositionCommand(elevatorSubsystem, 1.002, true),
+                        new PositionCommand(wristSubsystem, 100)
+                ),
+                new PositionCommand(wristSubsystem, 160)
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
 
@@ -324,7 +327,10 @@ public class ScoreCommands {
 
     public static Command zeroElevator() {
         return new FunctionalCommand(
-                () -> elevatorSubsystem.setVoltage(-2),
+                () -> {
+                    elevatorSubsystem.setVoltage(-2);
+                    elevatorSubsystem.setOffset(0, false);
+                },
                 () -> {
                 },
                 (interrupted) -> {
@@ -337,7 +343,10 @@ public class ScoreCommands {
 
     public static Command zeroWrist() {
         return new FunctionalCommand(
-                () -> wristSubsystem.setVoltage(-1),
+                () -> {
+                    wristSubsystem.setVoltage(-1);
+                    wristSubsystem.setOffset(0, false);
+                },
                 () -> {
                 },
                 (interrupted) -> {
@@ -351,7 +360,10 @@ public class ScoreCommands {
 
     public static Command zeroArm() {
         return new FunctionalCommand(
-                () -> armSubsystem.setVoltage(-2),
+                () -> {
+                    armSubsystem.setVoltage(-4);
+                    armSubsystem.setOffset(0, false);
+                },
                 () -> {
                 },
                 (interrupted) -> {
@@ -398,10 +410,6 @@ public class ScoreCommands {
                     RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
                             Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
                                     .getClosestTagID()))));
-
-//                    RobotContainer.commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kAutonStdDevs);
-//                    RobotContainer.aprilTagSubsystem.setStdDevs(Constants.Vision.kAutonStdDevs);
-//                    aprilTagSubsystem.setAutoAligning(true);
                 },
                 () -> RobotContainer.commandSwerveDrivetrain.setControl(
                         drive.withVelocityX(RobotContainer.xVelocity)
@@ -411,10 +419,6 @@ public class ScoreCommands {
                     RobotContainer.commandSwerveDrivetrain
                             .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
                                     .getPigeon2().getRotation2d().getDegrees() + 180)));
-
-//                    RobotContainer.commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
-//                    RobotContainer.aprilTagSubsystem.setStdDevs(Constants.Vision.kSingleTagStdDevs);
-//                    aprilTagSubsystem.setAutoAligning(false);
 
                     RobotContainer.commandSwerveDrivetrain.setControl(
                             drive.withVelocityX(0)
@@ -435,10 +439,6 @@ public class ScoreCommands {
                     RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
                             Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
                                     .getClosestTagID()))));
-
-//                    RobotContainer.commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kAutonStdDevs);
-//                    RobotContainer.aprilTagSubsystem.setStdDevs(Constants.Vision.kAutonStdDevs);
-//                    aprilTagSubsystem.setAutoAligning(true);
                 },
                 () ->
                         RobotContainer.commandSwerveDrivetrain.setControl(
@@ -449,10 +449,6 @@ public class ScoreCommands {
                     RobotContainer.commandSwerveDrivetrain
                             .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
                                     .getPigeon2().getRotation2d().getDegrees() + 180)));
-
-//                    RobotContainer.commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
-//                    RobotContainer.aprilTagSubsystem.setStdDevs(Constants.Vision.kSingleTagStdDevs);
-//                    aprilTagSubsystem.setAutoAligning(false);
 
                     RobotContainer.commandSwerveDrivetrain.setControl(
                             drive.withVelocityX(0)
@@ -618,7 +614,7 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .16, false),
+                                new PositionCommand(elevatorSubsystem, .1, false),
                                 new PositionCommand(wristSubsystem, 152)
                                 // new VelocityCommand(intakeSubsystem, 50)
                         ),
@@ -664,9 +660,10 @@ public class ScoreCommands {
                 new PositionCommand(armSubsystem, 85),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 1.003, true),
-                        new PositionCommand(wristSubsystem, 165)
+                        new PositionCommand(wristSubsystem, 100)
                         // new VelocityCommand(intakeSubsystem, 50)
-                )
+                ),
+                new PositionCommand(wristSubsystem, 165)
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
 

@@ -24,11 +24,11 @@ public class PositionCommand extends Command {
         this.templateSubsystem = templateSubsystem;
         this.goal = goal;
         updateGoalPosition = false;
-        if (isGoingUp) { //100, 150
+        if (isGoingUp) {
             //Up
-            this.vel = 50;
-            this.acc = 100;
-        } else { //80,100
+            this.vel = 60;
+            this.acc = 120;
+        } else {
             //Down
             this.vel = 35;
             this.acc = 70;
