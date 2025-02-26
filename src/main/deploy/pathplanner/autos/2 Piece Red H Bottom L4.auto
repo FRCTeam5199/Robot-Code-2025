@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "ALIGNL"
                 }
               },
               {
@@ -27,12 +27,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DUNK"
           }
         },
         {
@@ -60,7 +54,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVE"
+                  "name": "DRIVETOP"
                 }
               }
             ]
@@ -94,12 +88,6 @@
         {
           "type": "named",
           "data": {
-            "name": "DUNK"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "OUTTAKE"
           }
         },
@@ -107,6 +95,25 @@
           "type": "path",
           "data": {
             "pathName": "2 Piece Red K to HPB"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "INTAKE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DRIVETOP"
+                }
+              }
+            ]
           }
         }
       ]

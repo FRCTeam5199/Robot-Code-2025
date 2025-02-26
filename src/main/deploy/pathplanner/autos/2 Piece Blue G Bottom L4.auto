@@ -17,22 +17,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "L4"
+                  "name": "ALIGNL"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNL"
+                  "name": "L4"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DUNK"
           }
         },
         {
@@ -94,12 +88,6 @@
         {
           "type": "named",
           "data": {
-            "name": "DUNK"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "OUTTAKE"
           }
         },
@@ -107,6 +95,25 @@
           "type": "path",
           "data": {
             "pathName": "2 Piece Blue D to HPB"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "INTAKE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DRIVE"
+                }
+              }
+            ]
           }
         }
       ]

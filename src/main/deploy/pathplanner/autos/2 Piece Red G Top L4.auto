@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNL"
+                  "name": "ALIGNR"
                 }
               },
               {
@@ -27,12 +27,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DUNK"
           }
         },
         {
@@ -60,7 +54,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVETOP"
+                  "name": "DRIVE"
                 }
               }
             ]
@@ -79,7 +73,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNL"
+                  "name": "ALIGNR"
                 }
               },
               {
@@ -107,6 +101,25 @@
           "type": "path",
           "data": {
             "pathName": "2 Piece Red C to HPT"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "INTAKE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DRIVE"
+                }
+              }
+            ]
           }
         }
       ]

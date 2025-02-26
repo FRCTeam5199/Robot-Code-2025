@@ -101,17 +101,19 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.06, false).andThen(new PositionCommand(armSubsystem, 56.56)),
-                                new PositionCommand(wristSubsystem, 0.004)
+                                new PositionCommand(elevatorSubsystem, 0.03, false)
+                                        .andThen(new PositionCommand(armSubsystem, 56.56)),
+                                new PositionCommand(wristSubsystem, 0)
                         )
                 ),
                 new SequentialCommandGroup(
                         new ParallelCommandGroup( //Going up
-                                new PositionCommand(elevatorSubsystem, 0.06, true).andThen(new PositionCommand(armSubsystem, 56.56)),
-                                new PositionCommand(wristSubsystem, 0.004)
+                                new PositionCommand(elevatorSubsystem, 0.03, true),
+                                new PositionCommand(armSubsystem, 56.56),
+                                new PositionCommand(wristSubsystem, 0)
                         )
                 ),
-                () -> elevatorSubsystem.getMechM() > .06
+                () -> elevatorSubsystem.getMechM() > .03
         );
         // ).alongWith(new VelocityCommand(intakeSubsystem, 50));
     }
@@ -124,9 +126,9 @@ public class ScoreCommands {
                 () -> intakeSubsystem.intake(),
                 (interrupted) -> intakeSubsystem.stopIntake(),
                 () -> {
-                    if (intakeSubsystem.getStatorCurrent() > 35) {
+                    if (intakeSubsystem.getStatorCurrent() > 25) {
                         timer.start();
-                        if (timer.hasElapsed(.1)) {
+                        if (timer.hasElapsed(.3)) {
                             timer.stop();
                             return true;
                         }
@@ -218,7 +220,7 @@ public class ScoreCommands {
                         new PositionCommand(elevatorSubsystem, 1.002, true),
                         new PositionCommand(wristSubsystem, 100)
                 ),
-                new PositionCommand(wristSubsystem, 160)
+                new PositionCommand(wristSubsystem, 165)
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
 
@@ -268,7 +270,7 @@ public class ScoreCommands {
                 Map.ofEntries(
                         Map.entry(State.L2, new PositionCommand(armSubsystem, 65)),
                         Map.entry(State.L3, new PositionCommand(armSubsystem, 73)),
-                        Map.entry(State.L4, new PositionCommand(wristSubsystem, 165))
+                        Map.entry(State.L4, new PositionCommand(wristSubsystem, 167))
                 ),
                 RobotContainer::getState
         );
@@ -418,7 +420,10 @@ public class ScoreCommands {
                 (interrupted) -> {
                     RobotContainer.commandSwerveDrivetrain
                             .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
-                                    .getPigeon2().getRotation2d().getDegrees() + 180)));
+                                    .getPigeon2().getRotation2d().getDegrees() +
+                                    (DriverStation.getAlliance().isPresent()
+                                            && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                                            ? 180 : 0))));
 
                     RobotContainer.commandSwerveDrivetrain.setControl(
                             drive.withVelocityX(0)
@@ -448,7 +453,10 @@ public class ScoreCommands {
                 (interrupted) -> {
                     RobotContainer.commandSwerveDrivetrain
                             .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
-                                    .getPigeon2().getRotation2d().getDegrees() + 180)));
+                                    .getPigeon2().getRotation2d().getDegrees() +
+                                    (DriverStation.getAlliance().isPresent()
+                                            && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                                            ? 180 : 0))));
 
                     RobotContainer.commandSwerveDrivetrain.setControl(
                             drive.withVelocityX(0)
@@ -463,31 +471,13 @@ public class ScoreCommands {
         return new FunctionalCommand(
                 () -> {
                 },
-                () -> {
-                    if (DriverStation.getAlliance().isPresent()
-                            && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue))
-                        RobotContainer.commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(-.5)
-                                        .withVelocityY(-.5));
-                    else
-                        RobotContainer.commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(.5)
-                                        .withVelocityY(-.5));
-                },
+                () -> RobotContainer.commandSwerveDrivetrain.setControl(
+                        drive.withVelocityX(-.5)
+                                .withVelocityY(-.5)),
                 (interrupted) -> RobotContainer.commandSwerveDrivetrain.setControl(
                         drive.withVelocityX(0)
                                 .withVelocityY(0)),
-                () -> {
-                    if (intakeSubsystem.getStatorCurrent() > 25) {
-                        timer.start();
-                        if (timer.hasElapsed(.1)) {
-                            timer.stop();
-                            return true;
-                        }
-                        return false;
-                    }
-                    return false;
-                },
+                () -> false,
                 RobotContainer.commandSwerveDrivetrain);
     }
 
@@ -515,20 +505,9 @@ public class ScoreCommands {
                 () -> {
                     System.out.println("Forward Start");
                 },
-                () -> {
-                    if (DriverStation.getAlliance().isPresent()
-                            && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue))
-                        RobotContainer.commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(-0.5)
-                                        .withVelocityY(0.5));
-                    else
-                        RobotContainer.commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(0.5)
-                                        .withVelocityY(0.5));
-
-                    System.out.println("Going Forward");
-
-                },
+                () -> RobotContainer.commandSwerveDrivetrain.setControl(
+                        drive.withVelocityX(-0.5)
+                                .withVelocityY(0.5)),
                 (bool) -> {
                     RobotContainer.commandSwerveDrivetrain.setControl(
                             drive.withVelocityX(0)
@@ -536,17 +515,7 @@ public class ScoreCommands {
 
                     System.out.println("ending");
                 },
-                () -> {
-                    if (intakeSubsystem.isIntooken()) {
-                        timer.start();
-                        if (timer.hasElapsed(.2)) {
-                            timer.stop();
-                            return true;
-                        }
-                        return false;
-                    }
-                    return false;
-                },
+                () -> false,
                 RobotContainer.commandSwerveDrivetrain);
     }
 
@@ -660,10 +629,10 @@ public class ScoreCommands {
                 new PositionCommand(armSubsystem, 85),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 1.003, true),
-                        new PositionCommand(wristSubsystem, 130)
+                        new PositionCommand(wristSubsystem, 150)
                         // new VelocityCommand(intakeSubsystem, 50)
                 ),
-                new PositionCommand(wristSubsystem, 165)
+                new PositionCommand(wristSubsystem, 167)
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
 

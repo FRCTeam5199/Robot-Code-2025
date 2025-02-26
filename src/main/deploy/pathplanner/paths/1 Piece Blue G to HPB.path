@@ -28,7 +28,12 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6033586565373841,
+      "rotationDegrees": 54.145
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
@@ -79,7 +84,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.144771653784304
+    "rotation": 54.145
   },
   "reversed": false,
   "folder": "1 Piece Blue Paths",

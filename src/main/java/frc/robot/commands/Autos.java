@@ -86,10 +86,10 @@ public final class Autos {
 
         autonChooserRed.addOption("1 Piece Red Right", onePieceRedHPTL4);
         autonChooserRed.addOption("1 Piece Red Left", onePieceRedHPBL4);
-        autonChooserRed.addOption("2 Piece Red Right", twoPieceRedHHPBL4);
-        autonChooserRed.addOption("2 Piece Red Left", twoPieceBlueHHPTL4);
+        autonChooserRed.addOption("2 Piece Red Right", twoPieceRedGHPTL4);
+        autonChooserRed.addOption("2 Piece Red Left", twoPieceRedHHPBL4);
 
-        autonChooserBlue.addOption("1 Piece blue Left", onePieceBlueHPTL4);
+        autonChooserBlue.addOption("1 Piece Blue Left", onePieceBlueHPTL4);
         autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueHPBL4);
         autonChooserBlue.addOption("2 Piece Blue Left", twoPieceBlueHHPTL4);
         autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueGHPBL4);

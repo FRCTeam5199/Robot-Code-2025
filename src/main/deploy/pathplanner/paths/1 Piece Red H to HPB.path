@@ -28,7 +28,12 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5597760895641766,
+      "rotationDegrees": 124.359
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
@@ -72,7 +77,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 124.35938029758951
+    "rotation": 124.359
   },
   "reversed": false,
   "folder": "1 Piece Red Paths",

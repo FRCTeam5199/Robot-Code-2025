@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNL"
+                  "name": "ALIGNR"
                 }
               },
               {
@@ -27,12 +27,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DUNK"
           }
         },
         {
@@ -60,7 +54,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVETOP"
+                  "name": "DRIVE"
                 }
               }
             ]

@@ -32,12 +32,6 @@
         {
           "type": "named",
           "data": {
-            "name": "DUNK"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "OUTTAKE"
           }
         },
@@ -60,7 +54,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVE"
+                  "name": "DRIVETOP"
                 }
               }
             ]

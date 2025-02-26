@@ -28,7 +28,12 @@
       "linkedName": "HP Red Top"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5197920831667345,
+      "rotationDegrees": -125.816
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
@@ -65,7 +70,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.8159256349378
+    "rotation": -125.816
   },
   "reversed": false,
   "folder": "2 Piece Red Paths",

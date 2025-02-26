@@ -51,7 +51,7 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
-    private final CommandXboxController operatorXboxController = new CommandXboxController(2); // My joystick
+    private final CommandXboxController operatorXboxController = new CommandXboxController(1); // My joystick
     private final CommandButtonPanel commandButtonPanel = new CommandButtonPanel(1);
     public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
@@ -70,7 +70,7 @@ public class RobotContainer {
     public static double yVelocity = 0;
     public static double rotationVelocity = 0;
 
-    public static double autoAlignXOffset = 0.035;
+    public static double autoAlignXOffset = 0.025;
     public static double autoAlignYOffset = -.165;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
@@ -124,13 +124,12 @@ public class RobotContainer {
         NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
         NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
         NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
-        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4());
+        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4NoDunk());
         NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
         NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
         NamedCommands.registerCommand("ARML4", ScoreCommands.armL4());
-        NamedCommands.registerCommand("DUNK", ScoreCommands.dunk());
-        NamedCommands.registerCommand("ALIGNL", ScoreCommands.autoAlignLAuton());
-        NamedCommands.registerCommand("ALIGNR", ScoreCommands.autoAlignRAuton());
+        NamedCommands.registerCommand("ALIGNL", ScoreCommands.autoAlignLAuton().withTimeout(2000));
+        NamedCommands.registerCommand("ALIGNR", ScoreCommands.autoAlignRAuton().withTimeout(2000));
         NamedCommands.registerCommand("DRIVE", ScoreCommands.autoMoveForwardBottom());
         NamedCommands.registerCommand("DRIVETOP", ScoreCommands.autoMoveForwardTop());
         NamedCommands.registerCommand("DROP", ScoreCommands.drop());
@@ -295,12 +294,12 @@ public class RobotContainer {
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
 
-//        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
-//        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
+        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
+        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
-        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
-        System.out.println("Arm: " + armSubsystem.getDegrees());
-        System.out.println("Wrist: " + wristSubsystem.getDegrees());
+//        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
+//        System.out.println("Arm: " + armSubsystem.getDegrees());
+//        System.out.println("Wrist: " + wristSubsystem.getDegrees());
     }
 
 

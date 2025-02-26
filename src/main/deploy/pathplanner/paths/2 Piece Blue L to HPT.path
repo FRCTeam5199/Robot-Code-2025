@@ -12,16 +12,16 @@
         "y": 5.611716357543156
       },
       "isLocked": false,
-      "linkedName": "L Blue"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.5,
-        "y": 7.215
+        "x": 1.163,
+        "y": 6.98
       },
       "prevControl": {
-        "x": 2.365692018378329,
-        "y": 6.360046702002671
+        "x": 2.001946721311475,
+        "y": 6.404559426229508
       },
       "nextControl": null,
       "isLocked": false,

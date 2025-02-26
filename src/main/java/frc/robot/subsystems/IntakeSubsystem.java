@@ -57,6 +57,6 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
     //Peak naming :fire:
     public boolean isIntooken() {
-        return getStatorCurrent() > 50;
+        return getStatorCurrent() > 25;
     }
 }
