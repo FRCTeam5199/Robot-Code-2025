@@ -114,6 +114,10 @@ public final class Autos {
             public static Command onePieceBlueHPTL4() {
                 return onePieceBlueHPTL4;
             }
+
+            public static Command onePieceBlueDrop() {
+                return null;
+            }
         }
 
         public static class Red {
@@ -124,6 +128,7 @@ public final class Autos {
             public static Command onePieceRedHPTL4() {
                 return onePieceRedHPTL4;
             }
+
             public static Command onePieceRedDrop() {
                 return onePieceRedDrop;
             }

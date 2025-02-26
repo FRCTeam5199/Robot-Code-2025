@@ -115,6 +115,7 @@ public class Robot extends TimedRobot {
 
         if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue) {
             commandSwerveDrivetrain.getPigeon2().setYaw(Math.toRadians(180));
+
         }
 
 
