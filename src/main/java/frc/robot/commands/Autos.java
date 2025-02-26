@@ -26,6 +26,7 @@ public final class Autos {
     private static PathPlannerAuto onePieceBlueHPTL4;
     private static PathPlannerAuto onePieceRedHPBL4;
     private static PathPlannerAuto onePieceRedHPTL4;
+    private static PathPlannerAuto onePieceRedDrop;
 
     private static PathPlannerAuto twoPieceBlueGHPBL4;
     private static PathPlannerAuto twoPieceBlueHHPTL4;
@@ -62,7 +63,7 @@ public final class Autos {
         onePieceBlueHPTL4 = new PathPlannerAuto("1 Piece Blue HPT L4");
         onePieceRedHPBL4 = new PathPlannerAuto("1 Piece Red HPB L4");
         onePieceRedHPTL4 = new PathPlannerAuto("1 Piece Red HPT L4");
-
+        onePieceRedDrop = new PathPlannerAuto("Red Climber Drop");
         twoPieceBlueGHPBL4 = new PathPlannerAuto("2 Piece Blue G Bottom L4");
         twoPieceBlueHHPTL4 = new PathPlannerAuto("2 Piece Blue H Top L4");
         twoPieceBlueDHPBL4 = new PathPlannerAuto("2 Piece Blue D Bottom L4");
@@ -88,6 +89,7 @@ public final class Autos {
         autonChooserRed.addOption("1 Piece Red Left", onePieceRedHPBL4);
         autonChooserRed.addOption("2 Piece Red Right", twoPieceRedGHPTL4);
         autonChooserRed.addOption("2 Piece Red Left", twoPieceRedHHPBL4);
+        autonChooserRed.addOption("1 Piece Red Climber Drop", onePieceRedDrop);
 
         autonChooserBlue.addOption("1 Piece Blue Left", onePieceBlueHPTL4);
         autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueHPBL4);
@@ -122,7 +124,9 @@ public final class Autos {
             public static Command onePieceRedHPTL4() {
                 return onePieceRedHPTL4;
             }
-
+            public static Command onePieceRedDrop() {
+                return onePieceRedDrop;
+            }
         }
     }
 
