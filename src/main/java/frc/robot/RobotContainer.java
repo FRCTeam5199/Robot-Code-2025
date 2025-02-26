@@ -298,9 +298,9 @@ public class RobotContainer {
 //        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
 //        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
-//        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
-//        System.out.println("Arm: " + armSubsystem.getDegrees());
-//        System.out.println("Wrist: " + wristSubsystem.getDegrees());
+        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
+        System.out.println("Arm: " + armSubsystem.getDegrees());
+        System.out.println("Wrist: " + wristSubsystem.getDegrees());
     }
 
 
@@ -322,7 +322,7 @@ public class RobotContainer {
 
 
     public static boolean aligned() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .03
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .02
                 && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .02;
 
     }

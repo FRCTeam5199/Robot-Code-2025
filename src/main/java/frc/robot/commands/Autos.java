@@ -26,6 +26,7 @@ public final class Autos {
     private static PathPlannerAuto onePieceBlueHPTL4;
     private static PathPlannerAuto onePieceRedHPBL4;
     private static PathPlannerAuto onePieceRedHPTL4;
+
     private static PathPlannerAuto twoPieceBlueGHPBL4;
     private static PathPlannerAuto twoPieceBlueHHPTL4;
     private static PathPlannerAuto twoPieceBlueDHPBL4;
@@ -35,14 +36,14 @@ public final class Autos {
     private static PathPlannerAuto twoPieceRedKHPBL4;
     private static PathPlannerAuto twoPieceRedDHPTL4;
 
-    private static PathPlannerAuto threePieceBlueBottomL4;
-
-
-    private static PathPlannerAuto driveByTopBlue;
-    private static PathPlannerAuto twoPieceDriveByTopBlue;
-
-    private static PathPlannerAuto driveByBottomBlue;
-    private static PathPlannerAuto twoPieceDriveByBottomBlue;
+//    private static PathPlannerAuto threePieceBlueBottomL4;
+//
+//
+//    private static PathPlannerAuto driveByTopBlue;
+//    private static PathPlannerAuto twoPieceDriveByTopBlue;
+//
+//    private static PathPlannerAuto driveByBottomBlue;
+//    private static PathPlannerAuto twoPieceDriveByBottomBlue;
 
     /**
      * Gets or creates the AutoChooser (Singleton Method)
@@ -71,13 +72,13 @@ public final class Autos {
         twoPieceRedKHPBL4 = new PathPlannerAuto("2 Piece K Red Bottom L4");
         twoPieceRedDHPTL4 = new PathPlannerAuto("2 Piece D Red Top L4");
 
-        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom 2 L4");
-
-        driveByTopBlue = new PathPlannerAuto("Drive By");
-        twoPieceDriveByTopBlue = new PathPlannerAuto("Drive By L4");
-
-        driveByBottomBlue = new PathPlannerAuto("Drive By Blue Bottom");
-        twoPieceDriveByBottomBlue = new PathPlannerAuto("Drive By Blue Bottom 2 Piece L4");
+//        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom 2 L4");
+//
+//        driveByTopBlue = new PathPlannerAuto("Drive By");
+//        twoPieceDriveByTopBlue = new PathPlannerAuto("Drive By L4");
+//
+//        driveByBottomBlue = new PathPlannerAuto("Drive By Blue Bottom");
+//        twoPieceDriveByBottomBlue = new PathPlannerAuto("Drive By Blue Bottom 2 Piece L4");
 
 
         Shuffleboard.getTab("Autons").add("Red Autons", autonChooserRed).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(2, 1);
@@ -92,11 +93,11 @@ public final class Autos {
         autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueHPBL4);
         autonChooserBlue.addOption("2 Piece Blue Left", twoPieceBlueHHPTL4);
         autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueGHPBL4);
-        autonChooserBlue.addOption("Drive By Left", driveByTopBlue);
-        autonChooserBlue.addOption("2 Piece Drive By Top", twoPieceDriveByTopBlue);
-        autonChooserBlue.addOption("Drive By Right", driveByBottomBlue);
-        autonChooserBlue.addOption("2 Piece Drive By Right", twoPieceDriveByBottomBlue);
-        autonChooserBlue.addOption("3 Piece Right", threePieceBlueBottomL4);
+//        autonChooserBlue.addOption("Drive By Left", driveByTopBlue);
+//        autonChooserBlue.addOption("2 Piece Drive By Top", twoPieceDriveByTopBlue);
+//        autonChooserBlue.addOption("Drive By Right", driveByBottomBlue);
+//        autonChooserBlue.addOption("2 Piece Drive By Right", twoPieceDriveByBottomBlue);
+//        autonChooserBlue.addOption("3 Piece Right", threePieceBlueBottomL4);
 
 
     }

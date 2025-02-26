@@ -64,7 +64,7 @@ public final class Constants {
         public static final double ARM_MM_J = 1600;
 
         public static final Slot0Configs ELEVATOR_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(15)
+                .withKP(1)
                 .withKI(0)
                 .withKD(0)
                 .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
@@ -235,9 +235,9 @@ public final class Constants {
 
 
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(10)
+                .withKP(1)
                 .withKI(0)
-                .withKD(0)
+                .withKD(0.01)
                 .withKS(0)
                 .withKG(0)
                 .withKV(0)
@@ -263,9 +263,9 @@ public final class Constants {
 
         //The speed and acceleration the wrist should move at.
         //TODO: CHANGE
-        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(75, 150);
+        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(100, 200);
 
-        public static final FeedForward WRIST_FF = new FeedForward(.08, .13, .1075268817204301);
+        public static final FeedForward WRIST_FF = new FeedForward(.16, .22, .1111111111111111);
         //degrees
         public static final double WRIST_LOWER_TOLERANCE = 2;
         public static final double WRIST_UPPER_TOLERANCE = 2;

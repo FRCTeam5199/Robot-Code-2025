@@ -623,13 +623,13 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going up
                         new PositionCommand(armSubsystem, 65),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .16, true),
+                                new PositionCommand(elevatorSubsystem, .1, true),
                                 new PositionCommand(wristSubsystem, 152)
                                 // new VelocityCommand(intakeSubsystem, 50)
                         )
 
                 ),
-                () -> elevatorSubsystem.getMechM() > .07
+                () -> elevatorSubsystem.getMechM() > .1
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L2)));
     }
 
@@ -660,7 +660,7 @@ public class ScoreCommands {
                 new PositionCommand(armSubsystem, 85),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 1.003, true),
-                        new PositionCommand(wristSubsystem, 100)
+                        new PositionCommand(wristSubsystem, 130)
                         // new VelocityCommand(intakeSubsystem, 50)
                 ),
                 new PositionCommand(wristSubsystem, 165)

@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.Optional;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import org.photonvision.EstimatedRobotPose;
@@ -110,16 +111,20 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        commandSwerveDrivetrain.getPigeon2().setYaw(Math.toRadians(180));
-        autonomousCommand = robotContainer.getAutonomousCommand();
+        var alliance = DriverStation.getAlliance();
 
+        if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue) {
+            commandSwerveDrivetrain.getPigeon2().setYaw(Math.toRadians(180));
+        }
+
+
+        autonomousCommand = robotContainer.getAutonomousCommand();
 
         // Schedule the autonomous command (example)
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
     }
-
 
     /**
      * This function is called periodically during autonomous.
