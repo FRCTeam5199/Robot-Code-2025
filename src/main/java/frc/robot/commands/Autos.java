@@ -26,12 +26,16 @@ public final class Autos {
     private static PathPlannerAuto onePieceBlueHPTL4;
     private static PathPlannerAuto onePieceRedHPBL4;
     private static PathPlannerAuto onePieceRedHPTL4;
+    private static PathPlannerAuto onePieceBlueDrop;
     private static PathPlannerAuto onePieceRedDrop;
 
     private static PathPlannerAuto twoPieceBlueGHPBL4;
     private static PathPlannerAuto twoPieceBlueHHPTL4;
     private static PathPlannerAuto twoPieceBlueDHPBL4;
     private static PathPlannerAuto twoPieceBlueKHPTL4;
+
+    private static PathPlannerAuto threePieceBlueBottomL4;
+
     private static PathPlannerAuto twoPieceRedHHPBL4;
     private static PathPlannerAuto twoPieceRedGHPTL4;
     private static PathPlannerAuto twoPieceRedKHPBL4;
@@ -61,6 +65,7 @@ public final class Autos {
     public static void initializeAutos() {
         onePieceBlueHPBL4 = new PathPlannerAuto("1 Piece Blue HPB L4");
         onePieceBlueHPTL4 = new PathPlannerAuto("1 Piece Blue HPT L4");
+        onePieceBlueDrop = new PathPlannerAuto("Blue Climber Drop");
         onePieceRedHPBL4 = new PathPlannerAuto("1 Piece Red HPB L4");
         onePieceRedHPTL4 = new PathPlannerAuto("1 Piece Red HPT L4");
         onePieceRedDrop = new PathPlannerAuto("Red Climber Drop");
@@ -72,6 +77,7 @@ public final class Autos {
         twoPieceRedGHPTL4 = new PathPlannerAuto("2 Piece Red G Top L4");
         twoPieceRedKHPBL4 = new PathPlannerAuto("2 Piece K Red Bottom L4");
         twoPieceRedDHPTL4 = new PathPlannerAuto("2 Piece D Red Top L4");
+        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom 2 L4");
 
 //        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom 2 L4");
 //
@@ -95,6 +101,8 @@ public final class Autos {
         autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueHPBL4);
         autonChooserBlue.addOption("2 Piece Blue Left", twoPieceBlueHHPTL4);
         autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueGHPBL4);
+        autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDrop);
+//        autonChooserBlue.addOption("3 Piece Blue Bottom 2 L4", threePieceBlueBottomL4);
 //        autonChooserBlue.addOption("Drive By Left", driveByTopBlue);
 //        autonChooserBlue.addOption("2 Piece Drive By Top", twoPieceDriveByTopBlue);
 //        autonChooserBlue.addOption("Drive By Right", driveByBottomBlue);
@@ -116,7 +124,7 @@ public final class Autos {
             }
 
             public static Command onePieceBlueDrop() {
-                return null;
+                return onePieceBlueDrop;
             }
         }
 

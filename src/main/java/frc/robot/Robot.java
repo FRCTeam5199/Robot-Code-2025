@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.Optional;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
@@ -47,6 +48,10 @@ public class Robot extends TimedRobot {
         UserInterface.init();
 
         commandSwerveDrivetrain.configureAutoBuilder();
+
+        System.setProperty("wpilog.directory", "/media/sda1/wpilog");
+
+        DataLogManager.start();
 
         commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
 
@@ -113,9 +118,10 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         var alliance = DriverStation.getAlliance();
 
+//        commandSwerveDrivetrain.getPigeon2().reset();
+
         if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue) {
             commandSwerveDrivetrain.getPigeon2().setYaw(Math.toRadians(180));
-
         }
 
 

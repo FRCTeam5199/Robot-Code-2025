@@ -101,19 +101,19 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, 0.03, false)
+                                new PositionCommand(elevatorSubsystem, 0.04, false)
                                         .andThen(new PositionCommand(armSubsystem, 56.56)),
                                 new PositionCommand(wristSubsystem, 0)
                         )
                 ),
                 new SequentialCommandGroup(
                         new ParallelCommandGroup( //Going up
-                                new PositionCommand(elevatorSubsystem, 0.03, true),
+                                new PositionCommand(elevatorSubsystem, 0.04, true),
                                 new PositionCommand(armSubsystem, 56.56),
                                 new PositionCommand(wristSubsystem, 0)
                         )
                 ),
-                () -> elevatorSubsystem.getMechM() > .03
+                () -> elevatorSubsystem.getMechM() > .04
         );
         // ).alongWith(new VelocityCommand(intakeSubsystem, 50));
     }
@@ -163,7 +163,7 @@ public class ScoreCommands {
                 new PositionCommand(armSubsystem, 0),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 0, true),
-                        new PositionCommand(wristSubsystem, 50)
+                        new PositionCommand(wristSubsystem, 46)
                         // new VelocityCommand(intakeSubsystem, 50)
                 )
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1)));
@@ -241,13 +241,18 @@ public class ScoreCommands {
     public static Command armStable() {
         return new SelectCommand<>(
                 Map.ofEntries(
-                        Map.entry(State.L1, armL2()),
+                        Map.entry(State.L1, armL1()),
                         Map.entry(State.L2, armL2()),
                         Map.entry(State.L3, armL3()),
                         Map.entry(State.L4, armL4())
                 ),
                 RobotContainer::getState
         );
+    }
+
+    public static Command armL1() {
+        return new PositionCommand(armSubsystem, 0).alongWith(
+                new InstantCommand(() -> RobotContainer.setState(State.L1)));
     }
 
     public static Command armL2() {
@@ -303,7 +308,7 @@ public class ScoreCommands {
                                 new PositionCommand(wristSubsystem, 163)
                         )
                 ),
-                () -> elevatorSubsystem.getMechM() > .545
+                () -> elevatorSubsystem.getMechM() > .55
         );
     }
 
@@ -323,7 +328,7 @@ public class ScoreCommands {
                                 new PositionCommand(wristSubsystem, 163)
                         )
                 ),
-                () -> elevatorSubsystem.getMechM() > .545
+                () -> elevatorSubsystem.getMechM() > .25
         );
     }
 
@@ -382,7 +387,7 @@ public class ScoreCommands {
                         zeroElevator(),
                         zeroArm(),
                         zeroWrist()
-                ),
+                ).withTimeout(5),
                 new WaitCommand(.3),
                 new ParallelCommandGroup(
                         new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
@@ -423,7 +428,7 @@ public class ScoreCommands {
                                     .getPigeon2().getRotation2d().getDegrees() +
                                     (DriverStation.getAlliance().isPresent()
                                             && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
-                                            ? 180 : 0))));
+                                            ? 180 : 180))));
 
                     RobotContainer.commandSwerveDrivetrain.setControl(
                             drive.withVelocityX(0)
@@ -456,7 +461,7 @@ public class ScoreCommands {
                                     .getPigeon2().getRotation2d().getDegrees() +
                                     (DriverStation.getAlliance().isPresent()
                                             && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
-                                            ? 180 : 0))));
+                                            ? 180 : 180))));
 
                     RobotContainer.commandSwerveDrivetrain.setControl(
                             drive.withVelocityX(0)

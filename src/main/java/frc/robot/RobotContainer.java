@@ -16,10 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
@@ -124,12 +121,12 @@ public class RobotContainer {
         NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
         NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
         NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
-        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4NoDunk());
+        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4NoDunk().withTimeout(2));
         NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
         NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
         NamedCommands.registerCommand("ARML4", ScoreCommands.armL4());
-        NamedCommands.registerCommand("ALIGNL", ScoreCommands.autoAlignLAuton().withTimeout(2000));
-        NamedCommands.registerCommand("ALIGNR", ScoreCommands.autoAlignRAuton().withTimeout(2000));
+        NamedCommands.registerCommand("ALIGNL", ScoreCommands.autoAlignLAuton().withTimeout(2));
+        NamedCommands.registerCommand("ALIGNR", ScoreCommands.autoAlignRAuton().withTimeout(2));
         NamedCommands.registerCommand("DRIVE", ScoreCommands.autoMoveForwardBottom());
         NamedCommands.registerCommand("DRIVETOP", ScoreCommands.autoMoveForwardTop());
         NamedCommands.registerCommand("DROP", ScoreCommands.drop());
@@ -208,8 +205,9 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6)))
                 .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 
-        commandXboxController.povRight().onTrue(ScoreCommands.zeroSubsystems());
-        commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffset));
+        commandXboxController.button(7).onTrue(ScoreCommands.zeroSubsystems());
+        commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffsetLeft));
+        commandXboxController.povRight().onTrue(new InstantCommand(this::toggleAutoAlignOffsetRight));
 
         commandXboxController.povUp().onTrue(new InstantCommand(() -> setState(State.ALGAE_HIGH)));
         commandXboxController.povDown().onTrue(new InstantCommand(() -> setState(State.ALGAE_LOW)));
@@ -220,14 +218,14 @@ public class RobotContainer {
                 -> armSubsystem.setOffset(armSubsystem.getOffset() - 1)));
 
         operatorXboxController.rightBumper().onTrue(new InstantCommand(()
-                -> elevatorSubsystem.setOffset(armSubsystem.getOffset() + .01)));
+                -> elevatorSubsystem.setOffset(elevatorSubsystem.getOffset() + .01)));
         operatorXboxController.leftBumper().onTrue(new InstantCommand(()
-                -> elevatorSubsystem.setOffset(armSubsystem.getOffset() - .01)));
+                -> elevatorSubsystem.setOffset(elevatorSubsystem.getOffset() - .01)));
 
         operatorXboxController.b().onTrue(new InstantCommand(()
-                -> wristSubsystem.setOffset(armSubsystem.getOffset() + 1)));
+                -> wristSubsystem.setOffset(wristSubsystem.getOffset() + 1)));
         operatorXboxController.a().onTrue(new InstantCommand(()
-                -> wristSubsystem.setOffset(armSubsystem.getOffset() - 1)));
+                -> wristSubsystem.setOffset(wristSubsystem.getOffset() - 1)));
 
         operatorXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6)))
                 .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
@@ -235,6 +233,9 @@ public class RobotContainer {
                 .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         operatorXboxController.povRight().onTrue(new PositionCommand(wristSubsystem, 30));
         operatorXboxController.povLeft().onTrue(new PositionCommand(wristSubsystem, 0));
+
+        operatorXboxController.rightTrigger().onTrue(new PositionCommand(elevatorSubsystem, 0)
+                .andThen(new PositionCommand(armSubsystem, 0)));
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
     }
@@ -304,14 +305,28 @@ public class RobotContainer {
 
 
     public void toggleAutoAlignOffsetLeft() {
-        if (autoAlignYOffset > 0) {
-            autoAlignYOffset = -autoAlignYOffset;
+        if (DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) {
+            if (autoAlignYOffset < 0) {
+                autoAlignYOffset = -autoAlignYOffset;
+            }
+        } else {
+            if (autoAlignYOffset > 0) {
+                autoAlignYOffset = -autoAlignYOffset;
+            }
         }
     }
 
     public void toggleAutoAlignOffsetRight() {
-        if (autoAlignYOffset < 0) {
-            autoAlignYOffset = -autoAlignYOffset;
+        if (DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) {
+            if (autoAlignYOffset > 0) {
+                autoAlignYOffset = -autoAlignYOffset;
+            }
+        } else {
+            if (autoAlignYOffset < 0) {
+                autoAlignYOffset = -autoAlignYOffset;
+            }
         }
     }
 

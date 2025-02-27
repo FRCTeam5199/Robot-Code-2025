@@ -49,8 +49,8 @@ public final class Constants {
         public static final FeedForward ELEVATOR_FF = new FeedForward(.42, .18, .16666666666666666666666666666667);
         public static final double ELEVATOR_MIN = 0;
         public static final double ELEVATOR_MAX = 1.002;
-        public static final double ELEVATOR_LOWER_TOLERANCE = 0.03;
-        public static final double ELEVATOR_UPPER_TOLERANCE = 0.03;
+        public static final double ELEVATOR_LOWER_TOLERANCE = 0.05;
+        public static final double ELEVATOR_UPPER_TOLERANCE = 0.05;
         public static final double[][] ELEVATOR_GEARING = new double[][]{{3, 1}};
         public static final boolean INVERT = true;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;

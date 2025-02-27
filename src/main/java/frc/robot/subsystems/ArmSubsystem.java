@@ -68,7 +68,7 @@ public class ArmSubsystem extends TemplateSubsystem {
             //   setVoltage((ArmConstants.ARM_FF.getkG()) / Math.cos(Units.rotationsToRadians(getEncoderRot())));
 
         }
-        if (getSupplyCurrent() > 5.5) currentSpike++;
+        if (getStatorCurrent() > 50) currentSpike++;
         else noCurrentSpike++;
 
         if (noCurrentSpike >= 2) {
@@ -132,7 +132,7 @@ public class ArmSubsystem extends TemplateSubsystem {
     }
 
     public boolean isAtBottom() {
-        return currentSpike >= 7;
+        return currentSpike >= 3;
     }
 
 
