@@ -215,7 +215,7 @@ public class ScoreCommands {
 
     public static Command scoreL4() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 88),
+                new PositionCommand(armSubsystem, 83),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 1.002, true),
                         new PositionCommand(wristSubsystem, 100)
@@ -266,7 +266,7 @@ public class ScoreCommands {
     }
 
     public static Command armL4() {
-        return new PositionCommand(armSubsystem, 87)
+        return new PositionCommand(armSubsystem, 81)
                 .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
 
@@ -428,7 +428,7 @@ public class ScoreCommands {
                                     .getPigeon2().getRotation2d().getDegrees() +
                                     (DriverStation.getAlliance().isPresent()
                                             && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
-                                            ? 180 : 180))));
+                                            ? 0 : 180))));
 
                     RobotContainer.commandSwerveDrivetrain.setControl(
                             drive.withVelocityX(0)
@@ -461,7 +461,7 @@ public class ScoreCommands {
                                     .getPigeon2().getRotation2d().getDegrees() +
                                     (DriverStation.getAlliance().isPresent()
                                             && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
-                                            ? 180 : 180))));
+                                            ? 0 : 180))));
 
                     RobotContainer.commandSwerveDrivetrain.setControl(
                             drive.withVelocityX(0)
@@ -588,22 +588,22 @@ public class ScoreCommands {
         return new ConditionalCommand(
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .1, false),
-                                new PositionCommand(wristSubsystem, 152)
+                                new PositionCommand(elevatorSubsystem, .08, false),
+                                new PositionCommand(wristSubsystem, 140)
                                 // new VelocityCommand(intakeSubsystem, 50)
                         ),
-                        new PositionCommand(armSubsystem, 65)
+                        new PositionCommand(armSubsystem, 59) //59, .04, 148
                 ),
                 new SequentialCommandGroup( //Going up
-                        new PositionCommand(armSubsystem, 65),
+                        new PositionCommand(armSubsystem, 59),
                         new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, .1, true),
-                                new PositionCommand(wristSubsystem, 152)
+                                new PositionCommand(elevatorSubsystem, .08, true),
+                                new PositionCommand(wristSubsystem, 140)
                                 // new VelocityCommand(intakeSubsystem, 50)
                         )
 
                 ),
-                () -> elevatorSubsystem.getMechM() > .1
+                () -> elevatorSubsystem.getMechM() > .08
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L2)));
     }
 
@@ -612,33 +612,50 @@ public class ScoreCommands {
                 new SequentialCommandGroup( //Going down
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .46, false),
-                                new PositionCommand(wristSubsystem, 152)
+                                new PositionCommand(wristSubsystem, 159)
                                 // new VelocityCommand(intakeSubsystem, 50)
                         ),
-                        new PositionCommand(armSubsystem, 71)
+                        new PositionCommand(armSubsystem, 73)
                 ),
                 new SequentialCommandGroup( //Going up
-                        new PositionCommand(armSubsystem, 71),
+                        new PositionCommand(armSubsystem, 73), //73, .45, 167.5
                         new ParallelCommandGroup(
                                 new PositionCommand(elevatorSubsystem, .46, true),
-                                new PositionCommand(wristSubsystem, 152)
+                                new PositionCommand(wristSubsystem, 159)
                                 // new VelocityCommand(intakeSubsystem, 50)
                         )
                 ),
-                () -> elevatorSubsystem.getMechM() > .33
+                () -> elevatorSubsystem.getMechM() > .46
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)));
     }
 
     public static Command scoreL4NoDunk() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 85),
+                new PositionCommand(armSubsystem, 81),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 1.003, true),
                         new PositionCommand(wristSubsystem, 150)
                         // new VelocityCommand(intakeSubsystem, 50)
                 ),
-                new PositionCommand(wristSubsystem, 167)
+                new PositionCommand(wristSubsystem, 164.5) //81, 171
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
+    }
+
+    public static Command scoreL4NoDunkAuton() {
+        return new SequentialCommandGroup(
+                new PositionCommand(armSubsystem, 82),
+                new ParallelCommandGroup(
+                        new PositionCommand(elevatorSubsystem, 1.003, true),
+                        new PositionCommand(wristSubsystem, 165.5)
+                        // new VelocityCommand(intakeSubsystem, 50)
+                ),
+                new PositionCommand(wristSubsystem, 165.5) //81, 171
+        ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
+    }
+
+    public static Command armL4Auton() {
+        return new PositionCommand(armSubsystem, 82)
+                .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
 
     public static Command scoreNoDunk() {
@@ -657,7 +674,7 @@ public class ScoreCommands {
     }
 
     public static Command armL2NoDunk() {
-        return new PositionCommand(armSubsystem, 65).alongWith(
+        return new PositionCommand(armSubsystem, 59).alongWith(
                 new InstantCommand(() -> RobotContainer.setState(State.L2)));
     }
 

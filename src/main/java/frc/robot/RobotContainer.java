@@ -68,7 +68,7 @@ public class RobotContainer {
     public static double rotationVelocity = 0;
 
     public static double autoAlignXOffset = 0.025;
-    public static double autoAlignYOffset = -.165;
+    public static double autoAlignYOffset = -.165; //.165
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -121,10 +121,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
         NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
         NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
-        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4NoDunk().withTimeout(2));
+        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4NoDunkAuton().withTimeout(2));
         NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
         NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
-        NamedCommands.registerCommand("ARML4", ScoreCommands.armL4());
+        NamedCommands.registerCommand("ARML4", ScoreCommands.armL4Auton());
         NamedCommands.registerCommand("ALIGNL", ScoreCommands.autoAlignLAuton().withTimeout(2));
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.autoAlignRAuton().withTimeout(2));
         NamedCommands.registerCommand("DRIVE", ScoreCommands.autoMoveForwardBottom());
@@ -295,8 +295,8 @@ public class RobotContainer {
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
 
-        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
-        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
+        // System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
+        // System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
 //        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
 //        System.out.println("Arm: " + armSubsystem.getDegrees());
