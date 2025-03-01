@@ -115,7 +115,7 @@ public class RobotContainer {
         commandSwerveDrivetrain.configureAutoBuilder();
 
         NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
-        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
+        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtakeAuton());
         NamedCommands.registerCommand("DROP", ScoreCommands.drop());
         NamedCommands.registerCommand("HP", ScoreCommands.intakeHP());
         NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
@@ -187,7 +187,7 @@ public class RobotContainer {
                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                         .getPigeon2().getRotation2d().getDegrees() + (DriverStation.getAlliance().isPresent()
                         && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 0 : 180))))));
-        commandXboxController.rightBumper().onTrue(new VelocityCommand(intakeSubsystem, -75))
+        commandXboxController.rightBumper().onTrue(ScoreCommands.scoreShoot())
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
 //        commandXboxController.button(0).onTrue(new InstantCommand(() -> selectedTag = AprilTags.get(aprilTagSubsystem.getClosestTagID()))).toggleOnTrue(new FunctionalCommand(
@@ -290,7 +290,6 @@ public class RobotContainer {
             yVelocity = drivePIDControllerYVeryClose.calculate(currentStateY.position, nextStateY);
         }
         rotationVelocity = turnPIDController.calculate(currentStateRotation.position, nextStateRotation);
-
 //        System.out.println("aligned: " + aligned());
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);

@@ -55,6 +55,10 @@ public class IntakeSubsystem extends TemplateSubsystem {
         setPercent(-1);
     }
 
+    public void outtakeAuton() {
+        setVelocity(-85);
+    } 
+
     //Peak naming :fire:
     public boolean isIntooken() {
         return getStatorCurrent() > 25;

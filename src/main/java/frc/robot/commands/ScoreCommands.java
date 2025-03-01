@@ -9,6 +9,7 @@ import frc.robot.RobotContainer;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.template.PositionCommand;
+import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
 
 import java.util.Map;
@@ -157,6 +158,25 @@ public class ScoreCommands {
                 },
                 intakeSubsystem);
     }
+    
+    public static Command outtakeAuton() {
+        return new FunctionalCommand(
+                () -> {
+                    timer.reset();
+                },
+                () -> intakeSubsystem.outtakeAuton(),
+                (bool) -> intakeSubsystem.stopIntake(),
+                () -> {
+                    timer.start();
+                    if (timer.hasElapsed(.3)) {
+                        timer.stop();
+                        return true;
+
+                    }
+                    return false;
+                },
+                intakeSubsystem);
+    }
 
     public static Command scoreL1() {
         return new SequentialCommandGroup(
@@ -167,6 +187,14 @@ public class ScoreCommands {
                         // new VelocityCommand(intakeSubsystem, 50)
                 )
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1)));
+    }
+
+    public static Command scoreShoot() {
+        if(RobotContainer.getState() == State.L1){
+                return new VelocityCommand(intakeSubsystem, -25);
+        }else{
+                return new VelocityCommand(intakeSubsystem, -75);
+        }
     }
 
     public static Command scoreL2() {
@@ -643,18 +671,18 @@ public class ScoreCommands {
 
     public static Command scoreL4NoDunkAuton() {
         return new SequentialCommandGroup(
-                new PositionCommand(armSubsystem, 82),
+                new PositionCommand(armSubsystem, 81),
                 new ParallelCommandGroup(
                         new PositionCommand(elevatorSubsystem, 1.003, true),
-                        new PositionCommand(wristSubsystem, 165.5)
+                        new PositionCommand(wristSubsystem, 150)
                         // new VelocityCommand(intakeSubsystem, 50)
                 ),
-                new PositionCommand(wristSubsystem, 165.5) //81, 171
+                new PositionCommand(wristSubsystem, 164.5) //81, 171
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
 
     public static Command armL4Auton() {
-        return new PositionCommand(armSubsystem, 82)
+        return new PositionCommand(armSubsystem, 81)
                 .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
     }
 
