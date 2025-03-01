@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.*;
@@ -190,11 +191,10 @@ public class ScoreCommands {
     }
 
     public static Command scoreShoot() {
-        if(RobotContainer.getState() == State.L1){
-                return new VelocityCommand(intakeSubsystem, -25);
-        }else{
-                return new VelocityCommand(intakeSubsystem, -75);
-        }
+        return new ConditionalCommand(
+            new VelocityCommand(intakeSubsystem, -25), 
+            new VelocityCommand(intakeSubsystem, -75), 
+            RobotContainer.isL1);
     }
 
     public static Command scoreL2() {

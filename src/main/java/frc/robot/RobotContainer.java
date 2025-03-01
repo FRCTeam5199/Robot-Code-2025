@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -96,6 +98,7 @@ public class RobotContainer {
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
     public static State state = State.L1;
+    public static Boolean isL1 = false;
     //    private static final Command auto = Autos.OnePiece.Blue.onePieceBlueHPBL4();
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
@@ -300,7 +303,20 @@ public class RobotContainer {
 //        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
 //        System.out.println("Arm: " + armSubsystem.getDegrees());
 //        System.out.println("Wrist: " + wristSubsystem.getDegrees());
+
+        // if(state == State.L1){
+        //     isL1 = true;
+        // }else{
+        //     isL1 = false;
+        // }
     }
+    // public boolean isStateL1(){
+    //     if(state == State.L1){
+    //          true;
+    //     }else{
+    //         return false;
+    //     }
+    // }
 
 
     public void toggleAutoAlignOffsetLeft() {
