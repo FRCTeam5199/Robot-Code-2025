@@ -4,55 +4,53 @@
     {
       "anchor": {
         "x": 5.827614795918367,
-        "y": 4.1779655612244895
+        "y": 4.178
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.723022959183673,
-        "y": 5.1778380102040815
+        "x": 6.305532786885245,
+        "y": 5.457530737704917
       },
       "isLocked": false,
-      "linkedName": "H Blue"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.3058035714285714,
-        "y": 7.035809948979591
+        "x": 1.2587090163934425,
+        "y": 7.123821721311475
       },
       "prevControl": {
-        "x": 4.0890306122448985,
-        "y": 6.722417091836735
+        "x": 4.04193605720977,
+        "y": 6.810428864168618
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6213643574828092,
+      "rotationDegrees": -54.364
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Down",
+      "name": "HP",
       "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "sequential",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "HP"
-              }
-            }
-          ]
+          "name": "HP"
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 2.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -61,7 +59,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -54.36449228680642
+    "rotation": -54.364
   },
   "reversed": false,
   "folder": "1 Piece Blue Paths",
@@ -69,5 +67,5 @@
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

@@ -49,10 +49,10 @@ public class WristSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
 
-        if (getSupplyCurrent() > 4) currentSpike++;
+        if (getSupplyCurrent() > .6) currentSpike++;
         else noCurrentSpike++;
 
-        if (noCurrentSpike >= .1) {
+        if (noCurrentSpike >= 2) {
             currentSpike = 0;
             noCurrentSpike = 0;
         }
@@ -111,7 +111,7 @@ public class WristSubsystem extends TemplateSubsystem {
     }
 
     public boolean isAtBottom() {
-        return currentSpike >= 4;
+        return currentSpike >= 7;
     }
 
 

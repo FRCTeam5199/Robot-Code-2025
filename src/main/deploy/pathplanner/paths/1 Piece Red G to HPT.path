@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 11.744770408163266,
-        "y": 4.207812499999999
+        "x": 11.745,
+        "y": 4.171
       },
       "prevControl": null,
       "nextControl": {
-        "x": 10.610586734693877,
-        "y": 5.521077806122444
+        "x": 10.61081632653061,
+        "y": 5.4842653061224444
       },
       "isLocked": false,
-      "linkedName": "G Red"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -25,21 +25,37 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HP Red Top"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5469812075169936,
+      "rotationDegrees": -125.816
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Down",
+      "name": "HP",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
           "name": "HP"
+        }
+      }
+    },
+    {
+      "name": "INTAKE",
+      "waypointRelativePos": 0.8736942070275403,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKE"
         }
       }
     }
@@ -54,7 +70,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.8159256349378
+    "rotation": -125.816
   },
   "reversed": false,
   "folder": "1 Piece Red Paths",

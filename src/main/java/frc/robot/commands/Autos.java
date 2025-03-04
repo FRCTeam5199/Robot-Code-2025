@@ -5,23 +5,52 @@
 package frc.robot.commands;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.path.PathConstraints;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.UserInterface;
 
 public final class Autos {
     private SendableChooser<Command> autoChooser;
     private static Autos autos;
-    PathConstraints pathConstraints = new PathConstraints(4, 2, 2, 2);
+
+
+    public static SendableChooser<Command> autonChooserRed = new SendableChooser<>();
+    public static SendableChooser<Command> autonChooserBlue = new SendableChooser<>();
+
+    private static PathPlannerAuto onePieceBlueHPBL4;
+    private static PathPlannerAuto onePieceBlueHPTL4;
+    private static PathPlannerAuto onePieceRedHPBL4;
+    private static PathPlannerAuto onePieceRedHPTL4;
+    private static PathPlannerAuto onePieceBlueDrop;
+    private static PathPlannerAuto onePieceRedDrop;
+
+    private static PathPlannerAuto twoPieceBlueGHPBL4;
+    private static PathPlannerAuto twoPieceBlueHHPTL4;
+    private static PathPlannerAuto twoPieceBlueDHPBL4;
+    private static PathPlannerAuto twoPieceBlueKHPTL4;
+
+    private static PathPlannerAuto threePieceBlueBottomL4;
+
+    private static PathPlannerAuto twoPieceRedHHPBL4;
+    private static PathPlannerAuto twoPieceRedGHPTL4;
+    private static PathPlannerAuto twoPieceRedKHPBL4;
+    private static PathPlannerAuto twoPieceRedDHPTL4;
+
+    private static PathPlannerAuto onePieceBlueDeadReckoningL4;
+
+//    private static PathPlannerAuto threePieceBlueBottomL4;
+//
+//
+//    private static PathPlannerAuto driveByTopBlue;
+//    private static PathPlannerAuto twoPieceDriveByTopBlue;
+//
+//    private static PathPlannerAuto driveByBottomBlue;
+//    private static PathPlannerAuto twoPieceDriveByBottomBlue;
 
     /**
      * Gets or creates the AutoChooser (Singleton Method)
@@ -35,41 +64,86 @@ public final class Autos {
         return autoChooser;
     }
 
+    public static void initializeAutos() {
+        onePieceBlueHPBL4 = new PathPlannerAuto("1 Piece Blue HPB L4");
+        onePieceBlueHPTL4 = new PathPlannerAuto("1 Piece Blue HPT L4");
+        onePieceBlueDrop = new PathPlannerAuto("Blue Climber Drop");
+        onePieceRedHPBL4 = new PathPlannerAuto("1 Piece Red HPB L4");
+        onePieceRedHPTL4 = new PathPlannerAuto("1 Piece Red HPT L4");
+        onePieceRedDrop = new PathPlannerAuto("Red Climber Drop");
+        twoPieceBlueGHPBL4 = new PathPlannerAuto("2 Piece Blue G Bottom L4");
+        twoPieceBlueHHPTL4 = new PathPlannerAuto("2 Piece Blue H Top L4");
+        twoPieceBlueDHPBL4 = new PathPlannerAuto("2 Piece Blue D Bottom L4");
+        twoPieceBlueKHPTL4 = new PathPlannerAuto("2 Piece Blue K Top L4");
+        twoPieceRedHHPBL4 = new PathPlannerAuto("2 Piece Red H Bottom L4");
+        twoPieceRedGHPTL4 = new PathPlannerAuto("2 Piece Red G Top L4");
+        twoPieceRedKHPBL4 = new PathPlannerAuto("2 Piece K Red Bottom L4");
+        twoPieceRedDHPTL4 = new PathPlannerAuto("2 Piece D Red Top L4");
+        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom 2 L4");
+
+        onePieceBlueDeadReckoningL4 = new PathPlannerAuto("Blue Dead Reckoning L4");
+
+//        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom 2 L4");
+//
+//        driveByTopBlue = new PathPlannerAuto("Drive By");
+//        twoPieceDriveByTopBlue = new PathPlannerAuto("Drive By L4");
+//
+//        driveByBottomBlue = new PathPlannerAuto("Drive By Blue Bottom");
+//        twoPieceDriveByBottomBlue = new PathPlannerAuto("Drive By Blue Bottom 2 Piece L4");
+
+
+        Shuffleboard.getTab("Autons").add("Red Autons", autonChooserRed).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(2, 1);
+        Shuffleboard.getTab("Autons").add("Blue Autons", autonChooserBlue).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(2, 1);
+
+        autonChooserRed.addOption("1 Piece Red Right", onePieceRedHPTL4);
+        autonChooserRed.addOption("1 Piece Red Left", onePieceRedHPBL4);
+        autonChooserRed.addOption("2 Piece Red Right", twoPieceRedGHPTL4);
+        autonChooserRed.addOption("2 Piece Red Left", twoPieceRedHHPBL4);
+        autonChooserRed.addOption("1 Piece Red Climber Drop", onePieceRedDrop);
+
+        autonChooserBlue.addOption("1 Piece Blue Left", onePieceBlueHPTL4);
+        autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueHPBL4);
+        autonChooserBlue.addOption("2 Piece Blue Left", twoPieceBlueHHPTL4);
+        autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueGHPBL4);
+        autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDrop);
+        // autonChooserBlue.addOption("1 Piece Blue Dead Reckoning Left", onePieceBlueDeadReckoningL4);
+//        autonChooserBlue.addOption("3 Piece Blue Bottom 2 L4", threePieceBlueBottomL4);
+//        autonChooserBlue.addOption("Drive By Left", driveByTopBlue);
+//        autonChooserBlue.addOption("2 Piece Drive By Top", twoPieceDriveByTopBlue);
+//        autonChooserBlue.addOption("Drive By Right", driveByBottomBlue);
+//        autonChooserBlue.addOption("2 Piece Drive By Right", twoPieceDriveByBottomBlue);
+//        autonChooserBlue.addOption("3 Piece Right", threePieceBlueBottomL4);
+
+
+    }
+
     public static class OnePiece {
 
         public static class Blue {
-            public static Command onePieceBlueHPTL1() {
-                return new PathPlannerAuto("1 Piece Blue HPT L1");
-            }
-
-            public static Command onePieceBlueHPBL1() {
-                return new PathPlannerAuto("1 Piece Blue HPB L1");
+            public static Command onePieceBlueHPBL4() {
+                return onePieceBlueHPBL4;
             }
 
             public static Command onePieceBlueHPTL4() {
-                return new PathPlannerAuto("1 Piece Blue HPT L4");
+                return onePieceBlueHPTL4;
             }
 
-            public static Command onePieceBlueHPBL4() {
-                return new PathPlannerAuto("1 Piece Blue HPB L4");
+            public static Command onePieceBlueDrop() {
+                return onePieceBlueDrop;
             }
         }
 
         public static class Red {
-            public static Command onePieceRedHPTL1() {
-                return new PathPlannerAuto("1 Piece Red HPT L1");
-            }
-
-            public static Command onePieceRedHPBL1() {
-                return new PathPlannerAuto("1 Piece Red HPB L1");
+            public static Command onePieceRedHPBL4() {
+                return onePieceRedHPBL4;
             }
 
             public static Command onePieceRedHPTL4() {
-                return new PathPlannerAuto("1 Piece Red HPT L4");
+                return onePieceRedHPTL4;
             }
 
-            public static Command onePieceRedHPBL4() {
-                return new PathPlannerAuto("1 Piece Red HPB L4");
+            public static Command onePieceRedDrop() {
+                return onePieceRedDrop;
             }
         }
     }
@@ -77,44 +151,38 @@ public final class Autos {
 
     public static class TwoPiece {
         public static class Blue {
-            public static Command twoPieceBlueBL1() {
-                return new PathPlannerAuto("2 Piece Blue Bottom L1");
+            public static Command twoPieceBlueGBottomL4() {
+                return twoPieceBlueGHPBL4;
             }
 
-            public static Command twoPieceBlueTL1() {
-                return new PathPlannerAuto("2 Piece Blue Top L1");
+            public static Command twoPieceBlueHTopL4() {
+                return twoPieceBlueHHPTL4;
             }
 
-            public static Command twoPieceBlueBL4() {
-                return new PathPlannerAuto("2 Piece Blue Bottom L4");
+            public static Command twoPieceBlueDBottomL4() {
+                return twoPieceBlueDHPBL4;
             }
 
-            public static Command twoPieceBlueTL4() {
-                return new PathPlannerAuto("2 Piece Blue Top L4");
+            public static Command twoPieceBlueKTopL4() {
+                return twoPieceBlueKHPTL4;
             }
-
-            public static Command twoPieceBlueFrontCL4() {
-                return new PathPlannerAuto("2 Piece Blue Front C L4");
-            }
-
-
         }
 
         public static class Red {
-            public static Command twoPieceRedBL1() {
-                return new PathPlannerAuto("2 Piece Red Bottom L1");
+            public static Command twoPieceRedHBottomL4() {
+                return twoPieceRedHHPBL4;
             }
 
-            public static Command twoPieceRedTL1() {
-                return new PathPlannerAuto("2 Piece Red Top L1");
+            public static Command twoPieceRedGTopL4() {
+                return twoPieceRedGHPTL4;
             }
 
-            public static Command twoPieceRedBL4() {
-                return new PathPlannerAuto("2 Piece Red Bottom L4");
+            public static Command twoPieceRedKBottomL4() {
+                return twoPieceRedKHPBL4;
             }
 
-            public static Command twoPieceRedTL4() {
-                return new PathPlannerAuto("2 Piece Red Top L4");
+            public static Command twoPieceRedDTopL4() {
+                return twoPieceRedDHPTL4;
             }
         }
     }

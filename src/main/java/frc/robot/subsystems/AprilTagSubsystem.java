@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.RobotContainer;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -29,8 +30,10 @@ public class AprilTagSubsystem extends SubsystemBase {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimator;
     private Matrix<N3, N1> curStdDevs;
-    private AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    private AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     private double closestTagX = 0, closestTagY = 0, closestTagYaw = 0;
+
+    private boolean isAutoAligning = false;
 
     public int getClosestTagID() {
         return closestTagID;
@@ -78,10 +81,9 @@ public class AprilTagSubsystem extends SubsystemBase {
         for (var change : results) {
             visionEst = photonEstimator.update(change);
             updateEstimationStdDevs(visionEst, change.getTargets());
-
-
         }
-        if (visionEst.isPresent()) return new Pair<>(visionEst, visionEst.get().timestampSeconds);
+        if (visionEst.isPresent() && !isAutoAligning)
+            return new Pair<>(visionEst, visionEst.get().timestampSeconds);
         else return new Pair<>(Optional.empty(), 0.0);
     }
 
@@ -125,9 +127,9 @@ public class AprilTagSubsystem extends SubsystemBase {
                 avgDist /= numTags;
                 // Decrease std devs if multiple targets are visible
                 if (numTags > 1) estStdDevs = Constants.Vision.kMultiTagStdDevs;
-                // Increase std devs based on (average) distance
-                if (numTags == 1 && avgDist > 4)
-                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                    // Increase std devs based on (average) distance
+//                if (numTags == 1 && avgDist > 4)
+//                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
                 else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
                 curStdDevs = estStdDevs;
             }
@@ -142,6 +144,10 @@ public class AprilTagSubsystem extends SubsystemBase {
      */
     public Matrix<N3, N1> getEstimationStdDevs() {
         return curStdDevs;
+    }
+
+    public void setStdDevs(Matrix<N3, N1> stdDevs) {
+        curStdDevs = stdDevs;
     }
 
     public int updateClosestTagID() {
@@ -181,59 +187,6 @@ public class AprilTagSubsystem extends SubsystemBase {
         if (closestTagID == -1) return 0;
         return -180 - tagAngles[closestTagID] + commandSwerveDrivetrain.getPose().getRotation().getDegrees();
     }
-//
-//    public double getTargetHeight(PhotonTrackedTarget target) {
-//        double tag = target.getFiducialId();
-//        double height = 1;
-//        for (int i = 0; i < tagAngles.length; i++) {
-//            if (tag == i) {
-//                height = tagAngles[i];
-//            }
-//        }
-//        return height;
-//    }
-//
-//    public int closestTarget() {
-//        Pair<Double, Integer> closest = new Pair(100000000, 0);
-//        Pair<Double, Integer> closest2 = new Pair(100000, 0);
-//
-//
-//        for (int i = 0; i < results.size(); i++) {
-//            for (int z = 0; i < results.get(i).getTargets().size(); z++) {
-//                if (getTargetAngle(results.get(i).getTargets().get(z)) != 1)
-//                    closest2 = new Pair(PhotonUtils.calculateDistanceToTargetMeters(Vision.CAMERA_POSE.getZ(), .308, Units.degreesToRadians(Vision.CAMERA_POSE.getRotation().getMeasureY().baseUnitMagnitude()), getTargetAngle(results.get(i).getTargets().get(z))), results.get(i).getTargets().get(z).getFiducialId());
-//            }
-//            if (closest2.getFirst() < closest.getFirst()) {
-//                closest = closest2;
-//            }
-//        }
-//        return closest.getSecond();
-//    }
-//
-//    public List<Double> alignValues(int tag) {
-//        double x = 80, y = 80, z = 80;
-//        List<Double> targetValue = new ArrayList<Double>();
-//        targetValue.add(x);
-//        targetValue.add(y);
-//        targetValue.add(z);
-//
-//        if (tag != 0 || tag != -1) {
-//            for (int i = 0; i < results.size(); i++) {
-//                for (int p = 0; p < results.size(); p++) {
-//                    if (results.get(i).getTargets().get(p).getFiducialId() == tag) {
-//                        x = results.get(i).getTargets().get(p).getPitch();
-//                        y = results.get(i).getTargets().get(p).getYaw();
-//                        z = getTargetAngle(results.get(i).getTargets().get(p)) + 180;
-//
-//                    }
-//                }
-//            }
-//        }
-//
-//        return targetValue;
-//
-//    }
-
 
     public double[] getClosestTagXYYaw() {
         if (!results.isEmpty()) {
@@ -271,8 +224,14 @@ public class AprilTagSubsystem extends SubsystemBase {
 
                 closestTagYaw = bestTarget.getYaw();
 
-                // System.out.println("Id: " + bestTarget.getFiducialId()
-                //         + " X: " + closestTagX + " Y: " + closestTagY);
+                if (DriverStation.getAlliance().isPresent()
+                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
+                    closestTagX = -closestTagX;
+                    closestTagY = -closestTagY;
+                }
+
+            //    System.out.println("Id: " + bestTarget.getFiducialId()
+            //            + " X: " + closestTagX + " Y: " + closestTagY);
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};
@@ -284,5 +243,13 @@ public class AprilTagSubsystem extends SubsystemBase {
             aprilTagSubsystem = new AprilTagSubsystem();
         }
         return aprilTagSubsystem;
+    }
+
+    public boolean isAutoAligning() {
+        return isAutoAligning;
+    }
+
+    public void setAutoAligning(boolean autoAligning) {
+        isAutoAligning = autoAligning;
     }
 }

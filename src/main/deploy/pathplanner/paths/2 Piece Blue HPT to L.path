@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4998086734693878,
-        "y": 7.214891581632653
+        "x": 1.163,
+        "y": 6.98
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3056760204081637,
-        "y": 6.379177295918367
+        "x": 2.309192440722865,
+        "y": 6.274462967324704
       },
       "isLocked": false,
-      "linkedName": "HP Blue Top"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6496022727272726,
-        "y": 5.2315625
+        "x": 3.938778409090909,
+        "y": 5.261477272727273
       },
       "prevControl": {
-        "x": 2.9556609461966605,
-        "y": 5.865809948979592
+        "x": 3.145432752507239,
+        "y": 5.7325884645413
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "L Blue"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,13 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "arm",
+      "name": "ARML4",
       "waypointRelativePos": 0.5247641509433959,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "armL4"
+          "name": "ARML4"
         }
       }
     }

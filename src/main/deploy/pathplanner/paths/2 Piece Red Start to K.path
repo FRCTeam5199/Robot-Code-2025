@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 10.008984374999999,
+        "x": 10.375,
         "y": 2.144642857142857
       },
       "prevControl": null,
       "nextControl": {
-        "x": 11.008984374999999,
+        "x": 11.375,
         "y": 2.144642857142857
       },
       "isLocked": false,
@@ -25,13 +25,25 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "K Red"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ARML4",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ARML4"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

@@ -1,16 +1,14 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import frc.robot.constants.Constants;
+
 import frc.robot.constants.Constants.IntakeConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.Type;
 
 public class IntakeSubsystem extends TemplateSubsystem {
-
     public static IntakeSubsystem intakeSubsystem;
     public TalonFX intake_motor = new TalonFX(IntakeConstants.INTAKE_ID);
-
 
     public IntakeSubsystem() {
         super(Type.ROLLER,
@@ -55,5 +53,14 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
     public void outtake() {
         setPercent(-1);
+    }
+
+    public void outtakeAuton() {
+        setVelocity(-85);
+    } 
+
+    //Peak naming :fire:
+    public boolean isIntooken() {
+        return getStatorCurrent() > 25;
     }
 }

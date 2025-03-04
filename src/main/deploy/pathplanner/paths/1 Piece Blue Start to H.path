@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.329119318181817,
+        "x": 7.175,
         "y": 4.178
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.411053001128518,
+        "x": 6.2569336829467,
         "y": 4.178
       },
       "isLocked": false,
-      "linkedName": "Start Blue"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "H Blue"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,15 +33,20 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "armL4",
+      "name": "ARML4",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ARML4"
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

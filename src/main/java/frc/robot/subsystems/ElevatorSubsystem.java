@@ -23,8 +23,8 @@ public class ElevatorSubsystem extends TemplateSubsystem {
         configureMotor(
                 ElevatorConstants.INVERT,
                 ElevatorConstants.ELEVATOR_BRAKE,
-                ElevatorConstants.SUPPLY_CURRENT_LIMIT,
-                ElevatorConstants.STATOR_CURRENT_LIMIT,
+                ElevatorConstants.ELEVATOR_SUPPLY_CURRENT_LIMIT,
+                ElevatorConstants.ELEVATOR_STATOR_CURRENT_LIMIT,
                 ElevatorConstants.ELEVATOR_SLOT0_CONFIGS);
 
         configureFollowerMotor(ElevatorConstants.ELEVATOR_RIGHT_ID,
@@ -38,7 +38,7 @@ public class ElevatorSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
 
-        if (getSupplyCurrent() > 8) currentSpike++;
+        if (getSupplyCurrent() > 2.75) currentSpike++;
         else noCurrentSpike++;
 
         if (noCurrentSpike >= 3) {

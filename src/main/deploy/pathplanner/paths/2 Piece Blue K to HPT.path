@@ -42,6 +42,17 @@
           "name": "HP"
         }
       }
+    },
+    {
+      "name": "INTAKE",
+      "waypointRelativePos": 0.927350427350427,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKE"
+        }
+      }
     }
   ],
   "globalConstraints": {

@@ -6,6 +6,10 @@ package frc.robot;
 
 import java.util.Optional;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.commands.Autos;
+import frc.robot.commands.ScoreCommands;
 import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.Utils;
@@ -45,11 +49,16 @@ public class Robot extends TimedRobot {
 
         commandSwerveDrivetrain.configureAutoBuilder();
 
+        System.setProperty("wpilog.directory", "/media/sda1/wpilog");
+
+        DataLogManager.start();
+
         commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
 
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
+
         commandSwerveDrivetrain.seedFieldCentric();
     }
 
@@ -107,7 +116,15 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        commandSwerveDrivetrain.getPigeon2().setYaw(Math.toRadians(180));
+        var alliance = DriverStation.getAlliance();
+
+//        commandSwerveDrivetrain.getPigeon2().reset();
+
+        if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue) {
+            // commandSwerveDrivetrain.getPigeon2().setYaw(Math.toRadians(180));
+        }
+
+
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         // Schedule the autonomous command (example)
@@ -121,7 +138,6 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousPeriodic() {
-
     }
 
     @Override
@@ -134,6 +150,8 @@ public class Robot extends TimedRobot {
             autonomousCommand.cancel();
         }
 
+        ScoreCommands.wristandElevatorHP();
+
         CommandScheduler.getInstance().cancelAll();
     }
 
@@ -142,6 +160,15 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+//        estimatePose = aprilTagSubsystem.getEstimatedGlobalPose();
+//        if (estimatePose.getFirst().isPresent()) {
+//            Pose2d robotPose2d = estimatePose.getFirst().get().estimatedPose.toPose2d();
+//            Pose2d modify = new Pose2d(robotPose2d.getX(), robotPose2d.getY(),
+//                    commandSwerveDrivetrain.getPose().getRotation());
+//
+//            commandSwerveDrivetrain.addVisionMeasurement(modify, Utils.getCurrentTimeSeconds(),
+//                    aprilTagSubsystem.getEstimationStdDevs());
+//        }
     }
 
     @Override
