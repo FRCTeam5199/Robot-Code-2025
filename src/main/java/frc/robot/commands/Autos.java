@@ -42,7 +42,7 @@ public final class Autos {
 
     private static PathPlannerAuto testBlue;
 
-//    private static PathPlannerAuto threePieceBlueBottomL4;
+    private static PathPlannerAuto threePieceBlueHPBL4;
 //
 //
 //    private static PathPlannerAuto driveByTopBlue;
@@ -78,6 +78,7 @@ public final class Autos {
         twoPieceRedGHPTL4 = new PathPlannerAuto("2 Piece Red G Top L4");
         twoPieceRedKHPBL4 = new PathPlannerAuto("2 Piece K Red Bottom L4");
         twoPieceRedDHPTL4 = new PathPlannerAuto("2 Piece D Red Top L4");
+        threePieceBlueHPBL4 = new PathPlannerAuto("3 Piece Blue Bottom 1 L4");
         testBlue = new PathPlannerAuto("Test Blue");
 
 //        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom 2 L4");
@@ -103,6 +104,7 @@ public final class Autos {
         autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueGHPBL4);
         autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDrop);
         autonChooserBlue.addOption("Test Blue", testBlue);
+        autonChooserBlue.addOption("3 Piece Blue Right", threePieceBlueHPBL4);
         // autonChooserBlue.addOption("1 Piece Blue Dead Reckoning Left", onePieceBlueDeadReckoningL4);
 //        autonChooserBlue.addOption("3 Piece Blue Bottom 2 L4", threePieceBlueBottomL4);
 //        autonChooserBlue.addOption("Drive By Left", driveByTopBlue);
@@ -205,6 +207,10 @@ public final class Autos {
 
             public static Command threePieceBlueTL4() {
                 return new PathPlannerAuto("3 Piece Blue Top L4");
+            }
+
+            public static Command threePieceBlueHPBL4() {
+                return new PathPlannerAuto("3 Piece Blue Bottom 1 L4");
             }
 
         }

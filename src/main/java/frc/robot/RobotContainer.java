@@ -125,6 +125,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
         NamedCommands.registerCommand("L4", ScoreCommands.scoreL4NoDunkAuton().withTimeout(2));
         NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
+
         NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
         NamedCommands.registerCommand("ARML4", ScoreCommands.armL4Auton());
         NamedCommands.registerCommand("ALIGNL", ScoreCommands.autoAlignLAuton().withTimeout(2));

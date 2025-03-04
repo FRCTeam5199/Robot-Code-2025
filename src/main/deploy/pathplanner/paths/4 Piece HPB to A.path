@@ -48,7 +48,7 @@
   "folder": "4 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 54.144771653784304
+    "rotation": 55.0
   },
   "useDefaultConstraints": true
 }
