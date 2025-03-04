@@ -46,7 +46,7 @@ import frc.robot.utility.State;
  */
 public class RobotContainer {
     private static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
-    private static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+    private static double MaxAngularRate = 2 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
@@ -98,7 +98,6 @@ public class RobotContainer {
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
     public static State state = State.L1;
-    public static Boolean isL1 = false;
     //    private static final Command auto = Autos.OnePiece.Blue.onePieceBlueHPBL4();
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 

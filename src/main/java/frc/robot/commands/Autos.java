@@ -34,14 +34,13 @@ public final class Autos {
     private static PathPlannerAuto twoPieceBlueDHPBL4;
     private static PathPlannerAuto twoPieceBlueKHPTL4;
 
-    private static PathPlannerAuto threePieceBlueBottomL4;
 
     private static PathPlannerAuto twoPieceRedHHPBL4;
     private static PathPlannerAuto twoPieceRedGHPTL4;
     private static PathPlannerAuto twoPieceRedKHPBL4;
     private static PathPlannerAuto twoPieceRedDHPTL4;
 
-    private static PathPlannerAuto onePieceBlueDeadReckoningL4;
+    private static PathPlannerAuto testBlue;
 
 //    private static PathPlannerAuto threePieceBlueBottomL4;
 //
@@ -79,9 +78,7 @@ public final class Autos {
         twoPieceRedGHPTL4 = new PathPlannerAuto("2 Piece Red G Top L4");
         twoPieceRedKHPBL4 = new PathPlannerAuto("2 Piece K Red Bottom L4");
         twoPieceRedDHPTL4 = new PathPlannerAuto("2 Piece D Red Top L4");
-        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom 2 L4");
-
-        onePieceBlueDeadReckoningL4 = new PathPlannerAuto("Blue Dead Reckoning L4");
+        testBlue = new PathPlannerAuto("Test Blue");
 
 //        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom 2 L4");
 //
@@ -90,7 +87,6 @@ public final class Autos {
 //
 //        driveByBottomBlue = new PathPlannerAuto("Drive By Blue Bottom");
 //        twoPieceDriveByBottomBlue = new PathPlannerAuto("Drive By Blue Bottom 2 Piece L4");
-
 
         Shuffleboard.getTab("Autons").add("Red Autons", autonChooserRed).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(2, 1);
         Shuffleboard.getTab("Autons").add("Blue Autons", autonChooserBlue).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(2, 1);
@@ -106,6 +102,7 @@ public final class Autos {
         autonChooserBlue.addOption("2 Piece Blue Left", twoPieceBlueHHPTL4);
         autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueGHPBL4);
         autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDrop);
+        autonChooserBlue.addOption("Test Blue", testBlue);
         // autonChooserBlue.addOption("1 Piece Blue Dead Reckoning Left", onePieceBlueDeadReckoningL4);
 //        autonChooserBlue.addOption("3 Piece Blue Bottom 2 L4", threePieceBlueBottomL4);
 //        autonChooserBlue.addOption("Drive By Left", driveByTopBlue);

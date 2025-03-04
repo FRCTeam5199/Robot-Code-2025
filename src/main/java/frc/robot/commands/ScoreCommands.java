@@ -159,7 +159,7 @@ public class ScoreCommands {
                 },
                 intakeSubsystem);
     }
-    
+
     public static Command outtakeAuton() {
         return new FunctionalCommand(
                 () -> {
@@ -192,9 +192,9 @@ public class ScoreCommands {
 
     public static Command scoreShoot() {
         return new ConditionalCommand(
-            new VelocityCommand(intakeSubsystem, -25), 
-            new VelocityCommand(intakeSubsystem, -75), 
-            RobotContainer.isL1);
+                new VelocityCommand(intakeSubsystem, -25),
+                new VelocityCommand(intakeSubsystem, -75),
+                () -> RobotContainer.getState() == State.L1);
     }
 
     public static Command scoreL2() {

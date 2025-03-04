@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "dead reckoning"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "OUTTAKE"
+            "pathName": "test rotate"
           }
         }
       ]
