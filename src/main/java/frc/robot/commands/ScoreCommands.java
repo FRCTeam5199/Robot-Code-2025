@@ -435,6 +435,39 @@ public class ScoreCommands {
         );
     }
 
+    public static Command autoAlignTeleop() {
+        return new FunctionalCommand(
+                () -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
+                        Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                .getClosestTagID())))),
+                () -> {
+                    if ((!elevatorSubsystem.isMechAtGoal(false)
+                            || !armSubsystem.isMechAtGoal(false)
+                            || !wristSubsystem.isMechAtGoal(false))
+                            && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0]) < .3)
+                        commandSwerveDrivetrain.setControl(
+                                drive.withVelocityX(0)
+                                        .withVelocityY(yVelocity)
+                                        .withRotationalRate(rotationVelocity));
+                    else commandSwerveDrivetrain.setControl(
+                            drive.withVelocityX(xVelocity)
+                                    .withVelocityY(yVelocity)
+                                    .withRotationalRate(rotationVelocity));
+                },
+                (interrupted) -> {
+                    commandSwerveDrivetrain
+                            .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
+                                    .getPigeon2().getRotation2d().getDegrees() + (DriverStation.getAlliance().isPresent()
+                                    && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 0 : 180))));
+                    commandSwerveDrivetrain.setControl(
+                            drive.withVelocityX(0)
+                                    .withVelocityY(0)
+                                    .withRotationalRate(0));
+                },
+                RobotContainer::aligned,
+                commandSwerveDrivetrain);
+    }
+
     public static Command autoAlignLAuton() {
         return new FunctionalCommand(
                 () -> {
