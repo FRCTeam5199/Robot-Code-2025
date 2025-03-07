@@ -9,6 +9,24 @@
           "data": {
             "pathName": "test"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ALIGNR"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test 2"
+          }
         }
       ]
     }

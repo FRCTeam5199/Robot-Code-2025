@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +16,8 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -69,7 +66,7 @@ public class AprilTagSubsystem extends SubsystemBase {
     public void periodic() {
 //        System.out.println("Drive rotation: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
 //        System.out.println("Pigeon angle: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
-        System.out.println("Closest tag id: " + closestTagID);
+//        System.out.println("Closest tag id: " + closestTagID);
         results = camera.getAllUnreadResults();
         updateClosestTagID();
     }
@@ -106,11 +103,11 @@ public class AprilTagSubsystem extends SubsystemBase {
             Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
         if (estimatedPose.isEmpty()) {
             // No pose input. Default to single-tag std devs
-            curStdDevs = Constants.Vision.kSingleTagStdDevs;
+            curStdDevs = Constants.Vision.kTagStdDevs;
 
         } else {
             // Pose present. Start running Heuristic
-            var estStdDevs = Constants.Vision.kSingleTagStdDevs;
+            var estStdDevs = Constants.Vision.kTagStdDevs;
             int numTags = 0;
             double avgDist = 0;
 
@@ -129,12 +126,12 @@ public class AprilTagSubsystem extends SubsystemBase {
 
             if (numTags == 0) {
                 // No tags visible. Default to single-tag std devs
-                curStdDevs = Constants.Vision.kSingleTagStdDevs;
+                curStdDevs = Constants.Vision.kTagStdDevs;
             } else {
                 // One or more tags visible, run the full heuristic.
                 avgDist /= numTags;
                 // Decrease std devs if multiple targets are visible
-                if (numTags > 1) estStdDevs = Constants.Vision.kMultiTagStdDevs;
+                if (numTags > 1) estStdDevs = Constants.Vision.kTagStdDevs;
                     // Increase std devs based on (average) distance
 //                if (numTags == 1 && avgDist > 4)
 //                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);

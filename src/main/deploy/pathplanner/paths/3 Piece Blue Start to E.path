@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.012560220233998,
-        "y": 2.7869580178940123
+        "x": 5.070799180327868,
+        "y": 2.724
       },
       "prevControl": {
-        "x": 5.360203662856948,
-        "y": 2.631117853959586
+        "x": 5.418442622950819,
+        "y": 2.5681598360655737
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "E Blue"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
@@ -45,6 +45,17 @@
         "type": "named",
         "data": {
           "name": "ARML4"
+        }
+      }
+    },
+    {
+      "name": "L4",
+      "waypointRelativePos": 0.24358974358973956,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L4"
         }
       }
     }

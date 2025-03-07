@@ -44,7 +44,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
     }
 
     public void intake() {
-        setPercent(1);
+        setVelocity(75);
     }
 
     public void stopIntake() {
@@ -52,12 +52,8 @@ public class IntakeSubsystem extends TemplateSubsystem {
     }
 
     public void outtake() {
-        setPercent(-1);
+        setVelocity(-75);
     }
-
-    public void outtakeAuton() {
-        setVelocity(-85);
-    } 
 
     //Peak naming :fire:
     public boolean isIntooken() {

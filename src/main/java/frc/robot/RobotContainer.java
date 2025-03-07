@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.function.BooleanSupplier;
-
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -117,20 +115,20 @@ public class RobotContainer {
         commandSwerveDrivetrain.configureAutoBuilder();
 
 //        NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
-//        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtakeAuton());
+//        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
 //        NamedCommands.registerCommand("DROP", ScoreCommands.drop());
-//        NamedCommands.registerCommand("HP", ScoreCommands.intakeHP());
+        NamedCommands.registerCommand("HP", ScoreCommands.intakeHP());
 //        NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
 //        NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
 //        NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
-//        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4NoDunkAuton().withTimeout(2));
+        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4().withTimeout(2));
 //        NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
 //        NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
-//        NamedCommands.registerCommand("ARML4", ScoreCommands.armL4Auton());
+        NamedCommands.registerCommand("ARML4", ScoreCommands.armL4());
         NamedCommands.registerCommand("ALIGNL", ScoreCommands.autoAlignLAuton().withTimeout(2));
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.autoAlignRAuton().withTimeout(2));
-        NamedCommands.registerCommand("DRIVE", ScoreCommands.autoMoveForwardBottom());
-        NamedCommands.registerCommand("DRIVETOP", ScoreCommands.autoMoveForwardTop());
+//        NamedCommands.registerCommand("DRIVE", ScoreCommands.autoMoveForwardBottom());
+//        NamedCommands.registerCommand("DRIVETOP", ScoreCommands.autoMoveForwardTop());
 //        NamedCommands.registerCommand("DROP", ScoreCommands.drop());
 
         Autos.initializeAutos();
@@ -168,16 +166,15 @@ public class RobotContainer {
 //        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
 //        commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeL2(), ScoreCommands.scoreL3(), () -> algaeControls));
 
-        commandXboxController.leftTrigger().onTrue(/*ScoreCommands.scoreNoDunk()
-                        .alongWith(*/ScoreCommands.autoAlignTeleop())
-                .onFalse(new VelocityCommand(intakeSubsystem, 0)
-                        .alongWith(ScoreCommands.stable())
+        commandXboxController.leftTrigger().onTrue(ScoreCommands.score()
+                        .alongWith(ScoreCommands.autoAlignTeleop()))
+                .onFalse(ScoreCommands.stable()
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
-        commandXboxController.rightTrigger().onTrue(new VelocityCommand(intakeSubsystem, 75)
-                        .alongWith(ScoreCommands.intakeHP()))
+        commandXboxController.rightTrigger().onTrue(ScoreCommands.intakeHP()
+                        .andThen(new VelocityCommand(intakeSubsystem, 75)))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0)
                         .alongWith(ScoreCommands.intakeStable()));
 
@@ -195,7 +192,7 @@ public class RobotContainer {
 //                        .getPigeon2().getRotation2d().getDegrees() + (DriverStation.getAlliance().isPresent()
 //                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 0 : 180))))));
 
-//        commandXboxController.leftBumper().whileTrue(ScoreCommands.scoreNoDunk()).onFalse(ScoreCommands.stable());
+        commandXboxController.leftBumper().onTrue(ScoreCommands.score()).onFalse(ScoreCommands.stable());
         commandXboxController.rightBumper().onTrue(ScoreCommands.scoreShoot())
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
@@ -306,9 +303,9 @@ public class RobotContainer {
         // System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
 //        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
-//        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
-//        System.out.println("Arm: " + armSubsystem.getDegrees());
-//        System.out.println("Wrist: " + wristSubsystem.getDegrees());
+        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
+        System.out.println("Arm: " + armSubsystem.getDegrees());
+        System.out.println("Wrist: " + wristSubsystem.getDegrees());
 
     }
 
