@@ -150,7 +150,7 @@ public class ScoreCommands {
                         new PositionCommand(wristSubsystem, 185)
                 )
         ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1)))
-                .alongWith(new VelocityCommand(intakeSubsystem, -75));
+                .alongWith(new VelocityCommand(intakeSubsystem, 75));
     }
 
     public static Command scoreShoot() {
