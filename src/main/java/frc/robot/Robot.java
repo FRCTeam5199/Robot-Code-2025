@@ -149,7 +149,7 @@ public class Robot extends TimedRobot {
             autonomousCommand.cancel();
         }
 
-        ScoreCommands.wristandElevatorStable();
+        ScoreCommands.Stabling.wristandElevatorStable();
 
         CommandScheduler.getInstance().cancelAll();
     }

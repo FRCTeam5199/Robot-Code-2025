@@ -119,16 +119,16 @@ public class RobotContainer {
 //        NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
 //        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
 //        NamedCommands.registerCommand("DROP", ScoreCommands.drop());
-        NamedCommands.registerCommand("HP", ScoreCommands.intakeHP());
+        NamedCommands.registerCommand("HP", ScoreCommands.Intake.intakeHP());
 //        NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
 //        NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
 //        NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
-        NamedCommands.registerCommand("L4", ScoreCommands.scoreL4().withTimeout(2));
+        NamedCommands.registerCommand("L4", ScoreCommands.Score.scoreL4().withTimeout(2));
 //        NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
 //        NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
-        NamedCommands.registerCommand("ARML4", ScoreCommands.armL4());
-        NamedCommands.registerCommand("ALIGNL", ScoreCommands.autoAlignLAuton().withTimeout(2));
-        NamedCommands.registerCommand("ALIGNR", ScoreCommands.autoAlignRAuton().withTimeout(2));
+        NamedCommands.registerCommand("ARML4", ScoreCommands.Arm.armL4());
+        NamedCommands.registerCommand("ALIGNL", ScoreCommands.Drive.autoAlignLAuton().withTimeout(2));
+        NamedCommands.registerCommand("ALIGNR", ScoreCommands.Drive.autoAlignRAuton().withTimeout(2));
 //        NamedCommands.registerCommand("DRIVE", ScoreCommands.autoMoveForwardBottom());
 //        NamedCommands.registerCommand("DRIVETOP", ScoreCommands.autoMoveForwardTop());
 //        NamedCommands.registerCommand("DROP", ScoreCommands.drop());
@@ -162,23 +162,23 @@ public class RobotContainer {
 //        commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
 
         commandXboxController.a().onTrue(new InstantCommand(() -> RobotContainer.setState(State.L1)));
-        commandXboxController.b().onTrue(ScoreCommands.armL2NoDunk());
-        commandXboxController.x().onTrue(ScoreCommands.armL3NoDunk());
-        commandXboxController.y().onTrue(ScoreCommands.armL4());
+        commandXboxController.b().onTrue(ScoreCommands.Arm.armL2());
+        commandXboxController.x().onTrue(ScoreCommands.Arm.armL3());
+        commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
 //        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
 //        commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeL2(), ScoreCommands.scoreL3(), () -> algaeControls));
 
-        commandXboxController.leftTrigger().onTrue(ScoreCommands.score()
-                        .alongWith(ScoreCommands.autoAlignTeleop()))
-                .onFalse(ScoreCommands.stable()
+        commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
+                        .alongWith(ScoreCommands.Drive.autoAlignTeleop()))
+                .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
-        commandXboxController.rightTrigger().onTrue(ScoreCommands.intakeHP()
+        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
                         .andThen(new InstantCommand(()-> intakeSubsystem.setVoltage(-6))))
                 .onFalse(new InstantCommand(()->intakeSubsystem.setVoltage(0))
-                        .alongWith(ScoreCommands.intakeStable()));
+                        .alongWith(ScoreCommands.Stabling.intakeStable()));
 
 
 //        commandXboxController.leftBumper().whileTrue(new SequentialCommandGroup(
@@ -194,8 +194,8 @@ public class RobotContainer {
 //                        .getPigeon2().getRotation2d().getDegrees() + (DriverStation.getAlliance().isPresent()
 //                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 0 : 180))))));
 
-        commandXboxController.leftBumper().onTrue(ScoreCommands.score()).onFalse(ScoreCommands.stable());
-        commandXboxController.rightBumper().onTrue(ScoreCommands.scoreShoot())
+        commandXboxController.leftBumper().onTrue(ScoreCommands.Score.score()).onFalse(ScoreCommands.Stabling.stable());
+        commandXboxController.rightBumper().onTrue(ScoreCommands.Score.scoreShoot())
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
 //        commandXboxController.button(0).onTrue(new InstantCommand(() -> selectedTag = AprilTags.get(aprilTagSubsystem.getClosestTagID()))).toggleOnTrue(new FunctionalCommand(
@@ -213,7 +213,7 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6)))
                 .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 
-        commandXboxController.button(7).onTrue(ScoreCommands.zeroSubsystems());
+        commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
         commandXboxController.povLeft().onTrue(new InstantCommand(this::toggleAutoAlignOffsetLeft));
         commandXboxController.povRight().onTrue(new InstantCommand(this::toggleAutoAlignOffsetRight));
 

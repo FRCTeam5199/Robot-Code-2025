@@ -66,6 +66,18 @@ public final class Constants {
                 .withKG(ELEVATOR_FF.getkG())
                 .withKV(ELEVATOR_FF.getkV())
                 .withGravityType(GravityTypeValue.Elevator_Static);
+
+                public static final double STABLE = 0;
+                public static final double GROUND = .15;
+
+                public static final double L1 = 0;
+                public static final double L2 = .1559;
+                public static final double L3 = .398;
+                public static final double L4 = .924;
+                public static final double HP = .0151;
+
+                public static final double ALGAE_1 = 10;
+                public static final double ALGAE_2 = 10;
     }
 
     public static class ArmConstants {
@@ -87,6 +99,21 @@ public final class Constants {
         public static final double ARM_LOWER_TOLERANCE = 1;
         public static final double ARM_UPPER_TOLERANCE = 1;
 
+        public static final double STABLE = 0;
+        public static final double INTAKE_STABLE = 59;
+        public static final double GROUND = 9.25;
+
+        public static final double L1 = 0;
+        public static final double L2 = 36.29;
+        public static final double L3 = 56.86;
+        public static final double L4 = 72.61;
+        public static final double HP = 64.182;
+
+        public static final double ALGAE_1 = 10;
+        public static final double ALGAE_2 = 10;
+
+
+
         public static final double ARM_MIN = 0.61524;
         public static final double ARM_MAX = 180; //fix
 
@@ -103,13 +130,7 @@ public final class Constants {
                 .withKA(ARM_FF.getkA())
                 .withGravityType(GravityTypeValue.Arm_Cosine);
 
-        public static final double ARM_L1 = 0;
-        public static final double ARM_L2 = 0;
-        public static final double ARM_L3 = 0;
-        public static final double ARM_L4 = 0;
-        public static final double ARM_HP = 0;
-        public static final double ARM_ALGAE_LOW = 0;
-        public static final double ARM_ALGAE_HIGH = 0;
+
     }
 
     public static class IntakeConstants {
@@ -171,6 +192,19 @@ public final class Constants {
         public static final double WRIST_SUPPLY_CURRENT_LIMIT = 20;
         public static final boolean WRIST_INVERTED = false;
 
+
+        public static final double STABLE = 10;
+        public static final double GROUND = 185;
+        public static final double L1 = 0;
+        public static final double L2 = 59.39;
+        public static final double L3 = 84.2;
+        public static final double L4 = 109;
+        public static final double L4_DUNK = 110;
+        public static final double HP = 53;
+
+        public static final double ALGAE_1 = 10;
+        public static final double ALGAE_2 = 10;
+
         public static final boolean WRIST_BRAKE = true;
 
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
@@ -196,6 +230,8 @@ public final class Constants {
 
         public static final double[][] WRIST_GEAR_RATIO = {{72, 10}, {72, 20}, {48, 24}};
     }
+
+
 
     public static class Vision {
         public static final String CAMERA_NAME = "Camera";
