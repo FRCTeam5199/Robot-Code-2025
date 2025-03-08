@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.time.Instant;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -174,8 +176,8 @@ public class RobotContainer {
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
         commandXboxController.rightTrigger().onTrue(ScoreCommands.intakeHP()
-                        .andThen(new VelocityCommand(intakeSubsystem, 75)))
-                .onFalse(new VelocityCommand(intakeSubsystem, 0)
+                        .andThen(new InstantCommand(()-> intakeSubsystem.setVoltage(-6))))
+                .onFalse(new InstantCommand(()->intakeSubsystem.setVoltage(0))
                         .alongWith(ScoreCommands.intakeStable()));
 
 
