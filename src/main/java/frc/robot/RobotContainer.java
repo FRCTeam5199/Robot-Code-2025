@@ -175,11 +175,32 @@ public class RobotContainer {
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
-        commandXboxController.rightTrigger().onTrue(ScoreCommands.intakeHP()
-                        .andThen(new InstantCommand(()-> intakeSubsystem.setVoltage(-6))))
-                .onFalse(new InstantCommand(()->intakeSubsystem.setVoltage(0))
-                        .alongWith(ScoreCommands.intakeStable()));
 
+        commandXboxController.rightTrigger()
+                .onTrue(new SequentialCommandGroup(
+                        //Move to intake position
+                        ScoreCommands.intakeHP(),
+                        //Intake until beam initially breaks
+                        new VelocityCommand(intakeSubsystem, 50)
+                                .until(() -> intakeSubsystem.isCoralInIntake()),
+                        //Outtake slowly until beam connects
+                        new VelocityCommand(intakeSubsystem, -10)
+                                .until(() -> !intakeSubsystem.isCoralInIntake()),
+                        //Intake slowly until beam breaks; the coral is now barely at the beam
+                        new VelocityCommand(intakeSubsystem, 3)
+                                .until(() -> intakeSubsystem.isCoralInIntake()),
+                        //Intake slowly for an amount of time; lines it up completely
+                        new VelocityCommand(intakeSubsystem, 10)
+                                .withDeadline(new WaitCommand(0.2)),
+                        //Outtake slowly until beam connects
+                        new VelocityCommand(intakeSubsystem, -10)
+                                .until(() -> !intakeSubsystem.isCoralInIntake()),
+                        //Intake slowly until beam breaks
+                        new VelocityCommand(intakeSubsystem, 3)
+                                .until(() -> intakeSubsystem.isCoralInIntake())))
+                .onFalse(
+                        ScoreCommands.intakeStable()
+                );
 
 //        commandXboxController.leftBumper().whileTrue(new SequentialCommandGroup(
 //                new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
@@ -305,9 +326,9 @@ public class RobotContainer {
         // System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
 //        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
-        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
-        System.out.println("Arm: " + armSubsystem.getDegrees());
-        System.out.println("Wrist: " + wristSubsystem.getDegrees());
+//        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
+//        System.out.println("Arm: " + armSubsystem.getDegrees());
+//        System.out.println("Wrist: " + wristSubsystem.getDegrees());
 
     }
 

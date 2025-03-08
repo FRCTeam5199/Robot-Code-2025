@@ -114,13 +114,14 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final int INTAKE_ID = 20;
+        public static final int INTAKE_SENSOR_ID = 0;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
         public static final FeedForward INTAKE_FEEDFORWARD = new FeedForward(0.2, 0, 0.1162790697674419);
         public static final double INTAKE_lowerTOLERANCE = 5;
         public static final double INTAKE_upperTOLERANCE = 5;
         public static final double[][] INTAKE_gearRatios = {{1, 1}};
 
-        public static final boolean INTAKE_INVERT = true;
+        public static final boolean INTAKE_INVERT = false;
         public static final boolean INTAKE_BRAKE = true;
         public static final double INTAKE_STATOR_CURRENT_LIMIT = 100;
         public static final double INTAKE_SUPPLY_CURRENT_LIMIT = 100;

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.wpilibj.AnalogInput;
 
 import frc.robot.constants.Constants.IntakeConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
@@ -9,6 +10,7 @@ import frc.robot.utility.Type;
 public class IntakeSubsystem extends TemplateSubsystem {
     public static IntakeSubsystem intakeSubsystem;
     public TalonFX intake_motor = new TalonFX(IntakeConstants.INTAKE_ID);
+    private AnalogInput intakeSensor;
 
     public IntakeSubsystem() {
         super(Type.ROLLER,
@@ -27,12 +29,15 @@ public class IntakeSubsystem extends TemplateSubsystem {
                 IntakeConstants.INTAKE_STATOR_CURRENT_LIMIT,
                 IntakeConstants.INTAKE_SLOT0_CONFIGS
         );
+
+        intakeSensor = new AnalogInput(IntakeConstants.INTAKE_SENSOR_ID);
     }
 
     public void periodic() {
         super.periodic();
 
 //        System.out.println("Intake: " + getMechVelocity());
+        System.out.println("Intake Break Beam: " + intakeSensor.getValue());
 
     }
 
@@ -58,5 +63,9 @@ public class IntakeSubsystem extends TemplateSubsystem {
     //Peak naming :fire:
     public boolean isIntooken() {
         return getStatorCurrent() > 25;
+    }
+
+    public boolean isCoralInIntake() {
+        return intakeSensor.getValue() > 100;
     }
 }
