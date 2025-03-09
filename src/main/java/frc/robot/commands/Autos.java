@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -17,7 +16,6 @@ import frc.robot.UserInterface;
 public final class Autos {
     private SendableChooser<Command> autoChooser;
     private static Autos autos;
-
 
     public static SendableChooser<Command> autonChooserRed = new SendableChooser<>();
     public static SendableChooser<Command> autonChooserBlue = new SendableChooser<>();

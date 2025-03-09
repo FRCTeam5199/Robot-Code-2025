@@ -4,11 +4,8 @@
 
 package frc.robot.constants;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
 import edu.wpi.first.math.Matrix;
@@ -67,17 +64,17 @@ public final class Constants {
                 .withKV(ELEVATOR_FF.getkV())
                 .withGravityType(GravityTypeValue.Elevator_Static);
 
-        public static final double STABLE = 0;
-        public static final double GROUND = .15;
+                public static final double STABLE = 0;
+                public static final double GROUND = .15;
 
-        public static final double L1 = 0;
-        public static final double L2 = .1559;
-        public static final double L3 = .398;
-        public static final double L4 = .924;
-        public static final double HP = .0151;
+                public static final double L1 = 0;
+                public static final double L2 = .1559;
+                public static final double L3 = .398;
+                public static final double L4 = .924;
+                public static final double HP = .0151;
 
-        public static final double ALGAE_1 = 10;
-        public static final double ALGAE_2 = 10;
+                public static final double ALGAE_LOW = 10;
+                public static final double ALGAE_HIGH = 10;
     }
 
     public static class ArmConstants {
@@ -109,8 +106,9 @@ public final class Constants {
         public static final double L4 = 72.61;
         public static final double HP = 64.182;
 
-        public static final double ALGAE_1 = 10;
-        public static final double ALGAE_2 = 10;
+        public static final double ALGAE_LOW = 10;
+        public static final double ALGAE_HIGH = 10;
+
 
 
         public static final double ARM_MIN = 0.61524;
@@ -202,8 +200,8 @@ public final class Constants {
         public static final double L4_DUNK = 110;
         public static final double HP = 53;
 
-        public static final double ALGAE_1 = 10;
-        public static final double ALGAE_2 = 10;
+        public static final double ALGAE_LOW = 10;
+        public static final double ALGAE_HIGH = 10;
 
         public static final boolean WRIST_BRAKE = true;
 
@@ -230,6 +228,7 @@ public final class Constants {
 
         public static final double[][] WRIST_GEAR_RATIO = {{72, 10}, {72, 20}, {48, 24}};
     }
+
 
 
     public static class Vision {
