@@ -113,6 +113,4 @@ public class WristSubsystem extends TemplateSubsystem {
     public boolean isAtBottom() {
         return currentSpike >= 7;
     }
-
-
 }

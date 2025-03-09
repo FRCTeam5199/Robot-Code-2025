@@ -31,7 +31,9 @@ public final class Constants {
 
     public static class OperatorConstants {
         public static final int driverControllerPort = 0;
-        public static final int buttonPanelPort = 1;
+        public static final int operatorControllerPort = 3;
+        public static final int buttonPanel1Port = 1;
+        public static final int buttonPanel2Port = 2;
     }
 
     public static class ElevatorConstants {
