@@ -152,10 +152,6 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-//        commandXboxController.b().onTrue(new InstantCommand(() -> System.out.println("Arm Degrees: " + armSubsystem.getDegrees()))
-//                .andThen(new InstantCommand(() -> System.out.println("Elevator Centimeters: " + elevatorSubsystem.getMechM())))
-//                .andThen(new InstantCommand(() -> System.out.println("Wrist Degrees: " + wristSubsystem.getDegrees()))));
-
         commandSwerveDrivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
                 commandSwerveDrivetrain.applyRequest(() -> drive.withVelocityX(-commandXboxController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                         .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
@@ -170,15 +166,10 @@ public class RobotContainer {
             commandSwerveDrivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
         }
 
-//        commandXboxController.button(9).onTrue(new InstantCommand(() -> algaeControls = false));
-//        commandXboxController.button(10).onTrue(new InstantCommand(() -> algaeControls = true));
-
         commandXboxController.a().onTrue(new InstantCommand(() -> RobotContainer.setState(State.L1)));
         commandXboxController.b().onTrue(ScoreCommands.Arm.armL2());
         commandXboxController.x().onTrue(ScoreCommands.Arm.armL3());
         commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
-//        commandXboxController.b().onTrue(new ConditionalCommand(ScoreCommands.algaeL1(), ScoreCommands.scoreL2(), () -> algaeControls));
-//        commandXboxController.x().onTrue(new ConditionalCommand(ScoreCommands.algaeL2(), ScoreCommands.scoreL3(), () -> algaeControls));
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
                         .alongWith(new ConditionalCommand(
@@ -234,14 +225,6 @@ public class RobotContainer {
         commandXboxController.leftBumper().onTrue(ScoreCommands.Score.score()).onFalse(ScoreCommands.Stabling.stable());
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.scoreShoot())
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
-
-//        commandXboxController.button(0).onTrue(new InstantCommand(() -> selectedTag = AprilTags.get(aprilTagSubsystem.getClosestTagID()))).toggleOnTrue(new FunctionalCommand(
-//                () -> new SequentialCommandGroup(
-//                        new InstantCommand(() -> selectedTag = null),
-//                        new InstantCommand(() -> lockOnMode = true))
-//        () -> {},
-//                (interrupted) -> new InstantCommand(() -> lockOnMode = false),
-//                null));
 
         commandButtonPanel.button(ButtonPanelButtons.MOVE_CLIMB_INCREASE)
                 .onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6)))
