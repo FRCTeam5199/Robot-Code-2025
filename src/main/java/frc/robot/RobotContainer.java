@@ -53,8 +53,9 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private static final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
-    private static final CommandXboxController operatorXboxController = new CommandXboxController(3); // My joystick
-    private static final CommandButtonPanel commandButtonPanel = new CommandButtonPanel(1);
+    private static final CommandXboxController operatorXboxController = new CommandXboxController(OperatorConstants.operatorControllerPort); // My joystick
+    private static final CommandButtonPanel commandButtonPanel = new CommandButtonPanel(OperatorConstants.buttonPanel1Port, OperatorConstants.buttonPanel2Port);
+
     public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
@@ -314,15 +315,15 @@ public class RobotContainer {
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
 
+        System.out.println("Pose: " + commandSwerveDrivetrain.getPose());
         // System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
-//        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
+        // System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
 //        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
 //        System.out.println("Arm: " + armSubsystem.getDegrees());
 //        System.out.println("Wrist: " + wristSubsystem.getDegrees());
 
     }
-
 
     public void setAutoAlignOffsetLeft() {
         if (DriverStation.getAlliance().isPresent()
