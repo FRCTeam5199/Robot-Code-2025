@@ -1,26 +1,42 @@
 package frc.robot.commands;
 
+import static frc.robot.RobotContainer.commandSwerveDrivetrain;
+import static frc.robot.RobotContainer.rotationVelocity;
+import static frc.robot.RobotContainer.xVelocity;
+import static frc.robot.RobotContainer.yVelocity;
+
+import java.util.Map;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
-import frc.robot.constants.TunerConstants;
 import frc.robot.constants.Constants.ArmConstants;
 import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.constants.Constants.WristConstants;
-import frc.robot.subsystems.*;
+import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.AprilTagSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
-
-import java.util.Map;
-
-import static frc.robot.RobotContainer.*;
 
 public class ScoreCommands {
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -48,6 +64,41 @@ public class ScoreCommands {
                                                 commandSwerveDrivetrain.getPose().getY()),
                                         new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
                                                 .getClosestTagID()))))),
+                        () -> {
+                            if ((!elevatorSubsystem.isMechAtGoal(false)
+                                    || !armSubsystem.isMechAtGoal(false)
+                                    || !wristSubsystem.isMechAtGoal(false))
+                                    && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0]) < .3)
+                                commandSwerveDrivetrain.setControl(
+                                        drive.withVelocityX(0)
+                                                .withVelocityY(yVelocity)
+                                                .withRotationalRate(rotationVelocity));
+                            else commandSwerveDrivetrain.setControl(
+                                    drive.withVelocityX(xVelocity)
+                                            .withVelocityY(yVelocity)
+                                            .withRotationalRate(rotationVelocity));
+                        },
+                        (interrupted) -> {
+                            commandSwerveDrivetrain
+                                    .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
+                                            .getPigeon2().getRotation2d().getDegrees() + (DriverStation.getAlliance().isPresent()
+                                            && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 0 : 180))));
+                            commandSwerveDrivetrain.setControl(
+                                    drive.withVelocityX(0)
+                                            .withVelocityY(0)
+                                            .withRotationalRate(0));
+                        },
+                        RobotContainer::aligned,
+                        commandSwerveDrivetrain);
+            }
+
+            public static Command autoAlignTeleop(int tagID) {
+                return new FunctionalCommand(
+                        () -> commandSwerveDrivetrain.resetPose(
+                                new Pose2d(
+                                        new Translation2d(commandSwerveDrivetrain.getPose().getX(),
+                                                commandSwerveDrivetrain.getPose().getY()),
+                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(tagID))))),
                         () -> {
                             if ((!elevatorSubsystem.isMechAtGoal(false)
                                     || !armSubsystem.isMechAtGoal(false)
