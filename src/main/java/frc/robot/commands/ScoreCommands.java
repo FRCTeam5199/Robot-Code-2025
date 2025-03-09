@@ -235,17 +235,36 @@ public class ScoreCommands {
     }
 
     public static class Stabling {
-        public static Command stable() {
+        public static Command regularStable() {
             return new SequentialCommandGroup(
                     new ParallelCommandGroup(
                             new PositionCommand(wristSubsystem, WristConstants.STABLE),
-                            new PositionCommand(elevatorSubsystem, 0, false).beforeStarting(new WaitCommand(0.5))
+                            new PositionCommand(elevatorSubsystem, 0, false)
                                     .until(() -> elevatorSubsystem.isAtBottom()
                                             && elevatorSubsystem.getMechM() < .05)
                     ),
                     new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
             ).alongWith(new VelocityCommand(intakeSubsystem, 0));
+        }
+
+        public static Command groundIntakeStable() {
+                return new SequentialCommandGroup(
+                        new PositionCommand(wristSubsystem, WristConstants.STABLE),
+                        new PositionCommand(elevatorSubsystem, 0, false)
+                                .until(() -> elevatorSubsystem.isAtBottom()
+                                        && elevatorSubsystem.getMechM() < .05),
+                        new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
+                        Arm.armStable()
+                ).alongWith(new VelocityCommand(intakeSubsystem, 0));
+        }
+
+        public static Command stable() {
+                return new ConditionalCommand(
+                        groundIntakeStable(),
+                        regularStable(),
+                        () -> RobotContainer.getState() == State.L1
+                );
         }
 
         public static Command intakeStable() {
