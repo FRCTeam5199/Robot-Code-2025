@@ -17,8 +17,8 @@ public class IntakeSubsystem extends TemplateSubsystem {
                 IntakeConstants.INTAKE_ID,
                 IntakeConstants.INTAKE_CONSTRAINTS,
                 IntakeConstants.INTAKE_FEEDFORWARD,
-                IntakeConstants.INTAKE_lowerTOLERANCE,
-                IntakeConstants.INTAKE_upperTOLERANCE,
+                IntakeConstants.INTAKE_LOWER_TOLERANCE,
+                IntakeConstants.INTAKE_UPPER_TOLERANCE,
                 IntakeConstants.INTAKE_gearRatios,
                 "Intake");
 
@@ -37,7 +37,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
         super.periodic();
 
 //        System.out.println("Intake: " + getMechVelocity());
-        System.out.println("Intake Break Beam: " + intakeSensor.getValue());
+//        System.out.println("Intake Break Beam: " + intakeSensor.getValue());
 
     }
 

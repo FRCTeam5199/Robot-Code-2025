@@ -55,7 +55,7 @@ public final class Constants {
         public static final double DRUM_CIRCUMFERENCE = .119694706;
 
         public static final Slot0Configs ELEVATOR_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(1)
+                .withKP(.75)
                 .withKI(0)
                 .withKD(0)
                 .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
@@ -64,17 +64,17 @@ public final class Constants {
                 .withKV(ELEVATOR_FF.getkV())
                 .withGravityType(GravityTypeValue.Elevator_Static);
 
-                public static final double STABLE = 0;
-                public static final double GROUND = .15;
+        public static final double STABLE = 0;
+        public static final double GROUND = .15;
 
-                public static final double L1 = 0;
-                public static final double L2 = .1559;
-                public static final double L3 = .398;
-                public static final double L4 = .924;
-                public static final double HP = .0151;
+        public static final double L1 = 0;
+        public static final double L2 = .17;
+        public static final double L3 = .39;
+        public static final double L4 = .99;
+        public static final double HP = .015;
 
-                public static final double ALGAE_LOW = 10;
-                public static final double ALGAE_HIGH = 10;
+        public static final double ALGAE_LOW = .2;
+        public static final double ALGAE_HIGH = .5;
     }
 
     public static class ArmConstants {
@@ -100,15 +100,14 @@ public final class Constants {
         public static final double INTAKE_STABLE = 59;
         public static final double GROUND = 9.25;
 
-        public static final double L1 = 0;
-        public static final double L2 = 36.29;
-        public static final double L3 = 56.86;
-        public static final double L4 = 72.61;
+        public static final double L1 = 7; //currently ground intake
+        public static final double L2 = 37;
+        public static final double L3 = 60;
+        public static final double L4 = 74;
         public static final double HP = 64.182;
 
         public static final double ALGAE_LOW = 10;
         public static final double ALGAE_HIGH = 10;
-
 
 
         public static final double ARM_MIN = 0.61524;
@@ -135,8 +134,8 @@ public final class Constants {
         public static final int INTAKE_SENSOR_ID = 3;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
         public static final FeedForward INTAKE_FEEDFORWARD = new FeedForward(0.2, 0, 0.1162790697674419);
-        public static final double INTAKE_lowerTOLERANCE = 5;
-        public static final double INTAKE_upperTOLERANCE = 5;
+        public static final double INTAKE_LOWER_TOLERANCE = 5;
+        public static final double INTAKE_UPPER_TOLERANCE = 5;
         public static final double[][] INTAKE_gearRatios = {{1, 1}};
 
         public static final boolean INTAKE_INVERT = false;
@@ -185,7 +184,7 @@ public final class Constants {
     }
 
     public static class WristConstants {
-        public static final int WRIST_MOTOR_ID = 19;
+        public static final int WRIST_MOTOR_ID = 190; //19
         public static final double WRIST_STATOR_CURRENT_LIMIT = 20;
         public static final double WRIST_SUPPLY_CURRENT_LIMIT = 20;
         public static final boolean WRIST_INVERTED = false;
@@ -194,10 +193,9 @@ public final class Constants {
         public static final double STABLE = 10;
         public static final double GROUND = 185;
         public static final double L1 = 0;
-        public static final double L2 = 59.39;
-        public static final double L3 = 84.2;
-        public static final double L4 = 109;
-        public static final double L4_DUNK = 110;
+        public static final double L2 = 64;
+        public static final double L3 = 85;
+        public static final double L4 = 124;
         public static final double HP = 53;
 
         public static final double ALGAE_LOW = 10;
@@ -230,12 +228,12 @@ public final class Constants {
     }
 
 
-
     public static class Vision {
         public static final String CAMERA_NAME = "Camera";
         public static final Transform3d CAMERA_POSE =
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
-        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(3, 3, 999.0);
+        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(1.75, 1.75, 999.0);
     }
 }
+

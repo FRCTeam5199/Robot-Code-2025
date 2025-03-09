@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 3.6082991803278692,
-        "y": 2.8801741803278684
+        "x": 3.536372950819672,
+        "y": 2.748309426229507
       },
       "prevControl": {
-        "x": 2.653197139511542,
-        "y": 2.1862328537972564
+        "x": 2.5812709100033446,
+        "y": 2.054368099698895
       },
       "nextControl": null,
       "isLocked": false,
@@ -40,6 +40,17 @@
         "type": "named",
         "data": {
           "name": "ARML4"
+        }
+      }
+    },
+    {
+      "name": "INTAKESEQUENCE",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKESEQUENCE"
         }
       }
     },

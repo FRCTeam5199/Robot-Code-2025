@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
+import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.controls.ButtonPanelButtons;
@@ -122,31 +123,34 @@ public class RobotContainer {
     public RobotContainer() {
         commandSwerveDrivetrain.configureAutoBuilder();
 
-//        NamedCommands.registerCommand("INTAKE", ScoreCommands.intake());
-//        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.outtake());
-//        NamedCommands.registerCommand("DROP", ScoreCommands.drop());
-        NamedCommands.registerCommand("HP", ScoreCommands.Intake.intakeHP());
-//        NamedCommands.registerCommand("L1", ScoreCommands.scoreL1());
-//        NamedCommands.registerCommand("L2", ScoreCommands.scoreL2());
-//        NamedCommands.registerCommand("L3", ScoreCommands.scoreL3());
-        NamedCommands.registerCommand("L4", ScoreCommands.Score.scoreL4().withTimeout(2));
-//        NamedCommands.registerCommand("ARML2", ScoreCommands.armL2());
-//        NamedCommands.registerCommand("ARML3", ScoreCommands.armL3());
+//        NamedCommands.registerCommand("INTAKE", ScoreCommands.Intake.intakeAuto());
+//        NamedCommands.registerCommand("INTAKESEQUENCE", ScoreCommands.Intake.intakeSequence());
+//        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.Score.place()
+//                .until(() -> !intakeSubsystem.isCoralInIntake()));
+//        NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
+        NamedCommands.registerCommand("ELEVATORSTABLE", new InstantCommand(() -> elevatorSubsystem.setPosition(0)));
+//        NamedCommands.registerCommand("HP", ScoreCommands.Intake.intakeHP());
+//        NamedCommands.registerCommand("L1", ScoreCommands.Score.scoreL1());
+//        NamedCommands.registerCommand("L2", ScoreCommands.Score.scoreL2());
+//        NamedCommands.registerCommand("L3", ScoreCommands.Score.scoreL3());
+//        NamedCommands.registerCommand("L4", ScoreCommands.Score.scoreL4().withTimeout(2));
+        NamedCommands.registerCommand("L4", new InstantCommand(() -> elevatorSubsystem.setPosition(Constants.ElevatorConstants.L4)));
+//        NamedCommands.registerCommand("ARML2", ScoreCommands.Arm.armL2());
+//        NamedCommands.registerCommand("ARML3", ScoreCommands.Arm.armL3());
         NamedCommands.registerCommand("ARML4", ScoreCommands.Arm.armL4());
         NamedCommands.registerCommand("ALIGNL", ScoreCommands.Drive.autoAlignLAuton().withTimeout(2));
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.Drive.autoAlignRAuton().withTimeout(2));
-//        NamedCommands.registerCommand("DRIVE", ScoreCommands.autoMoveForwardBottom());
-//        NamedCommands.registerCommand("DRIVETOP", ScoreCommands.autoMoveForwardTop());
-//        NamedCommands.registerCommand("DROP", ScoreCommands.drop());
+//        NamedCommands.registerCommand("DRIVE", ScoreCommands.Drive.autoMoveForwardBottom());
+//        NamedCommands.registerCommand("DRIVETOP", ScoreCommands.Drive.autoMoveForwardTop());
 
         Autos.initializeAutos();
 
         if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-            reefTags.addAll(List.of(7,8,9,10,11,6));
+            reefTags.addAll(List.of(7, 8, 9, 10, 11, 6));
         } else {
-            reefTags.addAll(List.of(18,17,22,21,20,19));
+            reefTags.addAll(List.of(18, 17, 22, 21, 20, 19));
         }
-            
+
         configureBindings();
         SignalLogger.setPath("/media/LOG/ctre-logs/");
     }
@@ -175,55 +179,19 @@ public class RobotContainer {
                         .alongWith(new ConditionalCommand(
                                 ScoreCommands.Drive.autoAlignTeleop(selectedReefTag),
                                 ScoreCommands.Drive.autoAlignTeleop(AprilTagSubsystem.getInstance().getClosestTagID()),
-                                () -> false
-                        )))
+                                () -> false)))
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
-
         commandXboxController.rightTrigger()
-                .onTrue(new SequentialCommandGroup(
-                        //Move to intake position
-                        ScoreCommands.Intake.intakeHP(),
-                        //Intake until beam initially breaks
-                        new VelocityCommand(intakeSubsystem, 50)
-                                .until(() -> intakeSubsystem.isCoralInIntake()),
-                        //Outtake slowly until beam connects
-                        new VelocityCommand(intakeSubsystem, -10)
-                                .until(() -> !intakeSubsystem.isCoralInIntake()),
-                        //Intake slowly until beam breaks; the coral is now barely at the beam
-                        new VelocityCommand(intakeSubsystem, 3)
-                                .until(() -> intakeSubsystem.isCoralInIntake()),
-                        //Intake slowly for an amount of time; lines it up completely
-                        new VelocityCommand(intakeSubsystem, 10)
-                                .withDeadline(new WaitCommand(0.2)),
-                        //Outtake slowly until beam connects
-                        new VelocityCommand(intakeSubsystem, -10)
-                                .until(() -> !intakeSubsystem.isCoralInIntake()),
-                        //Intake slowly until beam breaks
-                        new VelocityCommand(intakeSubsystem, 3)
-                                .until(() -> intakeSubsystem.isCoralInIntake())))
-                .onFalse(
-                        ScoreCommands.Stabling.intakeStable()
-                );
+                .onTrue(ScoreCommands.Intake.intakeHP().alongWith(ScoreCommands.Intake.intakeSequence()))
+                .onFalse(ScoreCommands.Stabling.intakeStable());
 
-       commandXboxController.leftBumper().whileTrue(new SequentialCommandGroup(
-               new InstantCommand(() -> commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                       Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-                               .getClosestTagID()))))),
-               commandSwerveDrivetrain.applyRequest(
-                       () -> drive.withVelocityX(xVelocity)
-                               .withVelocityY(yVelocity)
-                               .withRotationalRate(rotationVelocity)))
-       ).onFalse(new InstantCommand(() -> commandSwerveDrivetrain
-               .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-                       .getPigeon2().getRotation2d().getDegrees() + (DriverStation.getAlliance().isPresent()
-                       && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 0 : 180))))));
-
-        commandXboxController.leftBumper().onTrue(ScoreCommands.Score.score()).onFalse(ScoreCommands.Stabling.stable());
-        commandXboxController.rightBumper().onTrue(ScoreCommands.Score.scoreShoot())
+        commandXboxController.leftBumper().onTrue(ScoreCommands.Score.score())
+                .onFalse(ScoreCommands.Stabling.stable());
+        commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
         commandButtonPanel.button(ButtonPanelButtons.MOVE_CLIMB_INCREASE)

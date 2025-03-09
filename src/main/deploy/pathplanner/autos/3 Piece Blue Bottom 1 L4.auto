@@ -11,15 +11,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ALIGNL"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ELEVATORSTABLE"
           }
         },
         {
@@ -54,15 +73,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ALIGNR"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNR"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ELEVATORSTABLE"
           }
         },
         {
@@ -97,21 +135,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "L4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ALIGNL"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HP"
           }
         }
       ]

@@ -32,8 +32,6 @@ public class AprilTagSubsystem extends SubsystemBase {
     private AprilTagFieldLayout kTagLayout;
     private double closestTagX = 0, closestTagY = 0, closestTagYaw = 0;
 
-    private boolean isAutoAligning = false;
-
     public int getClosestTagID() {
         return closestTagID;
     }
@@ -76,7 +74,6 @@ public class AprilTagSubsystem extends SubsystemBase {
      * only be called once per loop.
      *
      * <p>Also includes updates for the standard deviations, which can (optionally) be retrieved with
-     * {@link getEstimationStdDevs}
      *
      * @return An {@link EstimatedRobotPose} with an estimated pose, estimate timestamp, and targets
      * used for estimation.
@@ -84,10 +81,15 @@ public class AprilTagSubsystem extends SubsystemBase {
     public Pair<Optional<EstimatedRobotPose>, Double> getEstimatedGlobalPose() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (var change : results) {
+            boolean shouldContinue = false;
+            for (PhotonTrackedTarget target : change.getTargets())
+                if (target.getPoseAmbiguity() > .1) shouldContinue = true;
+            if (shouldContinue) continue;
+
             visionEst = photonEstimator.update(change);
             updateEstimationStdDevs(visionEst, change.getTargets());
         }
-        if (visionEst.isPresent() && !isAutoAligning)
+        if (visionEst.isPresent())
             return new Pair<>(visionEst, visionEst.get().timestampSeconds);
         else return new Pair<>(Optional.empty(), 0.0);
     }
@@ -263,13 +265,5 @@ public class AprilTagSubsystem extends SubsystemBase {
             aprilTagSubsystem = new AprilTagSubsystem();
         }
         return aprilTagSubsystem;
-    }
-
-    public boolean isAutoAligning() {
-        return isAutoAligning;
-    }
-
-    public void setAutoAligning(boolean autoAligning) {
-        isAutoAligning = autoAligning;
     }
 }
