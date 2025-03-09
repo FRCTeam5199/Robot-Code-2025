@@ -455,16 +455,16 @@ public class ScoreCommands {
                 return new ConditionalCommand(
                         new SequentialCommandGroup( //Going down
                                 new ParallelCommandGroup(
-                                        new PositionCommand(elevatorSubsystem, .55, false),
-                                        new PositionCommand(wristSubsystem, 163).beforeStarting(new WaitCommand(0.5))
+                                        new PositionCommand(elevatorSubsystem, ElevatorConstants.ALGAE_HIGH, false),
+                                        new PositionCommand(wristSubsystem, WristConstants.ALGAE_HIGH).beforeStarting(new WaitCommand(0.5))
                                 ),
-                                new PositionCommand(armSubsystem, 74)
+                                new PositionCommand(armSubsystem, ArmConstants.ALGAE_HIGH)
                         ),
                         new SequentialCommandGroup( //Going up
-                                new PositionCommand(armSubsystem, 74),
+                                new PositionCommand(armSubsystem, ArmConstants.ALGAE_HIGH),
                                 new ParallelCommandGroup(
-                                        new PositionCommand(elevatorSubsystem, .55, true),
-                                        new PositionCommand(wristSubsystem, 163).beforeStarting(new WaitCommand(0.5))
+                                        new PositionCommand(elevatorSubsystem, ElevatorConstants.ALGAE_HIGH, true),
+                                        new PositionCommand(wristSubsystem, WristConstants.ALGAE_HIGH).beforeStarting(new WaitCommand(0.5))
                                 )
                         ),
                         () -> elevatorSubsystem.getMechM() > .55
@@ -475,16 +475,16 @@ public class ScoreCommands {
                 return new ConditionalCommand(
                         new SequentialCommandGroup( //Going down
                                 new ParallelCommandGroup(
-                                        new PositionCommand(elevatorSubsystem, .25, false),
-                                        new PositionCommand(wristSubsystem, 163).beforeStarting(new WaitCommand(0.5))
+                                        new PositionCommand(elevatorSubsystem, ElevatorConstants.ALGAE_LOW, false),
+                                        new PositionCommand(wristSubsystem, WristConstants.ALGAE_LOW).beforeStarting(new WaitCommand(0.5))
                                 ),
-                                new PositionCommand(armSubsystem, 69)
+                                new PositionCommand(armSubsystem, ArmConstants.ALGAE_LOW)
                         ),
                         new SequentialCommandGroup( //Going up
-                                new PositionCommand(armSubsystem, 69),
+                                new PositionCommand(armSubsystem, ArmConstants.ALGAE_LOW),
                                 new ParallelCommandGroup(
-                                        new PositionCommand(elevatorSubsystem, .25, true),
-                                        new PositionCommand(wristSubsystem, 163).beforeStarting(new WaitCommand(0.5))
+                                        new PositionCommand(elevatorSubsystem, ElevatorConstants.ALGAE_LOW, true),
+                                        new PositionCommand(wristSubsystem, WristConstants.ALGAE_LOW).beforeStarting(new WaitCommand(0.5))
                                 )
                         ),
                         () -> elevatorSubsystem.getMechM() > .25

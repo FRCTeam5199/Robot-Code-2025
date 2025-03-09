@@ -76,8 +76,8 @@ public final class Constants {
                 public static final double L4 = .924;
                 public static final double HP = .0151;
 
-                public static final double ALGAE_1 = 10;
-                public static final double ALGAE_2 = 10;
+                public static final double ALGAE_LOW = 10;
+                public static final double ALGAE_HIGH = 10;
     }
 
     public static class ArmConstants {
@@ -109,8 +109,8 @@ public final class Constants {
         public static final double L4 = 72.61;
         public static final double HP = 64.182;
 
-        public static final double ALGAE_1 = 10;
-        public static final double ALGAE_2 = 10;
+        public static final double ALGAE_LOW = 10;
+        public static final double ALGAE_HIGH = 10;
 
 
 
@@ -203,8 +203,8 @@ public final class Constants {
         public static final double L4_DUNK = 110;
         public static final double HP = 53;
 
-        public static final double ALGAE_1 = 10;
-        public static final double ALGAE_2 = 10;
+        public static final double ALGAE_LOW = 10;
+        public static final double ALGAE_HIGH = 10;
 
         public static final boolean WRIST_BRAKE = true;
 
