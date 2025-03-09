@@ -67,17 +67,17 @@ public final class Constants {
                 .withKV(ELEVATOR_FF.getkV())
                 .withGravityType(GravityTypeValue.Elevator_Static);
 
-                public static final double STABLE = 0;
-                public static final double GROUND = .15;
+        public static final double STABLE = 0;
+        public static final double GROUND = .15;
 
-                public static final double L1 = 0;
-                public static final double L2 = .1559;
-                public static final double L3 = .398;
-                public static final double L4 = .924;
-                public static final double HP = .0151;
+        public static final double L1 = 0;
+        public static final double L2 = .1559;
+        public static final double L3 = .398;
+        public static final double L4 = .924;
+        public static final double HP = .0151;
 
-                public static final double ALGAE_1 = 10;
-                public static final double ALGAE_2 = 10;
+        public static final double ALGAE_1 = 10;
+        public static final double ALGAE_2 = 10;
     }
 
     public static class ArmConstants {
@@ -113,7 +113,6 @@ public final class Constants {
         public static final double ALGAE_2 = 10;
 
 
-
         public static final double ARM_MIN = 0.61524;
         public static final double ARM_MAX = 180; //fix
 
@@ -135,7 +134,7 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final int INTAKE_ID = 20;
-        public static final int INTAKE_SENSOR_ID = 0;
+        public static final int INTAKE_SENSOR_ID = 3;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
         public static final FeedForward INTAKE_FEEDFORWARD = new FeedForward(0.2, 0, 0.1162790697674419);
         public static final double INTAKE_lowerTOLERANCE = 5;
@@ -231,7 +230,6 @@ public final class Constants {
 
         public static final double[][] WRIST_GEAR_RATIO = {{72, 10}, {72, 20}, {48, 24}};
     }
-
 
 
     public static class Vision {
