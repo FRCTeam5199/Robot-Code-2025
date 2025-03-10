@@ -37,6 +37,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ObjectDetectionSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
@@ -100,7 +101,7 @@ public class RobotContainer {
 
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
-    // private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
+    private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
     
