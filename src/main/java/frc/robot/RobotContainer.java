@@ -26,7 +26,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.constants.Constants.OperatorConstants;
+import frc.robot.constants.Constants.WristConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.controls.ButtonPanelButtons;
 import frc.robot.controls.CommandButtonPanel;
@@ -133,7 +135,7 @@ public class RobotContainer {
 //        NamedCommands.registerCommand("L2", ScoreCommands.Score.scoreL2());
 //        NamedCommands.registerCommand("L3", ScoreCommands.Score.scoreL3());
 //        NamedCommands.registerCommand("L4", ScoreCommands.Score.scoreL4().withTimeout(2));
-        NamedCommands.registerCommand("L4", new InstantCommand(() -> elevatorSubsystem.setPosition(Constants.ElevatorConstants.L4)));
+        NamedCommands.registerCommand("L4", new PositionCommand(elevatorSubsystem, ElevatorConstants.L4).andThen(new PositionCommand(wristSubsystem, WristConstants.L4)));
 //        NamedCommands.registerCommand("ARML2", ScoreCommands.Arm.armL2());
 //        NamedCommands.registerCommand("ARML3", ScoreCommands.Arm.armL3());
         NamedCommands.registerCommand("ARML4", ScoreCommands.Arm.armL4());
