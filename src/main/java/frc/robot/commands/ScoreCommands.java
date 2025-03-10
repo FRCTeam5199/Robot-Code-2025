@@ -418,9 +418,6 @@ public class ScoreCommands {
             return new PositionCommand(wristSubsystem, WristConstants.HP);
         }
 
-        public static Command armHP(){
-            return new PositionCommand(armSubsystem, ArmConstants.HP);
-        }
 
         public static Command elevatorHP(){
             return new PositionCommand(elevatorSubsystem, ElevatorConstants.HP);
@@ -445,6 +442,46 @@ public class ScoreCommands {
                     () -> elevatorSubsystem.getMechM() > .04
             ).beforeStarting(new PositionCommand(wristSubsystem, 10));
         }
+
+        public static Command intake() {
+                return new FunctionalCommand(
+                        () -> {
+                            timer.reset();
+                        },
+                        () -> intakeSubsystem.intake(),
+                        (interrupted) -> intakeSubsystem.stopIntake(),
+                        () -> {
+                            if (intakeSubsystem.getStatorCurrent() > 25) {
+                                timer.start();
+                                if (timer.hasElapsed(.3)) {
+                                    timer.stop();
+                                    return true;
+                                }
+                                return false;
+                            }
+                            return false;
+                        },
+                        intakeSubsystem);
+            }
+    
+            public static Command outtake() {
+                return new FunctionalCommand(
+                        () -> {
+                            timer.reset();
+                        },
+                        () -> intakeSubsystem.outtake(),
+                        (bool) -> intakeSubsystem.stopIntake(),
+                        () -> {
+                            timer.start();
+                            if (timer.hasElapsed(.3)) {
+                                timer.stop();
+                                return true;
+    
+                            }
+                            return false;
+                        },
+                        intakeSubsystem);
+            }
 
         public static Command intakeSequence() {
             return new SequentialCommandGroup(
@@ -509,50 +546,15 @@ public class ScoreCommands {
             );
         }
 
+        public static Command armHP(){
+                return new PositionCommand(armSubsystem, ArmConstants.HP);
+        }
+    
+
 
     }
 
-    public static class Roller {
-        public static Command intake() {
-            return new FunctionalCommand(
-                    () -> {
-                        timer.reset();
-                    },
-                    () -> intakeSubsystem.intake(),
-                    (interrupted) -> intakeSubsystem.stopIntake(),
-                    () -> {
-                        if (intakeSubsystem.getStatorCurrent() > 25) {
-                            timer.start();
-                            if (timer.hasElapsed(.3)) {
-                                timer.stop();
-                                return true;
-                            }
-                            return false;
-                        }
-                        return false;
-                    },
-                    intakeSubsystem);
-        }
-
-        public static Command outtake() {
-            return new FunctionalCommand(
-                    () -> {
-                        timer.reset();
-                    },
-                    () -> intakeSubsystem.outtake(),
-                    (bool) -> intakeSubsystem.stopIntake(),
-                    () -> {
-                        timer.start();
-                        if (timer.hasElapsed(.3)) {
-                            timer.stop();
-                            return true;
-
-                        }
-                        return false;
-                    },
-                    intakeSubsystem);
-        }
-    }
+   
 
 
     public static class Score {
@@ -656,7 +658,7 @@ public class ScoreCommands {
                     new PositionCommand(armSubsystem, ArmConstants.L4),
                     new ParallelCommandGroup(
                             new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, true),
-                            new PositionCommand(wristSubsystem, WristConstants.L4).beforeStarting(new WaitCommand(0.5))
+                            new PositionCommand(wristSubsystem, WristConstants.L4).onlyIf(()->elevatorSubsystem.getMechM() >= .95)
                     )
             ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
         }

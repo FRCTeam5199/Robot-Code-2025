@@ -134,8 +134,8 @@ public class RobotContainer {
 //        NamedCommands.registerCommand("L1", ScoreCommands.Score.scoreL1());
 //        NamedCommands.registerCommand("L2", ScoreCommands.Score.scoreL2());
 //        NamedCommands.registerCommand("L3", ScoreCommands.Score.scoreL3());
-//        NamedCommands.registerCommand("L4", ScoreCommands.Score.scoreL4().withTimeout(2));
-        NamedCommands.registerCommand("L4", new PositionCommand(elevatorSubsystem, ElevatorConstants.L4).andThen(new PositionCommand(wristSubsystem, WristConstants.L4)));
+        NamedCommands.registerCommand("L4", ScoreCommands.Score.scoreL4().withTimeout(2));
+       // NamedCommands.registerCommand("L4", new PositionCommand(elevatorSubsystem, ElevatorConstants.L4).andThen(new PositionCommand(wristSubsystem, WristConstants.L4)));
 //        NamedCommands.registerCommand("ARML2", ScoreCommands.Arm.armL2());
 //        NamedCommands.registerCommand("ARML3", ScoreCommands.Arm.armL3());
         NamedCommands.registerCommand("ARML4", ScoreCommands.Arm.armL4());
