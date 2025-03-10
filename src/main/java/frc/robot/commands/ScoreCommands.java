@@ -237,8 +237,8 @@ public class ScoreCommands {
     public static class Stabling {
         public static Command regularStable() {
             return new SequentialCommandGroup(
+                new PositionCommand(wristSubsystem, WristConstants.STABLE),
                     new ParallelCommandGroup(
-                            new PositionCommand(wristSubsystem, WristConstants.STABLE),
                             new PositionCommand(elevatorSubsystem, 0, false)
                                     .until(() -> elevatorSubsystem.isAtBottom()
                                             && elevatorSubsystem.getMechM() < .05)
@@ -414,13 +414,25 @@ public class ScoreCommands {
                     .alongWith(new VelocityCommand(intakeSubsystem, 75));
         }
 
+        public static Command wristHP(){
+            return new PositionCommand(wristSubsystem, WristConstants.HP);
+        }
+
+        public static Command armHP(){
+            return new PositionCommand(armSubsystem, ArmConstants.HP);
+        }
+
+        public static Command elevatorHP(){
+            return new PositionCommand(elevatorSubsystem, ElevatorConstants.HP);
+        }
+
         public static Command intakeHP() {
             return new ConditionalCommand(
-                    new SequentialCommandGroup( //Going down
+                    new SequentialCommandGroup( 
                             new ParallelCommandGroup(
-                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.HP, false)
-                                            .andThen(new PositionCommand(armSubsystem, ArmConstants.HP)),
-                                    new PositionCommand(wristSubsystem, WristConstants.HP)
+                                new PositionCommand(wristSubsystem, WristConstants.HP).andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.HP, false))
+                                            .andThen(new PositionCommand(armSubsystem, ArmConstants.HP))
+
                             )
                     ),
                     new SequentialCommandGroup(

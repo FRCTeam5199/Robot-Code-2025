@@ -125,12 +125,12 @@ public class RobotContainer {
         commandSwerveDrivetrain.configureAutoBuilder();
 
 //        NamedCommands.registerCommand("INTAKE", ScoreCommands.Intake.intakeAuto());
-//        NamedCommands.registerCommand("INTAKESEQUENCE", ScoreCommands.Intake.intakeSequence());
+        NamedCommands.registerCommand("INTAKESEQUENCE", ScoreCommands.Intake.intakeSequence());
 //        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.Score.place()
 //                .until(() -> !intakeSubsystem.isCoralInIntake()));
 //        NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
         NamedCommands.registerCommand("ELEVATORSTABLE", new InstantCommand(() -> elevatorSubsystem.setPosition(0)));
-//        NamedCommands.registerCommand("HP", ScoreCommands.Intake.intakeHP());
+        NamedCommands.registerCommand("HP", ScoreCommands.Intake.intakeHP());
 //        NamedCommands.registerCommand("L1", ScoreCommands.Score.scoreL1());
 //        NamedCommands.registerCommand("L2", ScoreCommands.Score.scoreL2());
 //        NamedCommands.registerCommand("L3", ScoreCommands.Score.scoreL3());
