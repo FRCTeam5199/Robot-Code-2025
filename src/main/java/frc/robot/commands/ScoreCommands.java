@@ -6,6 +6,7 @@ import static frc.robot.RobotContainer.xVelocity;
 import static frc.robot.RobotContainer.yVelocity;
 
 import java.util.Map;
+import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -19,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -443,9 +446,18 @@ public class ScoreCommands {
                     .alongWith(groundIntakeSequence());
         }
 
+        public static Command wristHP(){
+            return new PositionCommand(wristSubsystem, WristConstants.HP);
+        }
+
+
+        public static Command elevatorHP(){
+            return new PositionCommand(elevatorSubsystem, ElevatorConstants.HP);
+        }
+
         public static Command intakeHP() {
             return new ConditionalCommand(
-                    new SequentialCommandGroup( //Going down
+                    new SequentialCommandGroup(
                             new ParallelCommandGroup(
                                     new PositionCommand(elevatorSubsystem, ElevatorConstants.HP, false)
                                             .andThen(new PositionCommand(armSubsystem, ArmConstants.HP)),
@@ -662,6 +674,18 @@ public class ScoreCommands {
                     )
             ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
         }
+
+//        public static Command scoreL4() {
+//            return new SequentialCommandGroup(
+//                    new PositionCommand(armSubsystem, ArmConstants.L4),
+//                    new ParallelCommandGroup(
+//                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, true),
+//                            new RepeatCommand(new PositionCommand(wristSubsystem, WristConstants.L4).onlyIf(()->elevatorSubsystem.getMechM() > .06)).until(()->wristSubsystem.getMechRot() >= WristConstants.L4)
+//
+//                            //           new WaitCommand(.3).andThen(new PositionCommand(wristSubsystem, WristConstants.L4))
+//                    )
+//            ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
+//        }
 
         public static Command dunkL4() {
             return new PositionCommand(wristSubsystem, WristConstants.L4);

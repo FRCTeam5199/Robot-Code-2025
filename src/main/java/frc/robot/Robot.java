@@ -46,6 +46,10 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         UserInterface.init();
 
+        System.setProperty("wpilog.directory", "/media/sda1/wpilog");
+        
+        DataLogManager.start();
+
         commandSwerveDrivetrain.configureAutoBuilder();
 
         System.setProperty("wpilog.directory", "/media/sda1/wpilog");

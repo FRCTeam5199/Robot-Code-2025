@@ -1,5 +1,7 @@
 package frc.robot.subsystems.template;
 
+import java.util.function.DoubleSupplier;
+
 import javax.xml.transform.Templates;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -409,10 +411,19 @@ public class TemplateSubsystem extends SubsystemBase {
         return motor.getRotorPosition().getValueAsDouble() * gearRatio * 360d;
     }
 
+    /**
+     * 
+     * @return Gets the position of the actual motor of the mechanism.
+     */
+
     public double getMotorRot() {
         return motor.getRotorPosition().getValueAsDouble();
     }
-
+    
+    /**
+     * 
+     * @return The rotation of the mechanism itself (Accounts for gear ratios and stuff)
+     */
     public double getMechRot() {
         return motor.getRotorPosition().getValueAsDouble() * gearRatio;
     }
@@ -441,9 +452,20 @@ public class TemplateSubsystem extends SubsystemBase {
         return mechRot / gearRatio;
     }
 
+    /**
+     * @return the current height of the elevator as a double
+     */
     public double getMechM() {
         if (type != Type.LINEAR) return 0;
         return motor.getRotorPosition().getValueAsDouble() * drumCircumference * gearRatio;
+    }
+
+    /**
+     * @return a constantly updating value for the height of the elevator as a double.
+     */
+    public DoubleSupplier getMechMeter(){
+        if (type != Type.LINEAR) return ()->0;
+        return ()->motor.getRotorPosition().getValueAsDouble() * drumCircumference * gearRatio;
     }
 
     public double getMechMFromMotorRot(double motorRot) {
