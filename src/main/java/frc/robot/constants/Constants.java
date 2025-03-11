@@ -197,6 +197,7 @@ public final class Constants {
         public static final double L1 = 0;
         public static final double L2 = 64;
         public static final double L3 = 85;
+        public static final double L4MOVING = 100;
         public static final double L4 = 124;
         public static final double HP = 54;
 

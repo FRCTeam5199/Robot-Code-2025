@@ -317,11 +317,11 @@ public class RobotContainer {
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
 
-        System.out.println("Pose: " + commandSwerveDrivetrain.getPose());
+ //       System.out.println("Pose: " + commandSwerveDrivetrain.getPose());
         // System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
         // System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
-//        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
+        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
 //        System.out.println("Arm: " + armSubsystem.getDegrees());
 //        System.out.println("Wrist: " + wristSubsystem.getDegrees());
 
