@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
+import frc.robot.commands.GoToCommands;
 import frc.robot.commands.PositionCommand;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.constants.Constants;
@@ -110,6 +111,8 @@ public class RobotContainer {
     
     private static List<Integer> reefTags = new ArrayList<>();
 
+    private static boolean lockOnMode = false;
+
     public static State state = State.L1;
     
     private static Timer timer = new Timer();
@@ -147,22 +150,20 @@ public class RobotContainer {
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
                 .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0))));
 
-        commandXboxController.a().onTrue(new InstantCommand(() -> RobotContainer.setState(State.L1)));
+        commandXboxController.a().onTrue(new InstantCommand(() -> RobotContainer.setState(State.GROUND)));
         commandXboxController.b().onTrue(ScoreCommands.Arm.armL2());
         commandXboxController.x().onTrue(ScoreCommands.Arm.armL3());
         commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
                 .alongWith(
-                        new ConditionalCommand(
-                                new ConditionalCommand(
-                                        ScoreCommands.Drive.autoAlignTeleop(selectedReefTag),
-                                        ScoreCommands.Drive.autoAlignTeleop(AprilTagSubsystem.getInstance().getClosestTagID()),
-                                () -> false),
-                                // new GoToCommand(0),
-                                null,
-                        () -> false)))
-                                
+                        // new ConditionalCommand(
+                            new ConditionalCommand(
+                                    ScoreCommands.Drive.autoAlignTeleop(selectedReefTag),
+                                    ScoreCommands.Drive.autoAlignTeleop(AprilTagSubsystem.getInstance().getClosestTagID()),
+                            () -> lockOnMode)))
+                            // null, // TODO: Go To Commands
+                        // () -> true)))
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
@@ -239,8 +240,10 @@ public class RobotContainer {
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(3)).andThen(() -> setAutoAlignOffsetRight()));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(4)).andThen(() -> setAutoAlignOffsetLeft()));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(4)).andThen(() -> setAutoAlignOffsetRight()));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(5)).andThen(() -> setAutoAlignOffsetLeft()));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(5)).andThen(() -> setAutoAlignOffsetLeft())/*.andThen(GoToCommands.GoToCommand(reefTags.get(4)))*/);
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(5)).andThen(() -> setAutoAlignOffsetRight()));
+        
+        commandButtonPanel.button(ButtonPanelButtons.BUTTON2).toggleOnTrue(new InstantCommand(() -> {if (lockOnMode) {lockOnMode = false;} else {lockOnMode = true;}}));
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
 
@@ -302,7 +305,10 @@ public class RobotContainer {
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
 
-//        System.out.println("Pose: " + commandSwerveDrivetrain.getPose());
+    //    System.out.println("Pose: " + commandSwerveDrivetrain.getPose());
+        // System.out.println(selectedReefTag);
+        // System.out.println(lockOnMode);
+        
         // System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
         // System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
