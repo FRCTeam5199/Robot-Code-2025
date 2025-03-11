@@ -22,11 +22,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.GoToCommands;
 import frc.robot.commands.PositionCommand;
 import frc.robot.commands.ScoreCommands;
+import frc.robot.commands.ScoreCommands.Score;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
@@ -122,10 +124,19 @@ public class RobotContainer {
      */
     public RobotContainer() {
         NamedCommands.registerCommand("ELEVATORSTABLE", new InstantCommand(() -> elevatorSubsystem.setPosition(0)));
-        NamedCommands.registerCommand("L4", new InstantCommand(() -> elevatorSubsystem.setPosition(Constants.ElevatorConstants.L4)));
+        NamedCommands.registerCommand("L4", Score.scoreL4());
         NamedCommands.registerCommand("ARML4", ScoreCommands.Arm.armL4());
-        NamedCommands.registerCommand("ALIGNL", ScoreCommands.Drive.autoAlignLAuton().withTimeout(2));
+        NamedCommands.registerCommand("ALIGNL", ScoreCommands.Drive.autoAlignLAuton().withTimeout(2).andThen(new PrintCommand("finished")));
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.Drive.autoAlignRAuton().withTimeout(2));
+        NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
+        NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwind());
+        NamedCommands.registerCommand("INTAKE", ScoreCommands.Intake.intakeSequence());
+        NamedCommands.registerCommand("HP", ScoreCommands.Intake.intakeHP());
+        NamedCommands.registerCommand("DRIVE", ScoreCommands.Drive.autoMoveForwardBottom());
+        NamedCommands.registerCommand("DRIVETOP", ScoreCommands.Drive.autoMoveForwardTop());
+
+        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.Score.outtake());
+
 
         Autos.initializeAutos();
 
@@ -172,6 +183,10 @@ public class RobotContainer {
         commandXboxController.rightTrigger()
                 .onTrue(ScoreCommands.Intake.intakeHP().alongWith(ScoreCommands.Intake.intakeSequence()))
                 .onFalse(ScoreCommands.Stabling.intakeStable());
+
+        // commandXboxController.rightTrigger()
+        //         .onTrue(ScoreCommands.Intake.intakeGround())
+        //         .onFalse(ScoreCommands.Stabling.intakeStable());
 
         commandXboxController.leftBumper().onTrue(ScoreCommands.Score.score())
                 .onFalse(ScoreCommands.Stabling.stable());
@@ -268,6 +283,8 @@ public class RobotContainer {
     }
 
     public static void periodic() {
+        System.out.println(aligned());
+
         if (!timer.isRunning()) timer.start();
         if (autoAlignXOffset > 0 && DriverStation.getAlliance().isPresent() &&
                 DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))

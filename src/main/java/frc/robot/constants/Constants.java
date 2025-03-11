@@ -67,7 +67,7 @@ public final class Constants {
                 .withGravityType(GravityTypeValue.Elevator_Static);
 
         public static final double STABLE = 0;
-        public static final double GROUND = .1;
+        public static final double GROUND = .15;
 
         public static final double L1 = 0;
         public static final double L2 = .17;
@@ -99,7 +99,7 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 1;
 
         public static final double STABLE = 0;
-        public static final double GROUND = 7.5;
+        public static final double GROUND = 9.5;
 
         public static final double L1 = 7;
         public static final double L2 = 37;
@@ -191,7 +191,7 @@ public final class Constants {
         public static final boolean WRIST_INVERTED = false;
 
         public static final double STABLE = 10;
-        public static final double GROUND = 177;
+        public static final double GROUND = 190;
         public static final double L1 = 0;
         public static final double L2 = 64;
         public static final double L3 = 85;
