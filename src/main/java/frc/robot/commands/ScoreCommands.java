@@ -701,7 +701,7 @@ public class ScoreCommands {
                    new PositionCommand(armSubsystem, ArmConstants.L4),
                    new ParallelCommandGroup(
                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, true),
-                           new RepeatCommand(new PositionCommand(wristSubsystem, WristConstants.L4).onlyIf(()->elevatorSubsystem.getMechM() > .15)).until(()->new PositionCommand(wristSubsystem, WristConstants.L4).isFinished())
+                           new RepeatCommand(new PositionCommand(wristSubsystem, WristConstants.L4).onlyIf(()->elevatorSubsystem.getMechM() > .15)).until(()-> wristSubsystem.getMechRot() == WristConstants.L4)
 
                            //           new WaitCommand(.3).andThen(new PositionCommand(wristSubsystem, WristConstants.L4))
                    )
