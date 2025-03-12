@@ -383,6 +383,28 @@ public class TemplateSubsystem extends SubsystemBase {
         }
     }
 
+    public boolean isMechAtPosition(double Position) {
+        switch (type) {
+            case LINEAR -> {
+                return isProfileFinished() &&
+                        getMechM() >= Position;
+            }
+            case PIVOT -> {
+                if (encoder != null)
+                    return isProfileFinished() &&
+                            Units.rotationsToDegrees(getEncoderRot()) >= Position;
+                else
+                    return isProfileFinished() &&
+                            getDegrees() >= Position;
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
+
+
+
     public void setOffset(double offset) {
         this.offset = offset;
         changedOffset = true;

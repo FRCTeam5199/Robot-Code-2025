@@ -687,6 +687,19 @@ public class ScoreCommands {
             ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
         }
 
+        public static Command autoScoreL4() {
+                return new SequentialCommandGroup(
+                        new PositionCommand(armSubsystem, ArmConstants.L4),
+                        new ParallelCommandGroup(
+                                new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, true),
+                                new PositionCommand(wristSubsystem, WristConstants.L4)
+                                        .beforeStarting(new WaitCommand(Double.MAX_VALUE)
+                                                .until(() -> elevatorSubsystem.getMechM() > .5))
+                        ).until(() -> elevatorSubsystem.isMechAtGoal(false)
+                                && wristSubsystem.isMechAtGoal(false))
+                ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
+            }
+
         public static Command score() {
             return new SelectCommand<>(
                     Map.ofEntries(
