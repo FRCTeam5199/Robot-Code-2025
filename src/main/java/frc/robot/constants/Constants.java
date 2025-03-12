@@ -73,7 +73,7 @@ public final class Constants {
         public static final double L2 = .17;
         public static final double L3 = .39;
         public static final double L4 = .99;
-        public static final double HP = .06;
+        public static final double HP = .05;
 
         public static final double ALGAE_LOW = .2;
         public static final double ALGAE_HIGH = .5;
@@ -103,7 +103,7 @@ public final class Constants {
 
         public static final double L1 = 7;
         public static final double L2 = 37;
-        public static final double L3 = 60;
+        public static final double L3 = 59;
         public static final double L4 = 74;
         public static final double HP = 65;
 
@@ -194,7 +194,7 @@ public final class Constants {
         public static final double GROUND = 190;
         public static final double L1 = 0;
         public static final double L2 = 64;
-        public static final double L3 = 85;
+        public static final double L3 = 83;
         public static final double PREVIOUS_L4 = 85;
         public static final double L4 = 124;
         public static final double HP = 55;
@@ -215,7 +215,7 @@ public final class Constants {
 
 
         public static final double WRIST_FF_OFFSET = Units.degreesToRadians(0);
-        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(200, 400);
+        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(75, 500);
 
         public static final FeedForward WRIST_FF = new FeedForward(.17, .19, .11764705882352941176470588235294);
 

@@ -106,36 +106,41 @@ public class RobotContainer {
     // private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
-    
+
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private static int selectedReefTag = 0;
-    
+
     private static List<Integer> reefTags = new ArrayList<>();
 
     private static boolean lockOnMode = false;
 
     public static State state = State.L1;
-    
+
     private static Timer timer = new Timer();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        NamedCommands.registerCommand("ELEVATORSTABLE", new InstantCommand(() -> elevatorSubsystem.setPosition(0)));
+        NamedCommands.registerCommand("ELEVATORSTABLE", new InstantCommand(()
+                -> elevatorSubsystem.setPosition(0)));
         NamedCommands.registerCommand("L4", Score.scoreL4());
         NamedCommands.registerCommand("ARML4", ScoreCommands.Arm.armL4());
-        NamedCommands.registerCommand("ALIGNL", ScoreCommands.Drive.autoAlignLAuton().withTimeout(2).andThen(new PrintCommand("finished")));
-        NamedCommands.registerCommand("ALIGNR", ScoreCommands.Drive.autoAlignRAuton().withTimeout(2));
+        NamedCommands.registerCommand("ALIGNL", ScoreCommands.Drive.autoAlignLAuton()
+                .withTimeout(2));
+        NamedCommands.registerCommand("ALIGNR", ScoreCommands.Drive.autoAlignRAuton()
+                .withTimeout(2));
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
         NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwind());
-        NamedCommands.registerCommand("INTAKE", ScoreCommands.Intake.intakeSequence());
+        NamedCommands.registerCommand("INTAKE", new VelocityCommand(intakeSubsystem, 40)
+                .until(intakeSubsystem::isCoralInIntake));
+        NamedCommands.registerCommand("INTAKESEQUENCE", ScoreCommands.Intake.intakeSequence());
         NamedCommands.registerCommand("HP", ScoreCommands.Intake.intakeHP());
         NamedCommands.registerCommand("DRIVE", ScoreCommands.Drive.autoMoveForwardBottom());
         NamedCommands.registerCommand("DRIVETOP", ScoreCommands.Drive.autoMoveForwardTop());
-
-        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.Score.outtake());
+        NamedCommands.registerCommand("OUTTAKE", ScoreCommands.Score.place()
+                .until(() -> !intakeSubsystem.isCoralInIntake()));
 
 
         Autos.initializeAutos();
@@ -167,22 +172,28 @@ public class RobotContainer {
         commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
-                .alongWith(
-                        // new ConditionalCommand(
-                            new ConditionalCommand(
-                                    ScoreCommands.Drive.autoAlignTeleop(selectedReefTag),
-                                    ScoreCommands.Drive.autoAlignTeleop(AprilTagSubsystem.getInstance().getClosestTagID()),
-                            () -> lockOnMode)))
-                            // null, // TODO: Go To Commands
-                        // () -> true)))
+                        .alongWith(
+                                // new ConditionalCommand(
+                                new ConditionalCommand(
+                                        ScoreCommands.Drive.autoAlignTeleop(selectedReefTag),
+                                        ScoreCommands.Drive.autoAlignTeleop(AprilTagSubsystem.getInstance().getClosestTagID()),
+                                        () -> lockOnMode)))
+                // null, // TODO: Go To Commands
+                // () -> true)))
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
-        commandXboxController.rightTrigger()
-                .onTrue(ScoreCommands.Intake.intakeHP().alongWith(ScoreCommands.Intake.intakeSequence()))
-                .onFalse(ScoreCommands.Stabling.intakeStable());
+        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP().
+                        alongWith(new VelocityCommand(intakeSubsystem, 40)
+                                .until(intakeSubsystem::isCoralInIntake)))
+                .onFalse(ScoreCommands.Stabling.intakeStable()
+                        .alongWith(new ConditionalCommand(
+                                ScoreCommands.Intake.intakeSequence(),
+                                new VelocityCommand(intakeSubsystem, 0),
+                                intakeSubsystem::isCoralInIntake
+                        )));
 
         // commandXboxController.rightTrigger()
         //         .onTrue(ScoreCommands.Intake.intakeGround())
@@ -190,7 +201,7 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().onTrue(ScoreCommands.Score.score())
                 .onFalse(ScoreCommands.Stabling.stable());
-        commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
+        commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place().until(() -> !intakeSubsystem.isCoralInIntake()))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
         commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
@@ -257,8 +268,14 @@ public class RobotContainer {
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(4)).andThen(() -> setAutoAlignOffsetRight()));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(5)).andThen(() -> setAutoAlignOffsetLeft())/*.andThen(GoToCommands.GoToCommand(reefTags.get(4)))*/);
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(5)).andThen(() -> setAutoAlignOffsetRight()));
-        
-        commandButtonPanel.button(ButtonPanelButtons.BUTTON2).toggleOnTrue(new InstantCommand(() -> {if (lockOnMode) {lockOnMode = false;} else {lockOnMode = true;}}));
+
+        commandButtonPanel.button(ButtonPanelButtons.BUTTON2).toggleOnTrue(new InstantCommand(() -> {
+            if (lockOnMode) {
+                lockOnMode = false;
+            } else {
+                lockOnMode = true;
+            }
+        }));
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
 
@@ -322,10 +339,10 @@ public class RobotContainer {
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
 
-    //    System.out.println("Pose: " + commandSwerveDrivetrain.getPose());
+        //    System.out.println("Pose: " + commandSwerveDrivetrain.getPose());
         // System.out.println(selectedReefTag);
         // System.out.println(lockOnMode);
-        
+
         // System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
         // System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
