@@ -694,7 +694,7 @@ public class ScoreCommands {
                                 new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, true),
                                 new PositionCommand(wristSubsystem, WristConstants.L4)
                                         .beforeStarting(new WaitCommand(Double.MAX_VALUE)
-                                                .until(() -> elevatorSubsystem.getMechM() > .5))
+                                                .until(()-> elevatorSubsystem.isMechAtPosition(.5)))
                         ).until(() -> elevatorSubsystem.isMechAtGoal(false)
                                 && wristSubsystem.isMechAtGoal(false))
                 ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
