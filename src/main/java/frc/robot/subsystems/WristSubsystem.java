@@ -60,14 +60,14 @@ public class WristSubsystem extends TemplateSubsystem {
             noCurrentSpike = 0;
         }
 
-        if (!DriverStation.isFMSAttached()) {
-            if (UserInterface.getTestComponent("Offset Wrist").getString("") != "") {
-                this.setOffset(UserInterface.getTestComponent("Offset Wrist").getDouble(0));
-            }
-            if (UserInterface.getTestComponent("Set Wrist").getString("") != "") {
-                this.setPosition(UserInterface.getTestComponent("Set Wrist").getDouble(0));
-            }
-        }
+        // if (!DriverStation.isFMSAttached()) {
+        //     if (UserInterface.getTestComponent("Offset Wrist").getString("") != "") {
+        //         this.setOffset(UserInterface.getTestComponent("Offset Wrist").getDouble(0));
+        //     }
+        //     if (UserInterface.getTestComponent("Set Wrist").getString("") != "") {
+        //         this.setPosition(UserInterface.getTestComponent("Set Wrist").getDouble(0));
+        //     }
+        // }
     }
 
     public static WristSubsystem getInstance() {

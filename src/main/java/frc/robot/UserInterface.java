@@ -64,18 +64,18 @@ public class UserInterface {
         createTeleopComponent("Replay Match Number", 0, BuiltInWidgets.kTextView, 3, 1, 1, 1, null);
         createTeleopComponent("Match Time", 0, BuiltInWidgets.kTextView, 4, 1, 3, 1, null);
 
-        createControlComponent("Reset All", ScoreCommands.Zeroing.zeroSubsystems(), BuiltInWidgets.kCommand, 0, 0, 1, 1, null);
-        createControlComponent("Reset Elevator", ScoreCommands.Zeroing.zeroElevator(), BuiltInWidgets.kCommand, 0, 1, 1, 1, null);
-        createControlComponent("Reset Arm", ScoreCommands.Zeroing.zeroArm(), BuiltInWidgets.kCommand, 0, 2, 1, 1, null);
-        createControlComponent("Reset Wrist", ScoreCommands.Zeroing.zeroWrist(), BuiltInWidgets.kCommand, 0, 3, 1, 1, null);
-        createControlComponent("Setpoint L1", ScoreCommands.Score.scoreL1(), BuiltInWidgets.kCommand, 1, 0, 1, 1, null);
-        createControlComponent("Setpoint L2", ScoreCommands.Score.scoreL2(), BuiltInWidgets.kCommand, 1, 1, 1, 1, null);
-        createControlComponent("Setpoint L3", ScoreCommands.Score.scoreL3(), BuiltInWidgets.kCommand, 1, 2, 1, 1, null);
-        createControlComponent("Setpoint L4", ScoreCommands.Score.scoreL4(), BuiltInWidgets.kCommand, 1, 3, 1, 1, null);
-        createControlComponent("Setpoint Ground Intake", ScoreCommands.Intake.intakeGround(), BuiltInWidgets.kCommand, 2, 0, 1, 1, null);
-        createControlComponent("Setpoint Human Player", ScoreCommands.Intake.intakeHP(), BuiltInWidgets.kCommand, 2, 1, 1, 1, null);
-        createControlComponent("Setpoint Algae High", ScoreCommands.Score.removeAlgaeHigh(), BuiltInWidgets.kCommand, 3, 0, 1, 1, null);
-        createControlComponent("Setpoint Algae Low", ScoreCommands.Score.removeAlgaeLow(), BuiltInWidgets.kCommand, 3, 1, 1, 1, null);
+        // createControlComponent("Reset All", null, BuiltInWidgets.kCommand, 0, 0, 1, 1, null);
+        // createControlComponent("Reset Elevator", null, BuiltInWidgets.kCommand, 0, 1, 1, 1, null);
+        // createControlComponent("Reset Arm", null, BuiltInWidgets.kCommand, 0, 2, 1, 1, null);
+        // createControlComponent("Reset Wrist", null, BuiltInWidgets.kCommand, 0, 3, 1, 1, null);
+        // createControlComponent("Setpoint L1", null, BuiltInWidgets.kCommand, 1, 0, 1, 1, null);
+        // createControlComponent("Setpoint L2", null, BuiltInWidgets.kCommand, 1, 1, 1, 1, null);
+        // createControlComponent("Setpoint L3", null, BuiltInWidgets.kCommand, 1, 2, 1, 1, null);
+        // createControlComponent("Setpoint L4", null, BuiltInWidgets.kCommand, 1, 3, 1, 1, null);
+        // createControlComponent("Setpoint Ground Intake", null, BuiltInWidgets.kCommand, 2, 0, 1, 1, null);
+        // createControlComponent("Setpoint Human Player", null, BuiltInWidgets.kCommand, 2, 1, 1, 1, null);
+        // createControlComponent("Setpoint Algae High", null, BuiltInWidgets.kCommand, 3, 0, 1, 1, null);
+        // createControlComponent("Setpoint Algae Low", null, BuiltInWidgets.kCommand, 3, 1, 1, 1, null);
 
         if (!DriverStation.isFMSAttached()) {
             createTestComponent("Offset Elevator", "", BuiltInWidgets.kTextView, 1, 0, 1, 1, null);
