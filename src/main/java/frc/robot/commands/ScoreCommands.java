@@ -213,10 +213,7 @@ public class ScoreCommands {
                                         .withVelocityY(0)
                                         .withRotationalRate(0));
                     },
-                    () -> {
-                        System.out.println(RobotContainer.aligned());
-                        return RobotContainer.aligned();
-                    },
+                    RobotContainer::aligned,
                     RobotContainer.commandSwerveDrivetrain);
         }
 
@@ -387,9 +384,7 @@ public class ScoreCommands {
                     },
                     () -> {
                     },
-                    (interrupted) -> {
-                        elevatorSubsystem.setVoltage(0);
-                    },
+                    (interrupted) -> elevatorSubsystem.setVoltage(0),
                     () -> (elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .05),
                     elevatorSubsystem
             );
@@ -403,9 +398,7 @@ public class ScoreCommands {
                     },
                     () -> {
                     },
-                    (interrupted) -> {
-                        wristSubsystem.setVoltage(0);
-                    },
+                    (interrupted) -> wristSubsystem.setVoltage(0),
                     wristSubsystem::isAtBottom,
                     wristSubsystem
             );
@@ -415,7 +408,7 @@ public class ScoreCommands {
         public static Command zeroArm() {
             return new FunctionalCommand(
                     () -> {
-                        armSubsystem.setVoltage(-4);
+                        armSubsystem.setVoltage(-5);
                         armSubsystem.setOffset(0, false);
                     },
                     () -> {
@@ -435,22 +428,23 @@ public class ScoreCommands {
                             zeroArm(),
                             zeroWrist()
                     ).withTimeout(5),
-                    new WaitCommand(.3),
+                    new WaitCommand(.6),
                     new ParallelCommandGroup(
                             new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                             new InstantCommand(() -> armSubsystem.getMotor().setPosition(0)),
                             new InstantCommand(() -> wristSubsystem.getMotor().setPosition(0))
-                    ),
-                    new ParallelCommandGroup(
-                            new PositionCommand(elevatorSubsystem, 0.12, true),
-                            new PositionCommand(armSubsystem, 7),
-                            new PositionCommand(wristSubsystem, 7)
-                    ),
-                    new ParallelCommandGroup(
-                            new PositionCommand(elevatorSubsystem, 0, true),
-                            new PositionCommand(armSubsystem, 0),
-                            new PositionCommand(wristSubsystem, 0)
                     )
+
+//                    new ParallelCommandGroup(
+//                            new PositionCommand(elevatorSubsystem, .17, true),
+//                            new PositionCommand(armSubsystem, 7),
+//                            new PositionCommand(wristSubsystem, 7)
+//                    ),
+//                    new ParallelCommandGroup(
+//                            new PositionCommand(elevatorSubsystem, 0, false),
+//                            new PositionCommand(armSubsystem, 0),
+//                            new PositionCommand(wristSubsystem, 0)
+//                    )
             );
         }
     }
@@ -498,7 +492,7 @@ public class ScoreCommands {
         public static Command intakeSequence() {
             return new SequentialCommandGroup(
                     //Intake until beam initially breaks
-                    new VelocityCommand(intakeSubsystem, 40)
+                    new VelocityCommand(intakeSubsystem, 75)
                             .until(intakeSubsystem::isCoralInIntake),
                     //Outtake slowly until beam connects
                     new VelocityCommand(intakeSubsystem, -10)
@@ -680,25 +674,24 @@ public class ScoreCommands {
                     new ParallelCommandGroup(
                             new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, true),
                             new PositionCommand(wristSubsystem, WristConstants.L4)
-                                    .beforeStarting(new WaitCommand(Double.MAX_VALUE)
-                                            .until(() -> elevatorSubsystem.getMechM() > .3))
-                    ).until(() -> elevatorSubsystem.isMechAtGoal(false)
-                            && wristSubsystem.isMechAtGoal(false))
+//                                    .beforeStarting(new WaitCommand(Double.MAX_VALUE)
+//                                            .until(() -> elevatorSubsystem.getMechM() > .3))
+                    )
             ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
         }
 
         public static Command autoScoreL4() {
-                return new SequentialCommandGroup(
-                        new PositionCommand(armSubsystem, ArmConstants.L4),
-                        new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, true),
-                                new PositionCommand(wristSubsystem, WristConstants.L4)
-                                        .beforeStarting(new WaitCommand(Double.MAX_VALUE)
-                                                .until(()-> elevatorSubsystem.isMechAtPosition(.5)))
-                        ).until(() -> elevatorSubsystem.isMechAtGoal(false)
-                                && wristSubsystem.isMechAtGoal(false))
-                ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
-            }
+            return new SequentialCommandGroup(
+                    new PositionCommand(armSubsystem, ArmConstants.L4),
+                    new ParallelCommandGroup(
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, true),
+                            new PositionCommand(wristSubsystem, WristConstants.L4)
+                                    .beforeStarting(new WaitCommand(Double.MAX_VALUE)
+                                            .until(() -> elevatorSubsystem.isMechAtPosition(.5)))
+                    ).until(() -> elevatorSubsystem.isMechAtGoal(false)
+                            && wristSubsystem.isMechAtGoal(false))
+            ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
+        }
 
         public static Command score() {
             return new SelectCommand<>(

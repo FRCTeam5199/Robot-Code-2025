@@ -383,23 +383,22 @@ public class TemplateSubsystem extends SubsystemBase {
         }
     }
 
-    public boolean isMechAtPosition(double Position) {
+    public boolean isMechAtPosition(double position) {
         switch (type) {
             case LINEAR -> {
-                return getMechM() >= Position;
+                return getMechM() >= position;
             }
             case PIVOT -> {
                 if (encoder != null)
-                    return Units.rotationsToDegrees(getEncoderRot()) >= Position;
+                    return Units.rotationsToDegrees(getEncoderRot()) >= position;
                 else
-                    return getDegrees() >= Position;
+                    return getDegrees() >= position;
             }
             default -> {
                 return false;
             }
         }
     }
-
 
 
     public void setOffset(double offset) {
@@ -431,16 +430,14 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     /**
-     * 
      * @return Gets the position of the actual motor of the mechanism.
      */
 
     public double getMotorRot() {
         return motor.getRotorPosition().getValueAsDouble();
     }
-    
+
     /**
-     * 
      * @return The rotation of the mechanism itself (Accounts for gear ratios and stuff)
      */
     public double getMechRot() {
@@ -482,9 +479,9 @@ public class TemplateSubsystem extends SubsystemBase {
     /**
      * @return a constantly updating value for the height of the elevator as a double.
      */
-    public DoubleSupplier getMechMeter(){
-        if (type != Type.LINEAR) return ()->0;
-        return ()->motor.getRotorPosition().getValueAsDouble() * drumCircumference * gearRatio;
+    public DoubleSupplier getMechMeter() {
+        if (type != Type.LINEAR) return () -> 0;
+        return () -> motor.getRotorPosition().getValueAsDouble() * drumCircumference * gearRatio;
     }
 
     public double getMechMFromMotorRot(double motorRot) {

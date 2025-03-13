@@ -186,7 +186,7 @@ public class RobotContainer {
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
         commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP().
-                        alongWith(new VelocityCommand(intakeSubsystem, 40)
+                        alongWith(new VelocityCommand(intakeSubsystem, 75)
                                 .until(intakeSubsystem::isCoralInIntake)))
                 .onFalse(ScoreCommands.Stabling.intakeStable()
                         .alongWith(new ConditionalCommand(
@@ -199,7 +199,7 @@ public class RobotContainer {
         //         .onTrue(ScoreCommands.Intake.intakeGround())
         //         .onFalse(ScoreCommands.Stabling.intakeStable());
 
-        commandXboxController.leftBumper().onTrue(ScoreCommands.Score.score())
+        commandXboxController.leftBumper().onTrue(Score.score().andThen(new InstantCommand(() -> System.out.println("hi"))))
                 .onFalse(ScoreCommands.Stabling.stable());
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place().until(() -> !intakeSubsystem.isCoralInIntake()))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
@@ -300,8 +300,6 @@ public class RobotContainer {
     }
 
     public static void periodic() {
-        System.out.println(aligned());
-
         if (!timer.isRunning()) timer.start();
         if (autoAlignXOffset > 0 && DriverStation.getAlliance().isPresent() &&
                 DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
@@ -349,6 +347,9 @@ public class RobotContainer {
 //        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
 //        System.out.println("Arm: " + armSubsystem.getDegrees());
 //        System.out.println("Wrist: " + wristSubsystem.getDegrees());
+
+        System.out.println("Elevator goal: " + elevatorSubsystem.getGoal());
+        System.out.println("Wrist goal: " + wristSubsystem.getGoal());
 
     }
 
