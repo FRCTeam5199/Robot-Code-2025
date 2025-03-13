@@ -80,15 +80,15 @@ public class ArmSubsystem extends TemplateSubsystem {
             noCurrentSpike = 0;
         }
 
-        // if (!DriverStation.isFMSAttached()) {
-        //     if (UserInterface.getTestComponent("Offset Arm").getString("") != "") {
-        //         this.setOffset(UserInterface.getTestComponent("Offset Arm").getDouble(0));
-        //     }
+        if (!DriverStation.isFMSAttached()) {
+            if (UserInterface.getTestComponent("Offset Arm").getString("") != "" && UserInterface.getTestComponent("Offset Arm").get() != null) {
+                this.setOffset(UserInterface.getTestComponent("Offset Arm").getDouble(0));
+            }
 
-        //     if (UserInterface.getTestComponent("Set Arm").getString("") != "") {
-        //         this.setPosition(UserInterface.getTestComponent("Set Arm").getDouble(0));
-        //     }
-        // }
+            if (UserInterface.getTestComponent("Set Arm").getString("") != "" && UserInterface.getTestComponent("Set Arm").get() != null) {
+                this.setPosition(UserInterface.getTestComponent("Set Arm").getDouble(0));
+            }
+        }
     }
 
     public static ArmSubsystem getInstance() {

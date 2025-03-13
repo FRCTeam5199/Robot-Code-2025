@@ -48,14 +48,14 @@ public class ElevatorSubsystem extends TemplateSubsystem {
             noCurrentSpike = 0;
         }
 
-        // if (!DriverStation.isFMSAttached()) {
-        //     if (UserInterface.getTestComponent("Offset Elevator").getString("") != "") {
-        //         this.setOffset(UserInterface.getTestComponent("Offset Elevator").getDouble(0));
-        //     }
-        //     if (UserInterface.getTestComponent("Set Elevator").getString("") != "") {
-        //         this.setPosition(UserInterface.getTestComponent("Set Elevator").getDouble(0));
-        //     }
-        // }
+        if (!DriverStation.isFMSAttached()) {
+            if (UserInterface.getTestComponent("Offset Elevator").getString("") != "" && UserInterface.getTestComponent("Offset Elevator").get() != null) {
+                this.setOffset(UserInterface.getTestComponent("Offset Elevator").getDouble(0));
+            }
+            if (UserInterface.getTestComponent("Set Elevator").getString("") != "" && UserInterface.getTestComponent("Set Elevator").get() != null) {
+                this.setPosition(UserInterface.getTestComponent("Set Elevator").getDouble(0));
+            }
+        }
     }
 
     public static ElevatorSubsystem getInstance() {

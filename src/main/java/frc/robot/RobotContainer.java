@@ -369,18 +369,18 @@ public class RobotContainer {
         UserInterface.setTeleopComponent("Replay Match Number", DriverStation.getReplayNumber());
         UserInterface.setTeleopComponent("Match Time", DriverStation.getMatchTime());
         
-        // UserInterface.setControlComponent("Reset All", ScoreCommands.Zeroing.zeroSubsystems());
-        // UserInterface.setControlComponent("Reset Elevator", ScoreCommands.Zeroing.zeroElevator());
-        // UserInterface.setControlComponent("Reset Arm", ScoreCommands.Zeroing.zeroArm());
-        // UserInterface.setControlComponent("Reset Wrist", ScoreCommands.Zeroing.zeroWrist());
-        // UserInterface.setControlComponent("Setpoint L1", ScoreCommands.Score.scoreL1());
-        // UserInterface.setControlComponent("Setpoint L2", ScoreCommands.Score.scoreL2());
-        // UserInterface.setControlComponent("Setpoint L3", ScoreCommands.Score.scoreL3());
-        // UserInterface.setControlComponent("Setpoint L4", ScoreCommands.Score.scoreL4());
-        // UserInterface.setControlComponent("Setpoint Ground Intake", ScoreCommands.Intake.intakeGround());
-        // UserInterface.setControlComponent("Setpoint Human Player", ScoreCommands.Intake.intakeHP());
-        // UserInterface.setControlComponent("Setpoint Algae High", ScoreCommands.Score.removeAlgaeHigh());
-        // UserInterface.setControlComponent("Setpoint Algae Low", ScoreCommands.Score.removeAlgaeLow());
+        UserInterface.setControlComponent("Reset All", ScoreCommands.Zeroing.zeroSubsystems());
+        UserInterface.setControlComponent("Reset Elevator", ScoreCommands.Zeroing.zeroElevator());
+        UserInterface.setControlComponent("Reset Arm", ScoreCommands.Zeroing.zeroArm());
+        UserInterface.setControlComponent("Reset Wrist", ScoreCommands.Zeroing.zeroWrist());
+        UserInterface.setControlComponent("Setpoint L1", ScoreCommands.Score.scoreL1());
+        UserInterface.setControlComponent("Setpoint L2", ScoreCommands.Score.scoreL2());
+        UserInterface.setControlComponent("Setpoint L3", ScoreCommands.Score.scoreL3());
+        UserInterface.setControlComponent("Setpoint L4", ScoreCommands.Score.scoreL4());
+        UserInterface.setControlComponent("Setpoint Ground Intake", ScoreCommands.Intake.intakeGround());
+        UserInterface.setControlComponent("Setpoint Human Player", ScoreCommands.Intake.intakeHP());
+        UserInterface.setControlComponent("Setpoint Algae High", ScoreCommands.Score.removeAlgaeHigh());
+        UserInterface.setControlComponent("Setpoint Algae Low", ScoreCommands.Score.removeAlgaeLow());
 
         //        System.out.println("aligned: " + aligned());
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
