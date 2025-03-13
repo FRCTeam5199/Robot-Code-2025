@@ -236,7 +236,13 @@ public class RobotContainer {
 //        operatorXboxController.rightTrigger().onTrue(new PositionCommand(elevatorSubsystem, 0)
 //                .andThen(new PositionCommand(armSubsystem, 0)));
 
-        commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP).onTrue(ScoreCommands.Intake.intakeHP());
+        commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP).onTrue(ScoreCommands.Intake.intakeHP())
+                .onFalse(ScoreCommands.Stabling.intakeStable()
+                        .alongWith(new ConditionalCommand(
+                                ScoreCommands.Intake.intakeSequence(),
+                                new VelocityCommand(intakeSubsystem, 0),
+                                intakeSubsystem::hasCoral
+                        )));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1).onTrue(new InstantCommand(() -> RobotContainer.setState(State.L1)));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armL2());
@@ -246,12 +252,18 @@ public class RobotContainer {
         commandButtonPanel.button(ButtonPanelButtons.SETMODE_ALGAE).onTrue(new InstantCommand(() -> setState(State.ALGAE_HIGH)));
         commandButtonPanel.button(ButtonPanelButtons.SETMODE_CORAL).onTrue(new InstantCommand(() -> setState(State.ALGAE_LOW)));
 
-        commandButtonPanel.button(ButtonPanelButtons.MOVE_WRIST_INCREASE).whileTrue(new InstantCommand(() -> wristSubsystem.setOffset(wristSubsystem.getOffset() + 1)));
-        commandButtonPanel.button(ButtonPanelButtons.MOVE_WRIST_DECREASE).whileTrue(new InstantCommand(() -> wristSubsystem.setOffset(wristSubsystem.getOffset() - 1)));
-        commandButtonPanel.button(ButtonPanelButtons.MOVE_ELEVATOR_INCREASE).whileTrue(new InstantCommand(() -> elevatorSubsystem.setOffset(elevatorSubsystem.getOffset() + 0.01)));
-        commandButtonPanel.button(ButtonPanelButtons.MOVE_ELEVATOR_DECREASE).whileTrue(new InstantCommand(() -> elevatorSubsystem.setOffset(elevatorSubsystem.getOffset() - 0.01)));
-        commandButtonPanel.button(ButtonPanelButtons.MOVE_ARM_INCREASE).whileTrue(new InstantCommand(() -> armSubsystem.setOffset(wristSubsystem.getOffset() + 1)));
-        commandButtonPanel.button(ButtonPanelButtons.MOVE_ARM_DECREASE).whileTrue(new InstantCommand(() -> armSubsystem.setOffset(wristSubsystem.getOffset() - 1)));
+        commandButtonPanel.button(ButtonPanelButtons.MOVE_WRIST_INCREASE)
+                .onTrue(new InstantCommand(() -> wristSubsystem.setOffset(wristSubsystem.getOffset() + 1)));
+        commandButtonPanel.button(ButtonPanelButtons.MOVE_WRIST_DECREASE)
+                .onTrue(new InstantCommand(() -> wristSubsystem.setOffset(wristSubsystem.getOffset() - 1)));
+        commandButtonPanel.button(ButtonPanelButtons.MOVE_ELEVATOR_INCREASE)
+                .onTrue(new InstantCommand(() -> elevatorSubsystem.setOffset(elevatorSubsystem.getOffset() + 0.01)));
+        commandButtonPanel.button(ButtonPanelButtons.MOVE_ELEVATOR_DECREASE)
+                .onTrue(new InstantCommand(() -> elevatorSubsystem.setOffset(elevatorSubsystem.getOffset() - 0.01)));
+        commandButtonPanel.button(ButtonPanelButtons.MOVE_ARM_INCREASE)
+                .onTrue(new InstantCommand(() -> armSubsystem.setOffset(armSubsystem.getOffset() + 1)));
+        commandButtonPanel.button(ButtonPanelButtons.MOVE_ARM_DECREASE)
+                .onTrue(new InstantCommand(() -> armSubsystem.setOffset(armSubsystem.getOffset() - 1)));
 
         commandButtonPanel.button(ButtonPanelButtons.MOVE_CLIMB_INCREASE).onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandButtonPanel.button(ButtonPanelButtons.MOVE_CLIMB_DECREASE).onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
@@ -269,13 +281,13 @@ public class RobotContainer {
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(5)).andThen(() -> setAutoAlignOffsetLeft())/*.andThen(GoToCommands.GoToCommand(reefTags.get(4)))*/);
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(5)).andThen(() -> setAutoAlignOffsetRight()));
 
-        commandButtonPanel.button(ButtonPanelButtons.BUTTON2).toggleOnTrue(new InstantCommand(() -> {
-            if (lockOnMode) {
-                lockOnMode = false;
-            } else {
-                lockOnMode = true;
-            }
-        }));
+//        commandButtonPanel.button(ButtonPanelButtons.BUTTON2).toggleOnTrue(new InstantCommand(() -> {
+//            if (lockOnMode) {
+//                lockOnMode = false;
+//            } else {
+//                lockOnMode = true;
+//            }
+//        }));
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
 
@@ -370,29 +382,29 @@ public class RobotContainer {
         UserInterface.setTeleopComponent("Replay Match Number", DriverStation.getReplayNumber());
         UserInterface.setTeleopComponent("Match Time", DriverStation.getMatchTime());
 
-        // UserInterface.setControlComponent("Reset All", ScoreCommands.Zeroing.zeroSubsystems());
-        // UserInterface.setControlComponent("Reset Elevator", ScoreCommands.Zeroing.zeroElevator());
-        // UserInterface.setControlComponent("Reset Arm", ScoreCommands.Zeroing.zeroArm());
-        // UserInterface.setControlComponent("Reset Wrist", ScoreCommands.Zeroing.zeroWrist());
-        // UserInterface.setControlComponent("Setpoint L1", ScoreCommands.Score.scoreL1());
-        // UserInterface.setControlComponent("Setpoint L2", ScoreCommands.Score.scoreL2());
-        // UserInterface.setControlComponent("Setpoint L3", ScoreCommands.Score.scoreL3());
-        // UserInterface.setControlComponent("Setpoint L4", ScoreCommands.Score.scoreL4());
-        // UserInterface.setControlComponent("Setpoint Ground Intake", ScoreCommands.Intake.intakeGround());
-        // UserInterface.setControlComponent("Setpoint Human Player", ScoreCommands.Intake.intakeHP());
-        // UserInterface.setControlComponent("Setpoint Algae High", ScoreCommands.Score.removeAlgaeHigh());
-        // UserInterface.setControlComponent("Setpoint Algae Low", ScoreCommands.Score.removeAlgaeLow());
+//         UserInterface.setControlComponent("Reset All", ScoreCommands.Zeroing.zeroSubsystems());
+//         UserInterface.setControlComponent("Reset Elevator", ScoreCommands.Zeroing.zeroElevator());
+//         UserInterface.setControlComponent("Reset Arm", ScoreCommands.Zeroing.zeroArm());
+//         UserInterface.setControlComponent("Reset Wrist", ScoreCommands.Zeroing.zeroWrist());
+//         UserInterface.setControlComponent("Setpoint L1", ScoreCommands.Score.scoreL1());
+//         UserInterface.setControlComponent("Setpoint L2", ScoreCommands.Score.scoreL2());
+//         UserInterface.setControlComponent("Setpoint L3", ScoreCommands.Score.scoreL3());
+//         UserInterface.setControlComponent("Setpoint L4", ScoreCommands.Score.scoreL4());
+//         UserInterface.setControlComponent("Setpoint Ground Intake", ScoreCommands.Intake.intakeGround());
+//         UserInterface.setControlComponent("Setpoint Human Player", ScoreCommands.Intake.intakeHP());
+//         UserInterface.setControlComponent("Setpoint Algae High", ScoreCommands.Score.removeAlgaeHigh());
+//         UserInterface.setControlComponent("Setpoint Algae Low", ScoreCommands.Score.removeAlgaeLow());
 
-        //        System.out.println("aligned: " + aligned());
+//        System.out.println("aligned: " + aligned());
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
 
-        //    System.out.println("Pose: " + commandSwerveDrivetrain.getPose());
-        // System.out.println(selectedReefTag);
-        // System.out.println(lockOnMode);
-
-        // System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
-        // System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
+//        System.out.println("Pose: " + commandSwerveDrivetrain.getPose());
+//        System.out.println(selectedReefTag);
+//        System.out.println(lockOnMode);
+//
+//        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
+//        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
 //        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
 //        System.out.println("Arm: " + armSubsystem.getDegrees());

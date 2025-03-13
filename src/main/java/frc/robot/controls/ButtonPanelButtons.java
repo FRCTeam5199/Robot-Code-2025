@@ -11,7 +11,7 @@ public enum ButtonPanelButtons {
     MOVE_ARM_DECREASE(1, 13),
     MOVE_CLIMB_INCREASE(1, 22),
     MOVE_CLIMB_DECREASE(1, 21),
-    SETPOINT_INTAKE_HP(1, 4),
+    SETPOINT_INTAKE_HP(1, 11),
     REEF_SCORE_L1(1, 12),
     REEF_SCORE_L2(1, 5),
     REEF_SCORE_L3(1, 8),
