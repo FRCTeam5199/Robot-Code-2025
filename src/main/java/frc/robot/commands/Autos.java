@@ -76,7 +76,7 @@ public final class Autos {
         twoPieceRedGHPTL4 = new PathPlannerAuto("2 Piece Red G Top L4");
         twoPieceRedKHPBL4 = new PathPlannerAuto("2 Piece K Red Bottom L4");
         twoPieceRedDHPTL4 = new PathPlannerAuto("2 Piece D Red Top L4");
-        threePieceBlueHPBL4 = new PathPlannerAuto("3 Piece Blue Bottom 1 L4");
+        threePieceBlueHPBL4 = new PathPlannerAuto("3 Piece Blue Bottom L4");
         testBlue = new PathPlannerAuto("Test Blue");
 
 //        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom 2 L4");

@@ -19,7 +19,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
                 IntakeConstants.INTAKE_FEEDFORWARD,
                 IntakeConstants.INTAKE_LOWER_TOLERANCE,
                 IntakeConstants.INTAKE_UPPER_TOLERANCE,
-                IntakeConstants.INTAKE_gearRatios,
+                IntakeConstants.INTAKE_GEAR_RATIO,
                 "Intake");
 
         configureMotor(
@@ -38,7 +38,6 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
 //        System.out.println("Intake: " + getMechVelocity());
 //        System.out.println("Intake Break Beam: " + intakeSensor.getValue());
-
     }
 
     public static IntakeSubsystem getInstance() {
@@ -58,11 +57,6 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
     public void outtake() {
         setVelocity(-75);
-    }
-
-    //Peak naming :fire:
-    public boolean isIntooken() {
-        return getStatorCurrent() > 25;
     }
 
     public boolean isCoralInIntake() {

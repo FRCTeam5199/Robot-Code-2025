@@ -5,13 +5,19 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "3 Piece Blue Start to G"
+            "name": "ARML4"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue Back to E"
+          }
+        },
+        {
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -38,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue G to HPB"
+            "pathName": "2 Piece Blue E to HPB"
           }
         },
         {
@@ -48,13 +54,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "INTAKE"
+                  "name": "DRIVE"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVE"
+                  "name": "INTAKE"
                 }
               }
             ]
@@ -63,11 +69,11 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue HPB to D"
+            "pathName": "2 Piece Blue HPB to D"
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -94,7 +100,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue D to HPB"
+            "pathName": "2 Piece Blue D to HPB"
           }
         },
         {
@@ -104,53 +110,22 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "INTAKE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "DRIVE"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Blue HPB to C"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ALIGNL"
-                }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "L4"
+                  "name": "INTAKE"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "OUTTAKE"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3 Piece L4",
+  "folder": "2 Piece L4",
   "choreoAuto": false
 }

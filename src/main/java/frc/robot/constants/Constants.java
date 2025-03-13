@@ -57,7 +57,7 @@ public final class Constants {
         public static final double DRUM_CIRCUMFERENCE = .119694706;
 
         public static final Slot0Configs ELEVATOR_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(.75)
+                .withKP(1)
                 .withKI(0)
                 .withKD(0)
                 .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
@@ -70,10 +70,10 @@ public final class Constants {
         public static final double GROUND = .15;
 
         public static final double L1 = 0;
-        public static final double L2 = .17;
-        public static final double L3 = .39;
-        public static final double L4 = .99;
-        public static final double HP = .012;
+        public static final double L2 = .16;
+        public static final double L3 = .42;
+        public static final double L4 = .97;
+        public static final double HP = .07;
 
         public static final double ALGAE_LOW = .2;
         public static final double ALGAE_HIGH = .5;
@@ -95,18 +95,17 @@ public final class Constants {
                 = new TrapezoidProfile.Constraints(800, 1600);
         public static final FeedForward ARM_FF = new FeedForward(0.2, 0, .1098901098901099);
 
-        public static final double ARM_LOWER_TOLERANCE = 1;
-        public static final double ARM_UPPER_TOLERANCE = 1;
+        public static final double ARM_LOWER_TOLERANCE = 2;
+        public static final double ARM_UPPER_TOLERANCE = 2;
 
         public static final double STABLE = 0;
-        public static final double INTAKE_STABLE = 59;
-        public static final double GROUND = 9.25;
+        public static final double GROUND = 9.5;
 
-        public static final double L1 = 7; //currently ground intake
-        public static final double L2 = 37;
-        public static final double L3 = 60;
-        public static final double L4 = 74;
-        public static final double HP = 64.182;
+        public static final double L1 = 7;
+        public static final double L2 = 33;
+        public static final double L3 = 53.5;
+        public static final double L4 = 73.5;
+        public static final double HP = 65;
 
         public static final double ALGAE_LOW = 10;
         public static final double ALGAE_HIGH = 10;
@@ -138,7 +137,7 @@ public final class Constants {
         public static final FeedForward INTAKE_FEEDFORWARD = new FeedForward(0.2, 0, 0.1162790697674419);
         public static final double INTAKE_LOWER_TOLERANCE = 5;
         public static final double INTAKE_UPPER_TOLERANCE = 5;
-        public static final double[][] INTAKE_gearRatios = {{1, 1}};
+        public static final double[][] INTAKE_GEAR_RATIO = {{1, 1}};
 
         public static final boolean INTAKE_INVERT = false;
         public static final boolean INTAKE_BRAKE = true;
@@ -191,14 +190,14 @@ public final class Constants {
         public static final double WRIST_SUPPLY_CURRENT_LIMIT = 20;
         public static final boolean WRIST_INVERTED = false;
 
-
         public static final double STABLE = 10;
-        public static final double GROUND = 185;
+        public static final double GROUND = 190;
         public static final double L1 = 0;
-        public static final double L2 = 64;
-        public static final double L3 = 85;
-        public static final double L4 = 124;
-        public static final double HP = 54;
+        public static final double L2 = 66;
+        public static final double L3 = 86;
+        public static final double PREVIOUS_L4 = 85;
+        public static final double L4 = 133;
+        public static final double HP = 55;
 
         public static final double ALGAE_LOW = 10;
         public static final double ALGAE_HIGH = 10;
@@ -206,7 +205,7 @@ public final class Constants {
         public static final boolean WRIST_BRAKE = true;
 
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(1)
+                .withKP(2)
                 .withKI(0)
                 .withKD(0.01)
                 .withKS(0)
@@ -216,9 +215,9 @@ public final class Constants {
 
 
         public static final double WRIST_FF_OFFSET = Units.degreesToRadians(0);
-        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(50, 100); //100, 200
+        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(75, 500);
 
-        public static final FeedForward WRIST_FF = new FeedForward(.16, .22, .10869565217391304347826086956522);
+        public static final FeedForward WRIST_FF = new FeedForward(.16, .18, .11764705882352941176470588235294);
 
         public static final double WRIST_LOWER_TOLERANCE = 2;
         public static final double WRIST_UPPER_TOLERANCE = 2;
@@ -235,7 +234,7 @@ public final class Constants {
         public static final Transform3d CAMERA_POSE =
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
-        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(.3, .3, .3);
+        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(2, 2, 999);
     }
 }
 

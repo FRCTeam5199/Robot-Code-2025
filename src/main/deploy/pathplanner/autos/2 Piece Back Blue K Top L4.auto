@@ -7,6 +7,12 @@
         {
           "type": "path",
           "data": {
+            "pathName": "2 Piece Blue Start to Back"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "2 Piece Blue Start to K"
           }
         },
@@ -32,12 +38,6 @@
         {
           "type": "named",
           "data": {
-            "name": "DUNK"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "OUTTAKE"
           }
         },
@@ -54,13 +54,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "INTAKE"
+                  "name": "DRIVE"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVETOP"
+                  "name": "INTAKE"
                 }
               }
             ]
@@ -94,19 +94,13 @@
         {
           "type": "named",
           "data": {
-            "name": "DUNK"
+            "name": "OUTTAKE"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "OUTTAKE"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2 Piece Blue L to HPT"
+            "name": "STABLE"
           }
         }
       ]

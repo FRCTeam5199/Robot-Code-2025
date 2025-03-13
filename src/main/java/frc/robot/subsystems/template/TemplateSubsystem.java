@@ -1,5 +1,9 @@
 package frc.robot.subsystems.template;
 
+import java.util.function.DoubleSupplier;
+
+import javax.xml.transform.Templates;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -439,6 +443,24 @@ public class TemplateSubsystem extends SubsystemBase {
         }
     }
 
+    public boolean isMechAtPosition(double position) {
+        switch (type) {
+            case LINEAR -> {
+                return getMechM() >= position;
+            }
+            case PIVOT -> {
+                if (encoder != null)
+                    return Units.rotationsToDegrees(getEncoderRot()) >= position;
+                else
+                    return getDegrees() >= position;
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
+
+
     public void setOffset(double offset) {
         this.offset = offset;
         changedOffset = true;
@@ -470,10 +492,17 @@ public class TemplateSubsystem extends SubsystemBase {
         return getMotorRot() * gearRatio * 360d;
     }
 
+    /**
+     * @return Gets the position of the actual motor of the mechanism.
+     */
+
     public double getMotorRot() {
         return motor.getRotorPosition().getValueAsDouble();
     }
 
+    /**
+     * @return The rotation of the mechanism itself (Accounts for gear ratios and stuff)
+     */
     public double getMechRot() {
         return getMotorRot() * gearRatio;
     }
@@ -512,6 +541,14 @@ public class TemplateSubsystem extends SubsystemBase {
     public double getMechM() {
         if (type != Type.LINEAR) return 0;
         return motor.getRotorPosition().getValueAsDouble() * drumCircumference * gearRatio;
+    }
+
+    /**
+     * @return a constantly updating value for the height of the elevator as a double.
+     */
+    public DoubleSupplier getMechMeter() {
+        if (type != Type.LINEAR) return () -> 0;
+        return () -> motor.getRotorPosition().getValueAsDouble() * drumCircumference * gearRatio;
     }
     /**
      * @param motorRot The rotation of a motor in rotations to be converted to meters
