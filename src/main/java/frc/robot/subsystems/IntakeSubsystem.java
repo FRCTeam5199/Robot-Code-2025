@@ -10,7 +10,8 @@ import frc.robot.utility.Type;
 public class IntakeSubsystem extends TemplateSubsystem {
     public static IntakeSubsystem intakeSubsystem;
     public TalonFX intake_motor = new TalonFX(IntakeConstants.INTAKE_ID);
-    private AnalogInput intakeSensor;
+    public AnalogInput intakeSensor;
+    public boolean hasCoral;
 
     public IntakeSubsystem() {
         super(Type.ROLLER,
@@ -36,8 +37,8 @@ public class IntakeSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
 
-//        System.out.println("Intake: " + getMechVelocity());
-//        System.out.println("Intake Break Beam: " + intakeSensor.getValue());
+//        System.out.println("Intake: " + getMechVelocity());intakeSensor.getValue());
+        hasCoral = intakeSensor.getValue() > 100;
     }
 
     public static IntakeSubsystem getInstance() {
@@ -59,7 +60,11 @@ public class IntakeSubsystem extends TemplateSubsystem {
         setVelocity(-75);
     }
 
-    public boolean isCoralInIntake() {
-        return intakeSensor.getValue() > 100;
+    public boolean hasCoral() {
+        return hasCoral;
+    }
+
+    public boolean hasCoralCurrent() {
+        return getSupplyCurrent() > 10;
     }
 }

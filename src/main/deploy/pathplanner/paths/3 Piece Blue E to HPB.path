@@ -38,19 +38,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "HP",
-      "waypointRelativePos": 0.1,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "HP"
-        }
-      }
-    },
-    {
       "name": "INSTANTHP",
-      "waypointRelativePos": 0.10303893637226338,
+      "waypointRelativePos": 0.03,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -60,8 +49,19 @@
       }
     },
     {
+      "name": "HP",
+      "waypointRelativePos": 0.04,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "HP"
+        }
+      }
+    },
+    {
       "name": "INTAKE",
-      "waypointRelativePos": 0.86,
+      "waypointRelativePos": 0.7631856540084417,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

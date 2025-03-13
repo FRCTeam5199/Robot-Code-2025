@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 1.4385245901639343,
-        "y": 0.926
+        "y": 0.974
       },
       "prevControl": {
         "x": 2.154851120776182,
-        "y": 1.4184744897959196
+        "y": 1.4664744897959194
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "INSTANTHP",
-      "waypointRelativePos": 0.1,
+      "waypointRelativePos": 0.03,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -45,7 +45,7 @@
     },
     {
       "name": "HP",
-      "waypointRelativePos": 0.1,
+      "waypointRelativePos": 0.044,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

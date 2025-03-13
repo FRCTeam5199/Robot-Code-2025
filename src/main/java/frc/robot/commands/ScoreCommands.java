@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.aligned;
 import static frc.robot.RobotContainer.commandSwerveDrivetrain;
 import static frc.robot.RobotContainer.rotationVelocity;
 import static frc.robot.RobotContainer.xVelocity;
@@ -20,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -35,6 +33,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
 
@@ -428,15 +427,20 @@ public class ScoreCommands {
                             zeroArm(),
                             zeroWrist()
                     ).withTimeout(5),
-                    new WaitCommand(.6),
+                    new WaitCommand(.5),
                     new ParallelCommandGroup(
                             new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                             new InstantCommand(() -> armSubsystem.getMotor().setPosition(0)),
                             new InstantCommand(() -> wristSubsystem.getMotor().setPosition(0))
-                    )
-
+                    ),
+                    new ParallelCommandGroup(
+                            new InstantCommand(() -> elevatorSubsystem.setOffset(0)),
+                            new InstantCommand(() -> armSubsystem.setOffset(0)),
+                            new InstantCommand(() -> wristSubsystem.setOffset(0))
+                    ),
+                    new PositionCommand(wristSubsystem, WristConstants.STABLE)
 //                    new ParallelCommandGroup(
-//                            new PositionCommand(elevatorSubsystem, .17, true),
+//                            new PositionCommand(elevatorSubsystem, .2, true),
 //                            new PositionCommand(armSubsystem, 7),
 //                            new PositionCommand(wristSubsystem, 7)
 //                    ),
@@ -474,6 +478,7 @@ public class ScoreCommands {
                     new SequentialCommandGroup(
                             new ParallelCommandGroup(
                                     new PositionCommand(elevatorSubsystem, ElevatorConstants.HP, false)
+                                            .until(() -> elevatorSubsystem.getMechM() < .4)
                                             .andThen(new PositionCommand(armSubsystem, ArmConstants.HP)),
                                     new PositionCommand(wristSubsystem, WristConstants.HP)
                             )
@@ -486,29 +491,33 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() > ElevatorConstants.HP
-            );
+            ).alongWith(new VelocityCommand(intakeSubsystem, 60)
+                    /*.until(intakeSubsystem::hasCoralCurrent)
+                    .andThen(new WaitCommand(1))
+                    .andThen(new VelocityCommand(intakeSubsystem, 10)*/
+                    .until(intakeSubsystem::hasCoral));
         }
 
         public static Command intakeSequence() {
             return new SequentialCommandGroup(
                     //Intake until beam initially breaks
-                    new VelocityCommand(intakeSubsystem, 75)
-                            .until(intakeSubsystem::isCoralInIntake),
+                    new VelocityCommand(intakeSubsystem, 60)
+                            .until(intakeSubsystem::hasCoral),
                     //Outtake slowly until beam connects
-                    new VelocityCommand(intakeSubsystem, -10)
-                            .until(() -> !intakeSubsystem.isCoralInIntake()),
+                    new VelocityCommand(intakeSubsystem, -25)
+                            .until(() -> !intakeSubsystem.hasCoral()),
                     //Intake slowly until beam breaks; the coral is now barely at the beam
                     new VelocityCommand(intakeSubsystem, 15)
-                            .until(intakeSubsystem::isCoralInIntake),
+                            .until(intakeSubsystem::hasCoral),
                     //Intake slowly for an amount of time; lines it up completely
                     new VelocityCommand(intakeSubsystem, 10)
                             .withDeadline(new WaitCommand(0.2)),
                     //Outtake slowly until beam connects
                     new VelocityCommand(intakeSubsystem, -10)
-                            .until(() -> !intakeSubsystem.isCoralInIntake()),
+                            .until(() -> !intakeSubsystem.hasCoral()),
                     //Intake slowly until beam breaks
                     new VelocityCommand(intakeSubsystem, 15)
-                            .until(intakeSubsystem::isCoralInIntake)
+                            .until(intakeSubsystem::hasCoral)
             );
         }
 
@@ -516,18 +525,18 @@ public class ScoreCommands {
             return new SequentialCommandGroup(
                     //Intake until beam initially breaks
                     new VelocityCommand(intakeSubsystem, 75)
-                            .until(intakeSubsystem::isCoralInIntake),
+                            .until(intakeSubsystem::hasCoral),
                     //Outtake slowly until beam connects
-                    new VelocityCommand(intakeSubsystem, -10)
-                            .until(() -> !intakeSubsystem.isCoralInIntake()),
+                    new VelocityCommand(intakeSubsystem, -25)
+                            .until(() -> !intakeSubsystem.hasCoral()),
                     //Intake slowly until beam breaks; the coral is now barely at the beam
                     new VelocityCommand(intakeSubsystem, 15)
-                            .until(intakeSubsystem::isCoralInIntake)
+                            .until(intakeSubsystem::hasCoral)
             );
         }
 
         public static Command intakeAuto() {
-            return new VelocityCommand(intakeSubsystem, 50).until(intakeSubsystem::isCoralInIntake);
+            return new VelocityCommand(intakeSubsystem, 50).until(intakeSubsystem::hasCoral);
         }
     }
 
@@ -674,9 +683,10 @@ public class ScoreCommands {
                     new ParallelCommandGroup(
                             new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, true),
                             new PositionCommand(wristSubsystem, WristConstants.L4)
-//                                    .beforeStarting(new WaitCommand(Double.MAX_VALUE)
-//                                            .until(() -> elevatorSubsystem.getMechM() > .3))
-                    )
+                                    .beforeStarting(new WaitCommand(Double.MAX_VALUE)
+                                            .until(() -> elevatorSubsystem.isMechGreaterThanPosition(.5)))
+                    ).until(() -> elevatorSubsystem.isMechAtGoal(false)
+                            && wristSubsystem.isMechAtGoal(false))
             ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
         }
 
@@ -687,7 +697,7 @@ public class ScoreCommands {
                             new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, true),
                             new PositionCommand(wristSubsystem, WristConstants.L4)
                                     .beforeStarting(new WaitCommand(Double.MAX_VALUE)
-                                            .until(() -> elevatorSubsystem.isMechAtPosition(.5)))
+                                            .until(() -> elevatorSubsystem.isMechGreaterThanPosition(.5)))
                     ).until(() -> elevatorSubsystem.isMechAtGoal(false)
                             && wristSubsystem.isMechAtGoal(false))
             ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
