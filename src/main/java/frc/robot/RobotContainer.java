@@ -18,18 +18,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
-import frc.robot.commands.GoToCommands;
 import frc.robot.commands.PositionCommand;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ScoreCommands.Score;
-import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.controls.ButtonPanelButtons;
@@ -335,7 +333,44 @@ public class RobotContainer {
             yVelocity = drivePIDControllerYVeryClose.calculate(currentStateY.position, nextStateY);
         }
         rotationVelocity = turnPIDController.calculate(currentStateRotation.position, nextStateRotation);
-//        System.out.println("aligned: " + aligned());
+
+        // if (UserInterface.getControlComponent("Reset All").getBoolean(false)) {
+        //     CommandScheduler.getInstance().schedule(ScoreCommands.Zeroing.zeroSubsystems());
+        //     UserInterface.setControlComponent("Reset All", false);
+        // } else if (UserInterface.getControlComponent("Reset Elevator").getBoolean(false)) {
+        //     CommandScheduler.getInstance().schedule(ScoreCommands.Zeroing.zeroElevator());
+        //     UserInterface.setControlComponent("Reset Elevator", false);
+        // } else if (UserInterface.getControlComponent("Reset Arm").getBoolean(false)) {
+        //     CommandScheduler.getInstance().schedule(ScoreCommands.Zeroing.zeroArm());
+        //     UserInterface.setControlComponent("Reset Arm", false);
+        // } else if (UserInterface.getControlComponent("Reset Wrist").getBoolean(false)) {
+        //     CommandScheduler.getInstance().schedule(ScoreCommands.Zeroing.zeroWrist());
+        //     UserInterface.setControlComponent("Reset Wrist", false);
+        // }
+
+        UserInterface.setAutonComponent("Event", DriverStation.getEventName());
+        UserInterface.setAutonComponent("Game Message", DriverStation.getGameSpecificMessage());
+        UserInterface.setAutonComponent("Location", DriverStation.getLocation().getAsInt());
+        UserInterface.setAutonComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
+        UserInterface.setAutonComponent("Enabled", DriverStation.isEnabled());
+        UserInterface.setAutonComponent("EStop", DriverStation.isEStopped());
+        UserInterface.setAutonComponent("Match Type", DriverStation.getMatchType().toString());
+        UserInterface.setAutonComponent("Match Number", DriverStation.getMatchNumber());
+        UserInterface.setAutonComponent("Replay Match Number", DriverStation.getReplayNumber());
+        UserInterface.setAutonComponent("Match Time", DriverStation.getMatchTime());
+
+        UserInterface.setTeleopComponent("Event", DriverStation.getEventName());
+        UserInterface.setTeleopComponent("Game Message", DriverStation.getGameSpecificMessage());
+        UserInterface.setTeleopComponent("Location", DriverStation.getLocation().getAsInt());
+        UserInterface.setTeleopComponent("Enabled", DriverStation.isEnabled());
+        UserInterface.setTeleopComponent("EStop", DriverStation.isEStopped());
+        UserInterface.setTeleopComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
+        UserInterface.setTeleopComponent("Match Type", DriverStation.getMatchType().toString());
+        UserInterface.setTeleopComponent("Match Number", DriverStation.getMatchNumber());
+        UserInterface.setTeleopComponent("Replay Match Number", DriverStation.getReplayNumber());
+        UserInterface.setTeleopComponent("Match Time", DriverStation.getMatchTime());
+        
+        //        System.out.println("aligned: " + aligned());
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
 //                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
 
