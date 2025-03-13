@@ -92,7 +92,7 @@ public class UserInterface {
     public static void setTab(String key) {
         Shuffleboard.selectTab(key);
     }
-
+    
     public static ShuffleboardTab getTab(String key) {
         return Shuffleboard.getTab(key);
     }

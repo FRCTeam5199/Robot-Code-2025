@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ARML4"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue Start to G"
+            "pathName": "2 Piece Blue Back to E"
           }
         },
         {
@@ -17,13 +23,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "L4"
+                  "name": "ALIGNL"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNL"
+                  "name": "L4"
                 }
               }
             ]
@@ -38,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue G to HPB"
+            "pathName": "2 Piece Blue E to HPB"
           }
         },
         {
@@ -48,13 +54,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "INTAKE"
+                  "name": "DRIVE"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVE"
+                  "name": "INTAKE"
                 }
               }
             ]
@@ -73,13 +79,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "L4"
+                  "name": "ALIGNR"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "L4"
                 }
               }
             ]
@@ -104,13 +110,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "INTAKE"
+                  "name": "DRIVE"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVE"
+                  "name": "INTAKE"
                 }
               }
             ]
