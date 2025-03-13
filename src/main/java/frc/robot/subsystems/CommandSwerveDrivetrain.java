@@ -69,8 +69,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                                     .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
                     ), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
                     new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                            new PIDConstants(13.1, 0.05, 0.1), // Translation PID constants  P = 10
-                            new PIDConstants(1.14, 0.01, .004) // Rotation PID constants  P = 1.13 D = 0.003
+                            new PIDConstants(12, 0, .5),
+                            new PIDConstants(8, 0, 0)
                     ),
                     config,
                     () -> {

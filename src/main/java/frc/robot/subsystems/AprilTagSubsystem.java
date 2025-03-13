@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.RobotContainer;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -15,10 +16,8 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -30,10 +29,8 @@ public class AprilTagSubsystem extends SubsystemBase {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimator;
     private Matrix<N3, N1> curStdDevs;
-    private AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+    private AprilTagFieldLayout kTagLayout;
     private double closestTagX = 0, closestTagY = 0, closestTagYaw = 0;
-
-    private boolean isAutoAligning = false;
 
     public int getClosestTagID() {
         return closestTagID;
@@ -47,14 +44,20 @@ public class AprilTagSubsystem extends SubsystemBase {
 
     double[] tagAngles = {1, 1, 1, 1, 1, 1, 300, 0, 60, 120, 180, 240, 1, 1, 1, 1, 1, 240, 180, 120, 60, 0, 300};
 
+    //4, 5, 14, 15
     public AprilTagSubsystem() {
         camera = new PhotonCamera(Constants.Vision.CAMERA_NAME);
+
+        try {
+            kTagLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory()
+                    + "/apriltagLayout.json");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         photonEstimator =
                 new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.Vision.CAMERA_POSE);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-
-
     }
 
     @Override
@@ -71,7 +74,6 @@ public class AprilTagSubsystem extends SubsystemBase {
      * only be called once per loop.
      *
      * <p>Also includes updates for the standard deviations, which can (optionally) be retrieved with
-     * {@link getEstimationStdDevs}
      *
      * @return An {@link EstimatedRobotPose} with an estimated pose, estimate timestamp, and targets
      * used for estimation.
@@ -79,10 +81,15 @@ public class AprilTagSubsystem extends SubsystemBase {
     public Pair<Optional<EstimatedRobotPose>, Double> getEstimatedGlobalPose() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (var change : results) {
+            boolean shouldContinue = false;
+            for (PhotonTrackedTarget target : change.getTargets())
+                if (target.getPoseAmbiguity() > .1) shouldContinue = true;
+            if (shouldContinue) continue;
+
             visionEst = photonEstimator.update(change);
             updateEstimationStdDevs(visionEst, change.getTargets());
         }
-        if (visionEst.isPresent() && !isAutoAligning)
+        if (visionEst.isPresent())
             return new Pair<>(visionEst, visionEst.get().timestampSeconds);
         else return new Pair<>(Optional.empty(), 0.0);
     }
@@ -98,11 +105,11 @@ public class AprilTagSubsystem extends SubsystemBase {
             Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
         if (estimatedPose.isEmpty()) {
             // No pose input. Default to single-tag std devs
-            curStdDevs = Constants.Vision.kSingleTagStdDevs;
+            curStdDevs = Constants.Vision.kTagStdDevs;
 
         } else {
             // Pose present. Start running Heuristic
-            var estStdDevs = Constants.Vision.kSingleTagStdDevs;
+            var estStdDevs = Constants.Vision.kTagStdDevs;
             int numTags = 0;
             double avgDist = 0;
 
@@ -121,12 +128,12 @@ public class AprilTagSubsystem extends SubsystemBase {
 
             if (numTags == 0) {
                 // No tags visible. Default to single-tag std devs
-                curStdDevs = Constants.Vision.kSingleTagStdDevs;
+                curStdDevs = Constants.Vision.kTagStdDevs;
             } else {
                 // One or more tags visible, run the full heuristic.
                 avgDist /= numTags;
                 // Decrease std devs if multiple targets are visible
-                if (numTags > 1) estStdDevs = Constants.Vision.kMultiTagStdDevs;
+                if (numTags > 1) estStdDevs = Constants.Vision.kTagStdDevs;
                     // Increase std devs based on (average) distance
 //                if (numTags == 1 && avgDist > 4)
 //                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
@@ -155,24 +162,31 @@ public class AprilTagSubsystem extends SubsystemBase {
         if (!results.isEmpty()) {
             PhotonPipelineResult result = results.get(results.size() - 1);
             if (result.hasTargets()) {
-                double smallestDistance = Double.MAX_VALUE;
+                double smallestAngleChange = 45;
 
                 for (PhotonTrackedTarget target : result.getTargets()) {
-                    if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11)
+                    if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11) //ignores tags not on the reef
                             || (target.getFiducialId() >= 17 && target.getFiducialId() <= 22)) {
-                        double distance = PhotonUtils.calculateDistanceToTargetMeters(
-                                Constants.Vision.CAMERA_POSE.getZ(), .31,
-                                Constants.Vision.CAMERA_POSE.getRotation().getY(),
-                                Units.degreesToRadians(target.getPitch()));
+                        double pigeonAngle = commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees();
 
-                        if (distance < smallestDistance) {
+                        while (pigeonAngle > 360) pigeonAngle -= 360;
+                        while (pigeonAngle < -360) pigeonAngle += 360;
+
+                        if (pigeonAngle < 0) pigeonAngle = 360 + pigeonAngle;
+
+                        double angleChange = Math.abs((-180 - tagAngles[target.getFiducialId()]) + pigeonAngle);
+
+                        while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
+
+                        if (angleChange < smallestAngleChange) {
+                            smallestAngleChange = angleChange;
                             bestTarget = target;
-                            smallestDistance = distance;
                         }
                     }
                 }
             }
         }
+
 
         if (bestTarget != null) closestTagID = bestTarget.getFiducialId();
         return closestTagID;
@@ -192,33 +206,41 @@ public class AprilTagSubsystem extends SubsystemBase {
         if (!results.isEmpty()) {
             PhotonPipelineResult result = results.get(results.size() - 1);
             if (result.hasTargets()) {
-                double smallestDistance = Double.MAX_VALUE;
+                double smallestAngleChange = 45;
                 PhotonTrackedTarget bestTarget = null;
 
                 for (PhotonTrackedTarget target : result.getTargets()) {
-                    if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11)
+                    if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11) //ignores tags not on the reef
                             || (target.getFiducialId() >= 17 && target.getFiducialId() <= 22)) {
-                        double distance = PhotonUtils.calculateDistanceToTargetMeters(
-                                Constants.Vision.CAMERA_POSE.getZ(), .31,
-                                Constants.Vision.CAMERA_POSE.getRotation().getY(),
-                                Units.degreesToRadians(target.getPitch()));
+                        double pigeonAngle = commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees();
 
-                        if (distance < smallestDistance) {
+                        while (pigeonAngle > 360) pigeonAngle -= 360;
+                        while (pigeonAngle < -360) pigeonAngle += 360;
+
+                        if (pigeonAngle < 0) pigeonAngle = 360 + pigeonAngle;
+
+                        double angleChange = Math.abs((-180 - tagAngles[target.getFiducialId()]) + pigeonAngle);
+
+                        while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
+
+                        if (angleChange < smallestAngleChange) {
+                            smallestAngleChange = angleChange;
                             bestTarget = target;
-                            smallestDistance = distance;
                         }
                     }
                 }
                 if (bestTarget == null) {
                     return new double[]{0.0, 0.0, 0.0};
                 }
-
-
                 closestTagID = bestTarget.getFiducialId();
+
+                double smallestDistance = PhotonUtils.calculateDistanceToTargetMeters(
+                        Constants.Vision.CAMERA_POSE.getZ(), .31,
+                        Constants.Vision.CAMERA_POSE.getRotation().getY(),
+                        Units.degreesToRadians(bestTarget.getPitch()));
 
                 closestTagX = -(Math.cos(Math.toRadians(bestTarget.getYaw())) * smallestDistance);
                 closestTagY = Math.sin(Math.toRadians(bestTarget.getYaw())) * smallestDistance;
-                closestTagID = bestTarget.getFiducialId();
 
                 closestTagX += Vision.CAMERA_TO_FRONT_DISTANCE;
 
@@ -230,8 +252,8 @@ public class AprilTagSubsystem extends SubsystemBase {
                     closestTagY = -closestTagY;
                 }
 
-            //    System.out.println("Id: " + bestTarget.getFiducialId()
-            //            + " X: " + closestTagX + " Y: " + closestTagY);
+//                System.out.println("Id: " + bestTarget.getFiducialId()
+//                        + " X: " + closestTagX + " Y: " + closestTagY);
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};
@@ -243,13 +265,5 @@ public class AprilTagSubsystem extends SubsystemBase {
             aprilTagSubsystem = new AprilTagSubsystem();
         }
         return aprilTagSubsystem;
-    }
-
-    public boolean isAutoAligning() {
-        return isAutoAligning;
-    }
-
-    public void setAutoAligning(boolean autoAligning) {
-        isAutoAligning = autoAligning;
     }
 }

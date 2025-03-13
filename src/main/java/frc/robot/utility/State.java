@@ -6,5 +6,6 @@ public enum State {
     L3,
     L4,
     ALGAE_HIGH,
-    ALGAE_LOW
+    ALGAE_LOW,
+    GROUND
 }

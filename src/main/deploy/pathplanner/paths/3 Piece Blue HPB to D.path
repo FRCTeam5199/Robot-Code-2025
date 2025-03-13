@@ -3,43 +3,79 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1567045454545453,
-        "y": 1.0534659090909075
+        "x": 1.2227459016393443,
+        "y": 1.0940061475409835
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1817622950819673,
-        "y": 1.8012807377049183
+        "x": 2.1570186551276187,
+        "y": 1.8302515525661005
       },
       "isLocked": false,
-      "linkedName": "HP Blue Bottom"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.9679303278688525,
-        "y": 2.7602971311475404
+        "x": 3.848053278688525,
+        "y": 2.628
       },
       "prevControl": {
-        "x": 3.1767418032786883,
-        "y": 2.4845799180327868
+        "x": 3.681221383402521,
+        "y": 2.441808918808446
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "D Blue"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "slow",
+      "minWaypointRelativePos": 0.86,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "armL3",
+      "name": "ARML4",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "armL4"
+          "name": "ARML4"
+        }
+      }
+    },
+    {
+      "name": "INTAKESEQUENCE",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKESEQUENCE"
+        }
+      }
+    },
+    {
+      "name": "L4",
+      "waypointRelativePos": 0.2207977207977203,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L4"
         }
       }
     }
@@ -60,7 +96,7 @@
   "folder": "3 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 54.144771653784304
+    "rotation": 55.0
   },
   "useDefaultConstraints": false
 }

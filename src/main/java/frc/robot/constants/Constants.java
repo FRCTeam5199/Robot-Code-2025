@@ -4,11 +4,8 @@
 
 package frc.robot.constants;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
 import edu.wpi.first.math.Matrix;
@@ -22,8 +19,6 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.utility.FeedForward;
 import frc.robot.utility.PID;
 
-import frc.robot.utility.Type;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -36,7 +31,9 @@ public final class Constants {
 
     public static class OperatorConstants {
         public static final int driverControllerPort = 0;
-        public static final int buttonPanelPort = 1;
+        public static final int operatorControllerPort = 3;
+        public static final int buttonPanel1Port = 1;
+        public static final int buttonPanel2Port = 2;
     }
 
     public static class ElevatorConstants {
@@ -59,12 +56,8 @@ public final class Constants {
         public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 45;
         public static final double DRUM_CIRCUMFERENCE = .119694706;
 
-        public static final double ARM_MM_CV = 80;
-        public static final double ARM_MM_A = 160;
-        public static final double ARM_MM_J = 1600;
-
         public static final Slot0Configs ELEVATOR_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(1)
+                .withKP(.75)
                 .withKI(0)
                 .withKD(0)
                 .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
@@ -73,15 +66,22 @@ public final class Constants {
                 .withKV(ELEVATOR_FF.getkV())
                 .withGravityType(GravityTypeValue.Elevator_Static);
 
-        public static final double L1 = 1;
+        public static final double STABLE = 0;
+        public static final double GROUND = .15;
 
+        public static final double L1 = 0;
+        public static final double L2 = .17;
+        public static final double L3 = .39;
+        public static final double L4 = .99;
+        public static final double HP = .012;
+
+        public static final double ALGAE_LOW = .2;
+        public static final double ALGAE_HIGH = .5;
     }
 
     public static class ArmConstants {
         public static final int ARM_MOTOR_ID = 14;
         public static final int ARM_FOLLOW_MOTOR_ID = 15;
-        public static final int ARM_CANCODER_ID = 30;
-        public static final TalonFXConfiguration TALON_FX_CONFIGURATION = new TalonFXConfiguration();
         public static final double ARM_STATOR_CURRENT_LIMIT = 60;
         public static final double ARM_SUPPLY_CURRENT_LIMIT = 60;
         public static final boolean LEFT_ARM_INVERTED = true;
@@ -89,64 +89,33 @@ public final class Constants {
 
         public static final boolean ARM_BRAKE = true;
 
-
-        //   public static final double ARM_FF_OFFSET = Units.degreesToRadians(13.5);
-
         public static final double ARM_FF_OFFSET = 0;
-        public static final CANcoderConfiguration ARM_CANCODER_CONFIGURATION = new CANcoderConfiguration();
 
-        /*This determines the range the cancoder records in rotations.
-         * -1 = -1 to 0
-         * 0 = -.5 to .5
-         * 1 = 0 to 1
-         */
-        public static final double ARM_CANCODER_DISCONTINUITY_POINT = 1;
-
-        //What direction should be considered postive.
-//        public static final SensorDirectionValue ARM_CANCODER_DIRECTION = SensorDirectionValue.Clockwise_Positive;
-
-        //When the arm is resting if the cancoder does not record 0 for absolute position multiply the value it record by -1 and put it here. This must be in rotations.
-        public static final double ARM_CANCODER_MAGNET_OFFSET = -0.064453125;
-
-        //The speed and acceleration the arm should move at.
-        public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS = new TrapezoidProfile.Constraints(800, 1600);
-        public static final double ARM_MM_CV = 80;
-        public static final double ARM_MM_A = 160;
-        public static final double ARM_MM_J = 1600;
-
-
-// kg = .348, ks = .14816, Kv = 6.16786
-        // These are the values that will be factored into the arm ff equmnzation. There is a separate documet to find these.
-
+        public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS
+                = new TrapezoidProfile.Constraints(800, 1600);
         public static final FeedForward ARM_FF = new FeedForward(0.2, 0, .1098901098901099);
 
-        //degrees. check super for template subsystem
         public static final double ARM_LOWER_TOLERANCE = 1;
         public static final double ARM_UPPER_TOLERANCE = 1;
 
-        //Degrees check super for template subsystem
+        public static final double STABLE = 0;
+        public static final double INTAKE_STABLE = 59;
+        public static final double GROUND = 9.25;
+
+        public static final double L1 = 7; //currently ground intake
+        public static final double L2 = 37;
+        public static final double L3 = 60;
+        public static final double L4 = 74;
+        public static final double HP = 64.182;
+
+        public static final double ALGAE_LOW = 10;
+        public static final double ALGAE_HIGH = 10;
+
+
         public static final double ARM_MIN = 0.61524;
         public static final double ARM_MAX = 180; //fix
 
-
-        public static final double ARM_MAX_VELOCITY = 500;
-        public static final double ARM_MAX_ACCELERATION = 750;
-        public static final double ARM_MOTOR_TO_MECH_GEAR_RATIO = 42.4286;
-        public static final double ARM_MOTOR_TO_SENSOR_GEAR_RATIO = 42.4286;
-        public static final double ARM_SENSOR_TO_MECH_GEAR_RATIO = 1;
-
         public static final double[][] ARM_GEAR_RATIO = {{240, 1}};
-
-        //Value the arm should move to for a wanted position.
-        public static final double GROUND = 5;
-        public static final double L1 = 137.2;
-        public static final double L2 = 128.8;
-        public static final double L3 = 119;
-        public static final double L4 = 60;
-        public static final double HP = 59.04;
-        public static final double DUNK = 100;
-
-        public static final String ARM_CANCODER_CANBUS = "rio";
 
         public static final Slot0Configs ARM_SLOT0_CONFIGS = new Slot0Configs()
                 .withKP(2.5)
@@ -159,18 +128,16 @@ public final class Constants {
                 .withKA(ARM_FF.getkA())
                 .withGravityType(GravityTypeValue.Arm_Cosine);
 
-        public static final double ARM_LOW_LIMIT = 6;
-        public static final double ARM_HIGH_LIMIT = 77;
 
     }
 
     public static class IntakeConstants {
-        public static final Type INTAKE_TYPE = Type.LINEAR;
         public static final int INTAKE_ID = 20;
+        public static final int INTAKE_SENSOR_ID = 3;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
         public static final FeedForward INTAKE_FEEDFORWARD = new FeedForward(0.2, 0, 0.1162790697674419);
-        public static final double INTAKE_lowerTOLERANCE = 5;
-        public static final double INTAKE_upperTOLERANCE = 5;
+        public static final double INTAKE_LOWER_TOLERANCE = 5;
+        public static final double INTAKE_UPPER_TOLERANCE = 5;
         public static final double[][] INTAKE_gearRatios = {{1, 1}};
 
         public static final boolean INTAKE_INVERT = false;
@@ -191,12 +158,11 @@ public final class Constants {
     }
 
     public static class ClimberConstants {
-        public static final Type CLIMBER_TYPE = Type.PIVOT;
         public static final int CLIMBER_ID = 16;
         public static final TrapezoidProfile.Constraints CLIMBER_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
         public static final FeedForward CLIMBER_FF = new FeedForward(0, 0, 0);
-        public static final double CLIMBER_lowerTOLERANCE = 0.0;
-        public static final double CLIMBER_upperTOLERANCE = 0.0;
+        public static final double CLIMBER_LOWER_TOLERANCE = 0.0;
+        public static final double CLIMBER_UPPER_TOLERANCE = 0.0;
         public static final double[][] CLIMBER_GEAR_RATIO = {{125, 1}};
         public static final double CLIMBER_LOW_LIMIT = 10;
         public static final double CLIMBER_HIGH_LIMIT = 110;
@@ -217,22 +183,27 @@ public final class Constants {
                 .withKV(CLIMBER_FF.getkV())
                 .withKA(CLIMBER_FF.getkA())
                 .withGravityType(GravityTypeValue.Arm_Cosine);
-
-
     }
 
     public static class WristConstants {
-
-        //TODO: Change all of these constants as they were just copied from arm
-
-        public static final int WRIST_MOTOR_ID = 19;
-        public static final TalonFXConfiguration TALON_FX_CONFIGURATION = new TalonFXConfiguration();
+        public static final int WRIST_MOTOR_ID = 19; //19
         public static final double WRIST_STATOR_CURRENT_LIMIT = 20;
         public static final double WRIST_SUPPLY_CURRENT_LIMIT = 20;
         public static final boolean WRIST_INVERTED = false;
 
-        public static final boolean WRIST_BRAKE = true;
 
+        public static final double STABLE = 10;
+        public static final double GROUND = 185;
+        public static final double L1 = 0;
+        public static final double L2 = 64;
+        public static final double L3 = 85;
+        public static final double L4 = 124;
+        public static final double HP = 54;
+
+        public static final double ALGAE_LOW = 10;
+        public static final double ALGAE_HIGH = 10;
+
+        public static final boolean WRIST_BRAKE = true;
 
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
                 .withKP(1)
@@ -245,60 +216,26 @@ public final class Constants {
 
 
         public static final double WRIST_FF_OFFSET = Units.degreesToRadians(0);
+        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(50, 100); //100, 200
 
-        public static final CANcoderConfiguration WRIST_CANCODER_CONFIGURATION = new CANcoderConfiguration();
-        public static final double WRIST_CANCODER_DISCONTINUITY_POINT = 1;
-        public static final SensorDirectionValue WRIST_CANCODER_DIRECTION
-                = SensorDirectionValue.Clockwise_Positive;
+        public static final FeedForward WRIST_FF = new FeedForward(.16, .22, .10869565217391304347826086956522);
 
-
-        public static final double WRIST_MM_CV = 80;
-        public static final double ARM_MM_A = 160;
-        public static final double ARM_MM_J = 1600;
-
-        //rotations
-        public static final double WRIST_CANCODER_MAGNET_OFFSET = 0.930176;
-
-        //TODO: CHANGE
-
-        //The speed and acceleration the wrist should move at.
-        //TODO: CHANGE
-        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(100, 200);
-
-        public static final FeedForward WRIST_FF = new FeedForward(.16, .22, .1111111111111111);
-        //degrees
         public static final double WRIST_LOWER_TOLERANCE = 2;
         public static final double WRIST_UPPER_TOLERANCE = 2;
-        //Degrees
+
         public static final double WRIST_MIN = 0.0;
         public static final double WRIST_MAX = 200;
 
         public static final double[][] WRIST_GEAR_RATIO = {{72, 10}, {72, 20}, {48, 24}};
-
-
-        public static final double
-                GROUND = 0,
-                L1 = 0,
-                L2 = 0,
-                L3 = 0,
-                L4 = 0,
-                HP = 0,
-                GROUND_2 = 0,
-                DUNK = 0;
-
-
     }
+
 
     public static class Vision {
         public static final String CAMERA_NAME = "Camera";
         public static final Transform3d CAMERA_POSE =
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
-        public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.6, 0.6, 999.0);
-
-        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.6, 0.6, 999.0);
-        public static final Matrix<N3, N1> kAutonStdDevs = VecBuilder.fill(0.6, 0.6, 3.0);
-
-        public static final String LIMELIGHT_NAME = null;
+        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(.3, .3, .3);
     }
 }
+

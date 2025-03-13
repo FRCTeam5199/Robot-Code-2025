@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import org.photonvision.EstimatedRobotPose;
 
@@ -47,13 +46,17 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         UserInterface.init();
 
+        System.setProperty("wpilog.directory", "/media/sda1/wpilog");
+        
+        DataLogManager.start();
+
         commandSwerveDrivetrain.configureAutoBuilder();
 
         System.setProperty("wpilog.directory", "/media/sda1/wpilog");
 
         DataLogManager.start();
 
-        commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kSingleTagStdDevs);
+        commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kTagStdDevs);
 
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
@@ -150,7 +153,7 @@ public class Robot extends TimedRobot {
             autonomousCommand.cancel();
         }
 
-        ScoreCommands.wristandElevatorHP();
+        ScoreCommands.Stabling.wristandElevatorStable();
 
         CommandScheduler.getInstance().cancelAll();
     }

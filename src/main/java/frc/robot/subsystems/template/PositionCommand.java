@@ -26,8 +26,8 @@ public class PositionCommand extends Command {
         updateGoalPosition = false;
         if (isGoingUp) {
             //Up
-            this.vel = 90;
-            this.acc = 180;
+            this.vel = 200;
+            this.acc = 400;
         } else {
             //Down
             this.vel = 60;

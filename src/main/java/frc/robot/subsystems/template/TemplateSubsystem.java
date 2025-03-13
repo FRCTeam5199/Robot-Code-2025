@@ -588,7 +588,6 @@ public class TemplateSubsystem extends SubsystemBase {
         if (changedOffset) {
             setPosition(goal);
             changedOffset = false;
-            System.out.println("Goal: " + goal + offset);
         }
         if (followLastMechProfile) followLastMechProfile();
 

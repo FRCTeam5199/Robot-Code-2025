@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2227459016393443,
-        "y": 1.0940061475409835
+        "x": 3.2007172131147543,
+        "y": 3.8511782786885242
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.319620901639346,
-        "y": 1.9968760455001677
+        "x": 2.9507172131147543,
+        "y": 3.8511782786885242
       },
       "isLocked": false,
-      "linkedName": "HP Blue Bottom"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6082991803278692,
-        "y": 2.8801741803278684
+        "x": 0.8870901639344262,
+        "y": 3.8511782786885242
       },
       "prevControl": {
-        "x": 2.653197139511542,
-        "y": 2.1862328537972564
+        "x": 1.1370901639344266,
+        "y": 3.8511782786885242
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C Blue"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 56.61148642388856
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "4 Piece Blue Paths",
+  "folder": "Tests",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

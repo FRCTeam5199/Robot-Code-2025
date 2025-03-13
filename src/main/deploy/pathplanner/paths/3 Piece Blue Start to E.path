@@ -3,43 +3,59 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6082991803278692,
-        "y": 2.8801741803278684
+        "x": 7.1566598360655735,
+        "y": 1.885194672131147
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.32488081298093,
-        "y": 1.8877634660421534
+        "x": 6.785040983606557,
+        "y": 2.076997950819672
       },
       "isLocked": false,
-      "linkedName": "C Blue"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.2227459016393443,
-        "y": 1.0940061475409835
+        "x": 5.11875,
+        "y": 2.628
       },
       "prevControl": {
-        "x": 2.0584601873536306,
-        "y": 1.9222586985613912
+        "x": 5.466393442622951,
+        "y": 2.4721598360655737
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HP Blue Bottom"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4585414585414595,
+      "rotationDegrees": 119.99999999999999
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "HP",
+      "name": "ARML4",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "HP"
+          "name": "ARML4"
+        }
+      }
+    },
+    {
+      "name": "L4",
+      "waypointRelativePos": 0.24358974358973956,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L4"
         }
       }
     }
@@ -54,13 +70,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "3 Piece Blue Paths",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 56.61148642388856
+    "velocity": 0.0,
+    "rotation": 180.0
   },
   "useDefaultConstraints": false
 }

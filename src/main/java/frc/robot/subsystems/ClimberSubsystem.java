@@ -13,9 +13,9 @@ public class ClimberSubsystem extends TemplateSubsystem {
                 Constants.ClimberConstants.CLIMBER_ID,
                 Constants.ClimberConstants.CLIMBER_CONSTRAINTS,
                 Constants.ClimberConstants.CLIMBER_FF,
-                Constants.ClimberConstants.CLIMBER_lowerTOLERANCE,
-                Constants.ClimberConstants.CLIMBER_upperTOLERANCE,
-                new double[][]{{125, 1}},
+                Constants.ClimberConstants.CLIMBER_LOWER_TOLERANCE,
+                Constants.ClimberConstants.CLIMBER_UPPER_TOLERANCE,
+                Constants.ClimberConstants.CLIMBER_GEAR_RATIO,
                 "Climber"
         );
 
@@ -44,9 +44,11 @@ public class ClimberSubsystem extends TemplateSubsystem {
     public void drop() {
         setPercent(0.45);
     }
+
     public void stopDrop() {
         setPercent(0);
     }
+
     public void retract() {
         setPercent(-0.3);
     }
