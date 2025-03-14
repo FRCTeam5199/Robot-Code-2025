@@ -66,13 +66,13 @@ public final class Constants {
                 .withGravityType(GravityTypeValue.Elevator_Static);
 
         public static final double STABLE = 0;
-        public static final double GROUND = .15;
+        public static final double GROUND = .12;
 
         public static final double L1 = 0;
         public static final double L2 = .16;
-        public static final double L3 = .42;
-        public static final double L4 = .97;
-        public static final double HP = .04;
+        public static final double L3 = .43;
+        public static final double L4 = .98;
+        public static final double HP = .0;
 
         public static final double ALGAE_LOW = .2;
         public static final double ALGAE_HIGH = .5;
@@ -98,13 +98,13 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 2;
 
         public static final double STABLE = 0;
-        public static final double GROUND = 9.5;
+        public static final double GROUND = 8;
 
         public static final double L1 = 7;
-        public static final double L2 = 33;
-        public static final double L3 = 53.5;
+        public static final double L2 = 34;
+        public static final double L3 = 54.5;
         public static final double L4 = 73.5;
-        public static final double HP = 65;
+        public static final double HP = 63;
 
         public static final double ALGAE_LOW = 10;
         public static final double ALGAE_HIGH = 10;
@@ -189,8 +189,8 @@ public final class Constants {
         public static final double WRIST_SUPPLY_CURRENT_LIMIT = 20;
         public static final boolean WRIST_INVERTED = false;
 
-        public static final double STABLE = 20;
-        public static final double GROUND = 190;
+        public static final double STABLE = 5;
+        public static final double GROUND = 198;
         public static final double L1 = 0;
         public static final double L2 = 66;
         public static final double L3 = 86;

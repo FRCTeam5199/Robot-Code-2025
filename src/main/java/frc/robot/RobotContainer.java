@@ -108,16 +108,12 @@ public class RobotContainer {
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
-
     private static int selectedReefTag = 0;
-
     private static List<Integer> reefTags = new ArrayList<>();
-
     private static boolean lockOnMode = false;
-
     public static State state = State.L1;
-
     private static Timer timer = new Timer();
+    private static boolean useAutoAlign = true;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -168,20 +164,13 @@ public class RobotContainer {
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
                 .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0))));
 
-        commandXboxController.a().onTrue(new InstantCommand(() -> RobotContainer.setState(State.GROUND)).alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)));
-        commandXboxController.b().onTrue(ScoreCommands.Arm.armL2().alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)));
-        commandXboxController.x().onTrue(ScoreCommands.Arm.armL3().alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)));
-        commandXboxController.y().onTrue(ScoreCommands.Arm.armL4().alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)));
+        commandXboxController.a().onTrue(new InstantCommand(() -> RobotContainer.setState(State.L1)));
+        commandXboxController.b().onTrue(ScoreCommands.Arm.armL2());
+        commandXboxController.x().onTrue(ScoreCommands.Arm.armL3());
+        commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
-                        .alongWith(
-                                // new ConditionalCommand(
-                                new ConditionalCommand(
-                                        ScoreCommands.Drive.autoAlignTeleop(selectedReefTag),
-                                        ScoreCommands.Drive.autoAlignTeleop(AprilTagSubsystem.getInstance().getClosestTagID()),
-                                        () -> lockOnMode)))
-                // null, // TODO: Go To Commands
-                // () -> true)))
+                        .alongWith(ScoreCommands.Drive.autoAlignTeleop()))
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
@@ -195,13 +184,12 @@ public class RobotContainer {
                                 intakeSubsystem::hasCoral
                         )));
 
-        // commandXboxController.rightTrigger()
-        //         .onTrue(ScoreCommands.Intake.intakeGround())
-        //         .onFalse(ScoreCommands.Stabling.intakeStable());
+//        commandXboxController.leftBumper().onTrue(Score.score())
+//                .onFalse(ScoreCommands.Stabling.stable());
+        commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround())
+                .onFalse(ScoreCommands.Stabling.groundIntakeStable());
 
-        commandXboxController.leftBumper().onTrue(Score.score())
-                .onFalse(ScoreCommands.Stabling.stable());
-        commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place().until(() -> !intakeSubsystem.hasCoral()))
+        commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
         commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
@@ -236,21 +224,29 @@ public class RobotContainer {
 //        operatorXboxController.rightTrigger().onTrue(new PositionCommand(elevatorSubsystem, 0)
 //                .andThen(new PositionCommand(armSubsystem, 0)));
 
-        commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP).onTrue(ScoreCommands.Intake.intakeHP())
-                .onFalse(ScoreCommands.Stabling.intakeStable()
-                        .alongWith(new ConditionalCommand(
-                                ScoreCommands.Intake.intakeSequence(),
-                                new VelocityCommand(intakeSubsystem, 0),
-                                intakeSubsystem::hasCoral
-                        )));
+//        commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP).onTrue(ScoreCommands.Intake.intakeHP())
+//                .onFalse(ScoreCommands.Stabling.intakeStable()
+//                        .alongWith(new ConditionalCommand(
+//                                ScoreCommands.Intake.intakeSequence(),
+//                                new VelocityCommand(intakeSubsystem, 0),
+//                                intakeSubsystem::hasCoral
+//                        )));
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1).onTrue(new InstantCommand(() -> RobotContainer.setState(State.L1)));
+        //Outtake
+        commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP)
+                .onTrue(ScoreCommands.Intake.reIntakeSequence());
+
+        //toggle auto align
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1)
+                .onTrue(new InstantCommand(RobotContainer::toggleUseAutoAlign));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armL2());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L3).onTrue(ScoreCommands.Arm.armL3());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armL4());
 
-        commandButtonPanel.button(ButtonPanelButtons.SETMODE_ALGAE).onTrue(new InstantCommand(() -> setState(State.ALGAE_HIGH)));
-        commandButtonPanel.button(ButtonPanelButtons.SETMODE_CORAL).onTrue(new InstantCommand(() -> setState(State.ALGAE_LOW)));
+        commandButtonPanel.button(ButtonPanelButtons.SETMODE_ALGAE)
+                .onTrue(new InstantCommand(() -> setState(State.ALGAE_HIGH)));
+        commandButtonPanel.button(ButtonPanelButtons.SETMODE_CORAL)
+                .onTrue(new InstantCommand(() -> setState(State.ALGAE_LOW)));
 
         commandButtonPanel.button(ButtonPanelButtons.MOVE_WRIST_INCREASE)
                 .onTrue(new InstantCommand(() -> wristSubsystem.setOffset(wristSubsystem.getOffset() + 1)));
@@ -267,6 +263,9 @@ public class RobotContainer {
 
         commandButtonPanel.button(ButtonPanelButtons.MOVE_CLIMB_INCREASE).onTrue(new InstantCommand(() -> climberSubsystem.setPercent(0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
         commandButtonPanel.button(ButtonPanelButtons.MOVE_CLIMB_DECREASE).onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-0.6))).onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+
+        commandButtonPanel.button(ButtonPanelButtons.AUX_LEFT).onTrue(new InstantCommand(this::setAutoAlignOffsetLeft));
+        commandButtonPanel.button(ButtonPanelButtons.AUX_RIGHT).onTrue(new InstantCommand(this::setAutoAlignOffsetRight));
 
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(0)).andThen(() -> setAutoAlignOffsetLeft()));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(0)).andThen(() -> setAutoAlignOffsetRight()));
@@ -450,7 +449,6 @@ public class RobotContainer {
     public static boolean aligned() {
         return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .02
                 && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .02;
-
     }
 
     public static void setState(State state) {
@@ -459,5 +457,13 @@ public class RobotContainer {
 
     public static State getState() {
         return state;
+    }
+
+    public static void toggleUseAutoAlign() {
+        useAutoAlign = !useAutoAlign;
+    }
+
+    public static boolean isUseAutoAlign() {
+        return useAutoAlign;
     }
 }

@@ -32,7 +32,6 @@ public final class Autos {
     private static PathPlannerAuto twoPieceBlueDHPBL4;
     private static PathPlannerAuto twoPieceBlueKHPTL4;
 
-
     private static PathPlannerAuto twoPieceRedHHPBL4;
     private static PathPlannerAuto twoPieceRedGHPTL4;
     private static PathPlannerAuto twoPieceRedKHPBL4;
