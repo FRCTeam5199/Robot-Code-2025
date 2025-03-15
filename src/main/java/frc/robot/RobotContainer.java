@@ -132,7 +132,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
         NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwind());
         NamedCommands.registerCommand("INTAKE", new VelocityCommand(intakeSubsystem, 40)
-                .until(intakeSubsystem::hasCoral));
+                .until(intakeSubsystem::hasCoral).withTimeout(2));
         NamedCommands.registerCommand("INTAKESEQUENCE", ScoreCommands.Intake.intakeSequence());
         NamedCommands.registerCommand("HP", ScoreCommands.Intake.intakeHP());
         NamedCommands.registerCommand("DRIVE", ScoreCommands.Drive.autoMoveForwardBottom());
@@ -227,7 +227,7 @@ public class RobotContainer {
         operatorXboxController.povRight().onTrue(new PositionCommand(wristSubsystem, 30));
         operatorXboxController.povLeft().onTrue(new PositionCommand(wristSubsystem, 0));
 
-        operatorXboxController.rightTrigger().onTrue(new PositionCommand(elevatorSubsystem, .05)
+        operatorXboxController.rightTrigger().onTrue(new PositionCommand(elevatorSubsystem, .15)
                 .andThen(new PositionCommand(armSubsystem, 0).andThen(new PositionCommand(wristSubsystem, 0))));
 
         commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP).onTrue(ScoreCommands.Intake.intakeHP())
