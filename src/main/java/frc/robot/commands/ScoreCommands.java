@@ -406,12 +406,22 @@ public class ScoreCommands {
 
     public static class Intake {
         public static Command intakeGround() {
-            return new SequentialCommandGroup(
-                    new PositionCommand(armSubsystem, ArmConstants.GROUND),
-                    new ParallelCommandGroup(
-                            new PositionCommand(elevatorSubsystem, ElevatorConstants.GROUND, true),
-                            new PositionCommand(wristSubsystem, WristConstants.GROUND)
-                    )
+            return new ConditionalCommand(
+                    new SequentialCommandGroup(
+                            new PositionCommand(armSubsystem, ArmConstants.GROUND),
+                            new ParallelCommandGroup(
+                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.GROUND, true),
+                                    new PositionCommand(wristSubsystem, WristConstants.GROUND)
+                            )
+                    ),
+                    new SequentialCommandGroup(
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.GROUND, false),
+                            new ParallelCommandGroup(
+                                    new PositionCommand(armSubsystem, ArmConstants.GROUND),
+                                    new PositionCommand(wristSubsystem, WristConstants.GROUND)
+                            )
+                    ),
+                    () -> elevatorSubsystem.getMechM() < ElevatorConstants.GROUND
             ).alongWith(groundIntakeSequence());
         }
 

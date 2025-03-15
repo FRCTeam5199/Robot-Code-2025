@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.582,
-        "y": 7.16
+        "x": 7.072745901639344,
+        "y": 6.11685450819672
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7738032786885252,
-        "y": 6.980184426229509
+        "x": 6.864733328054883,
+        "y": 5.978179459140413
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6202868852459016,
-        "y": 5.194
+        "x": 5.1067622950819676,
+        "y": 5.386
       },
       "prevControl": {
-        "x": 3.3966297935845824,
-        "y": 5.305702754440525
+        "x": 5.341710650954076,
+        "y": 5.471435765771677
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -119.99999999999999
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
@@ -40,17 +45,6 @@
         "type": "named",
         "data": {
           "name": "ARML4"
-        }
-      }
-    },
-    {
-      "name": "INTAKESEQUENCE",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKESEQUENCE"
         }
       }
     },
@@ -76,13 +70,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.50016676655259
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "3 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -52.001
+    "rotation": 180.0
   },
   "useDefaultConstraints": false
 }

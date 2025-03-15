@@ -98,13 +98,13 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 2;
 
         public static final double STABLE = 0;
-        public static final double GROUND = 8;
+        public static final double GROUND = 10;
 
         public static final double L1 = 7;
         public static final double L2 = 34;
         public static final double L3 = 54.5;
         public static final double L4 = 73.5;
-        public static final double HP = 63;
+        public static final double HP = 68; //63
 
         public static final double ALGAE_LOW = 10;
         public static final double ALGAE_HIGH = 10;
@@ -190,7 +190,7 @@ public final class Constants {
         public static final boolean WRIST_INVERTED = false;
 
         public static final double STABLE = 5;
-        public static final double GROUND = 198;
+        public static final double GROUND = 203;
         public static final double L1 = 0;
         public static final double L2 = 66;
         public static final double L3 = 86;

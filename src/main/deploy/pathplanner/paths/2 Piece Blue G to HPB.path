@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.9,
-        "y": 3.8554829545454536
+        "x": 5.922,
+        "y": 3.851
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.295471938775512,
-        "y": 2.28105693413729
+        "x": 6.317471938775511,
+        "y": 2.2765739795918365
       },
       "isLocked": false,
       "linkedName": null
@@ -52,8 +52,19 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "INSTANTHP",
+      "waypointRelativePos": 0.03,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INSTANTHP"
+        }
+      }
+    },
+    {
       "name": "HP",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.04,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

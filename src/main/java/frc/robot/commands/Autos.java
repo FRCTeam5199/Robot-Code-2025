@@ -39,7 +39,8 @@ public final class Autos {
 
     private static PathPlannerAuto testBlue;
 
-    private static PathPlannerAuto threePieceBlueHPBL4;
+    private static PathPlannerAuto threePieceBlueBottomPBL4;
+    private static PathPlannerAuto threePieceBlueTopPBL4;
 //
 //
 //    private static PathPlannerAuto driveByTopBlue;
@@ -75,7 +76,8 @@ public final class Autos {
         twoPieceRedGHPTL4 = new PathPlannerAuto("2 Piece Red G Top L4");
         twoPieceRedKHPBL4 = new PathPlannerAuto("2 Piece K Red Bottom L4");
         twoPieceRedDHPTL4 = new PathPlannerAuto("2 Piece D Red Top L4");
-        threePieceBlueHPBL4 = new PathPlannerAuto("3 Piece Blue Bottom L4");
+        threePieceBlueBottomPBL4 = new PathPlannerAuto("3 Piece Blue Bottom L4");
+        threePieceBlueTopPBL4 = new PathPlannerAuto("3 Piece Blue Top L4");
         testBlue = new PathPlannerAuto("Test Blue");
 
 //        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom 2 L4");
@@ -89,19 +91,20 @@ public final class Autos {
         Shuffleboard.getTab("Autons").add("Red Autons", autonChooserRed).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(2, 1);
         Shuffleboard.getTab("Autons").add("Blue Autons", autonChooserBlue).withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0).withSize(2, 1);
 
-        autonChooserRed.addOption("1 Piece Red Right", onePieceRedHPTL4);
-        autonChooserRed.addOption("1 Piece Red Left", onePieceRedHPBL4);
-        autonChooserRed.addOption("2 Piece Red Right", twoPieceRedGHPTL4);
-        autonChooserRed.addOption("2 Piece Red Left", twoPieceRedHHPBL4);
+//        autonChooserRed.addOption("1 Piece Red Right", onePieceRedHPTL4);
+//        autonChooserRed.addOption("1 Piece Red Left", onePieceRedHPBL4);
+//        autonChooserRed.addOption("2 Piece Red Right", twoPieceRedGHPTL4);
+//        autonChooserRed.addOption("2 Piece Red Left", twoPieceRedHHPBL4);
         autonChooserRed.addOption("1 Piece Red Climber Drop", onePieceRedDrop);
 
-        autonChooserBlue.addOption("1 Piece Blue Left", onePieceBlueHPTL4);
-        autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueHPBL4);
+//        autonChooserBlue.addOption("1 Piece Blue Left", onePieceBlueHPTL4);
+//        autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueHPBL4);
         autonChooserBlue.addOption("2 Piece Blue Left", twoPieceBlueHHPTL4);
-        autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueGHPBL4);
+//        autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueGHPBL4);
         autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDrop);
-        autonChooserBlue.addOption("Test Blue", testBlue);
-        autonChooserBlue.addOption("3 Piece Blue Right", threePieceBlueHPBL4);
+//        autonChooserBlue.addOption("Test Blue", testBlue);
+        autonChooserBlue.addOption("3 Piece Blue Right", threePieceBlueBottomPBL4);
+        autonChooserBlue.addOption("3 Piece Blue Left", threePieceBlueTopPBL4);
         // autonChooserBlue.addOption("1 Piece Blue Dead Reckoning Left", onePieceBlueDeadReckoningL4);
 //        autonChooserBlue.addOption("3 Piece Blue Bottom 2 L4", threePieceBlueBottomL4);
 //        autonChooserBlue.addOption("Drive By Left", driveByTopBlue);

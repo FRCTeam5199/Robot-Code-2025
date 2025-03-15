@@ -7,11 +7,11 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red Start to K"
+            "pathName": "2 Piece Blue Start to G"
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red K to HPB"
+            "pathName": "2 Piece Blue G to HPB"
           }
         },
         {
@@ -48,13 +48,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "INTAKE"
+                  "name": "DRIVE"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVE"
+                  "name": "INTAKE"
                 }
               }
             ]
@@ -63,11 +63,11 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red HPB to L"
+            "pathName": "2 Piece Blue HPB to D"
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -94,7 +94,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red L to HPB"
+            "pathName": "2 Piece Blue D to HPB"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DRIVE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "INTAKE"
+                }
+              }
+            ]
           }
         }
       ]
