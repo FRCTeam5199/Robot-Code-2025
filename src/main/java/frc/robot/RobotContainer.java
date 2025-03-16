@@ -175,13 +175,10 @@ public class RobotContainer {
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
-        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP())
-                .onFalse(ScoreCommands.Stabling.intakeStable()
-                        .alongWith(new ConditionalCommand(
-                                ScoreCommands.Intake.intakeSequence(),
-                                new VelocityCommand(intakeSubsystem, 0),
-                                intakeSubsystem::hasCoral
-                        )));
+        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP().andThen(ScoreCommands.Intake.intakeSequence()))
+                .onFalse(ScoreCommands.Stabling.intakeStable().alongWith(
+                                ScoreCommands.Intake.intakeSequence().unless(intakeSubsystem::hasCoral))
+                        );
 
 //        commandXboxController.leftBumper().onTrue(Score.score())
 //                .onFalse(ScoreCommands.Stabling.stable());
@@ -344,6 +341,8 @@ public class RobotContainer {
                 DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
             autoAlignXOffset = -autoAlignXOffset;
 
+        
+
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
         currentStateRotation.position = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
@@ -433,9 +432,9 @@ public class RobotContainer {
 //        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
 //        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
-//        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
-//        System.out.println("Arm: " + armSubsystem.getDegrees());
-//        System.out.println("Wrist: " + wristSubsystem.getDegrees());
+       System.out.println("Elevator: " + elevatorSubsystem.getMechM());
+        System.out.println("Arm: " + armSubsystem.getDegrees());
+       System.out.println("Wrist: " + wristSubsystem.getDegrees());
 
 //        System.out.println("Elevator goal: " + elevatorSubsystem.getGoal());
 //        System.out.println("Wrist goal: " + wristSubsystem.getGoal());

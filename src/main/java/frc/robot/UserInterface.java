@@ -16,12 +16,14 @@ import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ScoreCommands.Score;
 
 public class UserInterface {
-    private static ShuffleboardTab autonTab, teleopTab, controlTab, testTab;
+    private static ShuffleboardTab autonTab, teleopTab, controlTab, testTab, tuningTab;
 
     public static Map<String, GenericEntry> autonComponents = new HashMap<String, GenericEntry>();
     public static Map<String, GenericEntry> teleopComponents = new HashMap<String, GenericEntry>();
     public static Map<String, GenericEntry> controlComponents = new HashMap<String, GenericEntry>();
     public static Map<String, GenericEntry> testComponents = new HashMap<String, GenericEntry>();
+    public static Map<String, GenericEntry> tuningComponents = new HashMap<String, GenericEntry>();
+
 
     private UserInterface() {
     }
@@ -36,6 +38,7 @@ public class UserInterface {
         autonTab = Shuffleboard.getTab("Auton");
         teleopTab = Shuffleboard.getTab("Teleop");
         controlTab = Shuffleboard.getTab("Control");
+        tuningTab = Shuffleboard.getTab("Tuning");
 
         if (!DriverStation.isFMSAttached()) {
             testTab = Shuffleboard.getTab("Test");
@@ -64,6 +67,8 @@ public class UserInterface {
         createTeleopComponent("Match Number", 0, BuiltInWidgets.kTextView, 2, 1, 1, 1, null);
         createTeleopComponent("Replay Match Number", 0, BuiltInWidgets.kTextView, 3, 1, 1, 1, null);
         createTeleopComponent("Match Time", 0, BuiltInWidgets.kTextView, 4, 1, 3, 1, null);
+
+        createTuningComponent("Arm Position", 0, BuiltInWidgets.kTextView, 4, 1, 3, 1, null);
 
 //        createControlComponent("Reset All", ScoreCommands.Zeroing.zeroSubsystems(), BuiltInWidgets.kCommand, 0, 0, 1, 1, null);
 //        createControlComponent("Reset Elevator", ScoreCommands.Zeroing.zeroElevator(), BuiltInWidgets.kCommand, 0, 1, 1, 1, null);
@@ -126,6 +131,9 @@ public class UserInterface {
         testComponents.putIfAbsent(name, testTab.add(name, defaultValue).withWidget(widget).withPosition(positionX, positionY).withSize(width, height).withProperties(properties).getEntry());
     }
 
+    public static void createTuningComponent(String name, Object defaultValue, WidgetType widget, int positionX, int positionY, int width, int height, Map<String, Object> properties) {
+        tuningComponents.putIfAbsent(name, testTab.add(name, defaultValue).withWidget(widget).withPosition(positionX, positionY).withSize(width, height).withProperties(properties).getEntry());
+    }
     public static GenericEntry getAutonComponent(String key) {
         return autonComponents.get(key);
     }
@@ -163,6 +171,12 @@ public class UserInterface {
             testComponents.replace(key, autonComponents.get(key));
         }
     }
+    
+    public static void setTuningComponent(String key, Object value) {
+        tuningComponents.get(key).setValue(value);
+    }
+
+
 
     public static void update() {
         Shuffleboard.update();
