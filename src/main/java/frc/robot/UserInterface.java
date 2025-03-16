@@ -23,7 +23,8 @@ public class UserInterface {
     public static Map<String, GenericEntry> controlComponents = new HashMap<String, GenericEntry>();
     public static Map<String, GenericEntry> testComponents = new HashMap<String, GenericEntry>();
 
-    private UserInterface() {}
+    private UserInterface() {
+    }
 
     public static void init() {
         initalizeTabs();
@@ -142,11 +143,15 @@ public class UserInterface {
     }
 
     public static void setAutonComponent(String key, Object value) {
-        if (autonComponents.get(key).setValue(value)) { autonComponents.replace(key, autonComponents.get(key)); }
+        if (autonComponents.get(key).setValue(value)) {
+            autonComponents.replace(key, autonComponents.get(key));
+        }
     }
 
     public static void setTeleopComponent(String key, Object value) {
-        if (teleopComponents.get(key).setValue(value)) { teleopComponents.replace(key, autonComponents.get(key)); }
+        if (teleopComponents.get(key).setValue(value)) {
+            teleopComponents.replace(key, autonComponents.get(key));
+        }
     }
 
     public static void setControlComponent(String key, Object value) {
@@ -154,7 +159,9 @@ public class UserInterface {
     }
 
     public static void setTestComponent(String key, Object value) {
-        if (testComponents.get(key).setValue(value)) { testComponents.replace(key, autonComponents.get(key)); }
+        if (testComponents.get(key).setValue(value)) {
+            testComponents.replace(key, autonComponents.get(key));
+        }
     }
 
     public static void update() {

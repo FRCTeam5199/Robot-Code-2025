@@ -3,38 +3,72 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4998086734693878,
-        "y": 7.214891581632653
+        "x": 1.534,
+        "y": 7.22
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.330058673469388,
-        "y": 6.437141581632653
+        "x": 1.7258032786885251,
+        "y": 7.040184426229509
       },
       "isLocked": false,
-      "linkedName": "HP Blue Top"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.8490340909090905,
-        "y": 5.361193181818181
+        "x": 3.6322745901639335,
+        "y": 5.182
       },
       "prevControl": {
-        "x": 3.1080340909090913,
-        "y": 6.053443181818181
+        "x": 3.4086174985026143,
+        "y": 5.293702754440526
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "K Blue"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ARML4",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ARML4"
+        }
+      }
+    },
+    {
+      "name": "INTAKESEQUENCE",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKESEQUENCE"
+        }
+      }
+    },
+    {
+      "name": "L4",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L4"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -48,7 +82,7 @@
   "folder": "3 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -52.943471810590374
+    "rotation": -52.001
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

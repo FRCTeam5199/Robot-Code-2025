@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4624999999999997,
-        "y": 7.255686475409835
+        "x": 1.343,
+        "y": 7.148
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6303278688524592,
-        "y": 7.027920081967213
+        "x": 1.5108278688524595,
+        "y": 6.920233606557378
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.728176229508197,
-        "y": 5.073924180327869
+        "x": 3.6202868852459016,
+        "y": 5.182
       },
       "prevControl": {
-        "x": 3.5895011804518893,
-        "y": 5.28193675391233
+        "x": 3.481611836189594,
+        "y": 5.390012573584461
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,12 +34,23 @@
   "eventMarkers": [
     {
       "name": "ARML4",
-      "waypointRelativePos": 0.5247641509433959,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
           "name": "ARML4"
+        }
+      }
+    },
+    {
+      "name": "INTAKESEQUENCE",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKESEQUENCE"
         }
       }
     }
