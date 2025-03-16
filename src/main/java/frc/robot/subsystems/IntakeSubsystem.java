@@ -17,6 +17,12 @@ public class IntakeSubsystem extends TemplateSubsystem {
     private boolean isAboveSpeed = false;
     private int isAboveSpeedCounter = 0;
 
+    public void setScoringAlgae(boolean scoringAlgae) {
+        isScoringAlgae = scoringAlgae;
+    }
+
+    private boolean isScoringAlgae = false;
+
     public IntakeSubsystem() {
         super(Type.ROLLER,
                 IntakeConstants.INTAKE_ID,
@@ -41,7 +47,6 @@ public class IntakeSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
 
-//        System.out.println("Intake: " + getMechVelocity());intakeSensor.getValue());
         hasCoral = intakeSensor.getValue() > 100;
 
         if (super.isAboveSpeed()) isAboveSpeedCounter++;
@@ -49,9 +54,12 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
         isAboveSpeed = isAboveSpeedCounter > 2;
 
-        if (RobotContainer.getState() == State.ALGAE_LOW
-                || RobotContainer.getState() == State.ALGAE_HIGH
-                || RobotContainer.getState() == State.BARGE) setVelocity(-60);
+//        System.out.println("Has Coral: " + hasCoral());
+
+//        if ((RobotContainer.getState() == State.ALGAE_LOW
+//                || RobotContainer.getState() == State.ALGAE_HIGH
+//                || RobotContainer.getState() == State.BARGE
+//                || RobotContainer.getState() == State.PROCESSOR) && !isScoringAlgae) setVelocity(-100);
     }
 
     public static IntakeSubsystem getInstance() {

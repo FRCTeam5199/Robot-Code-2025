@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants.ArmConstants;
 import frc.robot.constants.Constants.ElevatorConstants;
@@ -325,9 +324,9 @@ public class ScoreCommands {
                     climberSubsystem);
         }
 
-        public static Command slightUnwind() {
+        public static Command slightUnwindAuton() {
             return new InstantCommand(() -> climberSubsystem.setPercent(-1))
-                    .andThen(new WaitCommand(0.2)).andThen(() -> climberSubsystem.setPercent(0));
+                    .andThen(new WaitCommand(.4)).andThen(() -> climberSubsystem.setPercent(0));
         }
     }
 
@@ -396,7 +395,8 @@ public class ScoreCommands {
                             new InstantCommand(() -> elevatorSubsystem.setOffset(0)),
                             new InstantCommand(() -> armSubsystem.setOffset(0)),
                             new InstantCommand(() -> wristSubsystem.setOffset(0))
-                    )
+                    ),
+                    new PositionCommand(wristSubsystem, WristConstants.STABLE)
 //                    new ParallelCommandGroup(
 //                            new PositionCommand(elevatorSubsystem, .2, true),
 //                            new PositionCommand(armSubsystem, 7),
@@ -571,6 +571,11 @@ public class ScoreCommands {
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.BARGE)));
         }
 
+        public static Command armProcessor() {
+            return new PositionCommand(armSubsystem, ArmConstants.PROCESSOR)
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.PROCESSOR)));
+        }
+
         public static Command armStable() {
             return new SelectCommand<>(
                     Map.ofEntries(
@@ -647,6 +652,26 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() > ElevatorConstants.BARGE
+            );
+        }
+
+        public static Command scoreProcessor() {
+            return new ConditionalCommand(
+                    new SequentialCommandGroup( //Going down
+                            new ParallelCommandGroup(
+                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.PROCESSOR, false),
+                                    new PositionCommand(wristSubsystem, WristConstants.PROCESSOR)
+                            ),
+                            new PositionCommand(armSubsystem, ArmConstants.PROCESSOR)
+                    ),
+                    new SequentialCommandGroup( //Going up
+                            new PositionCommand(armSubsystem, ArmConstants.PROCESSOR),
+                            new ParallelCommandGroup(
+                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.PROCESSOR, true),
+                                    new PositionCommand(wristSubsystem, WristConstants.PROCESSOR)
+                            )
+                    ),
+                    () -> elevatorSubsystem.getMechM() > ElevatorConstants.PROCESSOR
             );
         }
 
@@ -747,10 +772,32 @@ public class ScoreCommands {
 
         public static Command place() {
             return new ConditionalCommand(
+                    //L1
                     new VelocityCommand(intakeSubsystem, 25),
-                    new VelocityCommand(intakeSubsystem, 50),
+                    new ConditionalCommand(
+                            //Barge
+                            new SequentialCommandGroup(
+                                    new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true)),
+                                    new InstantCommand(() -> intakeSubsystem.setVelocity(0)),
+                                    new PositionCommand(wristSubsystem, 100)
+                                            .until(() -> wristSubsystem.getDegrees() < 175),
+                                    new VelocityCommand(intakeSubsystem, 50)
+                            ),
+                            new ConditionalCommand(
+                                    //Processor
+                                    new SequentialCommandGroup(
+                                            new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true)),
+                                            new InstantCommand(() -> intakeSubsystem.setVelocity(50))
+                                    ),
+                                    //Everything else
+                                    new VelocityCommand(intakeSubsystem, 50),
+                                    () -> RobotContainer.getState() == State.PROCESSOR
+                            ),
+                            () -> RobotContainer.getState() == State.BARGE
+                    ),
                     () -> RobotContainer.getState() == State.L1
             );
         }
+
     }
 }

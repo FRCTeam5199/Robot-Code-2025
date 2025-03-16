@@ -20,7 +20,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -128,7 +127,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.Drive.autoAlignRAuton()
                 .withTimeout(2));
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
-        NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwind());
+        NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwindAuton()
+                .andThen(ScoreCommands.Arm.armL4())
+                .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)));
         NamedCommands.registerCommand("INTAKE", new VelocityCommand(intakeSubsystem, 40)
                 .until(intakeSubsystem::hasCoral));
         NamedCommands.registerCommand("INTAKESEQUENCE", ScoreCommands.Intake.intakeSequence());
@@ -188,7 +189,8 @@ public class RobotContainer {
                 .onFalse(ScoreCommands.Stabling.groundIntakeStable());
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
-                .onFalse(new VelocityCommand(intakeSubsystem, 0));
+                .onFalse(new VelocityCommand(intakeSubsystem, 0)
+                        .beforeStarting(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(false))));
 
         commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
 
@@ -197,16 +199,21 @@ public class RobotContainer {
 //        commandXboxController.povLeft().onTrue(new VelocityCommand(intakeSubsystem, -50));
 //        commandXboxController.povRight().onTrue(new VelocityCommand(intakeSubsystem, -50));
 
-        commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
-        commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
+//        commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
+//        commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
 
-        commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP).onTrue(ScoreCommands.Intake.intakeHP())
-                .onFalse(ScoreCommands.Stabling.intakeStable()
-                        .alongWith(new ConditionalCommand(
-                                ScoreCommands.Intake.intakeSequence(),
-                                new VelocityCommand(intakeSubsystem, 0),
-                                intakeSubsystem::hasCoral
-                        )));
+        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(1)))
+                .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-1)))
+                .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+
+//        commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP).onTrue(ScoreCommands.Intake.intakeHP())
+//                .onFalse(ScoreCommands.Stabling.intakeStable()
+//                        .alongWith(new ConditionalCommand(
+//                                ScoreCommands.Intake.intakeSequence(),
+//                                new VelocityCommand(intakeSubsystem, 0),
+//                                intakeSubsystem::hasCoral
+//                        )));
 
         //Outtake
         commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP)
@@ -257,7 +264,7 @@ public class RobotContainer {
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
                 .onTrue(ScoreCommands.Arm.armBarge());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-                .onTrue(ScoreCommands.Arm.armBarge());
+                .onTrue(ScoreCommands.Arm.armProcessor());
 
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(0)).andThen(() -> setAutoAlignOffsetLeft()));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(0)).andThen(() -> setAutoAlignOffsetRight()));

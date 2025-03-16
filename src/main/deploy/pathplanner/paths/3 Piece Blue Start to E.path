@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.130737704918032,
-        "y": 2.712
+        "x": 5.058811475409836,
+        "y": 2.688
       },
       "prevControl": {
-        "x": 5.478381147540983,
-        "y": 2.5561598360655737
+        "x": 5.406454918032787,
+        "y": 2.5321598360655737
       },
       "nextControl": null,
       "isLocked": false,
@@ -37,17 +37,6 @@
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
-    {
-      "name": "ARML4",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ARML4"
-        }
-      }
-    },
     {
       "name": "UNWIND",
       "waypointRelativePos": 0,
