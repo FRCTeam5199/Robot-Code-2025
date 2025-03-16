@@ -584,8 +584,8 @@ public class ScoreCommands {
                             Map.entry(State.L3, armL3()),
                             Map.entry(State.L4, armL4()),
                             Map.entry(State.ALGAE_LOW, armAlgaeLow()),
-                            Map.entry(State.ALGAE_HIGH, armAlgaeHigh()),
-                            Map.entry(State.BARGE, armBarge())
+                            Map.entry(State.ALGAE_HIGH, armAlgaeHigh())
+//                            Map.entry(State.BARGE, armBarge())
                     ),
                     RobotContainer::getState
             );
@@ -763,38 +763,43 @@ public class ScoreCommands {
                             Map.entry(State.L3, scoreL3()),
                             Map.entry(State.L4, scoreL4()),
                             Map.entry(State.ALGAE_LOW, removeAlgaeLow()),
-                            Map.entry(State.ALGAE_HIGH, removeAlgaeHigh()),
-                            Map.entry(State.BARGE, scoreBarge())
+                            Map.entry(State.ALGAE_HIGH, removeAlgaeHigh())
+//                            Map.entry(State.BARGE, scoreBarge())
                     ),
                     RobotContainer::getState
             );
         }
 
         public static Command place() {
+//            return new ConditionalCommand(
+//                    //L1
+//                    new VelocityCommand(intakeSubsystem, 25),
+//                    new ConditionalCommand(
+//                            //Barge
+//                            new SequentialCommandGroup(
+//                                    new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true)),
+//                                    new InstantCommand(() -> intakeSubsystem.setVelocity(0)),
+//                                    new PositionCommand(wristSubsystem, 100)
+//                                            .until(() -> wristSubsystem.getDegrees() < 175),
+//                                    new VelocityCommand(intakeSubsystem, 50)
+//                            ),
+//                            new ConditionalCommand(
+//                                    //Processor
+//                                    new SequentialCommandGroup(
+//                                            new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true)),
+//                                            new InstantCommand(() -> intakeSubsystem.setVelocity(50))
+//                                    ),
+//                                    //Everything else
+//                                    new VelocityCommand(intakeSubsystem, 50),
+//                                    () -> RobotContainer.getState() == State.PROCESSOR
+//                            ),
+//                            () -> RobotContainer.getState() == State.BARGE
+//                    ),
+//                    () -> RobotContainer.getState() == State.L1
+//            );
             return new ConditionalCommand(
-                    //L1
                     new VelocityCommand(intakeSubsystem, 25),
-                    new ConditionalCommand(
-                            //Barge
-                            new SequentialCommandGroup(
-                                    new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true)),
-                                    new InstantCommand(() -> intakeSubsystem.setVelocity(0)),
-                                    new PositionCommand(wristSubsystem, 100)
-                                            .until(() -> wristSubsystem.getDegrees() < 175),
-                                    new VelocityCommand(intakeSubsystem, 50)
-                            ),
-                            new ConditionalCommand(
-                                    //Processor
-                                    new SequentialCommandGroup(
-                                            new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true)),
-                                            new InstantCommand(() -> intakeSubsystem.setVelocity(50))
-                                    ),
-                                    //Everything else
-                                    new VelocityCommand(intakeSubsystem, 50),
-                                    () -> RobotContainer.getState() == State.PROCESSOR
-                            ),
-                            () -> RobotContainer.getState() == State.BARGE
-                    ),
+                    new VelocityCommand(intakeSubsystem, 40),
                     () -> RobotContainer.getState() == State.L1
             );
         }

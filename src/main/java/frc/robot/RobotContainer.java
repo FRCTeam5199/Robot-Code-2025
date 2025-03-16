@@ -118,14 +118,14 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        NamedCommands.registerCommand("L4", Score.scoreL4());
+        NamedCommands.registerCommand("L4", Score.scoreL4().withTimeout(3));
         NamedCommands.registerCommand("ARML4", ScoreCommands.Arm.armL4()
                 .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)
                         .onlyIf(() -> wristSubsystem.getDegrees() < 5)));
         NamedCommands.registerCommand("ALIGNL", ScoreCommands.Drive.autoAlignLAuton()
-                .withTimeout(2));
+                .withTimeout(3));
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.Drive.autoAlignRAuton()
-                .withTimeout(2));
+                .withTimeout(3));
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
         NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwindAuton()
                 .andThen(ScoreCommands.Arm.armL4())
@@ -175,10 +175,10 @@ public class RobotContainer {
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
-        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP().andThen(ScoreCommands.Intake.intakeSequence()))
-                .onFalse(ScoreCommands.Stabling.intakeStable().alongWith(
-                                ScoreCommands.Intake.intakeSequence().unless(intakeSubsystem::hasCoral))
-                        );
+        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
+                        .andThen(ScoreCommands.Intake.intakeSequence()))
+                .onFalse(ScoreCommands.Stabling.intakeStable()
+                        .alongWith(ScoreCommands.Intake.intakeSequence()));
 
 //        commandXboxController.leftBumper().onTrue(Score.score())
 //                .onFalse(ScoreCommands.Stabling.stable());
@@ -258,10 +258,10 @@ public class RobotContainer {
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-                .onTrue(ScoreCommands.Arm.armBarge());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-                .onTrue(ScoreCommands.Arm.armProcessor());
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
+//                .onTrue(ScoreCommands.Arm.armBarge());
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
+//                .onTrue(ScoreCommands.Arm.armProcessor());
 
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(0)).andThen(() -> setAutoAlignOffsetLeft()));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(0)).andThen(() -> setAutoAlignOffsetRight()));
@@ -341,7 +341,6 @@ public class RobotContainer {
                 DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
             autoAlignXOffset = -autoAlignXOffset;
 
-        
 
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
@@ -432,9 +431,9 @@ public class RobotContainer {
 //        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
 //        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
-       System.out.println("Elevator: " + elevatorSubsystem.getMechM());
+        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
         System.out.println("Arm: " + armSubsystem.getDegrees());
-       System.out.println("Wrist: " + wristSubsystem.getDegrees());
+        System.out.println("Wrist: " + wristSubsystem.getDegrees());
 
 //        System.out.println("Elevator goal: " + elevatorSubsystem.getGoal());
 //        System.out.println("Wrist goal: " + wristSubsystem.getGoal());
