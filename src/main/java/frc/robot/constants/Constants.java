@@ -75,6 +75,7 @@ public final class Constants {
 
         public static final double ALGAE_LOW = .13;
         public static final double ALGAE_HIGH = .45;
+        public static final double BARGE = 1.002;
     }
 
     public static class ArmConstants {
@@ -107,7 +108,7 @@ public final class Constants {
 
         public static final double ALGAE_LOW = 60;
         public static final double ALGAE_HIGH = 70;
-
+        public static final double BARGE = 90;
 
         public static final double ARM_MIN = 0.61524;
         public static final double ARM_MAX = 180; //fix
@@ -197,6 +198,7 @@ public final class Constants {
 
         public static final double ALGAE_LOW = 200;
         public static final double ALGAE_HIGH = 200;
+        public static final double BARGE = 200;
 
         public static final boolean WRIST_BRAKE = true;
 

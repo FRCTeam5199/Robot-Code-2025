@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.1840473768353,
-        "y": 1.4581277325094861
+        "x": 15.787807377049178,
+        "y": 0.9022028688524597
       },
       "isLocked": false,
-      "linkedName": "HP Red Bottom"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 12.539139344262294,
-        "y": 2.71234631147541
+        "x": 13.64200819672131,
+        "y": 2.7
       },
       "prevControl": {
-        "x": 13.11121387468395,
-        "y": 2.245300930802201
+        "x": 13.845799180327868,
+        "y": 2.4962090163934434
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "K Red"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,6 +42,17 @@
           "name": "ARML4"
         }
       }
+    },
+    {
+      "name": "INTAKESEQUENCE",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKESEQUENCE"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -54,7 +65,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "2 Piece Red Paths",

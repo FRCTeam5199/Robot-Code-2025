@@ -119,8 +119,6 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        NamedCommands.registerCommand("ELEVATORSTABLE", new InstantCommand(()
-                -> elevatorSubsystem.setPosition(0)));
         NamedCommands.registerCommand("L4", Score.scoreL4());
         NamedCommands.registerCommand("ARML4", ScoreCommands.Arm.armL4()
                 .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)
@@ -199,8 +197,8 @@ public class RobotContainer {
 //        commandXboxController.povLeft().onTrue(new VelocityCommand(intakeSubsystem, -50));
 //        commandXboxController.povRight().onTrue(new VelocityCommand(intakeSubsystem, -50));
 
-        commandXboxController.povUp().onTrue(new InstantCommand(() -> setState(State.ALGAE_HIGH)));
-        commandXboxController.povDown().onTrue(new InstantCommand(() -> setState(State.ALGAE_LOW)));
+        commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
+        commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
 
         commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP).onTrue(ScoreCommands.Intake.intakeHP())
                 .onFalse(ScoreCommands.Stabling.intakeStable()
@@ -220,9 +218,9 @@ public class RobotContainer {
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armL4());
 
         commandButtonPanel.button(ButtonPanelButtons.SETMODE_ALGAE)
-                .onTrue(new InstantCommand(() -> setState(State.ALGAE_HIGH)));
+                .onTrue(ScoreCommands.Arm.armAlgaeHigh());
         commandButtonPanel.button(ButtonPanelButtons.SETMODE_CORAL)
-                .onTrue(new InstantCommand(() -> setState(State.ALGAE_LOW)));
+                .onTrue(ScoreCommands.Arm.armAlgaeLow());
 
         commandButtonPanel.button(ButtonPanelButtons.MOVE_WRIST_INCREASE)
                 .onTrue(new InstantCommand(() -> wristSubsystem.setOffset(wristSubsystem.getOffset() + 1)));
@@ -255,6 +253,11 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
+
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
+                .onTrue(ScoreCommands.Arm.armBarge());
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
+                .onTrue(ScoreCommands.Arm.armBarge());
 
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(0)).andThen(() -> setAutoAlignOffsetLeft()));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(0)).andThen(() -> setAutoAlignOffsetRight()));

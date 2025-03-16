@@ -3,8 +3,10 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.AnalogInput;
 
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants.IntakeConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
+import frc.robot.utility.State;
 import frc.robot.utility.Type;
 
 public class IntakeSubsystem extends TemplateSubsystem {
@@ -46,6 +48,10 @@ public class IntakeSubsystem extends TemplateSubsystem {
         else isAboveSpeedCounter = 0;
 
         isAboveSpeed = isAboveSpeedCounter > 2;
+
+        if (RobotContainer.getState() == State.ALGAE_LOW
+                || RobotContainer.getState() == State.ALGAE_HIGH
+                || RobotContainer.getState() == State.BARGE) setVelocity(-60);
     }
 
     public static IntakeSubsystem getInstance() {

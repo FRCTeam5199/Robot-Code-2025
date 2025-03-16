@@ -236,10 +236,13 @@ public class ScoreCommands {
                                     .until(() -> elevatorSubsystem.isAtBottom()
                                             && elevatorSubsystem.getMechM() < .05),
                             new PositionCommand(wristSubsystem, WristConstants.STABLE)
+                                    .onlyIf(() -> (RobotContainer.getState() != State.ALGAE_HIGH
+                                            && RobotContainer.getState() != State.ALGAE_LOW
+                                            && RobotContainer.getState() != State.BARGE))
                     ),
                     new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
-            ).alongWith(new VelocityCommand(intakeSubsystem, 0));
+            );
         }
 
         public static Command groundIntakeStable() {
@@ -252,7 +255,7 @@ public class ScoreCommands {
                     ),
                     new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
-            ).alongWith(new VelocityCommand(intakeSubsystem, 0));
+            );
         }
 
         public static Command stableL4() {
@@ -266,7 +269,7 @@ public class ScoreCommands {
                     ),
                     new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
-            ).alongWith(new VelocityCommand(intakeSubsystem, 0));
+            );
         }
 
         public static Command stable() {
@@ -530,23 +533,42 @@ public class ScoreCommands {
         }
 
         public static Command armL1() {
-            return new PositionCommand(armSubsystem, ArmConstants.L1).alongWith(
-                    new InstantCommand(() -> RobotContainer.setState(State.L1)));
+            return new PositionCommand(armSubsystem, ArmConstants.L1)
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1)))
+                    .alongWith(new VelocityCommand(intakeSubsystem, 0));
         }
 
         public static Command armL2() {
-            return new PositionCommand(armSubsystem, ArmConstants.L2).alongWith(
-                    new InstantCommand(() -> RobotContainer.setState(State.L2)));
+            return new PositionCommand(armSubsystem, ArmConstants.L2)
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L2)))
+                    .alongWith(new VelocityCommand(intakeSubsystem, 0));
         }
 
         public static Command armL3() {
             return new PositionCommand(armSubsystem, ArmConstants.L3)
-                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)));
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)))
+                    .alongWith(new VelocityCommand(intakeSubsystem, 0));
         }
 
         public static Command armL4() {
             return new PositionCommand(armSubsystem, ArmConstants.L4)
-                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)))
+                    .alongWith(new VelocityCommand(intakeSubsystem, 0));
+        }
+
+        public static Command armAlgaeLow() {
+            return new PositionCommand(armSubsystem, ArmConstants.ALGAE_LOW)
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.ALGAE_LOW)));
+        }
+
+        public static Command armAlgaeHigh() {
+            return new PositionCommand(armSubsystem, ArmConstants.ALGAE_HIGH)
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.ALGAE_HIGH)));
+        }
+
+        public static Command armBarge() {
+            return new PositionCommand(armSubsystem, ArmConstants.BARGE)
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.BARGE)));
         }
 
         public static Command armStable() {
@@ -555,7 +577,10 @@ public class ScoreCommands {
                             Map.entry(State.L1, armL1()),
                             Map.entry(State.L2, armL2()),
                             Map.entry(State.L3, armL3()),
-                            Map.entry(State.L4, armL4())
+                            Map.entry(State.L4, armL4()),
+                            Map.entry(State.ALGAE_LOW, armAlgaeLow()),
+                            Map.entry(State.ALGAE_HIGH, armAlgaeHigh()),
+                            Map.entry(State.BARGE, armBarge())
                     ),
                     RobotContainer::getState
             );
@@ -582,7 +607,7 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() > ElevatorConstants.ALGAE_HIGH
-            ).alongWith(new VelocityCommand(intakeSubsystem, -60));
+            );
         }
 
         public static Command removeAlgaeLow() {
@@ -602,7 +627,27 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() > ElevatorConstants.ALGAE_LOW
-            ).alongWith(new VelocityCommand(intakeSubsystem, -60));
+            );
+        }
+
+        public static Command scoreBarge() {
+            return new ConditionalCommand(
+                    new SequentialCommandGroup( //Going down
+                            new ParallelCommandGroup(
+                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.BARGE, false),
+                                    new PositionCommand(wristSubsystem, WristConstants.BARGE)
+                            ),
+                            new PositionCommand(armSubsystem, ArmConstants.BARGE)
+                    ),
+                    new SequentialCommandGroup( //Going up
+                            new PositionCommand(armSubsystem, ArmConstants.BARGE),
+                            new ParallelCommandGroup(
+                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.BARGE, true),
+                                    new PositionCommand(wristSubsystem, WristConstants.BARGE)
+                            )
+                    ),
+                    () -> elevatorSubsystem.getMechM() > ElevatorConstants.BARGE
+            );
         }
 
         public static Command scoreL1() {
@@ -692,8 +737,9 @@ public class ScoreCommands {
                             Map.entry(State.L2, scoreL2()),
                             Map.entry(State.L3, scoreL3()),
                             Map.entry(State.L4, scoreL4()),
+                            Map.entry(State.ALGAE_LOW, removeAlgaeLow()),
                             Map.entry(State.ALGAE_HIGH, removeAlgaeHigh()),
-                            Map.entry(State.ALGAE_LOW, removeAlgaeLow())
+                            Map.entry(State.BARGE, scoreBarge())
                     ),
                     RobotContainer::getState
             );
