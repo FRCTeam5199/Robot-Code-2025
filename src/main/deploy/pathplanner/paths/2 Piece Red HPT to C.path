@@ -12,20 +12,20 @@
         "y": 6.199744897959183
       },
       "isLocked": false,
-      "linkedName": "HP Red Top"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 13.878826530612246,
-        "y": 5.08829719387755
+        "x": 13.917725409836065,
+        "y": 5.158
       },
       "prevControl": {
-        "x": 14.759311224489798,
-        "y": 5.879241071428571
+        "x": 14.798210103713616,
+        "y": 5.948943877551021
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C Red"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

@@ -7,80 +7,24 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red Start to H"
+            "pathName": "2 Piece Blue Start to H"
           }
         },
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ALIGNL"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "OUTTAKE"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2 Piece Red H to HPB"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "INTAKE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "DRIVETOP"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2 Piece Red HPB to K"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "ALIGNR"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
               }
             ]
           }
@@ -94,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red K to HPB"
+            "pathName": "2 Piece Blue H to HPT"
           }
         },
         {
@@ -104,13 +48,69 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "INTAKE"
+                  "name": "DRIVETOP"
                 }
               },
               {
                 "type": "named",
                 "data": {
+                  "name": "INTAKE"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue HPT to L"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNR"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue L to HPT"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
                   "name": "DRIVETOP"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "INTAKE"
                 }
               }
             ]

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.253875,
-        "y": 1.9563358070500918
+        "x": 1.3865770633790053,
+        "y": 1.1524324285319398
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.596,
-        "y": 3.0
+        "x": 3.668237704918033,
+        "y": 2.916
       },
       "prevControl": {
-        "x": 3.143233606557377,
-        "y": 2.628555327868852
+        "x": 3.4884221311475407,
+        "y": 2.71234631147541
       },
       "nextControl": null,
       "isLocked": false,
@@ -68,7 +68,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.620873988631644
+    "rotation": 59.621
   },
   "reversed": false,
   "folder": "2 Piece Blue Paths",

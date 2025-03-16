@@ -11,13 +11,15 @@ public class IntakeSubsystem extends TemplateSubsystem {
     public static IntakeSubsystem intakeSubsystem;
     public TalonFX intake_motor = new TalonFX(IntakeConstants.INTAKE_ID);
     public AnalogInput intakeSensor;
-    public boolean hasCoral;
+    private boolean hasCoral;
+    private boolean isAboveSpeed = false;
+    private int isAboveSpeedCounter = 0;
 
     public IntakeSubsystem() {
         super(Type.ROLLER,
                 IntakeConstants.INTAKE_ID,
                 IntakeConstants.INTAKE_CONSTRAINTS,
-                IntakeConstants.INTAKE_FEEDFORWARD,
+                IntakeConstants.INTAKE_FF,
                 IntakeConstants.INTAKE_LOWER_TOLERANCE,
                 IntakeConstants.INTAKE_UPPER_TOLERANCE,
                 IntakeConstants.INTAKE_GEAR_RATIO,
@@ -39,6 +41,11 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
 //        System.out.println("Intake: " + getMechVelocity());intakeSensor.getValue());
         hasCoral = intakeSensor.getValue() > 100;
+
+        if (super.isAboveSpeed()) isAboveSpeedCounter++;
+        else isAboveSpeedCounter = 0;
+
+        isAboveSpeed = isAboveSpeedCounter > 2;
     }
 
     public static IntakeSubsystem getInstance() {
@@ -66,5 +73,10 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
     public boolean hasCoralCurrent() {
         return getSupplyCurrent() > 10;
+    }
+
+    @Override
+    public boolean isAboveSpeed() {
+        return isAboveSpeed;
     }
 }

@@ -215,6 +215,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     public void setPercent(double percent) {
         followLastMechProfile = false;
+        if (percent > 1) percent /= 100;
         motor.set(percent);
     }
 
@@ -378,6 +379,11 @@ public class TemplateSubsystem extends SubsystemBase {
                 return false;
             }
         }
+    }
+
+    public boolean isAboveSpeed() {
+        if (type != Type.ROLLER) return false;
+        return getMechVelocity() > goal;
     }
 
 

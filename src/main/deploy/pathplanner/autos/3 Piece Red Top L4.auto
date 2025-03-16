@@ -7,63 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue Start to J"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ALIGNR"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "OUTTAKE"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Blue J to HPT"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "DRIVETOP"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "INTAKE"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Blue HPT to L"
+            "pathName": "3 Piece Red Start to E"
           }
         },
         {
@@ -94,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue L to HPT"
+            "pathName": "3 Piece Red E to HPT"
           }
         },
         {
@@ -119,7 +63,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue HPT to K"
+            "pathName": "3 Piece Red HPT to D"
           }
         },
         {
@@ -129,7 +73,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "ALIGNL"
                 }
               },
               {
@@ -150,7 +94,63 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue K to HPT"
+            "pathName": "3 Piece Red D to HPT"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DRIVETOP"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "INTAKE"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Red HPT to C"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Red C to HPT"
           }
         },
         {

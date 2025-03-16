@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue Start to H"
+            "pathName": "2 Piece Red Start to G"
           }
         },
         {
@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "ALIGNL"
                 }
               },
               {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue H to HPT"
+            "pathName": "2 Piece Red G to HPT"
           }
         },
         {
@@ -48,13 +48,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "INTAKE"
+                  "name": "DRIVETOP"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVETOP"
+                  "name": "INTAKE"
                 }
               }
             ]
@@ -63,23 +63,23 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue HPT to L"
+            "pathName": "2 Piece Red HPT to C"
           }
         },
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "L4"
+                  "name": "ALIGNL"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "L4"
                 }
               }
             ]
@@ -94,7 +94,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue L to HPT"
+            "pathName": "2 Piece Red C to HPT"
           }
         },
         {
@@ -104,13 +104,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "INTAKE"
+                  "name": "DRIVETOP"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVETOP"
+                  "name": "INTAKE"
                 }
               }
             ]

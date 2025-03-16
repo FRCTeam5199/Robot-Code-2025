@@ -1,10 +1,5 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.commandSwerveDrivetrain;
-import static frc.robot.RobotContainer.rotationVelocity;
-import static frc.robot.RobotContainer.xVelocity;
-import static frc.robot.RobotContainer.yVelocity;
-
 import java.util.Map;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -22,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants.ArmConstants;
 import frc.robot.constants.Constants.ElevatorConstants;
@@ -36,6 +32,8 @@ import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
+
+import static frc.robot.RobotContainer.*;
 
 public class ScoreCommands {
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -56,14 +54,15 @@ public class ScoreCommands {
 
     public static class Drive {
         public static Command autoAlignTeleop() {
-            return new FunctionalCommand(
-                    () -> commandSwerveDrivetrain.resetPose(
-                            new Pose2d(
-                                    new Translation2d(commandSwerveDrivetrain.getPose().getX(),
-                                            commandSwerveDrivetrain.getPose().getY()),
-                                    new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-                                            .getClosestTagID()))))),
-                    () -> {
+            return new ConditionalCommand(
+                    new FunctionalCommand(
+                            () -> commandSwerveDrivetrain.resetPose(
+                                    new Pose2d(
+                                            new Translation2d(commandSwerveDrivetrain.getPose().getX(),
+                                                    commandSwerveDrivetrain.getPose().getY()),
+                                            new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                                    .getClosestTagID()))))),
+                            () -> {
                         /*if ((!elevatorSubsystem.isMechAtGoal(false)
                                 || !armSubsystem.isMechAtGoal(false)
                                 || !wristSubsystem.isMechAtGoal(false))
@@ -73,34 +72,41 @@ public class ScoreCommands {
                                             .withVelocityY(yVelocity)
                                             .withRotationalRate(rotationVelocity));
                         else*/
-                        commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(xVelocity)
-                                        .withVelocityY(yVelocity)
-                                        .withRotationalRate(rotationVelocity));
-                    },
-                    (interrupted) -> {
-                        commandSwerveDrivetrain.resetPose(
-                                new Pose2d(
-                                        new Translation2d(commandSwerveDrivetrain.getPose().getX(),
-                                                commandSwerveDrivetrain.getPose().getY()),
-                                        new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-                                                .getPigeon2().getRotation2d().getDegrees() + (DriverStation.getAlliance().isPresent()
-                                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 0 : 180)))));
-                        commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(0)
-                                        .withVelocityY(0)
-                                        .withRotationalRate(0));
-                    },
-                    RobotContainer::aligned,
-                    commandSwerveDrivetrain).onlyIf(RobotContainer::isUseAutoAlign);
+                                commandSwerveDrivetrain.setControl(
+                                        drive.withVelocityX(xVelocity)
+                                                .withVelocityY(yVelocity)
+                                                .withRotationalRate(rotationVelocity));
+                            },
+                            (interrupted) -> {
+                                commandSwerveDrivetrain.resetPose(
+                                        new Pose2d(
+                                                new Translation2d(commandSwerveDrivetrain.getPose().getX(),
+                                                        commandSwerveDrivetrain.getPose().getY()),
+                                                new Rotation2d(Math.toRadians(commandSwerveDrivetrain
+                                                        .getPigeon2().getRotation2d().getDegrees() + (DriverStation.getAlliance().isPresent()
+                                                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 0 : 180)))));
+                                commandSwerveDrivetrain.setControl(
+                                        drive.withVelocityX(0)
+                                                .withVelocityY(0)
+                                                .withRotationalRate(0));
+                            },
+                            RobotContainer::aligned,
+                            commandSwerveDrivetrain
+                    ),
+                    commandSwerveDrivetrain.applyRequest(() -> drive
+                            .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+                            .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+                            .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate)),
+                    () -> RobotContainer.isUseAutoAlign()
+                            && (RobotContainer.getState() == State.L2
+                            || RobotContainer.getState() == State.L3
+                            || RobotContainer.getState() == State.L4));
         }
 
         public static Command autoAlignLAuton() {
             return new FunctionalCommand(
                     () -> {
-                        if (RobotContainer.autoAlignYOffset < 0) {
-                            RobotContainer.autoAlignYOffset = -RobotContainer.autoAlignYOffset;
-                        }
+                        RobotContainer.setAutoAlignOffsetLeft();
 
                         commandSwerveDrivetrain.resetPose(
                                 new Pose2d(
@@ -140,9 +146,7 @@ public class ScoreCommands {
         public static Command autoAlignRAuton() {
             return new FunctionalCommand(
                     () -> {
-                        if (RobotContainer.autoAlignYOffset > 0) {
-                            RobotContainer.autoAlignYOffset = -RobotContainer.autoAlignYOffset;
-                        }
+                        RobotContainer.setAutoAlignOffsetRight();
 
                         commandSwerveDrivetrain.resetPose(
                                 new Pose2d(
@@ -181,9 +185,16 @@ public class ScoreCommands {
             return new FunctionalCommand(
                     () -> {
                     },
-                    () -> RobotContainer.commandSwerveDrivetrain.setControl(
-                            drive.withVelocityX(-.5)
-                                    .withVelocityY(-.5)),
+                    () -> {
+                        if (DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue))
+                            RobotContainer.commandSwerveDrivetrain.setControl(
+                                    drive.withVelocityX(-.5)
+                                            .withVelocityY(-.5));
+                        else RobotContainer.commandSwerveDrivetrain.setControl(
+                                drive.withVelocityX(-.5)
+                                        .withVelocityY(.5));
+                    },
                     (interrupted) -> RobotContainer.commandSwerveDrivetrain.setControl(
                             drive.withVelocityX(0)
                                     .withVelocityY(0)),
@@ -196,10 +207,17 @@ public class ScoreCommands {
             return new FunctionalCommand(
                     () -> {
                     },
-                    () -> RobotContainer.commandSwerveDrivetrain.setControl(
-                            drive.withVelocityX(-0.5)
-                                    .withVelocityY(0.5)),
-                    (bool) -> {
+                    () -> {
+                        if (DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue))
+                            RobotContainer.commandSwerveDrivetrain.setControl(
+                                    drive.withVelocityX(-0.5)
+                                            .withVelocityY(0.5));
+                        else RobotContainer.commandSwerveDrivetrain.setControl(
+                                drive.withVelocityX(-0.5)
+                                        .withVelocityY(-0.5));
+                    },
+                    (interrupted) -> {
                         RobotContainer.commandSwerveDrivetrain.setControl(
                                 drive.withVelocityX(0)
                                         .withVelocityY(0));
@@ -213,42 +231,41 @@ public class ScoreCommands {
     public static class Stabling {
         public static Command regularStable() {
             return new SequentialCommandGroup(
-                    new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
-                            .until(() -> elevatorSubsystem.isAtBottom()
-                                    && elevatorSubsystem.getMechM() < .05),
-                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     new ParallelCommandGroup(
-                            new PositionCommand(wristSubsystem, WristConstants.STABLE),
-                            Arm.armStable()
-                    )
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
+                                    .until(() -> elevatorSubsystem.isAtBottom()
+                                            && elevatorSubsystem.getMechM() < .05),
+                            new PositionCommand(wristSubsystem, WristConstants.STABLE)
+                    ),
+                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
+                    Arm.armStable()
             ).alongWith(new VelocityCommand(intakeSubsystem, 0));
         }
 
         public static Command groundIntakeStable() {
             return new SequentialCommandGroup(
-                    new PositionCommand(wristSubsystem, WristConstants.L2),
-                    new PositionCommand(elevatorSubsystem, 0, false)
-                            .until(() -> elevatorSubsystem.isAtBottom()
-                                    && elevatorSubsystem.getMechM() < .05),
-                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     new ParallelCommandGroup(
-                            new PositionCommand(wristSubsystem, WristConstants.STABLE),
-                            Arm.armStable()
-                    )
+                            new PositionCommand(elevatorSubsystem, 0, false)
+                                    .until(() -> elevatorSubsystem.isAtBottom()
+                                            && elevatorSubsystem.getMechM() < .05),
+                            new PositionCommand(wristSubsystem, WristConstants.STABLE)
+                    ),
+                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
+                    Arm.armStable()
             ).alongWith(new VelocityCommand(intakeSubsystem, 0));
         }
 
         public static Command stableL4() {
             return new SequentialCommandGroup(
                     new PositionCommand(wristSubsystem, WristConstants.PREVIOUS_L4),
-                    new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
-                            .until(() -> elevatorSubsystem.isAtBottom()
-                                    && elevatorSubsystem.getMechM() < .05),
-                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     new ParallelCommandGroup(
-                            new PositionCommand(wristSubsystem, WristConstants.STABLE),
-                            Arm.armStable()
-                    )
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
+                                    .until(() -> elevatorSubsystem.isAtBottom()
+                                            && elevatorSubsystem.getMechM() < .05),
+                            new PositionCommand(wristSubsystem, WristConstants.STABLE)
+                    ),
+                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
+                    Arm.armStable()
             ).alongWith(new VelocityCommand(intakeSubsystem, 0));
         }
 
@@ -282,7 +299,7 @@ public class ScoreCommands {
 
         public static Command wristandElevatorStable() {
             return new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
-                    .andThen(new PositionCommand(wristSubsystem, WristConstants.STABLE));
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.STABLE));
         }
     }
 
@@ -306,21 +323,8 @@ public class ScoreCommands {
         }
 
         public static Command slightUnwind() {
-            return new FunctionalCommand(
-                    () -> {
-                        timer.reset();
-                    },
-                    () -> climberSubsystem.drop(),
-                    (bool) -> climberSubsystem.stopDrop(),
-                    () -> {
-                        timer.start();
-                        if (timer.hasElapsed(0.25)) {
-                            timer.stop();
-                            return true;
-                        }
-                        return false;
-                    },
-                    climberSubsystem);
+            return new InstantCommand(() -> climberSubsystem.setPercent(-1))
+                    .andThen(new WaitCommand(0.2)).andThen(() -> climberSubsystem.setPercent(0));
         }
     }
 
@@ -373,6 +377,7 @@ public class ScoreCommands {
 
         public static Command zeroSubsystems() {
             return new SequentialCommandGroup(
+                    new PositionCommand(wristSubsystem, 0),
                     new ParallelCommandGroup(
                             zeroElevator(),
                             zeroArm()
@@ -388,8 +393,7 @@ public class ScoreCommands {
                             new InstantCommand(() -> elevatorSubsystem.setOffset(0)),
                             new InstantCommand(() -> armSubsystem.setOffset(0)),
                             new InstantCommand(() -> wristSubsystem.setOffset(0))
-                    ),
-                    new PositionCommand(wristSubsystem, WristConstants.STABLE)
+                    )
 //                    new ParallelCommandGroup(
 //                            new PositionCommand(elevatorSubsystem, .2, true),
 //                            new PositionCommand(armSubsystem, 7),
@@ -407,12 +411,10 @@ public class ScoreCommands {
     public static class Intake {
         public static Command intakeGround() {
             return new ConditionalCommand(
-                    new SequentialCommandGroup(
+                    new ParallelCommandGroup(
                             new PositionCommand(armSubsystem, ArmConstants.GROUND),
-                            new ParallelCommandGroup(
-                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.GROUND, true),
-                                    new PositionCommand(wristSubsystem, WristConstants.GROUND)
-                            )
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.GROUND, true),
+                            new PositionCommand(wristSubsystem, WristConstants.GROUND)
                     ),
                     new SequentialCommandGroup(
                             new PositionCommand(elevatorSubsystem, ElevatorConstants.GROUND, false),
@@ -464,19 +466,19 @@ public class ScoreCommands {
                     new VelocityCommand(intakeSubsystem, 60)
                             .until(intakeSubsystem::hasCoral),
                     //Outtake slowly until beam connects
-                    new VelocityCommand(intakeSubsystem, -35)
+                    new VelocityCommand(intakeSubsystem, -15)
                             .until(() -> !intakeSubsystem.hasCoral()),
                     //Intake slowly until beam breaks; the coral is now barely at the beam
-                    new VelocityCommand(intakeSubsystem, 25)
+                    new VelocityCommand(intakeSubsystem, 15)
                             .until(intakeSubsystem::hasCoral),
                     //Intake slowly for an amount of time; lines it up completely
                     new VelocityCommand(intakeSubsystem, 10)
                             .withDeadline(new WaitCommand(0.2)),
                     //Outtake slowly until beam connects
-                    new VelocityCommand(intakeSubsystem, -35)
+                    new VelocityCommand(intakeSubsystem, -15)
                             .until(() -> !intakeSubsystem.hasCoral()),
                     //Intake slowly until beam breaks
-                    new VelocityCommand(intakeSubsystem, 20)
+                    new VelocityCommand(intakeSubsystem, 15)
                             .until(intakeSubsystem::hasCoral)
             );
         }
@@ -579,8 +581,8 @@ public class ScoreCommands {
                                     new PositionCommand(wristSubsystem, WristConstants.ALGAE_HIGH)
                             )
                     ),
-                    () -> elevatorSubsystem.getMechM() > .55
-            );
+                    () -> elevatorSubsystem.getMechM() > ElevatorConstants.ALGAE_HIGH
+            ).alongWith(new VelocityCommand(intakeSubsystem, -60));
         }
 
         public static Command removeAlgaeLow() {
@@ -599,8 +601,8 @@ public class ScoreCommands {
                                     new PositionCommand(wristSubsystem, WristConstants.ALGAE_LOW)
                             )
                     ),
-                    () -> elevatorSubsystem.getMechM() > .25
-            );
+                    () -> elevatorSubsystem.getMechM() > ElevatorConstants.ALGAE_LOW
+            ).alongWith(new VelocityCommand(intakeSubsystem, -60));
         }
 
         public static Command scoreL1() {
@@ -700,8 +702,9 @@ public class ScoreCommands {
         public static Command place() {
             return new ConditionalCommand(
                     new VelocityCommand(intakeSubsystem, 25),
-                    new VelocityCommand(intakeSubsystem, 40),
-                    () -> RobotContainer.getState() == State.L1);
+                    new VelocityCommand(intakeSubsystem, 50),
+                    () -> RobotContainer.getState() == State.L1
+            );
         }
     }
 }

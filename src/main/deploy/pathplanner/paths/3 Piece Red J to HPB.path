@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 11.722385204081634,
-        "y": 3.8869579081632644
+        "x": 12.539139344262294,
+        "y": 2.71234631147541
       },
       "prevControl": null,
       "nextControl": {
-        "x": 10.401658163265306,
-        "y": 3.1930165816326523
+        "x": 12.69497950819672,
+        "y": 1.8252561475409823
       },
       "isLocked": false,
-      "linkedName": "H Red"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 16.37104591836735,
-        "y": 1.0365752551020397
+        "x": 15.943647540983607,
+        "y": 0.818
       },
       "prevControl": {
-        "x": 14.483227040816328,
-        "y": 0.9171874999999992
+        "x": 15.012192622950817,
+        "y": 1.1020676229508197
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,34 +30,38 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5597760895641766,
-      "rotationDegrees": 124.359
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 125.00000000000001
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "HP",
-      "waypointRelativePos": 0.03419811320754717,
+      "name": "INSTANTHP",
+      "waypointRelativePos": 0.03,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "sequential",
+        "type": "named",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "HP"
-              }
-            }
-          ]
+          "name": "INSTANTHP"
+        }
+      }
+    },
+    {
+      "name": "HP",
+      "waypointRelativePos": 0.04,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "HP"
         }
       }
     },
     {
       "name": "INTAKE",
-      "waypointRelativePos": 0.9135802469135802,
+      "waypointRelativePos": 0.8860759493670886,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -68,8 +72,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -77,13 +81,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 124.359
+    "rotation": 125.00000000000001
   },
   "reversed": false,
-  "folder": "1 Piece Red Paths",
+  "folder": "3 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 59.99999999999999
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

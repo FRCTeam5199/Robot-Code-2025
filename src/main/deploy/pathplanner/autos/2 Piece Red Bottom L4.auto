@@ -7,23 +7,23 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red Start to G"
+            "pathName": "2 Piece Red Start to H"
           }
         },
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "L4"
+                  "name": "ALIGNR"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "L4"
                 }
               }
             ]
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red G to HPT"
+            "pathName": "2 Piece Red H to HPB"
           }
         },
         {
@@ -48,13 +48,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "INTAKE"
+                  "name": "DRIVE"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVE"
+                  "name": "INTAKE"
                 }
               }
             ]
@@ -63,32 +63,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red HPT to C"
+            "pathName": "2 Piece Red HPB to K"
           }
         },
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "L4"
+                  "name": "ALIGNL"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "L4"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DUNK"
           }
         },
         {
@@ -100,7 +94,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Red C to HPT"
+            "pathName": "2 Piece Red K to HPB"
           }
         },
         {
@@ -110,13 +104,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "INTAKE"
+                  "name": "DRIVE"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVE"
+                  "name": "INTAKE"
                 }
               }
             ]

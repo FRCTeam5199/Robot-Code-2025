@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue Start to J"
+            "pathName": "3 Piece Red Start to J"
           }
         },
         {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue J to HPT"
+            "pathName": "3 Piece Red J to HPB"
           }
         },
         {
@@ -48,7 +48,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVETOP"
+                  "name": "DRIVE"
                 }
               },
               {
@@ -63,63 +63,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue HPT to L"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ALIGNL"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "OUTTAKE"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Blue L to HPT"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "DRIVETOP"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "INTAKE"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Blue HPT to K"
+            "pathName": "3 Piece Red HPB to K"
           }
         },
         {
@@ -150,7 +94,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue K to HPT"
+            "pathName": "3 Piece Red K to HPB"
           }
         },
         {
@@ -160,7 +104,63 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVETOP"
+                  "name": "DRIVE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "INTAKE"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Red HPB to L"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNR"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Red L to HPB"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DRIVE"
                 }
               },
               {

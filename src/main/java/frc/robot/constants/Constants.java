@@ -17,7 +17,6 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.utility.FeedForward;
-import frc.robot.utility.PID;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -74,8 +73,8 @@ public final class Constants {
         public static final double L4 = .98;
         public static final double HP = .0;
 
-        public static final double ALGAE_LOW = .2;
-        public static final double ALGAE_HIGH = .5;
+        public static final double ALGAE_LOW = .13;
+        public static final double ALGAE_HIGH = .45;
     }
 
     public static class ArmConstants {
@@ -98,16 +97,16 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 2;
 
         public static final double STABLE = 0;
-        public static final double GROUND = 10;
+        public static final double GROUND = 8;
 
         public static final double L1 = 7;
         public static final double L2 = 34;
-        public static final double L3 = 54.5;
-        public static final double L4 = 73.5;
-        public static final double HP = 68; //63
+        public static final double L3 = 56;
+        public static final double L4 = 75;
+        public static final double HP = 63;
 
-        public static final double ALGAE_LOW = 10;
-        public static final double ALGAE_HIGH = 10;
+        public static final double ALGAE_LOW = 60;
+        public static final double ALGAE_HIGH = 70;
 
 
         public static final double ARM_MIN = 0.61524;
@@ -133,7 +132,7 @@ public final class Constants {
         public static final int INTAKE_ID = 20;
         public static final int INTAKE_SENSOR_ID = 3;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
-        public static final FeedForward INTAKE_FEEDFORWARD = new FeedForward(0.2, 0, 0.1162790697674419);
+        public static final FeedForward INTAKE_FF = new FeedForward(0.27, 0, .09090909090909090909090909090909);
         public static final double INTAKE_LOWER_TOLERANCE = 5;
         public static final double INTAKE_UPPER_TOLERANCE = 5;
         public static final double[][] INTAKE_GEAR_RATIO = {{1, 1}};
@@ -143,10 +142,8 @@ public final class Constants {
         public static final double INTAKE_STATOR_CURRENT_LIMIT = 100;
         public static final double INTAKE_SUPPLY_CURRENT_LIMIT = 100;
 
-        public static final FeedForward INTAKE_FF = new FeedForward(0.14, 0, .123407);
-
         public static final Slot0Configs INTAKE_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(0.5)
+                .withKP(.75)
                 .withKI(0)
                 .withKD(0)
                 .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
@@ -189,17 +186,17 @@ public final class Constants {
         public static final double WRIST_SUPPLY_CURRENT_LIMIT = 20;
         public static final boolean WRIST_INVERTED = false;
 
-        public static final double STABLE = 5;
-        public static final double GROUND = 203;
+        public static final double STABLE = 0;
+        public static final double GROUND = 206;
         public static final double L1 = 0;
         public static final double L2 = 66;
-        public static final double L3 = 86;
+        public static final double L3 = 88;
         public static final double PREVIOUS_L4 = 100;
         public static final double L4 = 133;
         public static final double HP = 68;
 
-        public static final double ALGAE_LOW = 10;
-        public static final double ALGAE_HIGH = 10;
+        public static final double ALGAE_LOW = 200;
+        public static final double ALGAE_HIGH = 200;
 
         public static final boolean WRIST_BRAKE = true;
 
