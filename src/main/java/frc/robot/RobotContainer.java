@@ -387,40 +387,40 @@ public class RobotContainer {
         //     UserInterface.setControlComponent("Reset Wrist", false);
         // }
 
-        UserInterface.setAutonComponent("Event", DriverStation.getEventName());
-        UserInterface.setAutonComponent("Game Message", DriverStation.getGameSpecificMessage());
-        UserInterface.setAutonComponent("Location", DriverStation.getLocation().getAsInt());
-        UserInterface.setAutonComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
-        UserInterface.setAutonComponent("Enabled", DriverStation.isEnabled());
-        UserInterface.setAutonComponent("EStop", DriverStation.isEStopped());
-        UserInterface.setAutonComponent("Match Type", DriverStation.getMatchType().toString());
-        UserInterface.setAutonComponent("Match Number", DriverStation.getMatchNumber());
-        UserInterface.setAutonComponent("Replay Match Number", DriverStation.getReplayNumber());
-        UserInterface.setAutonComponent("Match Time", DriverStation.getMatchTime());
+        // UserInterface.setAutonComponent("Event", DriverStation.getEventName());
+        // UserInterface.setAutonComponent("Game Message", DriverStation.getGameSpecificMessage());
+        // UserInterface.setAutonComponent("Location", DriverStation.getLocation().getAsInt());
+        // UserInterface.setAutonComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
+        // UserInterface.setAutonComponent("Enabled", DriverStation.isEnabled());
+        // UserInterface.setAutonComponent("EStop", DriverStation.isEStopped());
+        // UserInterface.setAutonComponent("Match Type", DriverStation.getMatchType().toString());
+        // UserInterface.setAutonComponent("Match Number", DriverStation.getMatchNumber());
+        // UserInterface.setAutonComponent("Replay Match Number", DriverStation.getReplayNumber());
+        // UserInterface.setAutonComponent("Match Time", DriverStation.getMatchTime());
 
-        UserInterface.setTeleopComponent("Event", DriverStation.getEventName());
-        UserInterface.setTeleopComponent("Game Message", DriverStation.getGameSpecificMessage());
-        UserInterface.setTeleopComponent("Location", DriverStation.getLocation().getAsInt());
-        UserInterface.setTeleopComponent("Enabled", DriverStation.isEnabled());
-        UserInterface.setTeleopComponent("EStop", DriverStation.isEStopped());
-        UserInterface.setTeleopComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
-        UserInterface.setTeleopComponent("Match Type", DriverStation.getMatchType().toString());
-        UserInterface.setTeleopComponent("Match Number", DriverStation.getMatchNumber());
-        UserInterface.setTeleopComponent("Replay Match Number", DriverStation.getReplayNumber());
-        UserInterface.setTeleopComponent("Match Time", DriverStation.getMatchTime());
+        // UserInterface.setTeleopComponent("Event", DriverStation.getEventName());
+        // UserInterface.setTeleopComponent("Game Message", DriverStation.getGameSpecificMessage());
+        // UserInterface.setTeleopComponent("Location", DriverStation.getLocation().getAsInt());
+        // UserInterface.setTeleopComponent("Enabled", DriverStation.isEnabled());
+        // UserInterface.setTeleopComponent("EStop", DriverStation.isEStopped());
+        // UserInterface.setTeleopComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
+        // UserInterface.setTeleopComponent("Match Type", DriverStation.getMatchType().toString());
+        // UserInterface.setTeleopComponent("Match Number", DriverStation.getMatchNumber());
+        // UserInterface.setTeleopComponent("Replay Match Number", DriverStation.getReplayNumber());
+        // UserInterface.setTeleopComponent("Match Time", DriverStation.getMatchTime());
         
-        UserInterface.setControlComponent("Reset All", ScoreCommands.Zeroing.zeroSubsystems());
-        UserInterface.setControlComponent("Reset Elevator", ScoreCommands.Zeroing.zeroElevator());
-        UserInterface.setControlComponent("Reset Arm", ScoreCommands.Zeroing.zeroArm());
-        UserInterface.setControlComponent("Reset Wrist", ScoreCommands.Zeroing.zeroWrist());
-        UserInterface.setControlComponent("Setpoint L1", ScoreCommands.Score.scoreL1());
-        UserInterface.setControlComponent("Setpoint L2", ScoreCommands.Score.scoreL2());
-        UserInterface.setControlComponent("Setpoint L3", ScoreCommands.Score.scoreL3());
-        UserInterface.setControlComponent("Setpoint L4", ScoreCommands.Score.scoreL4());
-        UserInterface.setControlComponent("Setpoint Ground Intake", ScoreCommands.Intake.intakeGround());
-        UserInterface.setControlComponent("Setpoint Human Player", ScoreCommands.Intake.intakeHP());
-        UserInterface.setControlComponent("Setpoint Algae High", ScoreCommands.Score.removeAlgaeHigh());
-        UserInterface.setControlComponent("Setpoint Algae Low", ScoreCommands.Score.removeAlgaeLow());
+        // UserInterface.setControlComponent("Reset All", ScoreCommands.Zeroing.zeroSubsystems());
+        // UserInterface.setControlComponent("Reset Elevator", ScoreCommands.Zeroing.zeroElevator());
+        // UserInterface.setControlComponent("Reset Arm", ScoreCommands.Zeroing.zeroArm());
+        // UserInterface.setControlComponent("Reset Wrist", ScoreCommands.Zeroing.zeroWrist());
+        // UserInterface.setControlComponent("Setpoint L1", ScoreCommands.Score.scoreL1());
+        // UserInterface.setControlComponent("Setpoint L2", ScoreCommands.Score.scoreL2());
+        // UserInterface.setControlComponent("Setpoint L3", ScoreCommands.Score.scoreL3());
+        // UserInterface.setControlComponent("Setpoint L4", ScoreCommands.Score.scoreL4());
+        // UserInterface.setControlComponent("Setpoint Ground Intake", ScoreCommands.Intake.intakeGround());
+        // UserInterface.setControlComponent("Setpoint Human Player", ScoreCommands.Intake.intakeHP());
+        // UserInterface.setControlComponent("Setpoint Algae High", ScoreCommands.Score.removeAlgaeHigh());
+        // UserInterface.setControlComponent("Setpoint Algae Low", ScoreCommands.Score.removeAlgaeLow());
 
 //        System.out.println("aligned: " + aligned());
 //        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond

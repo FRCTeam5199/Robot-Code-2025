@@ -5,166 +5,65 @@ import java.util.Map;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.ScoreCommands;
-import frc.robot.commands.ScoreCommands.Score;
 
 public class UserInterface {
-    private static ShuffleboardTab autonTab, teleopTab, controlTab, testTab;
+    public static Map<String, ShuffleboardComponent> components = new HashMap<String, ShuffleboardComponent>();
 
-    public static Map<String, GenericEntry> autonComponents = new HashMap<String, GenericEntry>();
-    public static Map<String, GenericEntry> teleopComponents = new HashMap<String, GenericEntry>();
-    public static Map<String, GenericEntry> controlComponents = new HashMap<String, GenericEntry>();
-    public static Map<String, GenericEntry> testComponents = new HashMap<String, GenericEntry>();
+    private UserInterface() {}
 
-    private UserInterface() {
+    /**
+     * Gets or creates a Shuffleboard Tab
+     */
+    public ShuffleboardTab getTab(String tabName) {
+        return Shuffleboard.getTab(tabName);
     }
 
-    public static void init() {
-        initalizeTabs();
-        initalizeComponents();
-        Shuffleboard.selectTab("Autons");
+    public void selectTab(String tabName) {
+        Shuffleboard.selectTab(tabName);
     }
 
-    private static void initalizeTabs() {
-        autonTab = Shuffleboard.getTab("Auton");
-        teleopTab = Shuffleboard.getTab("Teleop");
-        controlTab = Shuffleboard.getTab("Control");
-
-        if (!DriverStation.isFMSAttached()) {
-            testTab = Shuffleboard.getTab("Test");
-        }
+    public void selectTab(int tabIndex) {
+        Shuffleboard.selectTab(tabIndex);
     }
 
-    private static void initalizeComponents() {
-        createAutonComponent("Event", "", BuiltInWidgets.kTextView, 0, 0, 4, 1, null);
-        createAutonComponent("Game Message", "", BuiltInWidgets.kTextView, 4, 0, 4, 1, null);
-        createAutonComponent("Location", 0, BuiltInWidgets.kTextView, 8, 0, 1, 1, null);
-        createAutonComponent("Alliance", false, BuiltInWidgets.kBooleanBox, 9, 0, 1, 1, null);
-        createAutonComponent("Enabled", false, BuiltInWidgets.kBooleanBox, 10, 0, 1, 1, null);
-        createAutonComponent("EStop", false, BuiltInWidgets.kBooleanBox, 11, 0, 1, 1, null);
-        createAutonComponent("Match Type", "", BuiltInWidgets.kTextView, 0, 1, 2, 1, null);
-        createAutonComponent("Match Number", 0, BuiltInWidgets.kTextView, 2, 1, 1, 1, null);
-        createAutonComponent("Replay Match Number", 0, BuiltInWidgets.kTextView, 3, 1, 1, 1, null);
-        createAutonComponent("Match Time", 0, BuiltInWidgets.kTextView, 4, 1, 3, 1, null);
-
-        createTeleopComponent("Event", "", BuiltInWidgets.kTextView, 0, 0, 4, 1, null);
-        createTeleopComponent("Game Message", "", BuiltInWidgets.kTextView, 4, 0, 4, 1, null);
-        createTeleopComponent("Location", 0, BuiltInWidgets.kTextView, 8, 0, 1, 1, null);
-        createTeleopComponent("Alliance", false, BuiltInWidgets.kBooleanBox, 9, 0, 1, 1, null);
-        createTeleopComponent("Enabled", false, BuiltInWidgets.kBooleanBox, 10, 0, 1, 1, null);
-        createTeleopComponent("EStop", false, BuiltInWidgets.kBooleanBox, 11, 0, 1, 1, null);
-        createTeleopComponent("Match Type", "", BuiltInWidgets.kTextView, 0, 1, 2, 1, null);
-        createTeleopComponent("Match Number", 0, BuiltInWidgets.kTextView, 2, 1, 1, 1, null);
-        createTeleopComponent("Replay Match Number", 0, BuiltInWidgets.kTextView, 3, 1, 1, 1, null);
-        createTeleopComponent("Match Time", 0, BuiltInWidgets.kTextView, 4, 1, 3, 1, null);
-
-        createControlComponent("Reset All", null, BuiltInWidgets.kCommand, 0, 0, 1, 1, null);
-        createControlComponent("Reset Elevator", null, BuiltInWidgets.kCommand, 0, 1, 1, 1, null);
-        createControlComponent("Reset Arm", null, BuiltInWidgets.kCommand, 0, 2, 1, 1, null);
-        createControlComponent("Reset Wrist", null, BuiltInWidgets.kCommand, 0, 3, 1, 1, null);
-        createControlComponent("Setpoint L1", null, BuiltInWidgets.kCommand, 1, 0, 1, 1, null);
-        createControlComponent("Setpoint L2", null, BuiltInWidgets.kCommand, 1, 1, 1, 1, null);
-        createControlComponent("Setpoint L3", null, BuiltInWidgets.kCommand, 1, 2, 1, 1, null);
-        createControlComponent("Setpoint L4", null, BuiltInWidgets.kCommand, 1, 3, 1, 1, null);
-        createControlComponent("Setpoint Ground Intake", null, BuiltInWidgets.kCommand, 2, 0, 1, 1, null);
-        createControlComponent("Setpoint Human Player", null, BuiltInWidgets.kCommand, 2, 1, 1, 1, null);
-        createControlComponent("Setpoint Algae High", null, BuiltInWidgets.kCommand, 3, 0, 1, 1, null);
-        createControlComponent("Setpoint Algae Low", null, BuiltInWidgets.kCommand, 3, 1, 1, 1, null);
-
-        if (!DriverStation.isFMSAttached()) {
-            createTestComponent("Offset Elevator", "", BuiltInWidgets.kTextView, 1, 0, 1, 1, null);
-            createTestComponent("Offset Arm", "", BuiltInWidgets.kTextView, 1, 1, 1, 1, null);
-            createTestComponent("Offset Wrist", "", BuiltInWidgets.kTextView, 1, 2, 1, 1, null);
-
-            createTestComponent("Set Elevator", "", BuiltInWidgets.kTextView, 0, 0, 1, 1, null);
-            createTestComponent("Set Arm", "", BuiltInWidgets.kTextView, 0, 1, 1, 1, null);
-            createTestComponent("Set Wrist", "", BuiltInWidgets.kTextView, 0, 2, 1, 1, null);
-        }
+    public void createComponent(String tabName, String componentName, Object componentValue, WidgetType componentType, int[] componentPosition, int[] componentSize, Map<String, Object> componentProperties) {
+        components.put(componentName, Shuffleboard.getTab(tabName).add("", 0)
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(componentPosition[0], componentPosition[1])
+        .withSize(componentSize[0], componentSize[1])
+        .withProperties(componentProperties));
     }
 
-    public static void setTab(String key) {
-        Shuffleboard.selectTab(key);
-    }
-    
-    public static ShuffleboardTab getTab(String key) {
-        return Shuffleboard.getTab(key);
-    }
-
-    public static void putData(String key, Sendable data) {
-        SmartDashboard.putData(key, data);
+    public void createComponent(String tabName, String componentName, Object componentValue, WidgetType componentType, int[] componentPosition, int[] componentSize) {
+        components.put(componentName, Shuffleboard.getTab(tabName).add(componentName, 0)
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(componentPosition[0], componentPosition[1])
+        .withSize(componentSize[0], componentSize[1]));
     }
 
-    public static Sendable getData(String key) {
-        return SmartDashboard.getData(key);
+    public void createComponent(String tabName, String componentName, Sendable componentValue, WidgetType componentType, int[] componentPosition, int[] componentSize, Map<String, Object> componentProperties) {
+        components.put(componentName,Shuffleboard.getTab(tabName).add(componentName, componentValue)
+        .withWidget(componentType)
+        .withPosition(componentPosition[0], componentPosition[1])
+        .withSize(componentSize[0], componentSize[1])
+        .withProperties(componentProperties));
     }
 
-    @SuppressWarnings("rawtypes")
-    public static void addSendableChooserComponent(String name, SendableChooser sendableChooser, WidgetType widget, int positionX, int positionY, int width, int height, Map<String, Object> properties) {
-        autonTab.add(name, sendableChooser).withWidget(widget).withPosition(positionX, positionY).withSize(width, height).withProperties(properties);
+    public void createComponent(String tabName, String componentName, Sendable componentValue, WidgetType componentType, int[] componentPosition, int[] componentSize) {
+        components.put(componentName, Shuffleboard.getTab(tabName).add(componentName, componentValue)
+        .withWidget(componentType)
+        .withPosition(componentPosition[0], componentPosition[1])
+        .withSize(componentSize[0], componentSize[1]));
     }
 
-    public static void createAutonComponent(String name, Object defaultValue, WidgetType widget, int positionX, int positionY, int width, int height, Map<String, Object> properties) {
-        autonComponents.putIfAbsent(name, autonTab.add(name, defaultValue).withWidget(widget).withPosition(positionX, positionY).withSize(width, height).withProperties(properties).getEntry());
-    }
-
-    public static void createTeleopComponent(String name, Object defaultValue, WidgetType widget, int positionX, int positionY, int width, int height, Map<String, Object> properties) {
-        teleopComponents.putIfAbsent(name, teleopTab.add(name, defaultValue).withWidget(widget).withPosition(positionX, positionY).withSize(width, height).withProperties(properties).getEntry());
-    }
-
-    public static void createControlComponent(String name, Object defaultValue, WidgetType widget, int positionX, int positionY, int width, int height, Map<String, Object> properties) {
-        controlComponents.putIfAbsent(name, controlTab.add(name, defaultValue).withWidget(widget).withPosition(positionX, positionY).withSize(width, height).withProperties(properties).getEntry());
-    }
-
-    public static void createTestComponent(String name, Object defaultValue, WidgetType widget, int positionX, int positionY, int width, int height, Map<String, Object> properties) {
-        testComponents.putIfAbsent(name, testTab.add(name, defaultValue).withWidget(widget).withPosition(positionX, positionY).withSize(width, height).withProperties(properties).getEntry());
-    }
-
-    public static GenericEntry getAutonComponent(String key) {
-        return autonComponents.get(key);
-    }
-
-    public static GenericEntry getTeleopComponent(String key) {
-        return teleopComponents.get(key);
-    }
-
-    public static GenericEntry getControlComponent(String key) {
-        return controlComponents.get(key);
-    }
-
-    public static GenericEntry getTestComponent(String key) {
-        return testComponents.get(key);
-    }
-
-    public static void setAutonComponent(String key, Object value) {
-        if (autonComponents.get(key).setValue(value)) {
-            autonComponents.replace(key, autonComponents.get(key));
-        }
-    }
-
-    public static void setTeleopComponent(String key, Object value) {
-        if (teleopComponents.get(key).setValue(value)) {
-            teleopComponents.replace(key, autonComponents.get(key));
-        }
-    }
-
-    public static void setControlComponent(String key, Object value) {
-        controlComponents.get(key).setValue(value);
-    }
-
-    public static void setTestComponent(String key, Object value) {
-        if (testComponents.get(key).setValue(value)) {
-            testComponents.replace(key, autonComponents.get(key));
-        }
-    }
-
-    public static void update() {
-        Shuffleboard.update();
+    public ShuffleboardComponent getComponentData(String componentName) {
+        return components.get(componentName);
     }
 }

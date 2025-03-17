@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        UserInterface.init();
+        // UserInterface.init();
 
         System.setProperty("wpilog.directory", "/media/sda1/wpilog");
 
@@ -75,7 +75,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
-        UserInterface.update();
+        // UserInterface.update();
 
         estimatePose = aprilTagSubsystem.getEstimatedGlobalPose();
         if (estimatePose.getFirst().isPresent()) {

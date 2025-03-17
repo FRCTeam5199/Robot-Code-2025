@@ -1,15 +1,17 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.constants.Constants.ArmConstants;
-import frc.robot.subsystems.template.TemplateSubsystem;
-import frc.robot.utility.Type;
-
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.SignalLogger;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.UserInterface;
+import frc.robot.constants.Constants.ArmConstants;
+import frc.robot.subsystems.template.TemplateSubsystem;
+import frc.robot.utility.Type;
 
 
 public class ArmSubsystem extends TemplateSubsystem {
@@ -77,13 +79,13 @@ public class ArmSubsystem extends TemplateSubsystem {
         }
 
         if (!DriverStation.isFMSAttached()) {
-            if (UserInterface.getTestComponent("Offset Arm").getString("") != "" && UserInterface.getTestComponent("Offset Arm").get() != null) {
-                this.setOffset(UserInterface.getTestComponent("Offset Arm").getDouble(0));
-            }
+            // if (UserInterface.getTestComponent("Offset Arm").getString("") != "" && UserInterface.getTestComponent("Offset Arm").get() != null) {
+            //     this.setOffset(UserInterface.getTestComponent("Offset Arm").getDouble(0));
+            // }
 
-            if (UserInterface.getTestComponent("Set Arm").getString("") != "" && UserInterface.getTestComponent("Set Arm").get() != null) {
-                this.setPosition(UserInterface.getTestComponent("Set Arm").getDouble(0));
-            }
+            // if (UserInterface.getTestComponent("Set Arm").getString("") != "" && UserInterface.getTestComponent("Set Arm").get() != null) {
+            //     this.setPosition(UserInterface.getTestComponent("Set Arm").getDouble(0));
+            // }
         }
     }
 
