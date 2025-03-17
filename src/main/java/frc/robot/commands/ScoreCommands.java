@@ -236,8 +236,8 @@ public class ScoreCommands {
                                             && elevatorSubsystem.getMechM() < .05),
                             new PositionCommand(wristSubsystem, WristConstants.STABLE)
                                     .onlyIf(() -> (RobotContainer.getState() != State.ALGAE_HIGH
-                                            && RobotContainer.getState() != State.ALGAE_LOW
-                                            && RobotContainer.getState() != State.BARGE))
+                                            && RobotContainer.getState() != State.ALGAE_LOW))
+//                                            && RobotContainer.getState() != State.BARGE))
                     ),
                     new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
@@ -566,15 +566,15 @@ public class ScoreCommands {
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.ALGAE_HIGH)));
         }
 
-        public static Command armBarge() {
-            return new PositionCommand(armSubsystem, ArmConstants.BARGE)
-                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.BARGE)));
-        }
-
-        public static Command armProcessor() {
-            return new PositionCommand(armSubsystem, ArmConstants.PROCESSOR)
-                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.PROCESSOR)));
-        }
+//        public static Command armBarge() {
+//            return new PositionCommand(armSubsystem, ArmConstants.BARGE)
+//                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.BARGE)));
+//        }
+//
+//        public static Command armProcessor() {
+//            return new PositionCommand(armSubsystem, ArmConstants.PROCESSOR)
+//                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.PROCESSOR)));
+//        }
 
         public static Command armStable() {
             return new SelectCommand<>(
@@ -635,45 +635,45 @@ public class ScoreCommands {
             );
         }
 
-        public static Command scoreBarge() {
-            return new ConditionalCommand(
-                    new SequentialCommandGroup( //Going down
-                            new ParallelCommandGroup(
-                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.BARGE, false),
-                                    new PositionCommand(wristSubsystem, WristConstants.BARGE)
-                            ),
-                            new PositionCommand(armSubsystem, ArmConstants.BARGE)
-                    ),
-                    new SequentialCommandGroup( //Going up
-                            new PositionCommand(armSubsystem, ArmConstants.BARGE),
-                            new ParallelCommandGroup(
-                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.BARGE, true),
-                                    new PositionCommand(wristSubsystem, WristConstants.BARGE)
-                            )
-                    ),
-                    () -> elevatorSubsystem.getMechM() > ElevatorConstants.BARGE
-            );
-        }
-
-        public static Command scoreProcessor() {
-            return new ConditionalCommand(
-                    new SequentialCommandGroup( //Going down
-                            new ParallelCommandGroup(
-                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.PROCESSOR, false),
-                                    new PositionCommand(wristSubsystem, WristConstants.PROCESSOR)
-                            ),
-                            new PositionCommand(armSubsystem, ArmConstants.PROCESSOR)
-                    ),
-                    new SequentialCommandGroup( //Going up
-                            new PositionCommand(armSubsystem, ArmConstants.PROCESSOR),
-                            new ParallelCommandGroup(
-                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.PROCESSOR, true),
-                                    new PositionCommand(wristSubsystem, WristConstants.PROCESSOR)
-                            )
-                    ),
-                    () -> elevatorSubsystem.getMechM() > ElevatorConstants.PROCESSOR
-            );
-        }
+//        public static Command scoreBarge() {
+//            return new ConditionalCommand(
+//                    new SequentialCommandGroup( //Going down
+//                            new ParallelCommandGroup(
+//                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.BARGE, false),
+//                                    new PositionCommand(wristSubsystem, WristConstants.BARGE)
+//                            ),
+//                            new PositionCommand(armSubsystem, ArmConstants.BARGE)
+//                    ),
+//                    new SequentialCommandGroup( //Going up
+//                            new PositionCommand(armSubsystem, ArmConstants.BARGE),
+//                            new ParallelCommandGroup(
+//                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.BARGE, true),
+//                                    new PositionCommand(wristSubsystem, WristConstants.BARGE)
+//                            )
+//                    ),
+//                    () -> elevatorSubsystem.getMechM() > ElevatorConstants.BARGE
+//            );
+//        }
+//
+//        public static Command scoreProcessor() {
+//            return new ConditionalCommand(
+//                    new SequentialCommandGroup( //Going down
+//                            new ParallelCommandGroup(
+//                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.PROCESSOR, false),
+//                                    new PositionCommand(wristSubsystem, WristConstants.PROCESSOR)
+//                            ),
+//                            new PositionCommand(armSubsystem, ArmConstants.PROCESSOR)
+//                    ),
+//                    new SequentialCommandGroup( //Going up
+//                            new PositionCommand(armSubsystem, ArmConstants.PROCESSOR),
+//                            new ParallelCommandGroup(
+//                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.PROCESSOR, true),
+//                                    new PositionCommand(wristSubsystem, WristConstants.PROCESSOR)
+//                            )
+//                    ),
+//                    () -> elevatorSubsystem.getMechM() > ElevatorConstants.PROCESSOR
+//            );
+//        }
 
         public static Command scoreL1() {
             return new SequentialCommandGroup(
