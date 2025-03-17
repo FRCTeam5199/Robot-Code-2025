@@ -43,7 +43,7 @@ public final class Autos {
     public SendableChooser<Command> getAutoChooser() {
         if (autoChooser == null) {
             autoChooser = AutoBuilder.buildAutoChooser();
-            UserInterface.getTab("Auton").add("AutoChooser", autoChooser).withWidget(BuiltInWidgets.kComboBoxChooser).withSize(1, 1).withPosition(0, 0);
+            Shuffleboard.getTab("Auton").add("AutoChooser", autoChooser).withWidget(BuiltInWidgets.kComboBoxChooser).withSize(1, 1).withPosition(0, 0);
         }
 
         return autoChooser;
