@@ -197,11 +197,6 @@ public class AprilTagSubsystem extends SubsystemBase {
         return -180 - tagAngles[id] + commandSwerveDrivetrain.getPose().getRotation().getDegrees();
     }
 
-    public double getRotationToAlign() {
-        if (closestTagID == -1) return 0;
-        return -180 - tagAngles[closestTagID] + commandSwerveDrivetrain.getPose().getRotation().getDegrees();
-    }
-
     public double[] getClosestTagXYYaw() {
         if (!results.isEmpty()) {
             PhotonPipelineResult result = results.get(results.size() - 1);
@@ -220,6 +215,9 @@ public class AprilTagSubsystem extends SubsystemBase {
                         if (pigeonAngle < 0) pigeonAngle = 360 + pigeonAngle;
 
                         double angleChange = Math.abs((-180 - tagAngles[target.getFiducialId()]) + pigeonAngle);
+                        if (DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
+                            angleChange += 180;
 
                         while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
 
@@ -252,8 +250,8 @@ public class AprilTagSubsystem extends SubsystemBase {
                     closestTagY = -closestTagY;
                 }
 
-                // System.out.println("Id: " + bestTarget.getFiducialId()
-                //         + " X: " + closestTagX + " Y: " + closestTagY);
+//                System.out.println("Id: " + bestTarget.getFiducialId()
+//                        + " X: " + closestTagX + " Y: " + closestTagY);
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};

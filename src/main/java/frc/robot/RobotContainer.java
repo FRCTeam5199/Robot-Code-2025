@@ -176,7 +176,7 @@ public class RobotContainer {
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
         commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
-                        .andThen(ScoreCommands.Intake.intakeSequence()))
+                        .alongWith(ScoreCommands.Intake.intakeSequence()))
                 .onFalse(ScoreCommands.Stabling.intakeStable()
                         .alongWith(ScoreCommands.Intake.intakeSequence()));
 
@@ -343,7 +343,6 @@ public class RobotContainer {
                 DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
             autoAlignXOffset = -autoAlignXOffset;
 
-
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
         currentStateRotation.position = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
@@ -478,7 +477,7 @@ public class RobotContainer {
 
 
     public static boolean aligned() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .02
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .05
                 && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .02;
     }
 

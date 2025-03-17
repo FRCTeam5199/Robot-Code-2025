@@ -69,8 +69,8 @@ public final class Constants {
 
         public static final double L1 = 0;
         public static final double L2 = .16;
-        public static final double L3 = .43;
-        public static final double L4 = .98;
+        public static final double L3 = .41;
+        public static final double L4 = 1.002;
         public static final double HP = .0;
 
         public static final double ALGAE_LOW = .13;
@@ -101,10 +101,10 @@ public final class Constants {
         public static final double STABLE = 0;
         public static final double GROUND = 8;//4
 
-        public static final double L1 = 7;
+        public static final double L1 = 14;
         public static final double L2 = 34;
         public static final double L3 = 56;
-        public static final double L4 = 75;
+        public static final double L4 = 78;
         public static final double HP = 63;
 
         public static final double ALGAE_LOW = 60;
@@ -133,7 +133,7 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final int INTAKE_ID = 20;
-        public static final int INTAKE_SENSOR_ID = 3;
+        public static final int INTAKE_SENSOR_ID = 2;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
         public static final FeedForward INTAKE_FF = new FeedForward(0.27, 0, .09090909090909090909090909090909);
         public static final double INTAKE_LOWER_TOLERANCE = 5;
@@ -190,13 +190,13 @@ public final class Constants {
         public static final boolean WRIST_INVERTED = false;
 
         public static final double STABLE = 10;
-        public static final double GROUND = 189; //206
-        public static final double L1 = 0;
-        public static final double L2 = 66;
-        public static final double L3 = 88;
+        public static final double GROUND = 189;
+        public static final double L1 = 10;
+        public static final double L2 = 58;
+        public static final double L3 = 84;
         public static final double PREVIOUS_L4 = 100;
-        public static final double L4 = 133;
-        public static final double HP = 68;
+        public static final double L4 = 135;
+        public static final double HP = 62;
 
         public static final double ALGAE_LOW = 200;
         public static final double ALGAE_HIGH = 200;

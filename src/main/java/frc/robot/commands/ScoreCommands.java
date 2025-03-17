@@ -456,17 +456,13 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() > ElevatorConstants.HP
-            ).alongWith(new VelocityCommand(intakeSubsystem, 60)
-                    /*.until(intakeSubsystem::hasCoralCurrent)
-                    .andThen(new WaitCommand(1))
-                    .andThen(new VelocityCommand(intakeSubsystem, 10)*/
-                    .until(intakeSubsystem::hasCoral));
+            );
         }
 
         public static Command intakeSequence() {
             return new SequentialCommandGroup(
                     //Intake until beam initially breaks
-                    new VelocityCommand(intakeSubsystem, 60)
+                    new VelocityCommand(intakeSubsystem, 50)
                             .until(intakeSubsystem::hasCoral),
                     //Outtake slowly until beam connects
                     new VelocityCommand(intakeSubsystem, -15)
@@ -728,7 +724,6 @@ public class ScoreCommands {
             return new SequentialCommandGroup(
                     new PositionCommand(armSubsystem, ArmConstants.L4),
                     new ParallelCommandGroup(
-//                            new PositionCommand(wristSubsystem, 10),
                             new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, true),
                             new PositionCommand(wristSubsystem, WristConstants.L4)
                                     .beforeStarting(new WaitCommand(Double.MAX_VALUE)
@@ -794,8 +789,8 @@ public class ScoreCommands {
 //                    () -> RobotContainer.getState() == State.L1
 //            );
             return new ConditionalCommand(
-                    new VelocityCommand(intakeSubsystem, 25),
-                    new VelocityCommand(intakeSubsystem, 40),
+                    new VelocityCommand(intakeSubsystem, 30),
+                    new VelocityCommand(intakeSubsystem, 60),
                     () -> RobotContainer.getState() == State.L1
             );
         }
