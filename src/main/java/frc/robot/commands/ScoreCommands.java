@@ -254,7 +254,7 @@ public class ScoreCommands {
                     ),
                     new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
-            );
+            ).alongWith(Intake.groundIntakeSequence());
         }
 
         public static Command stableL4() {
@@ -427,7 +427,7 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() < ElevatorConstants.GROUND
-            ).alongWith(groundIntakeSequence());
+            ).alongWith(new VelocityCommand(intakeSubsystem, 100));
         }
 
         public static Command wristHP() {
@@ -534,26 +534,22 @@ public class ScoreCommands {
 
         public static Command armL1() {
             return new PositionCommand(armSubsystem, ArmConstants.L1)
-                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1)))
-                    .alongWith(new VelocityCommand(intakeSubsystem, 0));
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1)));
         }
 
         public static Command armL2() {
             return new PositionCommand(armSubsystem, ArmConstants.L2)
-                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L2)))
-                    .alongWith(new VelocityCommand(intakeSubsystem, 0));
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L2)));
         }
 
         public static Command armL3() {
             return new PositionCommand(armSubsystem, ArmConstants.L3)
-                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)))
-                    .alongWith(new VelocityCommand(intakeSubsystem, 0));
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)));
         }
 
         public static Command armL4() {
             return new PositionCommand(armSubsystem, ArmConstants.L4)
-                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)))
-                    .alongWith(new VelocityCommand(intakeSubsystem, 0));
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
         }
 
         public static Command armAlgaeLow() {

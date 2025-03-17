@@ -182,7 +182,9 @@ public class RobotContainer {
 
 //        commandXboxController.leftBumper().onTrue(Score.score())
 //                .onFalse(ScoreCommands.Stabling.stable());
-        commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround())
+        commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround()
+                        .until(intakeSubsystem::hasCoral)
+                        .andThen(ScoreCommands.Stabling.groundIntakeStable()))
                 .onFalse(ScoreCommands.Stabling.groundIntakeStable());
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
@@ -431,15 +433,17 @@ public class RobotContainer {
 //        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
 //        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
-        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
-        System.out.println("Arm: " + armSubsystem.getDegrees());
-        System.out.println("Wrist: " + wristSubsystem.getDegrees());
+//        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
+//        System.out.println("Arm: " + armSubsystem.getDegrees());
+//        System.out.println("Wrist: " + wristSubsystem.getDegrees());
 
 //        System.out.println("Elevator goal: " + elevatorSubsystem.getGoal());
 //        System.out.println("Wrist goal: " + wristSubsystem.getGoal());
 //        System.out.println("Arm goal: " + armSubsystem.getGoal());
 
 //        System.out.println("Intake Velocity: " + intakeSubsystem.getMechVelocity());
+
+//        System.out.println("Has Coral: " + intakeSubsystem.hasCoral());
     }
 
     public static void setAutoAlignOffsetLeft() {
