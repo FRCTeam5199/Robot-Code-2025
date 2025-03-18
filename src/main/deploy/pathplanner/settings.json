@@ -3,26 +3,18 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "1 Piece Blue Paths",
-    "1 Piece Red Paths",
     "2 Piece Blue Paths",
     "2 Piece Red Paths",
     "3 Piece Blue Paths",
     "3 Piece Red Paths",
-    "4 Piece Blue Paths",
-    "4 Piece Red Paths",
-    "1 Piece Blue L1 Paths",
+    "Climber Drop Paths",
     "Tests"
   ],
   "autoFolders": [
-    "1 Piece L1",
-    "1 Piece L4",
-    "2 Piece L1",
     "2 Piece L4",
-    "3 Piece L1",
     "3 Piece L4",
-    "4 Piece L1",
-    "4 Piece L4"
+    "Climber Drop",
+    "Tests"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

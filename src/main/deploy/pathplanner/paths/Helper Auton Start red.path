@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.882,
-        "y": 5.11
+        "x": 10.405327868852458,
+        "y": 6.140829918032787
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.043485560366545,
-        "y": 5.300846571342278
+        "x": 10.155327868852458,
+        "y": 6.140829918032787
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 16.25,
-        "y": 7.125
+        "x": 9.792102272727272,
+        "y": 6.140829918032787
       },
       "prevControl": {
-        "x": 16.091521459442017,
-        "y": 6.931649147447931
+        "x": 10.042102272727272,
+        "y": 6.140829918032787
+      },
+      "nextControl": {
+        "x": 9.542102272727272,
+        "y": 6.140829918032787
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 10.405327868852458,
+        "y": 6.140829918032787
+      },
+      "prevControl": {
+        "x": 10.155327868852458,
+        "y": 6.140829918032787
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,35 +49,24 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "HP",
+      "name": "UNWIND",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "HP"
+          "name": "UNWIND"
         }
       }
     },
     {
-      "name": "INSTANTHP",
-      "waypointRelativePos": 0.03,
+      "name": "L4",
+      "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "INSTANTHP"
-        }
-      }
-    },
-    {
-      "name": "INTAKE",
-      "waypointRelativePos": 0.8755274261603374,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKE"
+          "name": "L4"
         }
       }
     }
@@ -76,13 +81,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.8159256349378
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "3 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -120.30268072048808
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }

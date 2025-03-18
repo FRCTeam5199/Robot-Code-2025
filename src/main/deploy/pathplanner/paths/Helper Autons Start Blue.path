@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.882,
-        "y": 5.11
+        "x": 7.072745901639344,
+        "y": 6.11685450819672
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.043485560366545,
-        "y": 5.300846571342278
+        "x": 7.369005681818181,
+        "y": 6.11903409090909
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 16.25,
-        "y": 7.125
+        "x": 7.239375,
+        "y": 6.11685450819672
       },
       "prevControl": {
-        "x": 16.091521459442017,
-        "y": 6.931649147447931
+        "x": 6.92028409090909,
+        "y": 6.129005681818182
+      },
+      "nextControl": {
+        "x": 7.55846590909091,
+        "y": 6.104703334575259
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.072745901639344,
+        "y": 6.11685450819672
+      },
+      "prevControl": {
+        "x": 7.320089550494612,
+        "y": 6.080507302376162
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,35 +49,24 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "HP",
+      "name": "UNWIND",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "HP"
+          "name": "UNWIND"
         }
       }
     },
     {
-      "name": "INSTANTHP",
-      "waypointRelativePos": 0.03,
+      "name": "L4",
+      "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "INSTANTHP"
-        }
-      }
-    },
-    {
-      "name": "INTAKE",
-      "waypointRelativePos": 0.8755274261603374,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKE"
+          "name": "L4"
         }
       }
     }
@@ -76,13 +81,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.8159256349378
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "3 Piece Red Paths",
+  "folder": "3 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -120.30268072048808
+    "rotation": 180.0
   },
   "useDefaultConstraints": false
 }

@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue Start to G"
+            "pathName": "Helper Autons Start Blue"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Blue Start to J"
           }
         },
         {
@@ -17,7 +23,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNL"
+                  "name": "ALIGNR"
                 }
               },
               {
@@ -38,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue G to HPB"
+            "pathName": "3 Piece Blue J to HPT"
           }
         },
         {
@@ -48,7 +54,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVE"
+                  "name": "DRIVETOP"
                 }
               },
               {
@@ -63,7 +69,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue HPB to C"
+            "pathName": "3 Piece Blue HPT to L"
           }
         },
         {
@@ -94,7 +100,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue C to HPB"
+            "pathName": "3 Piece Blue L to HPT"
           }
         },
         {
@@ -104,7 +110,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVE"
+                  "name": "DRIVETOP"
                 }
               },
               {

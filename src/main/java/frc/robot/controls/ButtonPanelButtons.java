@@ -1,8 +1,8 @@
 package frc.robot.controls;
 
 public enum ButtonPanelButtons {
-    SETMODE_CORAL(1, 4),
-    SETMODE_ALGAE(1, 4),
+    SETMODE_CORAL(1, 14),
+    SETMODE_ALGAE(1, 19),
     MOVE_WRIST_INCREASE(1, 7),
     MOVE_WRIST_DECREASE(1, 4),
     MOVE_ELEVATOR_INCREASE(1, 4),
