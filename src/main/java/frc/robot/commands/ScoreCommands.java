@@ -325,7 +325,7 @@ public class ScoreCommands {
         }
 
         public static Command slightUnwindAuton() {
-            return new InstantCommand(() -> climberSubsystem.setPercent(1))
+            return new InstantCommand(() -> climberSubsystem.setPercent(-1))
                     .andThen(new WaitCommand(.4)).andThen(() -> climberSubsystem.setPercent(0));
         }
     }
@@ -390,7 +390,7 @@ public class ScoreCommands {
                             zeroArm()
                     ).withTimeout(5),
                     zeroWrist().withTimeout(2),
-                    new WaitCommand(.5),
+                    new WaitCommand(.25),
                     new ParallelCommandGroup(
                             new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                             new InstantCommand(() -> armSubsystem.getMotor().setPosition(0)),

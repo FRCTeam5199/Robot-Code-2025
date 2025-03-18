@@ -121,7 +121,7 @@ public class RobotContainer {
         automaticPlace = !automaticPlace;
     }
 
-    private static boolean automaticPlace = true;
+    private static boolean automaticPlace = false;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
