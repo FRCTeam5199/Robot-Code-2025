@@ -23,7 +23,8 @@ public class UserInterface {
     public static Map<String, GenericEntry> controlComponents = new HashMap<String, GenericEntry>();
     public static Map<String, GenericEntry> testComponents = new HashMap<String, GenericEntry>();
 
-    private UserInterface() {}
+    private UserInterface() {
+    }
 
     public static void init() {
         initalizeTabs();
@@ -64,18 +65,18 @@ public class UserInterface {
         createTeleopComponent("Replay Match Number", 0, BuiltInWidgets.kTextView, 3, 1, 1, 1, null);
         createTeleopComponent("Match Time", 0, BuiltInWidgets.kTextView, 4, 1, 3, 1, null);
 
-        createControlComponent("Reset All", ScoreCommands.Zeroing.zeroSubsystems(), BuiltInWidgets.kCommand, 0, 0, 1, 1, null);
-        createControlComponent("Reset Elevator", ScoreCommands.Zeroing.zeroElevator(), BuiltInWidgets.kCommand, 0, 1, 1, 1, null);
-        createControlComponent("Reset Arm", ScoreCommands.Zeroing.zeroArm(), BuiltInWidgets.kCommand, 0, 2, 1, 1, null);
-        createControlComponent("Reset Wrist", ScoreCommands.Zeroing.zeroWrist(), BuiltInWidgets.kCommand, 0, 3, 1, 1, null);
-        createControlComponent("Setpoint L1", ScoreCommands.Score.scoreL1(), BuiltInWidgets.kCommand, 1, 0, 1, 1, null);
-        createControlComponent("Setpoint L2", ScoreCommands.Score.scoreL2(), BuiltInWidgets.kCommand, 1, 1, 1, 1, null);
-        createControlComponent("Setpoint L3", ScoreCommands.Score.scoreL3(), BuiltInWidgets.kCommand, 1, 2, 1, 1, null);
-        createControlComponent("Setpoint L4", ScoreCommands.Score.scoreL4(), BuiltInWidgets.kCommand, 1, 3, 1, 1, null);
-        createControlComponent("Setpoint Ground Intake", ScoreCommands.Intake.intakeGround(), BuiltInWidgets.kCommand, 2, 0, 1, 1, null);
-        createControlComponent("Setpoint Human Player", ScoreCommands.Intake.intakeHP(), BuiltInWidgets.kCommand, 2, 1, 1, 1, null);
-        createControlComponent("Setpoint Algae High", ScoreCommands.Score.removeAlgaeHigh(), BuiltInWidgets.kCommand, 3, 0, 1, 1, null);
-        createControlComponent("Setpoint Algae Low", ScoreCommands.Score.removeAlgaeLow(), BuiltInWidgets.kCommand, 3, 1, 1, 1, null);
+//        createControlComponent("Reset All", ScoreCommands.Zeroing.zeroSubsystems(), BuiltInWidgets.kCommand, 0, 0, 1, 1, null);
+//        createControlComponent("Reset Elevator", ScoreCommands.Zeroing.zeroElevator(), BuiltInWidgets.kCommand, 0, 1, 1, 1, null);
+//        createControlComponent("Reset Arm", ScoreCommands.Zeroing.zeroArm(), BuiltInWidgets.kCommand, 0, 2, 1, 1, null);
+//        createControlComponent("Reset Wrist", ScoreCommands.Zeroing.zeroWrist(), BuiltInWidgets.kCommand, 0, 3, 1, 1, null);
+//        createControlComponent("Setpoint L1", ScoreCommands.Score.scoreL1(), BuiltInWidgets.kCommand, 1, 0, 1, 1, null);
+//        createControlComponent("Setpoint L2", ScoreCommands.Score.scoreL2(), BuiltInWidgets.kCommand, 1, 1, 1, 1, null);
+//        createControlComponent("Setpoint L3", ScoreCommands.Score.scoreL3(), BuiltInWidgets.kCommand, 1, 2, 1, 1, null);
+//        createControlComponent("Setpoint L4", ScoreCommands.Score.scoreL4(), BuiltInWidgets.kCommand, 1, 3, 1, 1, null);
+//        createControlComponent("Setpoint Ground Intake", ScoreCommands.Intake.intakeGround(), BuiltInWidgets.kCommand, 2, 0, 1, 1, null);
+//        createControlComponent("Setpoint Human Player", ScoreCommands.Intake.intakeHP(), BuiltInWidgets.kCommand, 2, 1, 1, 1, null);
+//        createControlComponent("Setpoint Algae High", ScoreCommands.Score.removeAlgaeHigh(), BuiltInWidgets.kCommand, 3, 0, 1, 1, null);
+//        createControlComponent("Setpoint Algae Low", ScoreCommands.Score.removeAlgaeLow(), BuiltInWidgets.kCommand, 3, 1, 1, 1, null);
 
         if (!DriverStation.isFMSAttached()) {
             createTestComponent("Offset Elevator", "", BuiltInWidgets.kTextView, 1, 0, 1, 1, null);
@@ -142,11 +143,15 @@ public class UserInterface {
     }
 
     public static void setAutonComponent(String key, Object value) {
-        if (autonComponents.get(key).setValue(value)) { autonComponents.replace(key, autonComponents.get(key)); }
+        if (autonComponents.get(key).setValue(value)) {
+            autonComponents.replace(key, autonComponents.get(key));
+        }
     }
 
     public static void setTeleopComponent(String key, Object value) {
-        if (teleopComponents.get(key).setValue(value)) { teleopComponents.replace(key, autonComponents.get(key)); }
+        if (teleopComponents.get(key).setValue(value)) {
+            teleopComponents.replace(key, autonComponents.get(key));
+        }
     }
 
     public static void setControlComponent(String key, Object value) {
@@ -154,7 +159,9 @@ public class UserInterface {
     }
 
     public static void setTestComponent(String key, Object value) {
-        if (testComponents.get(key).setValue(value)) { testComponents.replace(key, autonComponents.get(key)); }
+        if (testComponents.get(key).setValue(value)) {
+            testComponents.replace(key, autonComponents.get(key));
+        }
     }
 
     public static void update() {

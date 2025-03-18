@@ -16,7 +16,6 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -278,6 +277,7 @@ public class TemplateSubsystem extends SubsystemBase {
      */
     public void setPercent(double percent) {
         followLastMechProfile = false;
+        if (percent > 1) percent /= 100;
         motor.set(percent);
     }
     /**
@@ -444,7 +444,7 @@ public class TemplateSubsystem extends SubsystemBase {
         }
     }
 
-    public boolean isMechAtPosition(double position) {
+    public boolean isMechGreaterThanPosition(double position) {
         switch (type) {
             case LINEAR -> {
                 return getMechM() >= position;
@@ -459,6 +459,11 @@ public class TemplateSubsystem extends SubsystemBase {
                 return false;
             }
         }
+    }
+
+    public boolean isAboveSpeed() {
+        if (type != Type.ROLLER) return false;
+        return getMechVelocity() > goal;
     }
 
 

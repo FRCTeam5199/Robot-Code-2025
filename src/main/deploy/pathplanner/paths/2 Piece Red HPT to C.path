@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.138201530612244,
-        "y": 6.199744897959183
+        "x": 16.027561475409833,
+        "y": 6.896055327868852
       },
       "isLocked": false,
-      "linkedName": "HP Red Top"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 13.878826530612246,
-        "y": 5.08829719387755
+        "x": 13.917725409836065,
+        "y": 5.158
       },
       "prevControl": {
-        "x": 14.759311224489798,
-        "y": 5.879241071428571
+        "x": 14.097540983606557,
+        "y": 5.3496413934426235
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "C Red"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -34,12 +34,23 @@
   "eventMarkers": [
     {
       "name": "ARML4",
-      "waypointRelativePos": 0.1120607787274454,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
           "name": "ARML4"
+        }
+      }
+    },
+    {
+      "name": "INTAKESEQUENCE",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKESEQUENCE"
         }
       }
     }
