@@ -325,7 +325,7 @@ public class ScoreCommands {
         }
 
         public static Command slightUnwindAuton() {
-            return new InstantCommand(() -> climberSubsystem.setPercent(-1))
+            return new InstantCommand(() -> climberSubsystem.setPercent(1))
                     .andThen(new WaitCommand(.4)).andThen(() -> climberSubsystem.setPercent(0));
         }
     }
@@ -380,6 +380,11 @@ public class ScoreCommands {
         public static Command zeroSubsystems() {
             return new SequentialCommandGroup(
                     new PositionCommand(wristSubsystem, 0),
+                    new ParallelCommandGroup(
+                            new InstantCommand(() -> elevatorSubsystem.setFollowLastMechProfile(false)),
+                            new InstantCommand(() -> armSubsystem.setFollowLastMechProfile(false)),
+                            new InstantCommand(() -> wristSubsystem.setFollowLastMechProfile(false))
+                    ),
                     new ParallelCommandGroup(
                             zeroElevator(),
                             zeroArm()

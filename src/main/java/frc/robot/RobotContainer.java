@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
@@ -114,6 +113,16 @@ public class RobotContainer {
     private static Timer timer = new Timer();
     private static boolean useAutoAlign = true;
 
+    public static boolean isAutomaticPlace() {
+        return automaticPlace;
+    }
+
+    public static void toggleAutomaticPlace() {
+        automaticPlace = !automaticPlace;
+    }
+
+    private static boolean automaticPlace = true;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -169,7 +178,8 @@ public class RobotContainer {
         commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
-                        .alongWith(ScoreCommands.Drive.autoAlignTeleop()))
+                        .alongWith(ScoreCommands.Drive.autoAlignTeleop())
+                        .andThen(ScoreCommands.Score.place().onlyIf(RobotContainer::isAutomaticPlace)))
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
@@ -251,7 +261,7 @@ public class RobotContainer {
         commandButtonPanel.button(ButtonPanelButtons.AUX_LEFT)
                 .onTrue(new InstantCommand(RobotContainer::toggleUseAutoAlign));
         commandButtonPanel.button(ButtonPanelButtons.AUX_RIGHT)
-                .onTrue(new PositionCommand(elevatorSubsystem, .05) //climb mode
+                .onTrue(new PositionCommand(elevatorSubsystem, .025) //climb mode
                         .andThen(new PositionCommand(armSubsystem, 0))
                         .andThen(new PositionCommand(wristSubsystem, 0)));
 
@@ -259,6 +269,11 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
+
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
+                .onTrue(new VelocityCommand(intakeSubsystem, 60));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
+                .onTrue(new InstantCommand(RobotContainer::toggleAutomaticPlace));
 
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
 //                .onTrue(ScoreCommands.Arm.armBarge());
@@ -477,7 +492,7 @@ public class RobotContainer {
 
 
     public static boolean aligned() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .05
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .02
                 && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .02;
     }
 

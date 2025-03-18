@@ -3,56 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 16.183,
-        "y": 0.926
+        "x": 10.417315573770493,
+        "y": 1.861
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.970807377049178,
-        "y": 1.0782028688524599
+        "x": 10.647281357267106,
+        "y": 1.9590598716131569
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 13.64200819672131,
-        "y": 2.7
+        "x": 12.539139344262294,
+        "y": 2.712
       },
       "prevControl": {
-        "x": 13.845799180327868,
-        "y": 2.4962090163934434
+        "x": 12.299385245901638,
+        "y": 2.616098360655738
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 59.99999999999999
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "ARML4",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ARML4"
-        }
-      }
-    },
-    {
-      "name": "INTAKESEQUENCE",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKESEQUENCE"
-        }
-      }
+      "command": null
     }
   ],
   "globalConstraints": {
@@ -65,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "2 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

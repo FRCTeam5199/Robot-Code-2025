@@ -3,54 +3,70 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 16.183,
-        "y": 0.926
+        "x": 5.035,
+        "y": 5.386
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.970807377049178,
-        "y": 1.0782028688524599
+        "x": 3.8479795081967216,
+        "y": 6.6563012295081965
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 13.64200819672131,
-        "y": 2.7
+        "x": 1.4864754098360655,
+        "y": 7.184
       },
       "prevControl": {
-        "x": 13.845799180327868,
-        "y": 2.4962090163934434
+        "x": 1.6984749858373382,
+        "y": 7.0515002649992065
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.2841553906591062,
+      "rotationDegrees": -52.001
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ARML4",
-      "waypointRelativePos": 0.0,
+      "name": "INSTANTHP",
+      "waypointRelativePos": 0.03,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "ARML4"
+          "name": "INSTANTHP"
         }
       }
     },
     {
-      "name": "INTAKESEQUENCE",
-      "waypointRelativePos": 0,
+      "name": "HP",
+      "waypointRelativePos": 0.04,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "INTAKESEQUENCE"
+          "name": "HP"
+        }
+      }
+    },
+    {
+      "name": "INTAKE",
+      "waypointRelativePos": 0.8560126582278498,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKE"
         }
       }
     }
@@ -65,13 +81,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -52.001
   },
   "reversed": false,
-  "folder": "2 Piece Red Paths",
+  "folder": "2 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

@@ -99,9 +99,9 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 2;
 
         public static final double STABLE = 0;
-        public static final double GROUND = 8;//4
+        public static final double GROUND = 11;
 
-        public static final double L1 = 14;
+        public static final double L1 = 16;
         public static final double L2 = 34;
         public static final double L3 = 56;
         public static final double L4 = 78;
@@ -190,7 +190,7 @@ public final class Constants {
         public static final boolean WRIST_INVERTED = false;
 
         public static final double STABLE = 10;
-        public static final double GROUND = 189;
+        public static final double GROUND = 202;
         public static final double L1 = 10;
         public static final double L2 = 58;
         public static final double L3 = 84;
