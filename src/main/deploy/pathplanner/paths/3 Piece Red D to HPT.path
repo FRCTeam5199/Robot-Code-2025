@@ -3,72 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.64200819672131,
-        "y": 5.326
+        "x": 13.602742346938776,
+        "y": 5.274840561224489
       },
       "prevControl": null,
       "nextControl": {
-        "x": 13.803493757087855,
-        "y": 5.516846571342278
+        "x": 14.337723214285713,
+        "y": 5.709486607142857
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "D Red"
     },
     {
       "anchor": {
-        "x": 16.1234631147541,
-        "y": 7.136
+        "x": 16.25,
+        "y": 7.125
       },
       "prevControl": {
-        "x": 15.964984574196116,
-        "y": 6.9426491474479315
+        "x": 15.774107142857142,
+        "y": 6.623549107142857
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "HP Red Top"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "INSTANTHP",
-      "waypointRelativePos": 0.03,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INSTANTHP"
-        }
-      }
-    },
-    {
-      "name": "HP",
-      "waypointRelativePos": 0.04,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "HP"
-        }
-      }
-    },
-    {
-      "name": "INTAKE",
-      "waypointRelativePos": 0.892405063291138,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKE"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -76,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.816
+    "rotation": -125.8159256349378
   },
   "reversed": false,
   "folder": "3 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -120.30268072048808
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

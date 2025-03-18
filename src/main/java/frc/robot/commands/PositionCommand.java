@@ -1,0 +1,76 @@
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.template.TemplateSubsystem;
+
+public class PositionCommand extends Command {
+    private double vel;
+    private double acc;
+    private double goal;
+    private TemplateSubsystem templateSubsystem;
+    private boolean updateGoalPosition;
+    private boolean changeConstraint;
+
+    public PositionCommand(TemplateSubsystem templateSubsystem, double goal) {
+        this.templateSubsystem = templateSubsystem;
+        this.goal = goal;
+        updateGoalPosition = false;
+        changeConstraint = false;
+
+        addRequirements(templateSubsystem);
+    }
+
+    //Used for if the velocity/acceleration constraint needs to be changed
+    public PositionCommand(TemplateSubsystem templateSubsystem, double goal, boolean isGoingUp) {
+        this.templateSubsystem = templateSubsystem;
+        this.goal = goal;
+        updateGoalPosition = false;
+        if (isGoingUp) {
+            //Up
+            this.vel = 200;
+            this.acc = 400;
+        } else {
+            //Down
+            this.vel = 60;
+            this.acc = 120;
+        }
+        changeConstraint = true;
+
+        addRequirements(templateSubsystem);
+    }
+
+    @Override
+    public void initialize() {
+        if (changeConstraint) {
+            templateSubsystem.setPosition(goal, false, vel, acc);
+        } else {
+            templateSubsystem.setPosition(goal, false);
+        }
+    }
+
+    @Override
+    public void execute() {
+        templateSubsystem.followLastMechProfile();
+
+        if (updateGoalPosition) {
+            templateSubsystem.setPosition(goal, false);
+            updateGoalPosition = false;
+        }
+    }
+
+
+    @Override
+    public boolean isFinished() {
+        return templateSubsystem.isMechAtGoal(false);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        templateSubsystem.setFollowLastMechProfile(true);
+    }
+
+    public void setGoal(double goal) {
+        this.goal = goal;
+        updateGoalPosition = true;
+    }
+}

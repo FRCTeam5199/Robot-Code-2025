@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 12.503176229508197,
-        "y": 5.397592213114754
+        "x": 13.602742346938776,
+        "y": 5.274840561224489
       },
       "prevControl": null,
       "nextControl": {
-        "x": 13.238157096855135,
-        "y": 5.832238259033121
+        "x": 14.337723214285713,
+        "y": 5.709486607142857
       },
       "isLocked": false,
       "linkedName": "D Red"
@@ -48,7 +48,7 @@
   "folder": "4 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": -120.30268072048808
   },
   "useDefaultConstraints": true
 }

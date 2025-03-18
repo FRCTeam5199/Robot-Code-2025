@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3865770633790053,
-        "y": 1.1524324285319398
+        "x": 2.253875,
+        "y": 1.9563358070500918
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.668237704918033,
-        "y": 2.916
+        "x": 3.596,
+        "y": 3.0
       },
       "prevControl": {
-        "x": 3.4884221311475407,
-        "y": 2.71234631147541
+        "x": 3.143233606557377,
+        "y": 2.628555327868852
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,23 +48,12 @@
   "eventMarkers": [
     {
       "name": "ARML4",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.36564171122994676,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
           "name": "ARML4"
-        }
-      }
-    },
-    {
-      "name": "INTAKESEQUENCE",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKESEQUENCE"
         }
       }
     }
@@ -79,7 +68,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.621
+    "rotation": 59.620873988631644
   },
   "reversed": false,
   "folder": "2 Piece Blue Paths",

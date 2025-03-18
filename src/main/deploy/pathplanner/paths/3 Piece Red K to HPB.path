@@ -3,72 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.606,
-        "y": 2.712
+        "x": 13.601607266673923,
+        "y": 2.7761981705314156
       },
       "prevControl": null,
       "nextControl": {
-        "x": 13.782776695296636,
-        "y": 2.535223304703363
+        "x": 14.659461063930532,
+        "y": 1.8417076427629309
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "K Red"
     },
     {
       "anchor": {
-        "x": 15.943647540983607,
-        "y": 0.806
+        "x": 16.0,
+        "y": 0.75
       },
       "prevControl": {
-        "x": 15.76687084568697,
-        "y": 0.9827766952966367
+        "x": 14.908545918367347,
+        "y": 1.6409757653061212
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "HP Red Bottom"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "INSTANTHP",
-      "waypointRelativePos": 0.03,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INSTANTHP"
-        }
-      }
-    },
-    {
-      "name": "HP",
-      "waypointRelativePos": 0.04,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "HP"
-        }
-      }
-    },
-    {
-      "name": "INTAKE",
-      "waypointRelativePos": 0.9092827004219408,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKE"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -76,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 126.54500000000002
+    "rotation": 125.00000000000001
   },
   "reversed": false,
   "folder": "3 Piece Red Paths",
@@ -84,5 +50,5 @@
     "velocity": 0,
     "rotation": 119.99999999999999
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

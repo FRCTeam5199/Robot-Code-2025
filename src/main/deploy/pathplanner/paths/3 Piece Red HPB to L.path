@@ -3,72 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 15.944,
-        "y": 0.806
+        "x": 16.0,
+        "y": 0.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.805173574402152,
-        "y": 1.0139115762907993
+        "x": 15.032581967213114,
+        "y": 1.7113729508196718
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "HP Red Bottom"
     },
     {
       "anchor": {
-        "x": 13.917725409836065,
-        "y": 2.868
+        "x": 13.881762295081966,
+        "y": 2.9461065573770493
       },
       "prevControl": {
-        "x": 14.041864109617695,
-        "y": 2.6509986561872796
+        "x": 14.469159836065572,
+        "y": 2.472643442622951
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "L Red"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "ARML4",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ARML4"
-        }
-      }
-    },
-    {
-      "name": "INTAKESEQUENCE",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKESEQUENCE"
-        }
-      }
-    },
-    {
-      "name": "L4",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "L4"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -82,7 +48,7 @@
   "folder": "3 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 126.54500000000002
+    "rotation": 125.00000000000001
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

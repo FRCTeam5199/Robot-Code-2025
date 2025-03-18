@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4164959016393444,
-        "y": 2.6763831967213116
+        "x": 2.32488081298093,
+        "y": 1.8877634660421534
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "C Blue"
     },
     {
       "anchor": {
-        "x": 1.439,
-        "y": 0.914
+        "x": 1.2227459016393443,
+        "y": 1.0940061475409835
       },
       "prevControl": {
-        "x": 1.6235490109768267,
-        "y": 1.0826465610306808
+        "x": 2.0584601873536306,
+        "y": 1.9222586985613912
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "HP Blue Bottom"
     }
   ],
   "rotationTargets": [],
@@ -33,30 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "INSTANTHP",
-      "waypointRelativePos": 0.03,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
       "name": "HP",
-      "waypointRelativePos": 0.04,
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
           "name": "HP"
-        }
-      }
-    },
-    {
-      "name": "INTAKE",
-      "waypointRelativePos": 0.8792194092827029,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKE"
         }
       }
     }

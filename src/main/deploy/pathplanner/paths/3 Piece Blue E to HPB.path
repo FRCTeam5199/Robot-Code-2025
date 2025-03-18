@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 1.5943647540983608,
+        "x": 1.6183401639344261,
         "y": 0.794
       },
       "prevControl": {
-        "x": 1.9837028789810491,
+        "x": 2.0076782888171145,
         "y": 0.9452140633798419
       },
       "nextControl": null,
@@ -38,19 +38,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "INSTANTHP",
-      "waypointRelativePos": 0.03,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INSTANTHP"
-        }
-      }
-    },
-    {
       "name": "HP",
-      "waypointRelativePos": 0.04,
+      "waypointRelativePos": 0.1,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -60,8 +49,19 @@
       }
     },
     {
+      "name": "INSTANTHP",
+      "waypointRelativePos": 0.10303893637226338,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INSTANTHP"
+        }
+      }
+    },
+    {
       "name": "INTAKE",
-      "waypointRelativePos": 0.7631856540084417,
+      "waypointRelativePos": 0.86,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

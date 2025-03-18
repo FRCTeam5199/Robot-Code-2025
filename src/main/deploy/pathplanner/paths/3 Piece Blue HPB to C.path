@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.582,
-        "y": 0.782
+        "x": 1.439,
+        "y": 0.926
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.949460760794862,
-        "y": 1.0907456905814237
+        "x": 1.8064607607948064,
+        "y": 1.2347456905814238
       },
       "isLocked": false,
       "linkedName": null
@@ -56,7 +56,7 @@
     },
     {
       "name": "L4",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.8646723646723646,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
