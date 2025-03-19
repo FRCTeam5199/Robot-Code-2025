@@ -112,6 +112,7 @@ public class RobotContainer {
     public static State state = State.L1;
     private static Timer timer = new Timer();
     private static boolean useAutoAlign = true;
+    private static boolean automaticPlace = true;
 
     public static boolean isAutomaticPlace() {
         return automaticPlace;
@@ -121,7 +122,6 @@ public class RobotContainer {
         automaticPlace = !automaticPlace;
     }
 
-    private static boolean automaticPlace = false;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -271,7 +271,8 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-                .onTrue(new VelocityCommand(intakeSubsystem, 60));
+                .onTrue(new VelocityCommand(intakeSubsystem, 60))
+                .onFalse(new VelocityCommand(intakeSubsystem, 0));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
                 .onTrue(new InstantCommand(RobotContainer::toggleAutomaticPlace));
 

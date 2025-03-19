@@ -275,7 +275,9 @@ public class ScoreCommands {
             return new ConditionalCommand(
                     stableL4(),
                     regularStable(),
-                    () -> RobotContainer.getState() == State.L4
+                    () -> (RobotContainer.getState() == State.L4
+                            || RobotContainer.getState() == State.ALGAE_LOW
+                            || RobotContainer.getState() == State.ALGAE_HIGH)
             );
         }
 
@@ -609,7 +611,7 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() > ElevatorConstants.ALGAE_HIGH
-            );
+            ).alongWith(new VelocityCommand(intakeSubsystem, -60));
         }
 
         public static Command removeAlgaeLow() {
@@ -629,7 +631,7 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() > ElevatorConstants.ALGAE_LOW
-            );
+            ).alongWith(new VelocityCommand(intakeSubsystem, -60));
         }
 
 //        public static Command scoreBarge() {
