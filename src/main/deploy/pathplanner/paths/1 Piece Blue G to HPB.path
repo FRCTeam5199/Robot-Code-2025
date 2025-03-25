@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.922,
-        "y": 3.851
+        "x": 5.826024590163935,
+        "y": 3.8631659836065575
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.317471938775511,
-        "y": 2.2765739795918365
+        "x": 6.221496528939446,
+        "y": 2.288739963198394
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.1567045454545453,
-        "y": 1.053
+        "x": 1.3066598360655735,
+        "y": 0.938165983606558
       },
       "prevControl": {
-        "x": 3.6489239332096357,
-        "y": 1.6723239795918334
+        "x": 3.798879223820664,
+        "y": 1.5574899631983912
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.46693386773547096,
+      "waypointRelativePos": 0.6033586565373841,
       "rotationDegrees": 54.145
     }
   ],
@@ -52,19 +52,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "INSTANTHP",
-      "waypointRelativePos": 0.03,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INSTANTHP"
-        }
-      }
-    },
-    {
       "name": "HP",
-      "waypointRelativePos": 0.04,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -98,10 +87,10 @@
     "rotation": 54.145
   },
   "reversed": false,
-  "folder": "2 Piece Blue Paths",
+  "folder": "1 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

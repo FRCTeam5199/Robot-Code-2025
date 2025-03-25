@@ -5,69 +5,19 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Blue Start to J"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ALIGNR"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "OUTTAKE"
+            "name": "ARML4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue J to HPT"
+            "pathName": "2 Piece Blue Back to E"
           }
         },
         {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "DRIVETOP"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "INTAKE"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Blue HPT to L"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -94,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue L to HPT"
+            "pathName": "2 Piece Blue E to HPB"
           }
         },
         {
@@ -104,7 +54,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVETOP"
+                  "name": "DRIVE"
                 }
               },
               {
@@ -119,11 +69,11 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue HPT to K"
+            "pathName": "2 Piece Blue HPB to D"
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -150,7 +100,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue K to HPT"
+            "pathName": "2 Piece Blue D to HPB"
           }
         },
         {
@@ -160,7 +110,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVETOP"
+                  "name": "DRIVE"
                 }
               },
               {
@@ -176,6 +126,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "3 Piece L4",
+  "folder": "2 Piece L4",
   "choreoAuto": false
 }
