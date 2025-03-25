@@ -489,6 +489,11 @@ public class ScoreCommands {
             );
         }
 
+        public static Command coralIntake(){
+                return new VelocityCommand(intakeSubsystem,100);
+        }
+
+
         public static Command reIntakeSequence() {
             //In case the coral gets stuck
             return new SequentialCommandGroup(

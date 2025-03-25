@@ -28,7 +28,10 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ScoreCommands.Score;
+import frc.robot.constants.Constants.ArmConstants;
+import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.constants.Constants.OperatorConstants;
+import frc.robot.constants.Constants.WristConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.controls.ButtonPanelButtons;
 import frc.robot.controls.CommandButtonPanel;
@@ -148,6 +151,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("OUTTAKE", ScoreCommands.Score.place()
                 .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral()));
 
+        
+
 
         Autos.initializeAutos();
 
@@ -191,6 +196,11 @@ public class RobotContainer {
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
         commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
                         .alongWith(ScoreCommands.Intake.intakeSequence()))
+                .onFalse(ScoreCommands.Stabling.intakeStable()
+                        .alongWith(ScoreCommands.Intake.intakeSequence()));
+
+                        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
+                        .alongWith(ScoreCommands.Intake.coralIntake()))
                 .onFalse(ScoreCommands.Stabling.intakeStable()
                         .alongWith(ScoreCommands.Intake.intakeSequence()));
 
@@ -268,6 +278,10 @@ public class RobotContainer {
                 .onTrue(new PositionCommand(elevatorSubsystem, .025) //climb mode
                         .andThen(new PositionCommand(armSubsystem, 0))
                         .andThen(new PositionCommand(wristSubsystem, 0)));
+
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(new PositionCommand(elevatorSubsystem, ElevatorConstants.L4).alongWith(new PositionCommand(wristSubsystem, 160)).alongWith(new VelocityCommand(intakeSubsystem, -90))).onFalse(new PositionCommand(wristSubsystem, WristConstants.HP).andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.HP)));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G).onTrue(new PositionCommand(armSubsystem, 90).alongWith(new VelocityCommand(intakeSubsystem, -90)));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I).onTrue(new PositionCommand(elevatorSubsystem, ElevatorConstants.L4).alongWith(new PositionCommand(wristSubsystem, 160)).alongWith(new VelocityCommand(intakeSubsystem, 90)));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
