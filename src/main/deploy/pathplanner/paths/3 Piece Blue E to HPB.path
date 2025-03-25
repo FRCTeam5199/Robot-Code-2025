@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.119,
-        "y": 2.628
+        "x": 5.059,
+        "y": 2.688
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.339799180327868,
-        "y": 1.6210327868852468
+        "x": 4.279799180327869,
+        "y": 1.6810327868852468
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.2227459016393443,
-        "y": 1.0940061475409835
+        "x": 1.5104508196721311,
+        "y": 0.722
       },
       "prevControl": {
-        "x": 1.6120840265220322,
-        "y": 1.2452202109208248
+        "x": 1.8997889445548195,
+        "y": 0.8732140633798419
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,8 +38,19 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "INSTANTHP",
+      "waypointRelativePos": 0.03,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INSTANTHP"
+        }
+      }
+    },
+    {
       "name": "HP",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.04,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -50,7 +61,7 @@
     },
     {
       "name": "INTAKE",
-      "waypointRelativePos": 0.86,
+      "waypointRelativePos": 0.7631856540084417,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

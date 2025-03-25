@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 16.0,
-        "y": 0.75
+        "x": 16.183,
+        "y": 0.926
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.1840473768353,
-        "y": 1.4581277325094861
+        "x": 15.970807377049178,
+        "y": 1.0782028688524599
       },
       "isLocked": false,
-      "linkedName": "HP Red Bottom"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 13.601607266673923,
-        "y": 2.7761981705314156
+        "x": 13.64200819672131,
+        "y": 2.7
       },
       "prevControl": {
-        "x": 14.173681797095579,
-        "y": 2.3091527898582065
+        "x": 13.845799180327868,
+        "y": 2.4962090163934434
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "K Red"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -40,6 +40,17 @@
         "type": "named",
         "data": {
           "name": "ARML4"
+        }
+      }
+    },
+    {
+      "name": "INTAKESEQUENCE",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INTAKESEQUENCE"
         }
       }
     }

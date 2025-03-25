@@ -3,23 +3,34 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.AnalogInput;
 
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants.IntakeConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
+import frc.robot.utility.State;
 import frc.robot.utility.Type;
 
 public class IntakeSubsystem extends TemplateSubsystem {
     public static IntakeSubsystem intakeSubsystem;
     public TalonFX intake_motor = new TalonFX(IntakeConstants.INTAKE_ID);
-    private AnalogInput intakeSensor;
+    public AnalogInput intakeSensor;
+    private boolean hasCoral;
+    private boolean isAboveSpeed = false;
+    private int isAboveSpeedCounter = 0;
+
+    public void setScoringAlgae(boolean scoringAlgae) {
+        isScoringAlgae = scoringAlgae;
+    }
+
+    private boolean isScoringAlgae = false;
 
     public IntakeSubsystem() {
         super(Type.ROLLER,
                 IntakeConstants.INTAKE_ID,
                 IntakeConstants.INTAKE_CONSTRAINTS,
-                IntakeConstants.INTAKE_FEEDFORWARD,
+                IntakeConstants.INTAKE_FF,
                 IntakeConstants.INTAKE_LOWER_TOLERANCE,
                 IntakeConstants.INTAKE_UPPER_TOLERANCE,
-                IntakeConstants.INTAKE_gearRatios,
+                IntakeConstants.INTAKE_GEAR_RATIO,
                 "Intake");
 
         configureMotor(
@@ -36,9 +47,20 @@ public class IntakeSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
 
-//        System.out.println("Intake: " + getMechVelocity());
-//        System.out.println("Intake Break Beam: " + intakeSensor.getValue());
+        hasCoral = intakeSensor.getValue() > 100;
 
+        if (super.isAboveSpeed()) isAboveSpeedCounter++;
+        else isAboveSpeedCounter = 0;
+
+        isAboveSpeed = isAboveSpeedCounter > 2;
+
+//        System.out.println("Has Coral: " + hasCoral());
+//        System.out.println("Sensor Value: " + intakeSensor.getValue());
+
+//        if ((RobotContainer.getState() == State.ALGAE_LOW
+//                || RobotContainer.getState() == State.ALGAE_HIGH
+//                || RobotContainer.getState() == State.BARGE
+//                || RobotContainer.getState() == State.PROCESSOR) && !isScoringAlgae) setVelocity(-100);
     }
 
     public static IntakeSubsystem getInstance() {
@@ -60,12 +82,16 @@ public class IntakeSubsystem extends TemplateSubsystem {
         setVelocity(-75);
     }
 
-    //Peak naming :fire:
-    public boolean isIntooken() {
-        return getStatorCurrent() > 25;
+    public boolean hasCoral() {
+        return hasCoral;
     }
 
-    public boolean isCoralInIntake() {
-        return intakeSensor.getValue() > 100;
+    public boolean hasCoralCurrent() {
+        return getSupplyCurrent() > 10;
+    }
+
+    @Override
+    public boolean isAboveSpeed() {
+        return isAboveSpeed;
     }
 }

@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.SignalLogger;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.UserInterface;
 import frc.robot.constants.Constants.WristConstants;
 import frc.robot.utility.Type;
 
@@ -49,7 +52,7 @@ public class WristSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
 
-        if (getSupplyCurrent() > .6) currentSpike++;
+        if (getSupplyCurrent() > 1) currentSpike++;
         else noCurrentSpike++;
 
         if (noCurrentSpike >= 2) {
@@ -57,9 +60,15 @@ public class WristSubsystem extends TemplateSubsystem {
             noCurrentSpike = 0;
         }
 
-//        System.out.println("wrist degrees: " + wristSubsystem.getDegrees());
+        if (!DriverStation.isFMSAttached()) {
+            if (UserInterface.getTestComponent("Offset Wrist").getString("") != "") {
+                this.setOffset(UserInterface.getTestComponent("Offset Wrist").getDouble(0));
+            }
+            if (UserInterface.getTestComponent("Set Wrist").getString("") != "") {
+                this.setPosition(UserInterface.getTestComponent("Set Wrist").getDouble(0));
+            }
+        }
     }
-
 
     public static WristSubsystem getInstance() {
         if (wristSubsystem == null) {

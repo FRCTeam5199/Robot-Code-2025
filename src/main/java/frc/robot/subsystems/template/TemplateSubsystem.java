@@ -1,5 +1,7 @@
 package frc.robot.subsystems.template;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -10,10 +12,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.signals.*;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
@@ -216,6 +215,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     public void setPercent(double percent) {
         followLastMechProfile = false;
+        if (percent > 1) percent /= 100;
         motor.set(percent);
     }
 
@@ -364,6 +364,29 @@ public class TemplateSubsystem extends SubsystemBase {
         }
     }
 
+    public boolean isMechGreaterThanPosition(double position) {
+        switch (type) {
+            case LINEAR -> {
+                return getMechM() >= position;
+            }
+            case PIVOT -> {
+                if (encoder != null)
+                    return Units.rotationsToDegrees(getEncoderRot()) >= position;
+                else
+                    return getDegrees() >= position;
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
+
+    public boolean isAboveSpeed() {
+        if (type != Type.ROLLER) return false;
+        return getMechVelocity() > goal;
+    }
+
+
     public void setOffset(double offset) {
         this.offset = offset;
         changedOffset = true;
@@ -392,10 +415,17 @@ public class TemplateSubsystem extends SubsystemBase {
         return motor.getRotorPosition().getValueAsDouble() * gearRatio * 360d;
     }
 
+    /**
+     * @return Gets the position of the actual motor of the mechanism.
+     */
+
     public double getMotorRot() {
         return motor.getRotorPosition().getValueAsDouble();
     }
 
+    /**
+     * @return The rotation of the mechanism itself (Accounts for gear ratios and stuff)
+     */
     public double getMechRot() {
         return motor.getRotorPosition().getValueAsDouble() * gearRatio;
     }
@@ -424,9 +454,20 @@ public class TemplateSubsystem extends SubsystemBase {
         return mechRot / gearRatio;
     }
 
+    /**
+     * @return the current height of the elevator as a double
+     */
     public double getMechM() {
         if (type != Type.LINEAR) return 0;
         return motor.getRotorPosition().getValueAsDouble() * drumCircumference * gearRatio;
+    }
+
+    /**
+     * @return a constantly updating value for the height of the elevator as a double.
+     */
+    public DoubleSupplier getMechMeter() {
+        if (type != Type.LINEAR) return () -> 0;
+        return () -> motor.getRotorPosition().getValueAsDouble() * drumCircumference * gearRatio;
     }
 
     public double getMechMFromMotorRot(double motorRot) {

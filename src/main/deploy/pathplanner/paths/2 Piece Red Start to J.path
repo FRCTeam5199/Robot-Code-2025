@@ -3,35 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 14.415,
-        "y": 3.85
+        "x": 10.417315573770493,
+        "y": 1.861
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.892689732142856,
-        "y": 3.045647321428571
+        "x": 10.647281357267106,
+        "y": 1.9590598716131569
       },
       "isLocked": false,
-      "linkedName": "A Red"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 16.0,
-        "y": 0.75
+        "x": 12.539139344262294,
+        "y": 2.712
       },
       "prevControl": {
-        "x": 15.480301339285713,
-        "y": 1.5962053571428567
+        "x": 12.299385245901638,
+        "y": 2.616098360655738
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HP Red Bottom"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 59.99999999999999
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ARML4",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "4 Piece Red Paths",
+  "folder": "2 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

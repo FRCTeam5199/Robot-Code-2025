@@ -5,13 +5,19 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "2 Piece Blue Start to G"
+            "name": "ARML4"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Blue Back to E"
+          }
+        },
+        {
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -38,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue G to HPB"
+            "pathName": "2 Piece Blue E to HPB"
           }
         },
         {
@@ -63,17 +69,17 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue HPB to C"
+            "pathName": "2 Piece Blue HPB to D"
           }
         },
         {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNL"
+                  "name": "ALIGNR"
                 }
               },
               {
@@ -94,7 +100,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue C to HPB"
+            "pathName": "2 Piece Blue D to HPB"
           }
         },
         {

@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.UserInterface;
 import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.Type;
@@ -45,11 +47,15 @@ public class ElevatorSubsystem extends TemplateSubsystem {
             currentSpike = 0;
             noCurrentSpike = 0;
         }
-
-        // System.out.println("is at goal position: " + isMechAtGoal(false));
-        // System.out.println("meters: " + getMechM());
-
-//        System.out.println("Elevator Mech M: " + getMechM());
+        
+        if (!DriverStation.isFMSAttached()) {
+            if (UserInterface.getTestComponent("Offset Elevator").getString("") != "") {
+                this.setOffset(UserInterface.getTestComponent("Offset Elevator").getDouble(0));
+            }
+            if (UserInterface.getTestComponent("Set Elevator").getString("") != "") {
+                this.setPosition(UserInterface.getTestComponent("Set Elevator").getDouble(0));
+            }
+        }
     }
 
     public static ElevatorSubsystem getInstance() {

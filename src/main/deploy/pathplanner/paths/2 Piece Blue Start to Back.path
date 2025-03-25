@@ -3,35 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 16.25,
-        "y": 7.125
+        "x": 7.120696721311476,
+        "y": 5.361
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.950390624999997,
-        "y": 6.9369419642857135
+        "x": 7.370696721311476,
+        "y": 5.361
       },
       "isLocked": false,
-      "linkedName": "HP Red Top"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 13.602742346938776,
-        "y": 5.274840561224489
+        "x": 7.5282786885245905,
+        "y": 5.361
       },
       "prevControl": {
-        "x": 14.657645089285714,
-        "y": 6.0228794642857135
+        "x": 7.180434720995173,
+        "y": 5.361
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "D Red"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "ARML4",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ARML4"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -120.30268072048808
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "4 Piece Red Paths",
+  "folder": "2 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -125.8159256349378
+    "rotation": 179.9832923322395
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
