@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Helper Autons Start Blue"
+            "pathName": "2 Piece Blue Start Helper"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue Start to J"
+            "pathName": "2 Piece Blue Start to J"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue J to HPT"
+            "pathName": "2 Piece Blue J to HPB"
           }
         },
         {
@@ -69,7 +69,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue HPT to L"
+            "pathName": "2 Piece Blue HPT to L"
           }
         },
         {
@@ -79,7 +79,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNL"
+                  "name": "ALIGNR"
                 }
               },
               {
@@ -100,7 +100,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue L to HPT"
+            "pathName": "2 Piece Blue L to HPT"
           }
         },
         {

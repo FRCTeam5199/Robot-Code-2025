@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 16.183,
-        "y": 0.926
+        "x": 7.072745901639344,
+        "y": 6.11685450819672
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.970807377049178,
-        "y": 1.0782028688524599
+        "x": 7.369005681818181,
+        "y": 6.11903409090909
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 13.64200819672131,
-        "y": 2.7
+        "x": 7.75,
+        "y": 6.11685450819672
       },
       "prevControl": {
-        "x": 13.845799180327868,
-        "y": 2.4962090163934434
+        "x": 7.43090909090909,
+        "y": 6.129005681818182
+      },
+      "nextControl": {
+        "x": 8.06909090909091,
+        "y": 6.104703334575259
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.072745901639344,
+        "y": 6.11685450819672
+      },
+      "prevControl": {
+        "x": 7.320089550494612,
+        "y": 6.080507302376162
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,24 +49,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ARML4",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ARML4"
-        }
-      }
-    },
-    {
-      "name": "INTAKESEQUENCE",
+      "name": "UNWIND",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "INTAKESEQUENCE"
+          "name": "UNWIND"
         }
       }
     }
@@ -65,13 +70,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "2 Piece Red Paths",
+  "folder": "2 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

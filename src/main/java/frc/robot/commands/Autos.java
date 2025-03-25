@@ -37,8 +37,8 @@ public final class Autos {
     private static PathPlannerAuto threePieceRedBottomL4;
     private static PathPlannerAuto threePieceRedTopL4;
 
-    private static PathPlannerAuto helper2PieceBlue;
-    private static PathPlannerAuto helper2PieceRed;
+    private static PathPlannerAuto helper2PieceTopBlue;
+    private static PathPlannerAuto helper2PieceTopRed;
 
     /**
      * Gets or creates the AutoChooser (Singleton Method)
@@ -58,8 +58,8 @@ public final class Autos {
         onePieceBlueDropL1 = new PathPlannerAuto("Blue Climber Drop");
         onePieceRedDropL1 = new PathPlannerAuto("Red Climber Drop");
 
-        helper2PieceBlue = new PathPlannerAuto("Helper Auton 2 Piece Blue");
-        helper2PieceRed = new PathPlannerAuto("Helper 2 Piece Red Top L4");
+        helper2PieceTopBlue = new PathPlannerAuto("2 Piece Blue Top L4 Helper");
+        helper2PieceTopRed = new PathPlannerAuto("2 Piece Red Top L4 Helper");
 
         twoPieceBlueBottomL4 = new PathPlannerAuto("2 Piece Blue Bottom L4");
         twoPieceBlueTopL4 = new PathPlannerAuto("2 Piece Blue Top L4");
@@ -85,13 +85,13 @@ public final class Autos {
         autonChooserRed.addOption("2 Piece Red Right", twoPieceRedTopL4);
         autonChooserRed.addOption("3 Piece Red Left", threePieceRedBottomL4);
         autonChooserRed.addOption("3 Piece Red Right", threePieceRedTopL4);
-        autonChooserRed.addOption("2 Piece Red Helper", helper2PieceRed);
+        autonChooserRed.addOption("2 Piece Red Left Helper", helper2PieceTopRed);
 
         autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDropL1);
         autonChooserBlue.addOption("2 Piece Blue Left", twoPieceBlueTopL4);
         autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueBottomL4);
         autonChooserBlue.addOption("3 Piece Blue Left", threePieceBlueTopL4);
         autonChooserBlue.addOption("3 Piece Blue Right", threePieceBlueBottomL4);
-        autonChooserBlue.addOption("2 Piece Blue Helper", helper2PieceBlue);
+        autonChooserBlue.addOption("2 Piece Blue Left Helper", helper2PieceTopBlue);
     }
 }

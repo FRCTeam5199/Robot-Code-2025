@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 16.183,
-        "y": 0.926
+        "x": 10.418,
+        "y": 1.861
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.970807377049178,
-        "y": 1.0782028688524599
+        "x": 10.168,
+        "y": 1.8609999999999998
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 13.64200819672131,
-        "y": 2.7
+        "x": 9.5,
+        "y": 1.861
       },
       "prevControl": {
-        "x": 13.845799180327868,
-        "y": 2.4962090163934434
+        "x": 9.75,
+        "y": 1.8609999999999998
+      },
+      "nextControl": {
+        "x": 9.25,
+        "y": 1.8609999999999998
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 10.418,
+        "y": 1.861
+      },
+      "prevControl": {
+        "x": 10.168,
+        "y": 1.8609999999999998
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,24 +49,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ARML4",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ARML4"
-        }
-      }
-    },
-    {
-      "name": "INTAKESEQUENCE",
+      "name": "UNWIND",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "INTAKESEQUENCE"
+          "name": "UNWIND"
         }
       }
     }
@@ -65,13 +70,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "2 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.00000000000001
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
