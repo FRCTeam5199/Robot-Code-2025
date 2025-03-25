@@ -260,7 +260,7 @@ public class RobotContainer {
 
         commandButtonPanel.button(ButtonPanelButtons.BUTTON1)
                 .onTrue(new InstantCommand(RobotContainer::toggleUseAutoAlign));
-        commandButtonPanel.button(ButtonPanelButtons.AUX_RIGHT)
+        commandButtonPanel.button(ButtonPanelButtons.BUTTON2)
                 .onTrue(new PositionCommand(elevatorSubsystem, .025) //climb mode
                         .andThen(new PositionCommand(armSubsystem, 0))
                         .andThen(new PositionCommand(wristSubsystem, 0)));
