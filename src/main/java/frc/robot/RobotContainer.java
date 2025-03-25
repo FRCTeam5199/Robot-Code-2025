@@ -172,10 +172,14 @@ public class RobotContainer {
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
                 .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0))));
 
-        commandXboxController.a().onTrue(ScoreCommands.Arm.armL1());
-        commandXboxController.b().onTrue(ScoreCommands.Arm.armL2());
-        commandXboxController.x().onTrue(ScoreCommands.Arm.armL3());
-        commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
+        commandXboxController.a().onTrue(ScoreCommands.Arm.armL1()
+                .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.L1)));
+        commandXboxController.b().onTrue(ScoreCommands.Arm.armL2()
+                .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.L2)));
+        commandXboxController.x().onTrue(ScoreCommands.Arm.armL3()
+                .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.L3)));
+        commandXboxController.y().onTrue(ScoreCommands.Arm.armL4()
+                .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.L3)));
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
                         .alongWith(ScoreCommands.Drive.autoAlignTeleop())
