@@ -50,8 +50,8 @@ public final class Constants {
         public static final boolean INVERT = true;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
         public static final boolean ELEVATOR_BRAKE = true;
-        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 45;
-        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 45;
+        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 60;
+        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 60;
         public static final double DRUM_CIRCUMFERENCE = .119694706;
 
         public static final Slot0Configs ELEVATOR_SLOT0_CONFIGS = new Slot0Configs()
@@ -65,6 +65,7 @@ public final class Constants {
                 .withGravityType(GravityTypeValue.Elevator_Static);
 
         public static final double STABLE = 0;
+        public static final double ALGAE_STABLE = 0.13;
         public static final double GROUND = .12;
 
         public static final double L1 = 0;
@@ -235,7 +236,7 @@ public final class Constants {
         public static final Transform3d CAMERA_POSE =
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
-        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(3.5, 3.5, 999);
+        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(.4, .4, 999);
     }
 }
 
