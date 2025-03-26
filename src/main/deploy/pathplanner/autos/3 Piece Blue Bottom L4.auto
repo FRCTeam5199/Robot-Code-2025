@@ -152,31 +152,6 @@
           "data": {
             "name": "STABLE"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Blue C to HPB"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "DRIVE"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "INTAKE"
-                }
-              }
-            ]
-          }
         }
       ]
     }

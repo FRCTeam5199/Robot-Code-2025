@@ -51,7 +51,7 @@ public class WristSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
 
-        if (getSupplyCurrent() > .75) currentSpike++;
+        if (getSupplyCurrent() > 1) currentSpike++;
         else noCurrentSpike++;
 
         if (noCurrentSpike >= 2) {
@@ -59,14 +59,14 @@ public class WristSubsystem extends TemplateSubsystem {
             noCurrentSpike = 0;
         }
 
-//        if (!DriverStation.isFMSAttached()) {
-//            if (UserInterface.getTestComponent("Offset Wrist").getString("") != "") {
-//                this.setOffset(UserInterface.getTestComponent("Offset Wrist").getDouble(0));
-//            }
-//            if (UserInterface.getTestComponent("Set Wrist").getString("") != "") {
-//                this.setPosition(UserInterface.getTestComponent("Set Wrist").getDouble(0));
-//            }
-//        }
+        if (!DriverStation.isFMSAttached()) {
+            if (UserInterface.getTestComponent("Offset Wrist").getString("") != "") {
+                this.setOffset(UserInterface.getTestComponent("Offset Wrist").getDouble(0));
+            }
+            if (UserInterface.getTestComponent("Set Wrist").getString("") != "") {
+                this.setPosition(UserInterface.getTestComponent("Set Wrist").getDouble(0));
+            }
+        }
     }
 
     public static WristSubsystem getInstance() {

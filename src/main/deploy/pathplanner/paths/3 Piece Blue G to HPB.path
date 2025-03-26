@@ -1,0 +1,71 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.8134375,
+        "y": 3.8554829545454536
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.185655737704918,
+        "y": 2.4486168032786884
+      },
+      "isLocked": false,
+      "linkedName": "G Blue"
+    },
+    {
+      "anchor": {
+        "x": 1.2227459016393443,
+        "y": 1.0940061475409835
+      },
+      "prevControl": {
+        "x": 3.910835825108733,
+        "y": 1.8672284051940455
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "HP Blue Bottom"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.47752511898466504,
+      "rotationDegrees": 55.15303966695289
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "HP",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "HP"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 55.0
+  },
+  "reversed": false,
+  "folder": "3 Piece Blue Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
+}

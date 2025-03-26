@@ -7,63 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red Start to E"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ALIGNL"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "OUTTAKE"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Red E to HPT"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "DRIVETOP"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "INTAKE"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Red HPT to D"
+            "pathName": "2 Piece Red Start to D"
           }
         },
         {
@@ -88,13 +32,19 @@
         {
           "type": "named",
           "data": {
+            "name": "DUNK"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "OUTTAKE"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red D to HPT"
+            "pathName": "2 Piece Red D to HPT"
           }
         },
         {
@@ -104,13 +54,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "DRIVETOP"
+                  "name": "INTAKE"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "INTAKE"
+                  "name": "DRIVETOP"
                 }
               }
             ]
@@ -119,7 +69,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red HPT to C"
+            "pathName": "2 Piece Red HPT to C"
           }
         },
         {
@@ -144,38 +94,25 @@
         {
           "type": "named",
           "data": {
+            "name": "DUNK"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "OUTTAKE"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red C to HPT"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "DRIVETOP"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "INTAKE"
-                }
-              }
-            ]
+            "pathName": "2 Piece Red C to HPT"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3 Piece L4",
+  "folder": "2 Piece L4",
   "choreoAuto": false
 }

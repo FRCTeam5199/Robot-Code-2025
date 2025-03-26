@@ -24,10 +24,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
-import frc.robot.constants.Constants;
-import frc.robot.subsystems.template.PositionCommand;
+import frc.robot.commands.PositionCommand;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ScoreCommands.Score;
+import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.controls.ButtonPanelButtons;
@@ -250,9 +250,9 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-1)))
                 .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 
-        commandButtonPanel.button(ButtonPanelButtons.AUX_LEFT)
+        commandButtonPanel.button(ButtonPanelButtons.BUTTON1)
                 .onTrue(new InstantCommand(RobotContainer::toggleUseAutoAlign));
-        commandButtonPanel.button(ButtonPanelButtons.AUX_RIGHT)
+        commandButtonPanel.button(ButtonPanelButtons.BUTTON2)
                 .onTrue(new PositionCommand(elevatorSubsystem, .025) //climb mode
                         .andThen(new PositionCommand(armSubsystem, 0))
                         .andThen(new PositionCommand(wristSubsystem, 0)));

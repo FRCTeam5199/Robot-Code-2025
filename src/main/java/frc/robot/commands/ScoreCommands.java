@@ -1,5 +1,12 @@
 package frc.robot.commands;
 
+import static frc.robot.RobotContainer.MaxAngularRate;
+import static frc.robot.RobotContainer.commandSwerveDrivetrain;
+import static frc.robot.RobotContainer.commandXboxController;
+import static frc.robot.RobotContainer.rotationVelocity;
+import static frc.robot.RobotContainer.xVelocity;
+import static frc.robot.RobotContainer.yVelocity;
+
 import java.util.Map;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -28,11 +35,8 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
-import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
-
-import static frc.robot.RobotContainer.*;
 
 public class ScoreCommands {
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -487,6 +491,11 @@ public class ScoreCommands {
                             .until(intakeSubsystem::hasCoral)
             );
         }
+
+        public static Command coralIntake(){
+                return new VelocityCommand(intakeSubsystem,100);
+        }
+
 
         public static Command reIntakeSequence() {
             //In case the coral gets stuck
