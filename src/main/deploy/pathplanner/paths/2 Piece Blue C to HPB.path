@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.596311475409836,
-        "y": 3.0
+        "x": 3.668,
+        "y": 2.916
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.004485444354285,
-        "y": 2.431014059724167
+        "x": 3.0761739689444494,
+        "y": 2.347014059724167
       },
       "isLocked": false,
       "linkedName": null
@@ -47,8 +47,19 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "INSTANTHP",
+      "waypointRelativePos": 0.03,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INSTANTHP"
+        }
+      }
+    },
+    {
       "name": "HP",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.04,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -84,8 +95,8 @@
   "reversed": false,
   "folder": "2 Piece Blue Paths",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 54.144771653784304
+    "velocity": 0.0,
+    "rotation": 59.621
   },
   "useDefaultConstraints": false
 }

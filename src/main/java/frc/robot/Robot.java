@@ -9,6 +9,7 @@ import java.util.Optional;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.commands.ScoreCommands;
+import frc.robot.subsystems.IntakeSubsystem;
 import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.Utils;
@@ -47,7 +48,7 @@ public class Robot extends TimedRobot {
         UserInterface.init();
 
         System.setProperty("wpilog.directory", "/media/sda1/wpilog");
-        
+
         DataLogManager.start();
 
         commandSwerveDrivetrain.configureAutoBuilder();

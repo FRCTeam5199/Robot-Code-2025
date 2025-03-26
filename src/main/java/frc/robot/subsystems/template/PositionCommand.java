@@ -1,7 +1,6 @@
-package frc.robot.commands;
+package frc.robot.subsystems.template;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.template.TemplateSubsystem;
 
 public class PositionCommand extends Command {
     private double vel;
@@ -32,7 +31,7 @@ public class PositionCommand extends Command {
         } else {
             //Down
             this.vel = 60;
-            this.acc = 120;
+            this.acc = 100;
         }
         changeConstraint = true;
 

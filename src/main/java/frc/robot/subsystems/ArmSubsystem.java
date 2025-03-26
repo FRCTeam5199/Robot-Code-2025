@@ -1,12 +1,8 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.UserInterface;
-import frc.robot.commands.PositionCommand;
 import frc.robot.constants.Constants.ArmConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.Type;
@@ -72,7 +68,7 @@ public class ArmSubsystem extends TemplateSubsystem {
             //   setVoltage((ArmConstants.ARM_FF.getkG()) / Math.cos(Units.rotationsToRadians(getEncoderRot())));
 
         }
-        if (getStatorCurrent() > 45) currentSpike++;
+        if (getStatorCurrent() > 40) currentSpike++;
         else noCurrentSpike++;
 
         if (noCurrentSpike >= 2) {
@@ -80,15 +76,15 @@ public class ArmSubsystem extends TemplateSubsystem {
             noCurrentSpike = 0;
         }
 
-        if (!DriverStation.isFMSAttached()) {
-            if (UserInterface.getTestComponent("Offset Arm").getString("") != "") {
-                this.setOffset(UserInterface.getTestComponent("Offset Arm").getDouble(0));
-            }
+        // if (!DriverStation.isFMSAttached()) {
+        //     if (UserInterface.getTestComponent("Offset Arm").getString("") != "") {
+        //         this.setOffset(UserInterface.getTestComponent("Offset Arm").getDouble(0));
+        //     }
 
-            if (UserInterface.getTestComponent("Set Arm").getString("") != "") {
-                this.setPosition(UserInterface.getTestComponent("Set Arm").getDouble(0));
-            }
-        }
+        //     if (UserInterface.getTestComponent("Set Arm").getString("") != "") {
+        //         this.setPosition(UserInterface.getTestComponent("Set Arm").getDouble(0));
+        //     }
+        // }
     }
 
     public static ArmSubsystem getInstance() {

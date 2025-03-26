@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 11.744770408163266,
-        "y": 4.207812499999999
+        "x": 11.644,
+        "y": 4.171
       },
       "prevControl": null,
       "nextControl": {
-        "x": 10.782206632653063,
-        "y": 5.528539540816325
+        "x": 10.681436224489797,
+        "y": 5.491727040816326
       },
       "isLocked": false,
-      "linkedName": "G Red"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HP Red Top"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
@@ -38,8 +38,19 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "INSTANTHP",
+      "waypointRelativePos": 0.03,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "INSTANTHP"
+        }
+      }
+    },
+    {
       "name": "HP",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 0.04,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

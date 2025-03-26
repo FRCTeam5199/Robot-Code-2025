@@ -7,13 +7,63 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue Start to Back"
+            "pathName": "2 Piece Red Start to H"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNR"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue Start to K"
+            "pathName": "2 Piece Red H to HPB"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DRIVE"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "INTAKE"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Piece Red HPB to K"
           }
         },
         {
@@ -44,7 +94,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue K to HPT"
+            "pathName": "2 Piece Red K to HPB"
           }
         },
         {
@@ -64,43 +114,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2 Piece Blue HPT to L"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ALIGNR"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "L4"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "OUTTAKE"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "STABLE"
           }
         }
       ]
