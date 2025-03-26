@@ -381,7 +381,6 @@ public class ScoreCommands {
 
         public static Command zeroSubsystems() {
             return new SequentialCommandGroup(
-                    new PositionCommand(wristSubsystem, 0),
                     new ParallelCommandGroup(
                             new InstantCommand(() -> elevatorSubsystem.setFollowLastMechProfile(false)),
                             new InstantCommand(() -> armSubsystem.setFollowLastMechProfile(false)),
@@ -484,7 +483,7 @@ public class ScoreCommands {
                     new VelocityCommand(intakeSubsystem, -15)
                             .until(() -> !intakeSubsystem.hasCoral()),
                     //Intake slowly until beam breaks
-                    new VelocityCommand(intakeSubsystem, 15)
+                    new VelocityCommand(intakeSubsystem, 10)
                             .until(intakeSubsystem::hasCoral)
             );
         }
@@ -501,16 +500,16 @@ public class ScoreCommands {
                     new VelocityCommand(intakeSubsystem, -50)
                             .until(() -> !intakeSubsystem.hasCoral()),
                     //Intake slowly until beam breaks; the coral is now barely at the beam
-                    new VelocityCommand(intakeSubsystem, 25)
+                    new VelocityCommand(intakeSubsystem, 15)
                             .until(intakeSubsystem::hasCoral),
                     //Intake slowly for an amount of time; lines it up completely
                     new VelocityCommand(intakeSubsystem, 10)
                             .withDeadline(new WaitCommand(0.2)),
                     //Outtake slowly until beam connects
-                    new VelocityCommand(intakeSubsystem, -35)
+                    new VelocityCommand(intakeSubsystem, -15)
                             .until(() -> !intakeSubsystem.hasCoral()),
                     //Intake slowly until beam breaks
-                    new VelocityCommand(intakeSubsystem, 20)
+                    new VelocityCommand(intakeSubsystem, 10)
                             .until(intakeSubsystem::hasCoral)
             );
         }
@@ -524,7 +523,7 @@ public class ScoreCommands {
                     new VelocityCommand(intakeSubsystem, -25)
                             .until(() -> !intakeSubsystem.hasCoral()),
                     //Intake slowly until beam breaks; the coral is now barely at the beam
-                    new VelocityCommand(intakeSubsystem, 15)
+                    new VelocityCommand(intakeSubsystem, 10)
                             .until(intakeSubsystem::hasCoral)
             );
         }
@@ -800,11 +799,20 @@ public class ScoreCommands {
 //                    ),
 //                    () -> RobotContainer.getState() == State.L1
 //            );
-            return new ConditionalCommand(
-                    new VelocityCommand(intakeSubsystem, 30),
-                    new VelocityCommand(intakeSubsystem, 60),
-                    () -> RobotContainer.getState() == State.L1
-            );
+                return new ConditionalCommand(
+                        new VelocityCommand(intakeSubsystem, -60),
+                        new ConditionalCommand(
+                                new VelocityCommand(intakeSubsystem, 30),
+                                new ConditionalCommand(
+                                        new VelocityCommand(intakeSubsystem, 80),
+                                        new VelocityCommand(intakeSubsystem, 60),
+                                        () -> RobotContainer.getState() == State.L4
+                                ),
+                                () -> RobotContainer.getState() == State.L1
+                        ),
+                        () -> (RobotContainer.getState() == State.ALGAE_HIGH
+                                || RobotContainer.getState() == State.ALGAE_LOW)
+                );
         }
 
     }

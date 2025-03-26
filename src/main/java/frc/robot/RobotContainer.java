@@ -77,8 +77,8 @@ public class RobotContainer {
     public static double yVelocity = 0;
     public static double rotationVelocity = 0;
 
-    public static double autoAlignXOffset = 0.01; //temporary because reef bad, change to .02
-    public static double autoAlignYOffset = -.165; //.165
+    public static double autoAlignXOffset = 0.03; //.03, .03, .04, 04, 045, .04, .04
+    public static double autoAlignYOffset = -.15; //.14, .15, .16, .15, .15, .155, .15
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -115,15 +115,6 @@ public class RobotContainer {
     public static State state = State.L1;
     private static Timer timer = new Timer();
     private static boolean useAutoAlign = true;
-    private static boolean automaticPlace = true;
-
-    public static boolean isAutomaticPlace() {
-        return automaticPlace;
-    }
-
-    public static void toggleAutomaticPlace() {
-        automaticPlace = !automaticPlace;
-    }
 
 
     /**
@@ -135,12 +126,12 @@ public class RobotContainer {
                 .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)
                         .onlyIf(() -> wristSubsystem.getDegrees() < 5)));
         NamedCommands.registerCommand("ALIGNL", ScoreCommands.Drive.autoAlignLAuton()
-                .withTimeout(3));
+                .withTimeout(2.5));
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.Drive.autoAlignRAuton()
-                .withTimeout(3));
+                .withTimeout(2.5));
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
         NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwindAuton()
-                .andThen(ScoreCommands.Arm.armL4())
+                .andThe9n(ScoreCommands.Arm.armL4())
                 .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)));
         NamedCommands.registerCommand("INTAKE", new VelocityCommand(intakeSubsystem, 40)
                 .until(intakeSubsystem::hasCoral));
@@ -149,7 +140,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("DRIVE", ScoreCommands.Drive.autoMoveForwardBottom().withTimeout(3));
         NamedCommands.registerCommand("DRIVETOP", ScoreCommands.Drive.autoMoveForwardTop().withTimeout(3));
         NamedCommands.registerCommand("OUTTAKE", ScoreCommands.Score.place()
-                .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral()));
+        // .withTimeout(1).andThen(new InstantCommand(() -> wristSubsystem.setPosition(Constants.WristConstants.HP))));
+                .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
+                .andThen(new InstantCommand(() -> wristSubsystem.setPosition(Constants.WristConstants.HP))));
 
         
 
@@ -187,8 +180,7 @@ public class RobotContainer {
                 .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.L3)));
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
-                        .alongWith(ScoreCommands.Drive.autoAlignTeleop())
-                        .andThen(ScoreCommands.Score.place().onlyIf(RobotContainer::isAutomaticPlace)))
+                        .alongWith(ScoreCommands.Drive.autoAlignTeleop()))
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
@@ -207,13 +199,12 @@ public class RobotContainer {
 //        commandXboxController.leftBumper().onTrue(Score.score())
 //                .onFalse(ScoreCommands.Stabling.stable());
         commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround()
-                        .until(intakeSubsystem::hasCoral)
+                        .until(() -> (intakeSubsystem.hasCoral()))
                         .andThen(ScoreCommands.Stabling.groundIntakeStable()))
                 .onFalse(ScoreCommands.Stabling.groundIntakeStable());
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
-                .onFalse(new VelocityCommand(intakeSubsystem, 0)
-                        .beforeStarting(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(false))));
+                .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
         commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
 
@@ -222,13 +213,13 @@ public class RobotContainer {
 //        commandXboxController.povLeft().onTrue(new VelocityCommand(intakeSubsystem, -50));
 //        commandXboxController.povRight().onTrue(new VelocityCommand(intakeSubsystem, -50));
 
-//        commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
-//        commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
+       commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
+       commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
 
-        commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(1)))
-                .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-        commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-1)))
-                .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        // commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(1)))
+        //         .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
+        // commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-1)))
+        //         .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 
 //        commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP).onTrue(ScoreCommands.Intake.intakeHP())
 //                .onFalse(ScoreCommands.Stabling.intakeStable()
@@ -240,7 +231,8 @@ public class RobotContainer {
 
         //Outtake
         commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP)
-                .onTrue(new VelocityCommand(intakeSubsystem, -100));
+                .onTrue(new VelocityCommand(intakeSubsystem, -100))
+                .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1).onTrue(ScoreCommands.Arm.armL1());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armL2());
@@ -292,7 +284,20 @@ public class RobotContainer {
                 .onTrue(new VelocityCommand(intakeSubsystem, 60))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-                .onTrue(new InstantCommand(RobotContainer::toggleAutomaticPlace));
+                .onTrue(ScoreCommands.Intake.reIntakeSequence());
+
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
+                .onTrue(ScoreCommands.Zeroing.zeroSubsystems());
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F)
+                .onTrue(new InstantCommand(() -> elevatorSubsystem.setPercent(0))
+                .andThen(new InstantCommand(() -> armSubsystem.setPercent(0)))
+                .andThen(new InstantCommand(() -> wristSubsystem.setPercent(0)))
+                .andThen(new InstantCommand(() -> elevatorSubsystem.setFollowLastMechProfile(false)))
+                .andThen(new InstantCommand(() -> armSubsystem.setFollowLastMechProfile(false)))
+                .andThen(new InstantCommand(() -> wristSubsystem.setFollowLastMechProfile(false))));
+
+        // commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
+        //         .onTrue(new InstantCommand(() -> intakeSubsystem.toggleBreakBeam()));
 
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
 //                .onTrue(ScoreCommands.Arm.armBarge());
@@ -420,27 +425,27 @@ public class RobotContainer {
         //     UserInterface.setControlComponent("Reset Wrist", false);
         // }
 
-        UserInterface.setAutonComponent("Event", DriverStation.getEventName());
-        UserInterface.setAutonComponent("Game Message", DriverStation.getGameSpecificMessage());
-        UserInterface.setAutonComponent("Location", DriverStation.getLocation().getAsInt());
-        UserInterface.setAutonComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
-        UserInterface.setAutonComponent("Enabled", DriverStation.isEnabled());
-        UserInterface.setAutonComponent("EStop", DriverStation.isEStopped());
-        UserInterface.setAutonComponent("Match Type", DriverStation.getMatchType().toString());
-        UserInterface.setAutonComponent("Match Number", DriverStation.getMatchNumber());
-        UserInterface.setAutonComponent("Replay Match Number", DriverStation.getReplayNumber());
-        UserInterface.setAutonComponent("Match Time", DriverStation.getMatchTime());
+        // UserInterface.setAutonComponent("Event", DriverStation.getEventName());
+        // UserInterface.setAutonComponent("Game Message", DriverStation.getGameSpecificMessage());
+        // UserInterface.setAutonComponent("Location", DriverStation.getLocation().getAsInt());
+        // UserInterface.setAutonComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
+        // UserInterface.setAutonComponent("Enabled", DriverStation.isEnabled());
+        // UserInterface.setAutonComponent("EStop", DriverStation.isEStopped());
+        // UserInterface.setAutonComponent("Match Type", DriverStation.getMatchType().toString());
+        // UserInterface.setAutonComponent("Match Number", DriverStation.getMatchNumber());
+        // UserInterface.setAutonComponent("Replay Match Number", DriverStation.getReplayNumber());
+        // UserInterface.setAutonComponent("Match Time", DriverStation.getMatchTime());
 
-        UserInterface.setTeleopComponent("Event", DriverStation.getEventName());
-        UserInterface.setTeleopComponent("Game Message", DriverStation.getGameSpecificMessage());
-        UserInterface.setTeleopComponent("Location", DriverStation.getLocation().getAsInt());
-        UserInterface.setTeleopComponent("Enabled", DriverStation.isEnabled());
-        UserInterface.setTeleopComponent("EStop", DriverStation.isEStopped());
-        UserInterface.setTeleopComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
-        UserInterface.setTeleopComponent("Match Type", DriverStation.getMatchType().toString());
-        UserInterface.setTeleopComponent("Match Number", DriverStation.getMatchNumber());
-        UserInterface.setTeleopComponent("Replay Match Number", DriverStation.getReplayNumber());
-        UserInterface.setTeleopComponent("Match Time", DriverStation.getMatchTime());
+        // UserInterface.setTeleopComponent("Event", DriverStation.getEventName());
+        // UserInterface.setTeleopComponent("Game Message", DriverStation.getGameSpecificMessage());
+        // UserInterface.setTeleopComponent("Location", DriverStation.getLocation().getAsInt());
+        // UserInterface.setTeleopComponent("Enabled", DriverStation.isEnabled());
+        // UserInterface.setTeleopComponent("EStop", DriverStation.isEStopped());
+        // UserInterface.setTeleopComponent("Alliance", DriverStation.getAlliance().get() == Alliance.Blue);
+        // UserInterface.setTeleopComponent("Match Type", DriverStation.getMatchType().toString());
+        // UserInterface.setTeleopComponent("Match Number", DriverStation.getMatchNumber());
+        // UserInterface.setTeleopComponent("Replay Match Number", DriverStation.getReplayNumber());
+        // UserInterface.setTeleopComponent("Match Time", DriverStation.getMatchTime());
 
 //         UserInterface.setControlComponent("Reset All", ScoreCommands.Zeroing.zeroSubsystems());
 //         UserInterface.setControlComponent("Reset Elevator", ScoreCommands.Zeroing.zeroElevator());
@@ -511,7 +516,7 @@ public class RobotContainer {
 
 
     public static boolean aligned() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .02
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .025
                 && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .02;
     }
 
