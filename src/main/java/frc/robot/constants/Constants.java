@@ -43,7 +43,7 @@ public final class Constants {
                 = new TrapezoidProfile.Constraints(75, 150);
         public static final FeedForward ELEVATOR_FF = new FeedForward(.42, .18, .16666666666666666666666666666667);
         public static final double ELEVATOR_MIN = 0;
-        public static final double ELEVATOR_MAX = 1.002;
+        public static final double ELEVATOR_MAX = 1.025;
         public static final double ELEVATOR_LOWER_TOLERANCE = 0.05;
         public static final double ELEVATOR_UPPER_TOLERANCE = 0.05;
         public static final double[][] ELEVATOR_GEARING = new double[][]{{3, 1}};
@@ -65,12 +65,12 @@ public final class Constants {
                 .withGravityType(GravityTypeValue.Elevator_Static);
 
         public static final double STABLE = 0;
-        public static final double GROUND = .12; //.17
+        public static final double GROUND = .12;
 
         public static final double L1 = 0;
-        public static final double L2 = .14;
-        public static final double L3 = .4;
-        public static final double L4 = 1.002;
+        public static final double L2 = .11;
+        public static final double L3 = .38;
+        public static final double L4 = 1.025;
         public static final double HP = .0;
 
         public static final double ALGAE_LOW = .13;
@@ -99,12 +99,12 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 2;
 
         public static final double STABLE = 0;
-        public static final double GROUND = 11;
+        public static final double GROUND = 9;
 
-        public static final double L1 = 18;
-        public static final double L2 = 44;
-        public static final double L3 = 64;
-        public static final double L4 = 78;
+        public static final double L1 = 16;
+        public static final double L2 = 41;
+        public static final double L3 = 61;
+        public static final double L4 = 75.25;
         public static final double HP = 63;
 
         public static final double ALGAE_LOW = 60;
@@ -193,9 +193,9 @@ public final class Constants {
         public static final double GROUND = 202;
         public static final double L1 = 10;
         public static final double L2 = 68;
-        public static final double L3 = 94;
+        public static final double L3 = 92;
         public static final double PREVIOUS_L4 = 100;
-        public static final double L4 = 135;
+        public static final double L4 = 140;
         public static final double HP = 62;
 
         public static final double ALGAE_LOW = 200;
@@ -220,8 +220,8 @@ public final class Constants {
 
         public static final FeedForward WRIST_FF = new FeedForward(.16, .18, .11764705882352941176470588235294);
 
-        public static final double WRIST_LOWER_TOLERANCE = 2;
-        public static final double WRIST_UPPER_TOLERANCE = 2;
+        public static final double WRIST_LOWER_TOLERANCE = 3;
+        public static final double WRIST_UPPER_TOLERANCE = 3;
 
         public static final double WRIST_MIN = 0.0;
         public static final double WRIST_MAX = 215; //unknown

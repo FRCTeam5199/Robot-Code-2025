@@ -38,7 +38,7 @@ public final class Autos {
     private static PathPlannerAuto threePieceRedTopL4;
 
     private static PathPlannerAuto helper2PieceTopBlue;
-    private static PathPlannerAuto helper2PieceTopRed;
+    private static PathPlannerAuto helper2PieceBottomRed;
 
     /**
      * Gets or creates the AutoChooser (Singleton Method)
@@ -59,7 +59,7 @@ public final class Autos {
         onePieceRedDropL1 = new PathPlannerAuto("Red Climber Drop");
 
         helper2PieceTopBlue = new PathPlannerAuto("2 Piece Blue Top L4 Helper");
-        helper2PieceTopRed = new PathPlannerAuto("2 Piece Red Top L4 Helper");
+        helper2PieceBottomRed = new PathPlannerAuto("2 Piece Red Bottom L4 Helper");
 
         twoPieceBlueBottomL4 = new PathPlannerAuto("2 Piece Blue Bottom L4");
         twoPieceBlueTopL4 = new PathPlannerAuto("2 Piece Blue Top L4");
@@ -85,7 +85,7 @@ public final class Autos {
         autonChooserRed.addOption("2 Piece Red Right", twoPieceRedTopL4);
         autonChooserRed.addOption("3 Piece Red Left", threePieceRedBottomL4);
         autonChooserRed.addOption("3 Piece Red Right", threePieceRedTopL4);
-        autonChooserRed.addOption("2 Piece Red Left Helper", helper2PieceTopRed);
+        autonChooserRed.addOption("2 Piece Red Left Helper", helper2PieceBottomRed);
 
         autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDropL1);
         autonChooserBlue.addOption("2 Piece Blue Left", twoPieceBlueTopL4);

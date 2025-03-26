@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.UserInterface;
 import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.Type;

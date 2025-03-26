@@ -17,12 +17,6 @@ public class IntakeSubsystem extends TemplateSubsystem {
     private boolean isAboveSpeed = false;
     private int isAboveSpeedCounter = 0;
 
-    public void setScoringAlgae(boolean scoringAlgae) {
-        isScoringAlgae = scoringAlgae;
-    }
-
-    private boolean isScoringAlgae = false;
-
     public IntakeSubsystem() {
         super(Type.ROLLER,
                 IntakeConstants.INTAKE_ID,
@@ -54,7 +48,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
         isAboveSpeed = isAboveSpeedCounter > 2;
 
-//        System.out.println("Has Coral: " + hasCoral());
+    //    System.out.println("Has Coral: " + hasCoral());
 //        System.out.println("Sensor Value: " + intakeSensor.getValue());
 
 //        if ((RobotContainer.getState() == State.ALGAE_LOW
