@@ -131,7 +131,7 @@ public class RobotContainer {
                 .withTimeout(2.5));
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
         NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwindAuton()
-                .andThe9n(ScoreCommands.Arm.armL4())
+                .andThen(ScoreCommands.Arm.armL4())
                 .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)));
         NamedCommands.registerCommand("INTAKE", new VelocityCommand(intakeSubsystem, 40)
                 .until(intakeSubsystem::hasCoral));

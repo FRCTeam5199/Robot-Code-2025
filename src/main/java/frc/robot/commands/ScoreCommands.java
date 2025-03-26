@@ -735,7 +735,7 @@ public class ScoreCommands {
             return new SequentialCommandGroup(
                     new PositionCommand(armSubsystem, ArmConstants.L4),
                     new ParallelCommandGroup(
-                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, true),
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L4, 1000, 4000),
                             new PositionCommand(wristSubsystem, WristConstants.L4)
                                     .beforeStarting(new WaitCommand(Double.MAX_VALUE)
                                             .until(() -> elevatorSubsystem.isMechGreaterThanPosition(.5)))
