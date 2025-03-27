@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.57,
-        "y": 2.784
+        "x": 3.153,
+        "y": 3.827
       },
       "prevControl": null,
       "nextControl": {
-        "x": 13.746776695296637,
-        "y": 2.607223304703363
+        "x": 2.9968228554811684,
+        "y": 3.6291060926504337
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 16.032405821917806,
-        "y": 0.779
+        "x": 1.091,
+        "y": 1.07
       },
       "prevControl": {
-        "x": 15.855629126621169,
-        "y": 0.9557766952966372
+        "x": 1.2700335997862424,
+        "y": 1.344904695386965
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,24 +33,35 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "HP",
-      "waypointRelativePos": 0.04,
+      "name": "ARML4",
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "HP"
+          "name": "ARML4"
         }
       }
     },
     {
-      "name": "INTAKE",
-      "waypointRelativePos": 0.9092827004219408,
+      "name": "INTAKESEQUENCE",
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "INTAKE"
+          "name": "INTAKESEQUENCE"
+        }
+      }
+    },
+    {
+      "name": "L4",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "L4"
         }
       }
     }
@@ -65,13 +76,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 126.54500000000002
+    "rotation": 55.0
   },
   "reversed": false,
-  "folder": "3 Piece Red Paths",
+  "folder": "4 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }

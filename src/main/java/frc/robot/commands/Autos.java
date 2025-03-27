@@ -37,6 +37,8 @@ public final class Autos {
     private static PathPlannerAuto threePieceRedBottomL4;
     private static PathPlannerAuto threePieceRedTopL4;
 
+    private static PathPlannerAuto fourPieceBlueBottomL4;
+
     private static PathPlannerAuto helper2PieceTopBlue;
     private static PathPlannerAuto helper2PieceBottomRed;
 
@@ -71,6 +73,8 @@ public final class Autos {
         threePieceRedBottomL4 = new PathPlannerAuto("3 Piece Red Bottom L4");
         threePieceRedTopL4 = new PathPlannerAuto("3 Piece Red Top L4");
 
+        fourPieceBlueBottomL4 = new PathPlannerAuto("4 Piece Blue Bottom L4");
+
         testBlue = new PathPlannerAuto("Test Blue");
 
         Shuffleboard.getTab("Autons").add("Red Autons", autonChooserRed)
@@ -92,6 +96,8 @@ public final class Autos {
         autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueBottomL4);
         autonChooserBlue.addOption("3 Piece Blue Left", threePieceBlueTopL4);
         autonChooserBlue.addOption("3 Piece Blue Right", threePieceBlueBottomL4);
+        autonChooserBlue.addOption("4 Piece Blue Right", fourPieceBlueBottomL4);
         autonChooserBlue.addOption("2 Piece Blue Left Helper", helper2PieceTopBlue);
+        autonChooserBlue.addOption("Test Blue", testBlue);
     }
 }

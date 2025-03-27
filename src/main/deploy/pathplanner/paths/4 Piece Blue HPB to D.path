@@ -3,70 +3,79 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.059,
-        "y": 2.688
+        "x": 1.51,
+        "y": 0.722
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.279799180327869,
-        "y": 1.6810327868852468
+        "x": 1.786020491803279,
+        "y": 0.9260061475409834
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.5104508196721311,
-        "y": 0.722
+        "x": 3.9799180327868857,
+        "y": 2.82
       },
       "prevControl": {
-        "x": 1.8997889445548195,
-        "y": 0.8732140633798419
+        "x": 3.813086137500882,
+        "y": 2.633808918808446
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
+  "rotationTargets": [],
+  "constraintZones": [
     {
-      "waypointRelativePos": 0.4077207826546757,
-      "rotationDegrees": 55.0
+      "name": "slow",
+      "minWaypointRelativePos": 0.86,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
     }
   ],
-  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "INSTANTHP",
-      "waypointRelativePos": 0.03,
+      "name": "ARML4",
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "INSTANTHP"
+          "name": "ARML4"
         }
       }
     },
     {
-      "name": "HP",
-      "waypointRelativePos": 0.04,
+      "name": "INTAKESEQUENCE",
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "HP"
+          "name": "INTAKESEQUENCE"
         }
       }
     },
     {
-      "name": "INTAKE",
-      "waypointRelativePos": 0.7631856540084417,
+      "name": "L4",
+      "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "INTAKE"
+          "name": "L4"
         }
       }
     }
@@ -81,13 +90,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 59.620873988631644
   },
   "reversed": false,
   "folder": "4 Piece Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 55.0
   },
   "useDefaultConstraints": false
 }

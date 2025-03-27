@@ -33,12 +33,6 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "INSTANTHP",
-      "waypointRelativePos": 0.03,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
       "name": "HP",
       "waypointRelativePos": 0.04,
       "endWaypointRelativePos": null,

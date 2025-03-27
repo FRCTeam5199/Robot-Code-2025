@@ -11,21 +11,28 @@
           }
         },
         {
-          "type": "wait",
+          "type": "parallel",
           "data": {
-            "waitTime": 1.0
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNR"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ALIGNR"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "test 2"
+            "name": "OUTTAKE"
           }
         }
       ]

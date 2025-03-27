@@ -78,7 +78,7 @@ public class RobotContainer {
     public static double rotationVelocity = 0;
 
     public static double autoAlignXOffset = -0.01;
-    public static double autoAlignYOffset = -.165;
+    public static double autoAlignYOffset = -.14;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -129,7 +129,7 @@ public class RobotContainer {
                 .withTimeout(2.5));
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.Drive.autoAlignRAuton()
                 .withTimeout(2.5));
-        NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
+//        NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
         NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwindAuton()
                 .andThen(ScoreCommands.Arm.armL4())
                 .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)));

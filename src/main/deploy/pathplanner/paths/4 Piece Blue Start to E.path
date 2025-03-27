@@ -3,65 +3,59 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.956,
-        "y": 2.784
+        "x": 7.132684426229508,
+        "y": 1.8732069672131149
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.764151639344262,
-        "y": 2.568530737704918
+        "x": 6.761065573770491,
+        "y": 2.0650102459016404
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.4505122950819673,
-        "y": 0.818
+        "x": 4.998872950819672,
+        "y": 2.784
       },
       "prevControl": {
-        "x": 1.6423155737704922,
-        "y": 0.9858278688524585
+        "x": 5.346516393442623,
+        "y": 2.6281598360655734
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4585414585414595,
+      "rotationDegrees": 119.99999999999999
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "INSTANTHP",
-      "waypointRelativePos": 0.03,
+      "name": "UNWIND",
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "INSTANTHP"
+          "name": "UNWIND"
         }
       }
     },
     {
-      "name": "HP",
-      "waypointRelativePos": 0.044,
+      "name": "L4",
+      "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "HP"
-        }
-      }
-    },
-    {
-      "name": "INTAKE",
-      "waypointRelativePos": 0.8843582887700531,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "INTAKE"
+          "name": "L4"
         }
       }
     }
@@ -76,13 +70,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 55.0
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "4 Piece Blue Paths",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 59.620873988631644
+    "velocity": 0.0,
+    "rotation": 180.0
   },
   "useDefaultConstraints": false
 }
