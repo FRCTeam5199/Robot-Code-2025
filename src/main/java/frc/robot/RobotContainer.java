@@ -112,7 +112,7 @@ public class RobotContainer {
     private static int selectedReefTag = 0;
     private static List<Integer> reefTags = new ArrayList<>();
     private static boolean lockOnMode = false;
-    private boolean goToMode = false;
+    private static boolean goToMode = false;
     public static State state = State.L1;
     private static Timer timer = new Timer();
     private static boolean useAutoAlign = true;
@@ -189,17 +189,15 @@ public class RobotContainer {
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
-        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
-                        .alongWith(ScoreCommands.Intake.intakeSequence()))
-                .onFalse(ScoreCommands.Stabling.intakeStable()
-                        .alongWith(ScoreCommands.Intake.intakeSequence()));
+        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP().alongWith(ScoreCommands.Intake.intakeSequence()))
+                .onFalse(ScoreCommands.Stabling.intakeStable().alongWith(ScoreCommands.Intake.intakeSequence()));
 
 //        commandXboxController.leftBumper().onTrue(Score.score())
 //                .onFalse(ScoreCommands.Stabling.stable());
-        commandXboxController.leftBumper().onTrue(new GoToCommands().GoToCommand(objectDetectionSubsystem.getObjectPositionFieldRelative()).onlyIf(() -> objectDetectionSubsystem.getObjectClass() == "Coral" && this.goToMode).andThen(ScoreCommands.Intake.intakeGround()
+        commandXboxController.leftBumper().onTrue(new GoToCommands().GoToCommand(objectDetectionSubsystem.getObjectPositionFieldRelative()).onlyIf(() -> objectDetectionSubsystem.getObjectClass() == "Coral" && getGoToMode()).andThen(ScoreCommands.Intake.intakeGround()
                         .until(intakeSubsystem::hasCoral)
                         .andThen(ScoreCommands.Stabling.groundIntakeStable())))
-                        .onFalse(ScoreCommands.Stabling.groundIntakeStable());
+                .onFalse(ScoreCommands.Stabling.groundIntakeStable());
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
                 .onFalse(new VelocityCommand(intakeSubsystem, 0)
@@ -229,8 +227,7 @@ public class RobotContainer {
 //                        )));
 
         //Outtake
-        commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP)
-                .onTrue(new VelocityCommand(intakeSubsystem, -100));
+        commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP).onTrue(new VelocityCommand(intakeSubsystem, -100));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1).onTrue(ScoreCommands.Arm.armL1());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armL2());
@@ -266,22 +263,22 @@ public class RobotContainer {
                 .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
 
         commandButtonPanel.button(ButtonPanelButtons.BUTTON1)
-                .onTrue(new InstantCommand(RobotContainer::toggleUseAutoAlign).andThen(new InstantCommand(RobotContainer::toggleUseAutoAlign)));
+                .onTrue(new InstantCommand(RobotContainer::toggleGoToMode).andThen(new InstantCommand(RobotContainer::toggleUseAutoAlign)));
         commandButtonPanel.button(ButtonPanelButtons.BUTTON2)
                 .onTrue(new PositionCommand(elevatorSubsystem, .025) //climb mode
                         .andThen(new PositionCommand(armSubsystem, 0))
                         .andThen(new PositionCommand(wristSubsystem, 0)));
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
-                .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
-                .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
+        // commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
+        //         .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
+        // commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
+        //         .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-                .onTrue(new VelocityCommand(intakeSubsystem, 60))
-                .onFalse(new VelocityCommand(intakeSubsystem, 0));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-                .onTrue(new InstantCommand(RobotContainer::toggleAutomaticPlace));
+        // commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
+        //         .onTrue(new VelocityCommand(intakeSubsystem, 60))
+        //         .onFalse(new VelocityCommand(intakeSubsystem, 0));
+        // commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
+        //         .onTrue(new InstantCommand(RobotContainer::toggleAutomaticPlace));
 
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
 //                .onTrue(ScoreCommands.Arm.armBarge());
@@ -520,7 +517,11 @@ public class RobotContainer {
         return useAutoAlign;
     }
 
-    public void toggleGoToMode() {
+    public static void toggleGoToMode() {
         goToMode = !goToMode;
+    }
+
+    public static boolean getGoToMode() {
+        return goToMode;
     }
 }
