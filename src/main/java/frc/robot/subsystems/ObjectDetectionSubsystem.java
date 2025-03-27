@@ -1,111 +1,65 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
-import frc.robot.LimelightHelpers.LimelightResults;
-import frc.robot.LimelightHelpers.LimelightTarget_Classifier;
-import frc.robot.LimelightHelpers.LimelightTarget_Detector;
+import frc.robot.RobotContainer;
+import frc.robot.constants.Constants;
 
 public class ObjectDetectionSubsystem extends SubsystemBase {
     private static ObjectDetectionSubsystem objectDetectionSubsystem;
 
-    private final PIDController lockOnPID = new PIDController(0, 0, 0);
-
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
-    NetworkTableEntry tclass = table.getEntry("tclass");
-
-    //read values periodically
-    double x;
-    double area;
-    double y;
-
-
-    @Override
-    public void periodic() {
-        x = tx.getDouble(0.0);
-        y = ty.getDouble(0.0);
-        area = ta.getDouble(0.00);
-
-    }
-
-    String cwass = tclass.getString("no piece");
+    private NetworkTable networkTable = NetworkTableInstance.getDefault().getTable(Constants.PhotonVisionConstants.CAMERA_NAME);
+    private NetworkTableEntry targetX = networkTable.getEntry("tx");
+    private NetworkTableEntry targetY = networkTable.getEntry("ty");
+    private NetworkTableEntry targetArea = networkTable.getEntry("ta");
+    private NetworkTableEntry targetClass = networkTable.getEntry("tclass");
 
     public static ObjectDetectionSubsystem getInstance() {
         if (objectDetectionSubsystem == null) objectDetectionSubsystem = new ObjectDetectionSubsystem();
         return objectDetectionSubsystem;
     }
 
-
-    public LimelightResults getLimelightResults() {
-        return LimelightHelpers.getLatestResults(""/*Constants.Vision.LIMELIGHT_NAME*/);
+    public boolean isObjectDetected() {
+        return targetArea.getDouble(0) != 0;
     }
 
-
-    public LimelightTarget_Classifier[] getTargets() {
-        return getLimelightResults().targets_Classifier;
+    /**
+     * Gets the distance of the object from the robot.
+     * @return
+     */
+    public String getObjectClass(){
+        return targetClass.getString("");
     }
 
-    public LimelightTarget_Detector[] getObjects() {
-        return getLimelightResults().targets_Detector;
-
+    /**
+     * Gets the distance of the object from the robot.
+     * @return
+     */
+    public double getObjectDistance(){
+        return Math.sqrt(Math.pow(targetX.getDouble(0), 2) + Math.pow(targetY.getDouble(0), 2));
     }
 
-    public LimelightTarget_Detector getNearestAlgae() {
-        LimelightTarget_Detector nearestAlgae = null;
-        double minDistance = Double.MAX_VALUE;
-
-        for (LimelightTarget_Detector object : getObjects()) {
-            if (object.className.equals("Algae")) { // Possibly add OR statement to select the object whether its algae or coral?
-                double distance = calculateDistance(object); // Implement this method
-                if (distance < minDistance) {
-                    nearestAlgae = object;
-                    minDistance = distance;
-                }
-            }
-        }
-
-        return nearestAlgae;
+    /**
+     * Gets a Pose3d of the object relative to the robot
+     * @return
+     */
+    public Pose3d getObjectPositionRobotRelative(){
+        return LimelightHelpers.getTargetPose3d_RobotSpace(Constants.PhotonVisionConstants.CAMERA_NAME);
     }
 
-    private double calculateDistance(LimelightTarget_Detector object) {
-        // Calculate the distance to the object based on its coordinates (tx, ty)
-        // Replace this with the actual distance calculation based on your needs
-        return Math.sqrt(object.tx * object.tx + object.ty * object.ty);
+    /**
+     * Gets a Pose2d of the object relative to the robot
+     * @return
+     */
+    public Pose2d getObjectPositionFieldRelative(){
+        return new Pose2d(RobotContainer.commandSwerveDrivetrain.getPose().getX() + this.getObjectPositionRobotRelative().getX(),
+                        RobotContainer.commandSwerveDrivetrain.getPose().getY() + this.getObjectPositionRobotRelative().getY(),
+                        new Rotation2d(RobotContainer.commandSwerveDrivetrain.getPose().getRotation().getRadians() + this.getObjectPositionRobotRelative().getRotation().toRotation2d().getRadians()));
     }
-
-    public double getAlgaePoseX() {
-        return x;
-    }
-
-    public double getAlgaePoseY() {
-        return y;
-    }
-
-    public double getAlgaeDistance() {
-        return area;
-    }
-
-    public double getObjectIdentity() {
-        return x;
-    }
-
-    public boolean algaePresent() {
-        if (x == 0 && y == 0 && area == 0) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public double lockOn() {
-        return lockOnPID.calculate(getAlgaePoseY(), 0);
-    }
-
 }
