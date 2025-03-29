@@ -78,7 +78,7 @@ public class RobotContainer {
     public static double rotationVelocity = 0;
 
     public static double autoAlignXOffset = -0.01;
-    public static double autoAlignYOffset = -.14;
+    public static double autoAlignYOffset = -.17;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -188,10 +188,12 @@ public class RobotContainer {
                 .onFalse(ScoreCommands.Stabling.intakeStable()
                         .alongWith(ScoreCommands.Intake.intakeSequence()));
 
-        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
-                        .alongWith(ScoreCommands.Intake.coralIntake()))
-                .onFalse(ScoreCommands.Stabling.intakeStable()
-                        .alongWith(ScoreCommands.Intake.intakeSequence()));
+        // commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
+        //                 .alongWith(ScoreCommands.Intake.coralIntake()))
+        //         .onFalse(ScoreCommands.Stabling.intakeStable()
+        //                 .alongWith(ScoreCommands.Intake.intakeSequence()));
+
+      
 
 //        commandXboxController.leftBumper().onTrue(Score.score())
 //                .onFalse(ScoreCommands.Stabling.stable());
