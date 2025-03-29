@@ -17,7 +17,7 @@ public class GoToCommand {
         double[][] reefSidePoses = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, // Red Reef Poses
                                     {1.19, 1.04, 0}, {3.3, 6.07, -60}, {5.6, 5.94, -120}, {6.27, 4.06, -180}, {5.22, 2.4, 120}, {0, 0, 0}}; // Blue Reef Poses
 
-        Pose2d targetPose2d;
+        Pose2d targetPose2d = new Pose2d();
         if (tagID >= 6 && tagID <= 11) {
             targetPose2d = new Pose2d(reefSidePoses[tagID - 6][0], reefSidePoses[tagID - 6][1], new Rotation2d(Math.toDegrees(reefSidePoses[tagID - 6][2])));
             System.out.println(targetPose2d);
