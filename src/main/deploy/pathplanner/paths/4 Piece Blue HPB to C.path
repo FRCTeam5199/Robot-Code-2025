@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 3.65625,
-        "y": 2.976
+        "x": 3.536372950819672,
+        "y": 2.71234631147541
       },
       "prevControl": {
-        "x": 3.472446859480425,
-        "y": 2.80621475317252
+        "x": 3.352569810300097,
+        "y": 2.54256106464793
       },
       "nextControl": null,
       "isLocked": false,
@@ -75,8 +75,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 56.61148642388856
+    "velocity": 1.0,
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "4 Piece Blue Paths",
