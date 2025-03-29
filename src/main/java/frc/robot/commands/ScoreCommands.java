@@ -1,5 +1,12 @@
 package frc.robot.commands;
 
+import static frc.robot.RobotContainer.MaxAngularRate;
+import static frc.robot.RobotContainer.commandSwerveDrivetrain;
+import static frc.robot.RobotContainer.commandXboxController;
+import static frc.robot.RobotContainer.rotationVelocity;
+import static frc.robot.RobotContainer.xVelocity;
+import static frc.robot.RobotContainer.yVelocity;
+
 import java.util.Map;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -32,10 +39,6 @@ import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
 
-import javax.swing.*;
-
-import static frc.robot.RobotContainer.*;
-
 public class ScoreCommands {
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private static ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
@@ -51,7 +54,6 @@ public class ScoreCommands {
 
     private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
-
 
     public static class Drive {
         public static Command autoAlignTeleop() {
@@ -348,7 +350,6 @@ public class ScoreCommands {
     }
 
     public static class Zeroing {
-
         public static Command zeroElevator() {
             return new FunctionalCommand(
                     () -> {
@@ -366,6 +367,7 @@ public class ScoreCommands {
         public static Command zeroWrist() {
             return new FunctionalCommand(
                     () -> {
+                        wristSubsystem.setPosition(10);
                         wristSubsystem.setVoltage(-1);
                         wristSubsystem.setOffset(0, false);
                     },
@@ -613,8 +615,6 @@ public class ScoreCommands {
                     RobotContainer::getState
             );
         }
-
-
     }
 
     public static class Score {
@@ -635,7 +635,8 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() > ElevatorConstants.ALGAE_HIGH
-            ).alongWith(new VelocityCommand(intakeSubsystem, -60));
+            ).alongWith(new VelocityCommand(intakeSubsystem, -60)).until(() -> intakeSubsystem.isCurrentSpiked())
+            .andThen(new VelocityCommand(intakeSubsystem, -30)).until(() -> !intakeSubsystem.isCurrentSpiked());
         }
 
         public static Command removeAlgaeLow() {

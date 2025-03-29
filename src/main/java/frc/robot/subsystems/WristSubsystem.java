@@ -1,19 +1,16 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Volts;
+
 import com.ctre.phoenix6.SignalLogger;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.constants.Constants.WristConstants;
-import frc.robot.utility.Type;
-
 import frc.robot.subsystems.template.TemplateSubsystem;
-
-
-import static edu.wpi.first.units.Units.Second;
-import static edu.wpi.first.units.Units.Volts;
+import frc.robot.utility.Type;
 
 public class WristSubsystem extends TemplateSubsystem {
     private static WristSubsystem wristSubsystem;
@@ -58,15 +55,6 @@ public class WristSubsystem extends TemplateSubsystem {
             currentSpike = 0;
             noCurrentSpike = 0;
         }
-
-//        if (!DriverStation.isFMSAttached()) {
-//            if (UserInterface.getTestComponent("Offset Wrist").getString("") != "") {
-//                this.setOffset(UserInterface.getTestComponent("Offset Wrist").getDouble(0));
-//            }
-//            if (UserInterface.getTestComponent("Set Wrist").getString("") != "") {
-//                this.setPosition(UserInterface.getTestComponent("Set Wrist").getDouble(0));
-//            }
-//        }
     }
 
     public static WristSubsystem getInstance() {
