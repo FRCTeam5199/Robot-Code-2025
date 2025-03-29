@@ -191,16 +191,14 @@ public class RobotContainer {
                 .onFalse(ScoreCommands.Stabling.intakeStable()
                         .alongWith(ScoreCommands.Intake.intakeSequence()));
 
-//        commandXboxController.leftBumper().onTrue(Score.score())
-//                .onFalse(ScoreCommands.Stabling.stable());
         commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround()
                         .until(intakeSubsystem::hasCoral)
                         .andThen(ScoreCommands.Stabling.groundIntakeStable()))
                 .onFalse(ScoreCommands.Stabling.groundIntakeStable());
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
-                .onFalse(new VelocityCommand(intakeSubsystem, 0));
-                        // .alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(false))));
+                .onFalse(new VelocityCommand(intakeSubsystem, 0)
+                        .alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(false))));
 
         commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
 
@@ -267,19 +265,19 @@ public class RobotContainer {
                         .andThen(new PositionCommand(armSubsystem, 0))
                         .andThen(new PositionCommand(wristSubsystem, 0)));
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(ScoreCommands.Arm.armBarge());
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armBarge());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G).onTrue(new PositionCommand(armSubsystem, 90).alongWith(new VelocityCommand(intakeSubsystem, -90)));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I).onTrue(new PositionCommand(elevatorSubsystem, ElevatorConstants.L4).alongWith(new PositionCommand(wristSubsystem, 160)).alongWith(new VelocityCommand(intakeSubsystem, 90)));
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
                 .onTrue(new VelocityCommand(intakeSubsystem, 60))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L3)
                 .onTrue(ScoreCommands.Intake.reIntakeSequence());
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
