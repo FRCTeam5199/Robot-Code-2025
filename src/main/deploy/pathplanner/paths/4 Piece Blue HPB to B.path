@@ -33,17 +33,6 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ARML4",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ARML4"
-        }
-      }
-    },
-    {
       "name": "INTAKESEQUENCE",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
@@ -55,8 +44,19 @@
       }
     },
     {
+      "name": "PREPL4",
+      "waypointRelativePos": 0.05,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "PREPL4"
+        }
+      }
+    },
+    {
       "name": "L4",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.7,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -75,7 +75,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 0.75,
     "rotation": 0.0
   },
   "reversed": false,

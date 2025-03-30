@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.761065573770491,
-        "y": 2.0650102459016404
+        "x": 6.77727013140695,
+        "y": 1.7035580267322277
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.1786885245901635,
-        "y": 2.5804815573770488
+        "x": 5.25061475409836,
+        "y": 2.616444672131148
       },
       "prevControl": {
-        "x": 5.526331967213114,
-        "y": 2.4246413934426223
+        "x": 5.4996739392643805,
+        "y": 2.638113135030907
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4585414585414595,
+      "waypointRelativePos": 0.7014404190309905,
       "rotationDegrees": 119.99999999999999
     }
   ],
@@ -38,24 +38,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "UNWIND",
+      "name": "UNWINDL4",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "UNWIND"
-        }
-      }
-    },
-    {
-      "name": "L4",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "L4"
+          "name": "UNWINDL4"
         }
       }
     }
@@ -69,7 +58,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 1.25,
     "rotation": 119.99999999999999
   },
   "reversed": false,

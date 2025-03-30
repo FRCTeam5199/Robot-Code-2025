@@ -186,7 +186,6 @@ public class AprilTagSubsystem extends SubsystemBase {
         stdDev = (percentInBetween *
                 (lookUpTable.get(highIndex).getSecond() - lookUpTable.get(lowIndex).getSecond())) +
                 lookUpTable.get(lowIndex).getSecond();
-        System.out.println("Std: " + stdDev);
 
         return VecBuilder.fill(stdDev, stdDev, 999);
     }

@@ -58,7 +58,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
         isAboveSpeed = isAboveSpeedCounter > 2;
 
-        //    System.out.println("Has Coral: " + hasCoral());
+//        System.out.println("Has Coral: " + hasCoral());
 //        System.out.println("Sensor Value: " + intakeSensor.getValue());
 
         if ((RobotContainer.getState() == State.ALGAE_LOW

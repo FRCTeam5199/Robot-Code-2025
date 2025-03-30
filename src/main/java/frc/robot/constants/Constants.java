@@ -96,8 +96,8 @@ public final class Constants {
                 = new TrapezoidProfile.Constraints(800, 1600);
         public static final FeedForward ARM_FF = new FeedForward(0.2, 0, .1098901098901099);
 
-        public static final double ARM_LOWER_TOLERANCE = 2;
-        public static final double ARM_UPPER_TOLERANCE = 2;
+        public static final double ARM_LOWER_TOLERANCE = 4;
+        public static final double ARM_UPPER_TOLERANCE = 4;
 
         public static final double STABLE = 0;
         public static final double GROUND = 9;
@@ -134,7 +134,7 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final int INTAKE_ID = 20;
-        public static final int INTAKE_SENSOR_ID = 2;
+        public static final int INTAKE_SENSOR_ID = 0;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
         public static final FeedForward INTAKE_FF = new FeedForward(0.27, 0, .09090909090909090909090909090909);
         public static final double INTAKE_LOWER_TOLERANCE = 5;
@@ -197,7 +197,7 @@ public final class Constants {
         public static final double L3 = 92;
         public static final double PREVIOUS_L4 = 100;
         public static final double L4 = 140;
-        public static final double HP = 62;
+        public static final double HP = 58;
 
         public static final double ALGAE_LOW = 200;
         public static final double ALGAE_HIGH = 200;
@@ -221,8 +221,8 @@ public final class Constants {
 
         public static final FeedForward WRIST_FF = new FeedForward(.16, .18, .11764705882352941176470588235294);
 
-        public static final double WRIST_LOWER_TOLERANCE = 3;
-        public static final double WRIST_UPPER_TOLERANCE = 3;
+        public static final double WRIST_LOWER_TOLERANCE = 5;
+        public static final double WRIST_UPPER_TOLERANCE = 5;
 
         public static final double WRIST_MIN = 0.0;
         public static final double WRIST_MAX = 215; //unknown
