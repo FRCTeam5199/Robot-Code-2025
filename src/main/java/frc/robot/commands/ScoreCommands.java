@@ -264,7 +264,7 @@ public class ScoreCommands {
                             new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
                                     .until(() -> elevatorSubsystem.isAtBottom()
                                             && elevatorSubsystem.getMechM() < .05),
-                            new PositionCommand(wristSubsystem, WristConstants.STABLE)
+                            new PositionCommand(wristSubsystem, WristConstants.PREVIOUS_L4)
                     ),
                     new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
@@ -274,12 +274,10 @@ public class ScoreCommands {
         public static Command algaeStable() {
             return new SequentialCommandGroup(
                     new ParallelCommandGroup(
-                            new PositionCommand(elevatorSubsystem, ElevatorConstants.ALGAE_STABLE, false)
-                                    .until(() -> elevatorSubsystem.isAtBottom()
-                                            && elevatorSubsystem.getMechM() < .05),
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.ALGAE_STABLE, false),
                             new PositionCommand(wristSubsystem, WristConstants.BARGE)
                     ),
-                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
+
                     Arm.armStable()
             );
         }

@@ -65,7 +65,7 @@ public final class Constants {
                 .withGravityType(GravityTypeValue.Elevator_Static);
 
         public static final double STABLE = 0;
-        public static final double ALGAE_STABLE = 0.13;
+        public static final double ALGAE_STABLE = 0.17;
         public static final double GROUND = .12;
 
         public static final double L1 = 0;
@@ -197,7 +197,7 @@ public final class Constants {
         public static final double L3 = 92;
         public static final double PREVIOUS_L4 = 100;
         public static final double L4 = 140;
-        public static final double HP = 58;
+        public static final double HP = 59;
 
         public static final double ALGAE_LOW = 200;
         public static final double ALGAE_HIGH = 200;

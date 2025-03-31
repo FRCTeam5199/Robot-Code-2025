@@ -31,6 +31,7 @@ import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ScoreCommands.Score;
 import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.constants.Constants.OperatorConstants;
+import frc.robot.constants.Constants.WristConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.controls.ButtonPanelButtons;
 import frc.robot.controls.CommandButtonPanel;
@@ -273,7 +274,7 @@ public class RobotContainer {
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(ScoreCommands.Arm.armBarge());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G).onTrue(new PositionCommand(armSubsystem, 90).alongWith(new VelocityCommand(intakeSubsystem, -90)));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I).onTrue(new PositionCommand(elevatorSubsystem, ElevatorConstants.L4).alongWith(new PositionCommand(wristSubsystem, 160)).alongWith(new VelocityCommand(intakeSubsystem, 90)));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I).onTrue(new PositionCommand(elevatorSubsystem, ElevatorConstants.L4).alongWith(new PositionCommand(wristSubsystem, WristConstants.BARGE)).alongWith(new VelocityCommand(intakeSubsystem, 90))).onFalse(new PositionCommand(elevatorSubsystem, ElevatorConstants.ALGAE_STABLE).alongWith(new PositionCommand(wristSubsystem, WristConstants.HP)));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
