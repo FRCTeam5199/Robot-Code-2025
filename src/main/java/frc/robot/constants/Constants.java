@@ -75,7 +75,7 @@ public final class Constants {
         public static final double HP = .0;
 
         public static final double ALGAE_LOW = .13;
-        public static final double ALGAE_HIGH = .45;
+        public static final double ALGAE_HIGH = .4175;
         public static final double BARGE = 1.002;
         public static final double PROCESSOR = .12;
     }

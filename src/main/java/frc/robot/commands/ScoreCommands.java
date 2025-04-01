@@ -588,7 +588,7 @@ public class ScoreCommands {
         }
 
         public static Command armBarge() {
-            return new PositionCommand(armSubsystem, ArmConstants.BARGE)
+            return new PositionCommand(armSubsystem, ArmConstants.BARGE, 50, 50)
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.BARGE)));
         }
 

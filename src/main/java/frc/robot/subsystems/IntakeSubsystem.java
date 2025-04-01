@@ -64,7 +64,8 @@ public class IntakeSubsystem extends TemplateSubsystem {
         if ((RobotContainer.getState() == State.ALGAE_LOW
                 || RobotContainer.getState() == State.ALGAE_HIGH
                 || RobotContainer.getState() == State.BARGE
-                || RobotContainer.getState() == State.PROCESSOR) && !isScoringAlgae) setVelocity(-50);
+                || RobotContainer.getState() == State.PROCESSOR) && !isScoringAlgae
+                 && WristSubsystem.getInstance().getDegrees() > 20) setVelocity(-50);
     }
 
     public static IntakeSubsystem getInstance() {
