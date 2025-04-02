@@ -93,7 +93,7 @@ public class AprilTagSubsystem extends SubsystemBase {
         for (var change : results) {
             boolean shouldContinue = false;
             for (PhotonTrackedTarget target : change.getTargets())
-                if (target.getPoseAmbiguity() > 0.02) shouldContinue = true;
+                if (target.getPoseAmbiguity() > .1) shouldContinue = true;
             if (shouldContinue) continue;
 
             visionEst = photonEstimator.update(change);
@@ -115,10 +115,11 @@ public class AprilTagSubsystem extends SubsystemBase {
             Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
         if (estimatedPose.isEmpty()) {
             // No pose input. Default to single-tag std devs
-            curStdDevs = Constants.Vision.kSingleTagStdDevs;
+            curStdDevs = Constants.Vision.kTagStdDevs;
+
         } else {
             // Pose present. Start running Heuristic
-            var estStdDevs = Constants.Vision.kSingleTagStdDevs;
+            var estStdDevs = Constants.Vision.kTagStdDevs;
             int numTags = 0;
             double avgDist = 0;
 
@@ -137,58 +138,56 @@ public class AprilTagSubsystem extends SubsystemBase {
 
             if (numTags == 0) {
                 // No tags visible. Default to single-tag std devs
-                curStdDevs = Vision.kSingleTagStdDevs;
+                curStdDevs = Constants.Vision.kTagStdDevs;
             } else {
                 // One or more tags visible, run the full heuristic.
                 avgDist /= numTags;
                 // Decrease std devs if multiple targets are visible
-                if (numTags > 1) estStdDevs = Vision.kMultiTagStdDevs;
-                else {
+                if (numTags > 1) estStdDevs = Constants.Vision.kTagStdDevs;
                     // Increase std devs based on (average) distance
-                    estStdDevs = getStdDevs(avgDist);
-//                    estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
-                }
-
+//                if (numTags == 1 && avgDist > 4)
+//                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
                 curStdDevs = estStdDevs;
             }
         }
     }
 
-    public Matrix<N3, N1> getStdDevs(double distance) {
-        double stdDev;
-        //Checks for if the distance is outside the bounds of the look up table
-        if (distance < lookUpTable.get(0).getFirst()) {
-            stdDev = lookUpTable.get(0).getSecond();
-            return VecBuilder.fill(stdDev, stdDev, 999);
-        }
-        if (distance > lookUpTable.get(lookUpTable.size() - 1).getFirst()) {
-            stdDev = lookUpTable.get(lookUpTable.size() - 1).getSecond();
-            return VecBuilder.fill(stdDev, stdDev, 999);
-        }
-
-        //Interpolation
-        double lowDistance = lookUpTable.get(0).getFirst();
-        double highDistance = lookUpTable.get(lookUpTable.size() - 1).getFirst();
-        int lowIndex = 0;
-        int highIndex = lookUpTable.size() - 1;
-        for (int i = 0; i < lookUpTable.size() - 1; i++) {
-            if (distance > lookUpTable.get(i).getFirst()
-                    && distance < lookUpTable.get(i + 1).getFirst()) {
-                lowDistance = lookUpTable.get(i).getFirst();
-                highDistance = lookUpTable.get(i + 1).getFirst();
-                lowIndex = i;
-                highIndex = i + 1;
-                break;
-            }
-        }
-
-        double percentInBetween = (distance - lowDistance) / (highDistance - lowDistance);
-        stdDev = (percentInBetween *
-                (lookUpTable.get(highIndex).getSecond() - lookUpTable.get(lowIndex).getSecond())) +
-                lookUpTable.get(lowIndex).getSecond();
-
-        return VecBuilder.fill(stdDev, stdDev, 999);
-    }
+//    public Matrix<N3, N1> getStdDevs(double distance) {
+//        double stdDev;
+//        //Checks for if the distance is outside the bounds of the look up table
+//        if (distance < lookUpTable.get(0).getFirst()) {
+//            stdDev = lookUpTable.get(0).getSecond();
+//            return VecBuilder.fill(stdDev, stdDev, 999);
+//        }
+//        if (distance > lookUpTable.get(lookUpTable.size() - 1).getFirst()) {
+//            stdDev = lookUpTable.get(lookUpTable.size() - 1).getSecond();
+//            return VecBuilder.fill(stdDev, stdDev, 999);
+//        }
+//
+//        //Interpolation
+//        double lowDistance = lookUpTable.get(0).getFirst();
+//        double highDistance = lookUpTable.get(lookUpTable.size() - 1).getFirst();
+//        int lowIndex = 0;
+//        int highIndex = lookUpTable.size() - 1;
+//        for (int i = 0; i < lookUpTable.size() - 1; i++) {
+//            if (distance > lookUpTable.get(i).getFirst()
+//                    && distance < lookUpTable.get(i + 1).getFirst()) {
+//                lowDistance = lookUpTable.get(i).getFirst();
+//                highDistance = lookUpTable.get(i + 1).getFirst();
+//                lowIndex = i;
+//                highIndex = i + 1;
+//                break;
+//            }
+//        }
+//
+//        double percentInBetween = (distance - lowDistance) / (highDistance - lowDistance);
+//        stdDev = (percentInBetween *
+//                (lookUpTable.get(highIndex).getSecond() - lookUpTable.get(lowIndex).getSecond())) +
+//                lookUpTable.get(lowIndex).getSecond();
+//
+//        return VecBuilder.fill(stdDev, stdDev, 999);
+//    }
 
     /**
      * Returns the latest standard deviations of the estimated pose from {@link
@@ -297,8 +296,8 @@ public class AprilTagSubsystem extends SubsystemBase {
                     closestTagY = -closestTagY;
                 }
 
-               System.out.println("Id: " + bestTarget.getFiducialId()
-                       + " X: " + closestTagX + " Y: " + closestTagY);
+                System.out.println("Id: " + bestTarget.getFiducialId()
+                        + " X: " + closestTagX + " Y: " + closestTagY);
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};
