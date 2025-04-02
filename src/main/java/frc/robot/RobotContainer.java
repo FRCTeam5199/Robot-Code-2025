@@ -77,8 +77,8 @@ public class RobotContainer {
     public static double yVelocity = 0;
     public static double rotationVelocity = 0;
 
-    public static double autoAlignXOffset = -0.01;
-    public static double autoAlignYOffset = -.15;
+    public static double autoAlignXOffset = 0.01;
+    public static double autoAlignYOffset = -.165;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -115,7 +115,7 @@ public class RobotContainer {
     public static State state = State.L1;
     private static Timer timer = new Timer();
     private static boolean useAutoAlign = true;
-    private static boolean useAutoPlace = true;
+    private static boolean useAutoPlace = false;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -179,7 +179,7 @@ public class RobotContainer {
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
                         .alongWith(ScoreCommands.Drive.autoAlignTeleop())
-                        .andThen(ScoreCommands.Score.place()))
+                        .andThen(ScoreCommands.Score.place().onlyIf(() -> useAutoPlace)))
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
@@ -273,8 +273,6 @@ public class RobotContainer {
                         .andThen(new PositionCommand(wristSubsystem, 0)));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(ScoreCommands.Arm.armBarge());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G).onTrue(new PositionCommand(armSubsystem, 90).alongWith(new VelocityCommand(intakeSubsystem, -.90)));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I).onTrue(new PositionCommand(elevatorSubsystem, ElevatorConstants.L4).alongWith(new PositionCommand(wristSubsystem, WristConstants.BARGE)).alongWith(new VelocityCommand(intakeSubsystem, 90))).onFalse(new PositionCommand(elevatorSubsystem, ElevatorConstants.ALGAE_STABLE).alongWith(new PositionCommand(wristSubsystem, WristConstants.HP)));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));

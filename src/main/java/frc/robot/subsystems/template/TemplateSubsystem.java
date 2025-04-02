@@ -387,7 +387,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     public boolean isAboveSpeed() {
         if (type != Type.ROLLER) return false;
-        return getMechVelocity() > goal;
+        return getMechVelocity() > goal - 20;
     }
 
 
