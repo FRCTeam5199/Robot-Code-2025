@@ -234,11 +234,9 @@ public final class Constants {
     public static class Vision {
         public static final String CAMERA_NAME = "Camera";
         public static final Transform3d CAMERA_POSE =
-
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
-        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(1.25, 1.25, 999);
-        public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(.25, .25, 999);
+        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(3.5, 3.5, 999);
     }
 }
 
