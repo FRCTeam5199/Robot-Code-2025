@@ -237,7 +237,7 @@ public class ScoreCommands {
                             new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
                                     .until(() -> elevatorSubsystem.isAtBottom()
                                             && elevatorSubsystem.getMechM() < .05),
-                            new PositionCommand(wristSubsystem, WristConstants.STABLE)
+                            new PositionCommand(wristSubsystem, WristConstants.HP)
                     ),
                     new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
@@ -270,9 +270,9 @@ public class ScoreCommands {
             ).alongWith(Intake.groundIntakeSequence());
         }
 
-        public static Command stableL4() {
+        public static Command   stableL4() {
             return new SequentialCommandGroup(
-                    new PositionCommand(wristSubsystem, WristConstants.PREVIOUS_L4),
+                    new PositionCommand(wristSubsystem, WristConstants.HP),
                     new ParallelCommandGroup(
                             new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
                                     .until(() -> elevatorSubsystem.isAtBottom()
