@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 3.668237704918033,
-        "y": 5.134
+        "x": 3.6512414383561644,
+        "y": 5.212
       },
       "prevControl": {
-        "x": 3.4445806132567136,
-        "y": 5.245702754440526
+        "x": 3.4275843466948452,
+        "y": 5.323702754440525
       },
       "nextControl": null,
       "isLocked": false,
@@ -76,7 +76,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.50016676655259
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": "3 Piece Blue Paths",

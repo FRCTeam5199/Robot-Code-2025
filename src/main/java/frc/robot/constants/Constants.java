@@ -41,7 +41,7 @@ public final class Constants {
 
         public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS
                 = new TrapezoidProfile.Constraints(75, 150);
-        public static final FeedForward ELEVATOR_FF = new FeedForward(.42, .18, .16666666666666666666666666666667);
+        public static final FeedForward ELEVATOR_FF = new FeedForward(.4, .3, .178); // Old values ks: .42, kg: .18, kv: .1666
         public static final double ELEVATOR_MIN = 0;
         public static final double ELEVATOR_MAX = 1.025;
         public static final double ELEVATOR_LOWER_TOLERANCE = 0.05;
@@ -65,17 +65,17 @@ public final class Constants {
                 .withGravityType(GravityTypeValue.Elevator_Static);
 
         public static final double STABLE = 0;
-        public static final double ALGAE_STABLE = 0.13;
+        public static final double ALGAE_STABLE = 0.17;
         public static final double GROUND = .12;
 
         public static final double L1 = 0;
         public static final double L2 = .11;
-        public static final double L3 = .38;
+        public static final double L3 = .42;
         public static final double L4 = 1.025;
         public static final double HP = .0;
 
         public static final double ALGAE_LOW = .13;
-        public static final double ALGAE_HIGH = .45;
+        public static final double ALGAE_HIGH = .4175;
         public static final double BARGE = 1.002;
         public static final double PROCESSOR = .12;
     }
@@ -94,18 +94,18 @@ public final class Constants {
 
         public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS
                 = new TrapezoidProfile.Constraints(800, 1600);
-        public static final FeedForward ARM_FF = new FeedForward(0.2, 0, .1098901098901099);
+        public static final FeedForward ARM_FF = new FeedForward(0.23, 0.07, 0.1218);
 
-        public static final double ARM_LOWER_TOLERANCE = 2;
-        public static final double ARM_UPPER_TOLERANCE = 2;
+        public static final double ARM_LOWER_TOLERANCE = 4;
+        public static final double ARM_UPPER_TOLERANCE = 4;
 
         public static final double STABLE = 0;
-        public static final double GROUND = 9;
+        public static final double GROUND = 6;
 
         public static final double L1 = 16;
         public static final double L2 = 41;
         public static final double L3 = 61;
-        public static final double L4 = 75.25;
+        public static final double L4 = 73.75;
         public static final double HP = 63;
 
         public static final double ALGAE_LOW = 60;
@@ -134,7 +134,7 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final int INTAKE_ID = 20;
-        public static final int INTAKE_SENSOR_ID = 2;
+        public static final int INTAKE_SENSOR_ID = 0;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
         public static final FeedForward INTAKE_FF = new FeedForward(0.27, 0, .09090909090909090909090909090909);
         public static final double INTAKE_LOWER_TOLERANCE = 5;
@@ -191,13 +191,13 @@ public final class Constants {
         public static final boolean WRIST_INVERTED = false;
 
         public static final double STABLE = 10;
-        public static final double GROUND = 202;
+        public static final double GROUND = 200;
         public static final double L1 = 10;
-        public static final double L2 = 68;
-        public static final double L3 = 92;
+        public static final double L2 = 67;
+        public static final double L3 = 91;
         public static final double PREVIOUS_L4 = 100;
-        public static final double L4 = 140;
-        public static final double HP = 62;
+        public static final double L4 = 137.5;
+        public static final double HP = 61;
 
         public static final double ALGAE_LOW = 200;
         public static final double ALGAE_HIGH = 200;
@@ -207,22 +207,24 @@ public final class Constants {
         public static final boolean WRIST_BRAKE = true;
 
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(2)
+                .withKP(2.8)
                 .withKI(0)
                 .withKD(0.01)
-                .withKS(0)
-                .withKG(0)
-                .withKV(0)
-                .withKA(0);
+                .withKS(.26)
+                .withKG(.2)
+                .withKV(0.134)
+                .withKA(0)
+
+                .withGravityType(GravityTypeValue.Arm_Cosine);
 
 
         public static final double WRIST_FF_OFFSET = Units.degreesToRadians(0);
         public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(75, 500);
 
-        public static final FeedForward WRIST_FF = new FeedForward(.16, .18, .11764705882352941176470588235294);
+        public static final FeedForward WRIST_FF = new FeedForward(.26, .2, .134);
 
-        public static final double WRIST_LOWER_TOLERANCE = 3;
-        public static final double WRIST_UPPER_TOLERANCE = 3;
+        public static final double WRIST_LOWER_TOLERANCE = 5;
+        public static final double WRIST_UPPER_TOLERANCE = 5;
 
         public static final double WRIST_MIN = 0.0;
         public static final double WRIST_MAX = 215; //unknown
@@ -234,11 +236,9 @@ public final class Constants {
     public static class Vision {
         public static final String CAMERA_NAME = "Camera";
         public static final Transform3d CAMERA_POSE =
-
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
-        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(1.25, 1.25, 999);
-        public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(.25, .25, 999);
+        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(3.5, 3.5, 999);
     }
 }
 

@@ -42,6 +42,7 @@ public class TemplateSubsystem extends SubsystemBase {
     private TrapezoidProfile.State initState;
     private TrapezoidProfile.State currentState;
     private TrapezoidProfile.State goalState;
+    private TrapezoidProfile.Constraints constraints;
     private double goal;
     private boolean followLastMechProfile = false;
 
@@ -96,6 +97,7 @@ public class TemplateSubsystem extends SubsystemBase {
         initState = new TrapezoidProfile.State(0.0, 0.0);
         goalState = new TrapezoidProfile.State(0.0, 0.0);
         currentState = new TrapezoidProfile.State(0.0, 0.0);
+        this.constraints = constraints;
 
         switch (type) {
             case ROLLER -> simpleMotorFF = new SimpleMotorFeedforward(
@@ -308,6 +310,8 @@ public class TemplateSubsystem extends SubsystemBase {
     public void setPosition(double goal, boolean holdPosition) {
         if (type == Type.ROLLER) return;
 
+        profile = new TrapezoidProfile(constraints);
+
         switch (type) {
             case LINEAR -> goalState.position = getMotorRotFromMechM(goal + offset);
             case PIVOT -> goalState.position = getMotorRotFromDegrees(goal + offset);
@@ -383,7 +387,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     public boolean isAboveSpeed() {
         if (type != Type.ROLLER) return false;
-        return getMechVelocity() > goal;
+        return getMechVelocity() > goal - 20;
     }
 
 
