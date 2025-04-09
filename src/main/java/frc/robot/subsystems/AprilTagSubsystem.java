@@ -27,7 +27,7 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.Vision;
 
 public class AprilTagSubsystem extends SubsystemBase {
-    private final PhotonCamera camera;
+    public final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimator;
     private Matrix<N3, N1> curStdDevs;
     private AprilTagFieldLayout kTagLayout;
@@ -203,6 +203,11 @@ public class AprilTagSubsystem extends SubsystemBase {
         curStdDevs = stdDevs;
     }
 
+    public boolean 
+    cameraPresent(){
+        return camera.isConnected();
+    }
+
     public int updateClosestTagID() {
         PhotonTrackedTarget bestTarget = null;
         if (!results.isEmpty()) {
@@ -266,6 +271,7 @@ public class AprilTagSubsystem extends SubsystemBase {
                             angleChange += 180;
 
                         while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
+                        // System.out.println("Angle Change: " + angleChange);
 
                         if (angleChange < smallestAngleChange) {
                             smallestAngleChange = angleChange;
@@ -296,8 +302,8 @@ public class AprilTagSubsystem extends SubsystemBase {
                     closestTagY = -closestTagY;
                 }
 
-                System.out.println("Id: " + bestTarget.getFiducialId()
-                        + " X: " + closestTagX + " Y: " + closestTagY);
+                // System.out.println("Id: " + bestTarget.getFiducialId()
+                //         + " X: " + closestTagX + " Y: " + closestTagY);
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};

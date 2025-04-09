@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.commands.ScoreCommands;
 import org.photonvision.EstimatedRobotPose;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 
 import edu.wpi.first.math.Pair;
@@ -99,6 +100,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
+        SignalLogger.stop();
     }
 
     @Override
@@ -120,6 +122,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         var alliance = DriverStation.getAlliance();
+        SignalLogger.start();
 
 //        commandSwerveDrivetrain.getPigeon2().reset();
 
@@ -152,6 +155,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
+        SignalLogger.stop();
+        SignalLogger.start();
 
         ScoreCommands.Stabling.wristandElevatorStable();
 

@@ -20,6 +20,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -77,8 +78,9 @@ public class RobotContainer {
     public static double yVelocity = 0;
     public static double rotationVelocity = 0;
 
-    public static double autoAlignXOffset = 0.03;
-    public static double autoAlignYOffset = -.165;
+    //.04, .16
+    public static double autoAlignXOffset = 0.055; //.06, .05
+    public static double autoAlignYOffset = -.15; //.145, .155
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -145,6 +147,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("INTAKESEQUENCE", ScoreCommands.Intake.intakeSequence());
         NamedCommands.registerCommand("OUTTAKE", ScoreCommands.Score.place()
                 .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
+                .withTimeout(2)
                 .andThen(new InstantCommand(() -> wristSubsystem.setPosition(Constants.WristConstants.HP))));
 
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
@@ -158,7 +161,11 @@ public class RobotContainer {
         }
 
         configureBindings();
-        SignalLogger.setPath("/media/LOG/ctre-logs/");
+        SignalLogger.setPath("/media/BRAZIL/");
+        SignalLogger.writeBoolean("Camera Present", aprilTagSubsystem.camera.isConnected());
+        SignalLogger.writeDouble("X Value", aprilTagSubsystem.getClosestTagXYYaw()[0]);
+        SignalLogger.writeDouble("Y Value", aprilTagSubsystem.getClosestTagXYYaw()[1]);
+
     }
 
     private void configureBindings() {
@@ -172,7 +179,7 @@ public class RobotContainer {
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
                 .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0))));
 
-        commandXboxController.a().onTrue(ScoreCommands.Arm.armL1());
+        commandXboxController.a().onTrue(ScoreCommands.Arm.armL4());
         commandXboxController.b().onTrue(ScoreCommands.Arm.armL2());
         commandXboxController.x().onTrue(ScoreCommands.Arm.armL3());
         commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
@@ -188,7 +195,7 @@ public class RobotContainer {
         commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
                         .alongWith(ScoreCommands.Intake.intakeSequence()))
                 .onFalse(ScoreCommands.Stabling.intakeStable()
-                        .alongWith(ScoreCommands.Intake.intakeSequence()));
+                        .alongWith(ScoreCommands.Intake.reIntakeSequence()));
 
         // commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
         //                 .alongWith(ScoreCommands.Intake.coralIntake()))
@@ -204,9 +211,11 @@ public class RobotContainer {
                 .onFalse(ScoreCommands.Stabling.groundIntakeStable());
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
-                .onFalse(new VelocityCommand(intakeSubsystem, 0)
-                        .alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(false))));
-
+                .onFalse(new ConditionalCommand(
+                                new VelocityCommand(intakeSubsystem,40),
+                                new VelocityCommand(intakeSubsystem, 0),
+                                () -> RobotContainer.getState() == State.BARGE)
+                        .alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true))));
         commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
 
         commandXboxController.povLeft().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
@@ -232,11 +241,11 @@ public class RobotContainer {
 
         //Outtake
         commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP)
-                .onTrue(new VelocityCommand(intakeSubsystem, -100))
+                .onTrue(new VelocityCommand(intakeSubsystem, -50))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1).onTrue(ScoreCommands.Arm.armL1());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armL2());
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armL1());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L3).onTrue(ScoreCommands.Arm.armL3());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armL4());
 
@@ -383,6 +392,8 @@ public class RobotContainer {
         if (autoAlignXOffset > 0 && DriverStation.getAlliance().isPresent() &&
                 DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
             autoAlignXOffset = -autoAlignXOffset;
+
+        // System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0] + "Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
 
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];

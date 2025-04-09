@@ -41,7 +41,7 @@ public final class Constants {
 
         public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS
                 = new TrapezoidProfile.Constraints(75, 150);
-        public static final FeedForward ELEVATOR_FF = new FeedForward(.42, .18, .16666666666666666666666666666667);
+        public static final FeedForward ELEVATOR_FF = new FeedForward(.4, .3, .178); // Old values ks: .42, kg: .18, kv: .1666
         public static final double ELEVATOR_MIN = 0;
         public static final double ELEVATOR_MAX = 1.025;
         public static final double ELEVATOR_LOWER_TOLERANCE = 0.05;
@@ -94,18 +94,18 @@ public final class Constants {
 
         public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS
                 = new TrapezoidProfile.Constraints(800, 1600);
-        public static final FeedForward ARM_FF = new FeedForward(0.2, 0, .1098901098901099);
+        public static final FeedForward ARM_FF = new FeedForward(0.23, 0.07, 0.1218);
 
         public static final double ARM_LOWER_TOLERANCE = 4;
         public static final double ARM_UPPER_TOLERANCE = 4;
 
         public static final double STABLE = 0;
-        public static final double GROUND = 8;
+        public static final double GROUND = 6;
 
         public static final double L1 = 16;
         public static final double L2 = 41;
         public static final double L3 = 61;
-        public static final double L4 = 74.75;
+        public static final double L4 = 73.75;
         public static final double HP = 63;
 
         public static final double ALGAE_LOW = 60;
@@ -191,13 +191,13 @@ public final class Constants {
         public static final boolean WRIST_INVERTED = false;
 
         public static final double STABLE = 10;
-        public static final double GROUND = 202;
+        public static final double GROUND = 200;
         public static final double L1 = 10;
         public static final double L2 = 67;
         public static final double L3 = 91;
         public static final double PREVIOUS_L4 = 100;
-        public static final double L4 = 140;
-        public static final double HP = 60;
+        public static final double L4 = 137.5;
+        public static final double HP = 61;
 
         public static final double ALGAE_LOW = 200;
         public static final double ALGAE_HIGH = 200;
@@ -207,19 +207,21 @@ public final class Constants {
         public static final boolean WRIST_BRAKE = true;
 
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(2)
+                .withKP(2.8)
                 .withKI(0)
                 .withKD(0.01)
-                .withKS(0)
-                .withKG(0)
-                .withKV(0)
-                .withKA(0);
+                .withKS(.26)
+                .withKG(.2)
+                .withKV(0.134)
+                .withKA(0)
+
+                .withGravityType(GravityTypeValue.Arm_Cosine);
 
 
         public static final double WRIST_FF_OFFSET = Units.degreesToRadians(0);
         public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(75, 500);
 
-        public static final FeedForward WRIST_FF = new FeedForward(.16, .18, .11764705882352941176470588235294);
+        public static final FeedForward WRIST_FF = new FeedForward(.26, .2, .134);
 
         public static final double WRIST_LOWER_TOLERANCE = 5;
         public static final double WRIST_UPPER_TOLERANCE = 5;
