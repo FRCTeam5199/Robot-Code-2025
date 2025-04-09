@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 3.1527663934426227,
-        "y": 3.827
+        "x": 2.8770491803278686,
+        "y": 3.6713627049180326
       },
       "prevControl": {
-        "x": 3.0218503012165976,
-        "y": 3.607850040972344
+        "x": 2.7461330881018435,
+        "y": 3.452212745890377
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,17 +32,6 @@
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
-    {
-      "name": "ARML4",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ARML4"
-        }
-      }
-    },
     {
       "name": "INTAKESEQUENCE",
       "waypointRelativePos": 0,
@@ -55,8 +44,19 @@
       }
     },
     {
+      "name": "PREPL4",
+      "waypointRelativePos": 0.05,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "PREPL4"
+        }
+      }
+    },
+    {
       "name": "L4",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.7,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -75,7 +75,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.75,
     "rotation": 0.0
   },
   "reversed": false,

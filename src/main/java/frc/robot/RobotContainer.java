@@ -20,14 +20,18 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ScoreCommands.Score;
-import frc.robot.constants.Constants;
+
 import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.constants.Constants.OperatorConstants;
+import frc.robot.constants.Constants.WristConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.controls.ButtonPanelButtons;
 import frc.robot.controls.CommandButtonPanel;
@@ -74,8 +78,9 @@ public class RobotContainer {
     public static double yVelocity = 0;
     public static double rotationVelocity = 0;
 
-    public static double autoAlignXOffset = -0.01;
-    public static double autoAlignYOffset = -.14;
+    //.04, .16
+    public static double autoAlignXOffset = 0.055; //.06, .05
+    public static double autoAlignYOffset = -.15; //.145, .155
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -112,34 +117,40 @@ public class RobotContainer {
     public static State state = State.L1;
     private static Timer timer = new Timer();
     private static boolean useAutoAlign = true;
-
+    private static boolean useAutoPlace = false;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        NamedCommands.registerCommand("ARML4", ScoreCommands.Arm.armL4());
+        NamedCommands.registerCommand("PREPL4", ScoreCommands.Score.prepL4());
+        NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwindAuton()
+                .andThen(ScoreCommands.Arm.armL4()));
+        NamedCommands.registerCommand("UNWINDL4", ScoreCommands.Climber.slightUnwindAuton()
+                .andThen(ScoreCommands.Score.scoreL4()));
         NamedCommands.registerCommand("L4", Score.scoreL4().withTimeout(3));
-        NamedCommands.registerCommand("ARML4", ScoreCommands.Arm.armL4()
-                .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)
-                        .onlyIf(() -> wristSubsystem.getDegrees() < 5)));
+        NamedCommands.registerCommand("HP", ScoreCommands.Intake.intakeHP());
+
+
         NamedCommands.registerCommand("ALIGNL", ScoreCommands.Drive.autoAlignLAuton()
                 .withTimeout(2.5));
         NamedCommands.registerCommand("ALIGNR", ScoreCommands.Drive.autoAlignRAuton()
                 .withTimeout(2.5));
-//        NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
-        NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwindAuton()
-                .andThen(ScoreCommands.Arm.armL4())
-                .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.STABLE)));
+        NamedCommands.registerCommand("DRIVE", ScoreCommands.Drive.autoMoveForwardBottom()
+                .withTimeout(3));
+        NamedCommands.registerCommand("DRIVETOP", ScoreCommands.Drive.autoMoveForwardTop()
+                .withTimeout(3));
+
         NamedCommands.registerCommand("INTAKE", new VelocityCommand(intakeSubsystem, 40)
                 .until(intakeSubsystem::hasCoral));
         NamedCommands.registerCommand("INTAKESEQUENCE", ScoreCommands.Intake.intakeSequence());
-        NamedCommands.registerCommand("HP", ScoreCommands.Intake.intakeHP());
-        NamedCommands.registerCommand("DRIVE", ScoreCommands.Drive.autoMoveForwardBottom().withTimeout(3));
-        NamedCommands.registerCommand("DRIVETOP", ScoreCommands.Drive.autoMoveForwardTop().withTimeout(3));
         NamedCommands.registerCommand("OUTTAKE", ScoreCommands.Score.place()
                 .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
-                .andThen(new InstantCommand(() -> wristSubsystem.setPosition(Constants.WristConstants.HP))));
+                .withTimeout(2)
+                .andThen(new InstantCommand(() -> wristSubsystem.setPosition(WristConstants.HP))));
 
+        NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
 
         Autos.initializeAutos();
 
@@ -150,7 +161,11 @@ public class RobotContainer {
         }
 
         configureBindings();
-        SignalLogger.setPath("/media/LOG/ctre-logs/");
+        SignalLogger.setPath("/media/BRAZIL/");
+        SignalLogger.writeBoolean("Camera Present", aprilTagSubsystem.camera.isConnected());
+        SignalLogger.writeDouble("X Value", aprilTagSubsystem.getClosestTagXYYaw()[0]);
+        SignalLogger.writeDouble("Y Value", aprilTagSubsystem.getClosestTagXYYaw()[1]);
+
     }
 
     private void configureBindings() {
@@ -164,17 +179,14 @@ public class RobotContainer {
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
                 .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0))));
 
-        commandXboxController.a().onTrue(ScoreCommands.Arm.armL1()
-                .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.L1)));
-        commandXboxController.b().onTrue(ScoreCommands.Arm.armL2()
-                .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.L2)));
-        commandXboxController.x().onTrue(ScoreCommands.Arm.armL3()
-                .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.L3)));
-        commandXboxController.y().onTrue(ScoreCommands.Arm.armL4()
-                .alongWith(new PositionCommand(wristSubsystem, Constants.WristConstants.L3)));
+        commandXboxController.a().onTrue(ScoreCommands.Arm.armL4());
+        commandXboxController.b().onTrue(ScoreCommands.Arm.armL2());
+        commandXboxController.x().onTrue(ScoreCommands.Arm.armL3());
+        commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
-                        .alongWith(ScoreCommands.Drive.autoAlignTeleop()))
+                        .alongWith(ScoreCommands.Drive.autoAlignTeleop())
+                        .andThen(ScoreCommands.Score.place().onlyIf(() -> useAutoPlace)))
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
@@ -184,12 +196,13 @@ public class RobotContainer {
         commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
                         .alongWith(ScoreCommands.Intake.intakeSequence()))
                 .onFalse(ScoreCommands.Stabling.intakeStable()
-                        .alongWith(ScoreCommands.Intake.intakeSequence()));
+                        .alongWith(ScoreCommands.Intake.reIntakeSequence()));
 
-        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
-                        .alongWith(ScoreCommands.Intake.coralIntake()))
-                .onFalse(ScoreCommands.Stabling.intakeStable()
-                        .alongWith(ScoreCommands.Intake.intakeSequence()));
+        // commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
+        //                 .alongWith(ScoreCommands.Intake.coralIntake()))
+        //         .onFalse(ScoreCommands.Stabling.intakeStable()
+        //                 .alongWith(ScoreCommands.Intake.intakeSequence()));
+
 
         commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround()
                         .until(intakeSubsystem::hasCoral)
@@ -197,9 +210,11 @@ public class RobotContainer {
                 .onFalse(ScoreCommands.Stabling.groundIntakeStable());
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
-                .onFalse(new VelocityCommand(intakeSubsystem, 0)
-                        .alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(false))));
-
+                .onFalse(new ConditionalCommand(
+                                new VelocityCommand(intakeSubsystem,40),
+                                new VelocityCommand(intakeSubsystem, 0),
+                                () -> RobotContainer.getState() == State.BARGE)
+                        .alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true))));
         commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
 
         commandXboxController.povLeft().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
@@ -225,11 +240,11 @@ public class RobotContainer {
 
         //Outtake
         commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP)
-                .onTrue(new VelocityCommand(intakeSubsystem, -100))
+                .onTrue(new VelocityCommand(intakeSubsystem, -50))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1).onTrue(ScoreCommands.Arm.armL1());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armL2());
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armL1());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L3).onTrue(ScoreCommands.Arm.armL3());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armL4());
 
@@ -289,6 +304,9 @@ public class RobotContainer {
                         .andThen(new InstantCommand(() -> elevatorSubsystem.setFollowLastMechProfile(false)))
                         .andThen(new InstantCommand(() -> armSubsystem.setFollowLastMechProfile(false)))
                         .andThen(new InstantCommand(() -> wristSubsystem.setFollowLastMechProfile(false))));
+
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J)
+                .onTrue(new InstantCommand(RobotContainer::toggleUseAutoPlace));
 
         // commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
         //         .onTrue(new InstantCommand(() -> intakeSubsystem.toggleBreakBeam()));
@@ -375,6 +393,8 @@ public class RobotContainer {
         if (autoAlignXOffset > 0 && DriverStation.getAlliance().isPresent() &&
                 DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
             autoAlignXOffset = -autoAlignXOffset;
+
+        // System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0] + "Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
 
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
@@ -473,6 +493,8 @@ public class RobotContainer {
 //        System.out.println("Wrist goal: " + wristSubsystem.getGoal());
 //        System.out.println("Arm goal: " + armSubsystem.getGoal());
 
+//        System.out.println("Wrist at goal: " + wristSubsystem.isMechAtGoal(false));
+
 //        System.out.println("Intake Velocity: " + intakeSubsystem.getMechVelocity());
 
 //        System.out.println("Has Coral: " + intakeSubsystem.hasCoral());
@@ -528,5 +550,9 @@ public class RobotContainer {
 
     public static boolean isUseAutoAlign() {
         return useAutoAlign;
+    }
+
+    public static void toggleUseAutoPlace() {
+        useAutoPlace = !useAutoPlace;
     }
 }
