@@ -84,8 +84,8 @@ public class RobotContainer {
     public static double rotationVelocity = 0;
 
     //.04, .16
-    public static double autoAlignXOffset = 0.055; //.06, .05
-    public static double autoAlignYOffset = -.15; //.145, .155
+    public static double autoAlignXOffset = 0.055;
+    public static double autoAlignYOffset = -.15;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -123,6 +123,8 @@ public class RobotContainer {
     private static Timer timer = new Timer();
     private static boolean useAutoAlign = true;
     private static boolean useAutoPlace = false;
+    private static boolean shouldFixTip = true;
+    private static boolean isCoralBlockingHP = false;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -182,7 +184,7 @@ public class RobotContainer {
         // reset the field-centric heading on menu button press
         commandXboxController.button(8).onTrue(commandSwerveDrivetrain
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
-                .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0)))); 
+                .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0))));
 
         commandXboxController.a().onTrue(ScoreCommands.Arm.armL4());
         commandXboxController.b().onTrue(ScoreCommands.Arm.armL2());
@@ -197,13 +199,16 @@ public class RobotContainer {
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
-                                
-        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
-                        .alongWith(ScoreCommands.Intake.intakeSequence()))
+
+        commandXboxController.rightTrigger().onTrue(
+                        new ConditionalCommand(ScoreCommands.Intake.intakeHPCoralStuck(),
+                                ScoreCommands.Intake.intakeHP(),
+                                () -> isCoralBlockingHP)
+                                .alongWith(ScoreCommands.Intake.intakeSequence()))
                 .onFalse(ScoreCommands.Stabling.intakeStable()
                         .alongWith(ScoreCommands.Intake.reIntakeSequence()));
         // ACTUAL INTAKE COMMAND ^^^^
-         
+
 
         // commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
         //                 .alongWith(ScoreCommands.Intake.coralIntake()))
@@ -218,7 +223,7 @@ public class RobotContainer {
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
                 .onFalse(new ConditionalCommand(
-                        new VelocityCommand(intakeSubsystem, 40),
+                        new VelocityCommand(intakeSubsystem, 50),
                         new VelocityCommand(intakeSubsystem, 0),
                         () -> RobotContainer.getState() == State.BARGE)
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true))));
@@ -244,12 +249,9 @@ public class RobotContainer {
 //                                new VelocityCommand(intakeSubsystem, 0),
 //                                intakeSubsystem::hasCoral
 //                        )));
-        //Intake when Coral is infront of HP        
+        //Intake when Coral is in front of HP
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L).
-        onTrue(ScoreCommands.Intake.intakeHPCoralStuck()
-                .alongWith(ScoreCommands.Intake.intakeSequence()))
-        .onFalse(ScoreCommands.Stabling.intakeStable()
-                .alongWith(ScoreCommands.Intake.reIntakeSequence()));
+                onTrue(new InstantCommand(RobotContainer::toggleCoralBlockingHP));
 
         //Outtake
         commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP)
@@ -289,23 +291,22 @@ public class RobotContainer {
         commandButtonPanel.button(ButtonPanelButtons.AUX_LEFT)
                 .onTrue(new InstantCommand(RobotContainer::toggleUseAutoAlign));
         commandButtonPanel.button(ButtonPanelButtons.AUX_RIGHT)
-                .onTrue(new PositionCommand(elevatorSubsystem, .025) //climb mode
+                .onTrue(new InstantCommand(RobotContainer::toggleShouldFixTip).alongWith(
+                                new PositionCommand(elevatorSubsystem, .025))
                         .andThen(new PositionCommand(armSubsystem, 0))
                         .andThen(new PositionCommand(wristSubsystem, 0)));
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armBarge());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G).onTrue(new PositionCommand(armSubsystem, 90).alongWith(new VelocityCommand(intakeSubsystem, -90)));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I).onTrue(new PositionCommand(elevatorSubsystem, ElevatorConstants.L4).alongWith(new PositionCommand(wristSubsystem, 160)).alongWith(new VelocityCommand(intakeSubsystem, 90)));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(ScoreCommands.Arm.armBarge());
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1)
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2)
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
                 .onTrue(new VelocityCommand(intakeSubsystem, 60))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L3)
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
                 .onTrue(ScoreCommands.Intake.reIntakeSequence());
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
@@ -442,7 +443,8 @@ public class RobotContainer {
         rotationVelocity = turnPIDController.calculate(currentStateRotation.position, nextStateRotation);
 
         // Code for if the bot starts tipping
-        if (Math.abs(pitch) > 2 || Math.abs(roll) > 2) {
+        if (((Math.abs(pitch) > 2 && Math.abs(pitch) < 90)
+                || (Math.abs(roll) > 2 && Math.abs(roll) < 90)) && shouldFixTip) {
             commandSwerveDrivetrain.setControl(
                     robotCentricDrive.withVelocityX(roll)
                             .withVelocityY(pitch));
@@ -508,11 +510,11 @@ public class RobotContainer {
 //        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
 //        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
-//        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
+        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
 //        System.out.println("Arm: " + armSubsystem.getDegrees());
 //        System.out.println("Wrist: " + wristSubsystem.getDegrees());
 
-//        System.out.println("Elevator goal: " + elevatorSubsystem.getGoal());
+        System.out.println("Elevator goal: " + elevatorSubsystem.getGoal());
 //        System.out.println("Wrist goal: " + wristSubsystem.getGoal());
 //        System.out.println("Arm goal: " + armSubsystem.getGoal());
 
@@ -522,8 +524,8 @@ public class RobotContainer {
 
 //        System.out.println("Has Coral: " + intakeSubsystem.hasCoral());
 
-        System.out.println("Robot Pitch: " + commandSwerveDrivetrain.getPigeon2().getPitch().getValueAsDouble());
-        System.out.println("Robot Roll: " + commandSwerveDrivetrain.getPigeon2().getRoll().getValueAsDouble());
+//        System.out.println("Robot Pitch: " + commandSwerveDrivetrain.getPigeon2().getPitch().getValueAsDouble());
+//        System.out.println("Robot Roll: " + commandSwerveDrivetrain.getPigeon2().getRoll().getValueAsDouble());
     }
 
     public static void setAutoAlignOffsetLeft() {
@@ -580,5 +582,13 @@ public class RobotContainer {
 
     public static void toggleUseAutoPlace() {
         useAutoPlace = !useAutoPlace;
+    }
+
+    public static void toggleShouldFixTip() {
+        shouldFixTip = !shouldFixTip;
+    }
+
+    public static void toggleCoralBlockingHP() {
+        isCoralBlockingHP = !isCoralBlockingHP;
     }
 }
