@@ -52,7 +52,6 @@ public class ScoreCommands {
     private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
-
     public static class Drive {
         public static Command autoAlignTeleop() {
             return new ConditionalCommand(
@@ -245,17 +244,17 @@ public class ScoreCommands {
         }
 
         public static Command bargeStable() {
-                return new SequentialCommandGroup(
-                        new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
-                                        .until(() -> elevatorSubsystem.isAtBottom()
-                                                && elevatorSubsystem.getMechM() < .05),
-                                new PositionCommand(wristSubsystem, WristConstants.STABLE, 50, 50)
-                        ),
-                        new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
-                        Arm.armStable()
-                );
-            }
+            return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
+                                    .until(() -> elevatorSubsystem.isAtBottom()
+                                            && elevatorSubsystem.getMechM() < .05),
+                            new PositionCommand(wristSubsystem, WristConstants.STABLE, 50, 50)
+                    ),
+                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
+                    Arm.armStable()
+            );
+        }
 
         public static Command groundIntakeStable() {
             return new SequentialCommandGroup(
@@ -301,9 +300,9 @@ public class ScoreCommands {
                     new ConditionalCommand(
                             algaeStable(),
                             new ConditionalCommand(
-                                bargeStable(),
-                                regularStable(),
-                                () -> RobotContainer.getState() == State.BARGE
+                                    bargeStable(),
+                                    regularStable(),
+                                    () -> RobotContainer.getState() == State.BARGE
                             ),
                             () -> (RobotContainer.getState() == State.ALGAE_LOW
                                     || RobotContainer.getState() == State.ALGAE_HIGH)
