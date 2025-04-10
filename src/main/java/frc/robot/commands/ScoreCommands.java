@@ -247,17 +247,17 @@ public class ScoreCommands {
         }
 
         public static Command bargeStable() {
-                return new SequentialCommandGroup(
-                        new ParallelCommandGroup(
-                                new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
-                                        .until(() -> elevatorSubsystem.isAtBottom()
-                                                && elevatorSubsystem.getMechM() < .05),
-                                new PositionCommand(wristSubsystem, WristConstants.STABLE, 50, 50)
-                        ),
-                        new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
-                        Arm.armStable()
-                );
-            }
+            return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
+                                    .until(() -> elevatorSubsystem.isAtBottom()
+                                            && elevatorSubsystem.getMechM() < .05),
+                            new PositionCommand(wristSubsystem, WristConstants.STABLE, 50, 50)
+                    ),
+                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
+                    Arm.armStable()
+            );
+        }
 
         public static Command groundIntakeStable() {
             return new SequentialCommandGroup(
@@ -279,7 +279,7 @@ public class ScoreCommands {
                             new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
                                     .until(() -> elevatorSubsystem.isAtBottom()
                                             && elevatorSubsystem.getMechM() < .05),
-                            new PositionCommand(wristSubsystem, WristConstants.PREVIOUS_L4)
+                            new PositionCommand(wristSubsystem, WristConstants.HP)
                     ),
                     new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
@@ -303,9 +303,9 @@ public class ScoreCommands {
                     new ConditionalCommand(
                             algaeStable(),
                             new ConditionalCommand(
-                                bargeStable(),
-                                regularStable(),
-                                () -> RobotContainer.getState() == State.BARGE
+                                    bargeStable(),
+                                    regularStable(),
+                                    () -> RobotContainer.getState() == State.BARGE
                             ),
                             () -> (RobotContainer.getState() == State.ALGAE_LOW
                                     || RobotContainer.getState() == State.ALGAE_HIGH)
@@ -318,7 +318,7 @@ public class ScoreCommands {
             return new SequentialCommandGroup(
                     new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, false)
                             .andThen(new PositionCommand(armSubsystem, ArmConstants.HP)),
-                    new PositionCommand(wristSubsystem, WristConstants.STABLE)
+                    new PositionCommand(wristSubsystem, WristConstants.HP)
             );
         }
 
@@ -499,6 +499,27 @@ public class ScoreCommands {
             );
         }
 
+        public static Command intakeHPCoralStuck() {
+                return new ConditionalCommand(
+                        new SequentialCommandGroup(
+                                new ParallelCommandGroup(
+                                        new PositionCommand(elevatorSubsystem, ElevatorConstants.HP, false)
+                                                .until(() -> elevatorSubsystem.getMechM() < .3)
+                                                .andThen(new PositionCommand(armSubsystem, ArmConstants.HP_C)),
+                                        new PositionCommand(wristSubsystem, WristConstants.HP_C)
+                                )
+                        ),
+                        new SequentialCommandGroup(
+                                new ParallelCommandGroup( //Going up
+                                        new PositionCommand(elevatorSubsystem, ElevatorConstants.HP, true),
+                                        new PositionCommand(armSubsystem, ArmConstants.HP_C),
+                                        new PositionCommand(wristSubsystem, WristConstants.HP_C)
+                                )
+                        ),
+                        () -> elevatorSubsystem.getMechM() > ElevatorConstants.HP
+                );
+            }
+
         public static Command intakeSequence() {
             return new SequentialCommandGroup(
                     //Intake until beam initially breaks
@@ -562,7 +583,7 @@ public class ScoreCommands {
             return new PositionCommand(armSubsystem, ArmConstants.L1)
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1)))
                     .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)))
-                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.L1))
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.HP))
                     .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
         }
 
@@ -570,7 +591,7 @@ public class ScoreCommands {
             return new PositionCommand(armSubsystem, ArmConstants.L2)
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L2)))
                     .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)))
-                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.L2))
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.HP))
                     .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
         }
 
@@ -578,7 +599,7 @@ public class ScoreCommands {
             return new PositionCommand(armSubsystem, ArmConstants.L3)
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)))
                     .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)))
-                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.L3))
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.HP))
                     .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
         }
 
@@ -586,7 +607,7 @@ public class ScoreCommands {
             return new PositionCommand(armSubsystem, ArmConstants.L4)
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)))
                     .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)))
-                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.L3))
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.HP))
                     .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
         }
 

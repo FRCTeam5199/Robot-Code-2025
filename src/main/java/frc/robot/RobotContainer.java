@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -17,6 +18,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,9 +31,9 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ScoreCommands.Score;
 
+import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.constants.Constants.OperatorConstants;
-import frc.robot.constants.Constants.WristConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.controls.ButtonPanelButtons;
 import frc.robot.controls.CommandButtonPanel;
@@ -63,6 +65,10 @@ public class RobotContainer {
 
     public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
+            .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
+
+    // Robot Centric drive to use with auto-balancing
+    public final static SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDesaturateWheelSpeeds(true)
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(4, 0, .1, new TrapezoidProfile.Constraints(100, 200));
@@ -148,7 +154,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("OUTTAKE", ScoreCommands.Score.place()
                 .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
                 .withTimeout(2)
-                .andThen(new InstantCommand(() -> wristSubsystem.setPosition(WristConstants.HP))));
+                .andThen(new InstantCommand(() -> wristSubsystem.setPosition(Constants.WristConstants.HP))));
 
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
 
@@ -192,11 +198,13 @@ public class RobotContainer {
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
-                                
+
         commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
                         .alongWith(ScoreCommands.Intake.intakeSequence()))
                 .onFalse(ScoreCommands.Stabling.intakeStable()
                         .alongWith(ScoreCommands.Intake.reIntakeSequence()));
+        // ACTUAL INTAKE COMMAND ^^^^
+
 
         // commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
         //                 .alongWith(ScoreCommands.Intake.coralIntake()))
@@ -211,9 +219,9 @@ public class RobotContainer {
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
                 .onFalse(new ConditionalCommand(
-                                new VelocityCommand(intakeSubsystem,40),
-                                new VelocityCommand(intakeSubsystem, 0),
-                                () -> RobotContainer.getState() == State.BARGE)
+                        new VelocityCommand(intakeSubsystem, 40),
+                        new VelocityCommand(intakeSubsystem, 0),
+                        () -> RobotContainer.getState() == State.BARGE)
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true))));
         commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
 
@@ -237,6 +245,12 @@ public class RobotContainer {
 //                                new VelocityCommand(intakeSubsystem, 0),
 //                                intakeSubsystem::hasCoral
 //                        )));
+        //Intake when Coral is infront of HP
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L).
+        onTrue(ScoreCommands.Intake.intakeHPCoralStuck()
+                .alongWith(ScoreCommands.Intake.intakeSequence()))
+        .onFalse(ScoreCommands.Stabling.intakeStable()
+                .alongWith(ScoreCommands.Intake.reIntakeSequence()));
 
         //Outtake
         commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP)
@@ -280,19 +294,17 @@ public class RobotContainer {
                         .andThen(new PositionCommand(armSubsystem, 0))
                         .andThen(new PositionCommand(wristSubsystem, 0)));
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armBarge());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G).onTrue(new PositionCommand(armSubsystem, 90).alongWith(new VelocityCommand(intakeSubsystem, -90)));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I).onTrue(new PositionCommand(elevatorSubsystem, ElevatorConstants.L4).alongWith(new PositionCommand(wristSubsystem, 160)).alongWith(new VelocityCommand(intakeSubsystem, 90)));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(ScoreCommands.Arm.armBarge());
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1)
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2)
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
                 .onTrue(new VelocityCommand(intakeSubsystem, 60))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L3)
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
                 .onTrue(ScoreCommands.Intake.reIntakeSequence());
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
@@ -412,6 +424,9 @@ public class RobotContainer {
         TrapezoidProfile.State nextStateY = profileY.calculate(timer.get(), currentStateY, goalStateY);
         TrapezoidProfile.State nextStateRotation = profileRotation.calculate(timer.get(), currentStateRotation, goalStateRotation);
 
+        double pitch = commandSwerveDrivetrain.getPigeon2().getPitch().getValueAsDouble();
+        double roll = commandSwerveDrivetrain.getPigeon2().getRoll().getValueAsDouble();
+
         if ((Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) > .15
                 || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) > .1)) {
             xVelocity = drivePIDControllerX.calculate(currentStateX.position, nextStateX);
@@ -424,6 +439,13 @@ public class RobotContainer {
             yVelocity = drivePIDControllerYVeryClose.calculate(currentStateY.position, nextStateY);
         }
         rotationVelocity = turnPIDController.calculate(currentStateRotation.position, nextStateRotation);
+
+        // Code for if the bot starts tipping
+        if (Math.abs(pitch) > 2 || Math.abs(roll) > 2) {
+            commandSwerveDrivetrain.setControl(
+                    robotCentricDrive.withVelocityX(roll)
+                            .withVelocityY(pitch));
+        }
 
         // if (UserInterface.getControlComponent("Reset All").getBoolean(false)) {
         //     CommandScheduler.getInstance().schedule(ScoreCommands.Zeroing.zeroSubsystems());
