@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -17,6 +18,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -62,6 +64,10 @@ public class RobotContainer {
 
     public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
+            .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
+
+    // Robot Centric drive to use with auto-balancing
+    public final static SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDesaturateWheelSpeeds(true)
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(4, 0, .1, new TrapezoidProfile.Constraints(100, 200));
@@ -212,9 +218,9 @@ public class RobotContainer {
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
                 .onFalse(new ConditionalCommand(
-                                new VelocityCommand(intakeSubsystem,40),
-                                new VelocityCommand(intakeSubsystem, 0),
-                                () -> RobotContainer.getState() == State.BARGE)
+                        new VelocityCommand(intakeSubsystem, 40),
+                        new VelocityCommand(intakeSubsystem, 0),
+                        () -> RobotContainer.getState() == State.BARGE)
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true))));
         commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
 
@@ -419,6 +425,9 @@ public class RobotContainer {
         TrapezoidProfile.State nextStateY = profileY.calculate(timer.get(), currentStateY, goalStateY);
         TrapezoidProfile.State nextStateRotation = profileRotation.calculate(timer.get(), currentStateRotation, goalStateRotation);
 
+        double pitch = commandSwerveDrivetrain.getPigeon2().getPitch().getValueAsDouble();
+        double roll = commandSwerveDrivetrain.getPigeon2().getRoll().getValueAsDouble();
+
         if ((Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) > .15
                 || Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) > .1)) {
             xVelocity = drivePIDControllerX.calculate(currentStateX.position, nextStateX);
@@ -431,6 +440,13 @@ public class RobotContainer {
             yVelocity = drivePIDControllerYVeryClose.calculate(currentStateY.position, nextStateY);
         }
         rotationVelocity = turnPIDController.calculate(currentStateRotation.position, nextStateRotation);
+
+        // Code for if the bot starts tipping
+        if (Math.abs(pitch) > 2 || Math.abs(roll) > 2) {
+            commandSwerveDrivetrain.setControl(
+                    robotCentricDrive.withVelocityX(roll)
+                            .withVelocityY(pitch));
+        }
 
         // if (UserInterface.getControlComponent("Reset All").getBoolean(false)) {
         //     CommandScheduler.getInstance().schedule(ScoreCommands.Zeroing.zeroSubsystems());
@@ -505,6 +521,9 @@ public class RobotContainer {
 //        System.out.println("Intake Velocity: " + intakeSubsystem.getMechVelocity());
 
 //        System.out.println("Has Coral: " + intakeSubsystem.hasCoral());
+
+        System.out.println("Robot Pitch: " + commandSwerveDrivetrain.getPigeon2().getPitch().getValueAsDouble());
+        System.out.println("Robot Roll: " + commandSwerveDrivetrain.getPigeon2().getRoll().getValueAsDouble());
     }
 
     public static void setAutoAlignOffsetLeft() {
