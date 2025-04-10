@@ -107,6 +107,7 @@ public final class Constants {
         public static final double L3 = 61;
         public static final double L4 = 73.75;
         public static final double HP = 63;
+        public static final double HP_C = 75;
 
         public static final double ALGAE_LOW = 60;
         public static final double ALGAE_HIGH = 70;
@@ -198,6 +199,8 @@ public final class Constants {
         public static final double PREVIOUS_L4 = 100;
         public static final double L4 = 137.5;
         public static final double HP = 61;
+        public static final double HP_C = 67;
+
 
         public static final double ALGAE_LOW = 200;
         public static final double ALGAE_HIGH = 200;

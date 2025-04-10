@@ -176,7 +176,7 @@ public class RobotContainer {
         // reset the field-centric heading on menu button press
         commandXboxController.button(8).onTrue(commandSwerveDrivetrain
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
-                .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0))));
+                .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0)))); 
 
         commandXboxController.a().onTrue(ScoreCommands.Arm.armL4());
         commandXboxController.b().onTrue(ScoreCommands.Arm.armL2());
@@ -196,6 +196,8 @@ public class RobotContainer {
                         .alongWith(ScoreCommands.Intake.intakeSequence()))
                 .onFalse(ScoreCommands.Stabling.intakeStable()
                         .alongWith(ScoreCommands.Intake.reIntakeSequence()));
+        // ACTUAL INTAKE COMMAND ^^^^
+         
 
         // commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
         //                 .alongWith(ScoreCommands.Intake.coralIntake()))
@@ -236,6 +238,12 @@ public class RobotContainer {
 //                                new VelocityCommand(intakeSubsystem, 0),
 //                                intakeSubsystem::hasCoral
 //                        )));
+        //Intake when Coral is infront of HP        
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L).
+        onTrue(ScoreCommands.Intake.intakeHPCoralStuck()
+                .alongWith(ScoreCommands.Intake.intakeSequence()))
+        .onFalse(ScoreCommands.Stabling.intakeStable()
+                .alongWith(ScoreCommands.Intake.reIntakeSequence()));
 
         //Outtake
         commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP)
