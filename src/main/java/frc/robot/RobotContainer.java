@@ -193,11 +193,11 @@ public class RobotContainer {
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
                         .alongWith(ScoreCommands.Drive.autoAlignTeleop())
-                        .alongWith(new VelocityCommand(intakeSubsystem, -60))
+                        .alongWith(new VelocityCommand(intakeSubsystem, -60)
                         .onlyIf(() -> state == State.BARGE
                                 || state == State.PROCESSOR
                                 || state == State.ALGAE_LOW
-                                || state == State.ALGAE_HIGH))
+                                || state == State.ALGAE_HIGH)))
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(new VelocityCommand(intakeSubsystem, -60)
                                 .onlyIf(() -> state == State.ALGAE_LOW || state == State.ALGAE_HIGH))
