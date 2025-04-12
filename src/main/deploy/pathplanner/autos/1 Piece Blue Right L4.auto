@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Piece Blue Start to H"
+            "pathName": "2 Piece Blue Start to G"
           }
         },
         {
@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "ALIGNL"
                 }
               },
               {
@@ -33,6 +33,12 @@
           "type": "named",
           "data": {
             "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HP"
           }
         }
       ]
