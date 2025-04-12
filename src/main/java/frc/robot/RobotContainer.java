@@ -135,6 +135,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwindAuton()
                 .andThen(ScoreCommands.Arm.armL4()));
         NamedCommands.registerCommand("UNWINDL4", ScoreCommands.Climber.slightUnwindAuton()
+                .andThen(ScoreCommands.Arm.armL4())
                 .andThen(ScoreCommands.Score.scoreL4()));
         NamedCommands.registerCommand("L4", Score.scoreL4().withTimeout(3));
         NamedCommands.registerCommand("HP", ScoreCommands.Intake.intakeHP());
