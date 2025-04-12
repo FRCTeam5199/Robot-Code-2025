@@ -23,6 +23,12 @@ public final class Autos {
     private static PathPlannerAuto onePieceBlueDropL1;
     private static PathPlannerAuto onePieceRedDropL1;
 
+    private static PathPlannerAuto onePieceBlueRightL4;
+    private static PathPlannerAuto onePieceBlueLeftL4;
+
+    private static PathPlannerAuto onePieceRedRightL4;
+    private static PathPlannerAuto onePieceRedLeftL4;
+
     private static PathPlannerAuto twoPieceBlueBottomL4;
     private static PathPlannerAuto twoPieceBlueTopL4;
 
@@ -60,6 +66,11 @@ public final class Autos {
         onePieceBlueDropL1 = new PathPlannerAuto("Blue Climber Drop");
         onePieceRedDropL1 = new PathPlannerAuto("Red Climber Drop");
 
+        onePieceBlueRightL4 = new PathPlannerAuto("1 Piece Blue Right L4");
+        onePieceBlueLeftL4 = new PathPlannerAuto("1 Piece Blue Left L4");
+        onePieceRedRightL4 = new PathPlannerAuto("1 Piece Red Right L4");
+        onePieceRedLeftL4 = new PathPlannerAuto("1 Piece Red Left L4");
+
         helper2PieceTopBlue = new PathPlannerAuto("2 Piece Blue Top L4 Helper");
         helper2PieceBottomRed = new PathPlannerAuto("2 Piece Red Bottom L4 Helper");
 
@@ -85,6 +96,8 @@ public final class Autos {
                 .withSize(2, 1);
 
         autonChooserRed.addOption("1 Piece Red Climber Drop", onePieceRedDropL1);
+        autonChooserRed.addOption("1 Piece Red Right", onePieceRedRightL4);
+        autonChooserRed.addOption("1 Piece Red Left", onePieceRedLeftL4);
         autonChooserRed.addOption("2 Piece Red Left", twoPieceRedBottomL4);
         autonChooserRed.addOption("2 Piece Red Right", twoPieceRedTopL4);
         autonChooserRed.addOption("3 Piece Red Left", threePieceRedBottomL4);
@@ -92,12 +105,12 @@ public final class Autos {
         autonChooserRed.addOption("2 Piece Red Left Helper", helper2PieceBottomRed);
 
         autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDropL1);
+        autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueRightL4);
+        autonChooserBlue.addOption("1 Piece Blue Left", onePieceBlueLeftL4);
         autonChooserBlue.addOption("2 Piece Blue Left", twoPieceBlueTopL4);
         autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueBottomL4);
         autonChooserBlue.addOption("3 Piece Blue Left", threePieceBlueTopL4);
         autonChooserBlue.addOption("3 Piece Blue Right", threePieceBlueBottomL4);
-        autonChooserBlue.addOption("4 Piece Blue Right", fourPieceBlueBottomL4);
         autonChooserBlue.addOption("2 Piece Blue Left Helper", helper2PieceTopBlue);
-        autonChooserBlue.addOption("Test Blue", testBlue);
     }
 }

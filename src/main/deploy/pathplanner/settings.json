@@ -14,8 +14,9 @@
   "autoFolders": [
     "2 Piece L4",
     "3 Piece L4",
-    "Climber Drop",
     "4 Piece L4",
+    "Climber Drop",
+    "1 Piece L4",
     "Tests"
   ],
   "defaultMaxVel": 3.0,

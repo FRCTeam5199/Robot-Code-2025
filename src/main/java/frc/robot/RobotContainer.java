@@ -122,7 +122,6 @@ public class RobotContainer {
     public static State state = State.L1;
     private static Timer timer = new Timer();
     private static boolean useAutoAlign = true;
-    private static boolean useAutoPlace = false;
     private static boolean shouldFixTip = true;
     private static boolean isCoralBlockingHP = false;
 
@@ -194,28 +193,35 @@ public class RobotContainer {
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
                         .alongWith(ScoreCommands.Drive.autoAlignTeleop())
-                        .andThen(ScoreCommands.Score.place().onlyIf(() -> useAutoPlace)))
+                        .alongWith(new VelocityCommand(intakeSubsystem, -60))
+                        .onlyIf(() -> state == State.BARGE
+                                || state == State.PROCESSOR
+                                || state == State.ALGAE_LOW
+                                || state == State.ALGAE_HIGH))
                 .onFalse(ScoreCommands.Stabling.stable()
+                        .alongWith(new VelocityCommand(intakeSubsystem, -60)
+                                .onlyIf(() -> state == State.ALGAE_LOW || state == State.ALGAE_HIGH))
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
 
         commandXboxController.rightTrigger().onTrue(
-                        new ConditionalCommand(ScoreCommands.Intake.intakeHPCoralStuck(),
-                                ScoreCommands.Intake.intakeHP(),
-                                () -> isCoralBlockingHP)
-                                .alongWith(ScoreCommands.Intake.intakeSequence()))
-                .onFalse(ScoreCommands.Stabling.intakeStable()
-                        .alongWith(ScoreCommands.Intake.reIntakeSequence()));
-        // ACTUAL INTAKE COMMAND ^^^^
-
-
-        // commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
-        //                 .alongWith(ScoreCommands.Intake.coralIntake()))
-        //         .onFalse(ScoreCommands.Stabling.intakeStable()
-        //                 .alongWith(ScoreCommands.Intake.intakeSequence()));
-
+                        new ConditionalCommand(
+                                ScoreCommands.Intake.intakeHPCoralStuck(),
+                                new ConditionalCommand(
+                                        ScoreCommands.Intake.intakeGroundAlgae(),
+                                        ScoreCommands.Intake.intakeHP(),
+                                        () -> (state == State.BARGE || state == State.PROCESSOR)
+                                ),
+                                () -> isCoralBlockingHP
+                        ).alongWith(ScoreCommands.Intake.intakeSequence()))
+                .onFalse(
+                        new ConditionalCommand(
+                                ScoreCommands.Stabling.groundAlgaeStable(),
+                                ScoreCommands.Stabling.intakeStable(),
+                                () -> (state == State.BARGE || state == State.PROCESSOR)
+                        ).alongWith(ScoreCommands.Intake.reIntakeSequence()));
 
         commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround()
                         .until(intakeSubsystem::hasCoral)
@@ -223,11 +229,13 @@ public class RobotContainer {
                 .onFalse(ScoreCommands.Stabling.groundIntakeStable());
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
-                .onFalse(new ConditionalCommand(
-                        new VelocityCommand(intakeSubsystem, 50),
-                        new VelocityCommand(intakeSubsystem, 0),
-                        () -> RobotContainer.getState() == State.BARGE)
-                        .alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true))));
+                .onFalse(
+                        new ConditionalCommand(
+                                new VelocityCommand(intakeSubsystem, 50),
+                                new VelocityCommand(intakeSubsystem, 0),
+                                () -> RobotContainer.getState() == State.BARGE
+                                        || RobotContainer.getState() == State.PROCESSOR
+                        ).alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true))));
         commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
 
         commandXboxController.povLeft().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
@@ -298,6 +306,7 @@ public class RobotContainer {
                         .andThen(new PositionCommand(wristSubsystem, 0)));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(ScoreCommands.Arm.armBarge());
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G).onTrue(ScoreCommands.Arm.armProcessor());
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
@@ -319,9 +328,6 @@ public class RobotContainer {
                         .andThen(new InstantCommand(() -> elevatorSubsystem.setFollowLastMechProfile(false)))
                         .andThen(new InstantCommand(() -> armSubsystem.setFollowLastMechProfile(false)))
                         .andThen(new InstantCommand(() -> wristSubsystem.setFollowLastMechProfile(false))));
-
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J)
-                .onTrue(new InstantCommand(RobotContainer::toggleUseAutoPlace));
 
         // commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
         //         .onTrue(new InstantCommand(() -> intakeSubsystem.toggleBreakBeam()));
@@ -511,11 +517,11 @@ public class RobotContainer {
 //        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
 //        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
-        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
+//        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
 //        System.out.println("Arm: " + armSubsystem.getDegrees());
 //        System.out.println("Wrist: " + wristSubsystem.getDegrees());
 
-        System.out.println("Elevator goal: " + elevatorSubsystem.getGoal());
+//        System.out.println("Elevator goal: " + elevatorSubsystem.getGoal());
 //        System.out.println("Wrist goal: " + wristSubsystem.getGoal());
 //        System.out.println("Arm goal: " + armSubsystem.getGoal());
 
@@ -579,10 +585,6 @@ public class RobotContainer {
 
     public static boolean isUseAutoAlign() {
         return useAutoAlign;
-    }
-
-    public static void toggleUseAutoPlace() {
-        useAutoPlace = !useAutoPlace;
     }
 
     public static void toggleShouldFixTip() {

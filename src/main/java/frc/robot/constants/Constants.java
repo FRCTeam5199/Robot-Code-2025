@@ -65,8 +65,9 @@ public final class Constants {
                 .withGravityType(GravityTypeValue.Elevator_Static);
 
         public static final double STABLE = 0;
-        public static final double ALGAE_STABLE = 0.17;
+        public static final double ALGAE_STABLE = .17;
         public static final double GROUND = .12;
+        public static final double ALGAE_GROUND = .22;
 
         public static final double L1 = 0;
         public static final double L2 = .09;
@@ -77,7 +78,7 @@ public final class Constants {
         public static final double ALGAE_LOW = .13;
         public static final double ALGAE_HIGH = .4175;
         public static final double BARGE = 1.002;
-        public static final double PROCESSOR = .12;
+        public static final double PROCESSOR = .22;
     }
 
     public static class ArmConstants {
@@ -101,18 +102,19 @@ public final class Constants {
 
         public static final double STABLE = 0;
         public static final double GROUND = 6;
+        public static final double ALGAE_GROUND = 15;
 
         public static final double L1 = 16;
         public static final double L2 = 41;
         public static final double L3 = 61;
-        public static final double L4 = 75;
+        public static final double L4 = 75.25;
         public static final double HP = 63;
         public static final double HP_C = 75;
 
         public static final double ALGAE_LOW = 60;
         public static final double ALGAE_HIGH = 70;
         public static final double BARGE = 85;
-        public static final double PROCESSOR = 0;
+        public static final double PROCESSOR = 15;
 
         public static final double ARM_MIN = 0.61524;
         public static final double ARM_MAX = 180; //fix
@@ -193,11 +195,14 @@ public final class Constants {
 
         public static final double STABLE = 10;
         public static final double GROUND = 200;
+        public static final double ALGAE_GROUND = 224;
+
         public static final double L1 = 10;
         public static final double L2 = 67;
         public static final double L3 = 91;
         public static final double PREVIOUS_L4 = 100;
         public static final double L4 = 137.5;
+
         public static final double HP = 61;
         public static final double HP_C = 67;
 
@@ -205,7 +210,7 @@ public final class Constants {
         public static final double ALGAE_LOW = 200;
         public static final double ALGAE_HIGH = 200;
         public static final double BARGE = 215;
-        public static final double PROCESSOR = 200;
+        public static final double PROCESSOR = 224;
 
         public static final boolean WRIST_BRAKE = true;
 
