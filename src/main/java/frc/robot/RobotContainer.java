@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ScoreCommands.Score;
-
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.constants.Constants.OperatorConstants;
@@ -224,19 +223,6 @@ public class RobotContainer {
                                 () -> (state == State.BARGE || state == State.PROCESSOR)
                         ).alongWith(ScoreCommands.Intake.reIntakeSequence()));
 
-        commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
-                        .alongWith(ScoreCommands.Intake.intakeSequence()))
-                .onFalse(ScoreCommands.Stabling.intakeStable()
-                        .alongWith(ScoreCommands.Intake.reIntakeSequence()));
-        // ACTUAL INTAKE COMMAND ^^^^
-
-
-        // commandXboxController.rightTrigger().onTrue(ScoreCommands.Intake.intakeHP()
-        //                 .alongWith(ScoreCommands.Intake.coralIntake()))
-        //         .onFalse(ScoreCommands.Stabling.intakeStable()
-        //                 .alongWith(ScoreCommands.Intake.intakeSequence()));
-
-
         commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround()
                         .until(intakeSubsystem::hasCoral)
                         .andThen(ScoreCommands.Stabling.groundIntakeStable()))
@@ -273,7 +259,6 @@ public class RobotContainer {
 //                                intakeSubsystem::hasCoral
 //                        )));
         //Intake when Coral is in front of HP
-        //Intake when Coral is infront of HP
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L).
                 onTrue(new InstantCommand(RobotContainer::toggleCoralBlockingHP));
 
@@ -322,7 +307,6 @@ public class RobotContainer {
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(ScoreCommands.Arm.armBarge());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G).onTrue(ScoreCommands.Arm.armProcessor());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(ScoreCommands.Arm.armBarge());
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
                 .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
