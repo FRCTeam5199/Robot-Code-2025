@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.7014404190309905,
+      "waypointRelativePos": 0.5303360977738975,
       "rotationDegrees": 119.99999999999999
     }
   ],
@@ -38,7 +38,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "UNWINDL4",
+      "name": "UNWIND",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {

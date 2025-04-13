@@ -40,24 +40,24 @@ public final class Constants {
         public static final int ELEVATOR_RIGHT_ID = 18;
 
         public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS
-                = new TrapezoidProfile.Constraints(75, 150);
+                = new TrapezoidProfile.Constraints(150, 150);
         public static final FeedForward ELEVATOR_FF = new FeedForward(.4, .3, .178); // Old values ks: .42, kg: .18, kv: .1666
         public static final double ELEVATOR_MIN = 0;
-        public static final double ELEVATOR_MAX = 1.025;
+        public static final double ELEVATOR_MAX = 1.01;
         public static final double ELEVATOR_LOWER_TOLERANCE = 0.05;
         public static final double ELEVATOR_UPPER_TOLERANCE = 0.05;
         public static final double[][] ELEVATOR_GEARING = new double[][]{{3, 1}};
         public static final boolean INVERT = true;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
         public static final boolean ELEVATOR_BRAKE = true;
-        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 60;
-        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 60;
+        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 75;
+        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 75;
         public static final double DRUM_CIRCUMFERENCE = .119694706;
 
         public static final Slot0Configs ELEVATOR_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(.75)
+                .withKP(2)
                 .withKI(0)
-                .withKD(0)
+                .withKD(0.1)
                 .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
                 .withKS(ELEVATOR_FF.getkS())
                 .withKG(ELEVATOR_FF.getkG())
@@ -65,19 +65,20 @@ public final class Constants {
                 .withGravityType(GravityTypeValue.Elevator_Static);
 
         public static final double STABLE = 0;
-        public static final double ALGAE_STABLE = 0.17;
+        public static final double ALGAE_STABLE = .17;
         public static final double GROUND = .12;
+        public static final double ALGAE_GROUND = .22;
 
         public static final double L1 = 0;
-        public static final double L2 = .11;
-        public static final double L3 = .42;
-        public static final double L4 = 1.025;
-        public static final double HP = .0;
+        public static final double L2 = .09;
+        public static final double L3 = .38;
+        public static final double L4 = 1.01;
+        public static final double HP = 0;
 
         public static final double ALGAE_LOW = .13;
         public static final double ALGAE_HIGH = .4175;
         public static final double BARGE = 1.002;
-        public static final double PROCESSOR = .12;
+        public static final double PROCESSOR = .22;
     }
 
     public static class ArmConstants {
@@ -93,7 +94,7 @@ public final class Constants {
         public static final double ARM_FF_OFFSET = 0;
 
         public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS
-                = new TrapezoidProfile.Constraints(800, 1600);
+                = new TrapezoidProfile.Constraints(150, 300);
         public static final FeedForward ARM_FF = new FeedForward(0.23, 0.07, 0.1218);
 
         public static final double ARM_LOWER_TOLERANCE = 4;
@@ -101,18 +102,19 @@ public final class Constants {
 
         public static final double STABLE = 0;
         public static final double GROUND = 6;
+        public static final double ALGAE_GROUND = 15;
 
         public static final double L1 = 16;
         public static final double L2 = 41;
         public static final double L3 = 61;
-        public static final double L4 = 73.75;
+        public static final double L4 = 75.25;
         public static final double HP = 63;
         public static final double HP_C = 75;
 
         public static final double ALGAE_LOW = 60;
         public static final double ALGAE_HIGH = 70;
-        public static final double BARGE = 90;
-        public static final double PROCESSOR = 0;
+        public static final double BARGE = 85;
+        public static final double PROCESSOR = 15;
 
         public static final double ARM_MIN = 0.61524;
         public static final double ARM_MAX = 180; //fix
@@ -193,11 +195,14 @@ public final class Constants {
 
         public static final double STABLE = 10;
         public static final double GROUND = 200;
+        public static final double ALGAE_GROUND = 224;
+
         public static final double L1 = 10;
         public static final double L2 = 67;
         public static final double L3 = 91;
         public static final double PREVIOUS_L4 = 100;
         public static final double L4 = 137.5;
+
         public static final double HP = 61;
         public static final double HP_C = 67;
 
@@ -205,26 +210,24 @@ public final class Constants {
         public static final double ALGAE_LOW = 200;
         public static final double ALGAE_HIGH = 200;
         public static final double BARGE = 215;
-        public static final double PROCESSOR = 200;
+        public static final double PROCESSOR = 224;
 
         public static final boolean WRIST_BRAKE = true;
 
+        public static final double WRIST_FF_OFFSET = Units.degreesToRadians(0);
+        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS
+                = new TrapezoidProfile.Constraints(75, 150);
+
+        public static final FeedForward WRIST_FF = new FeedForward(.26, .2, .134);
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
                 .withKP(2.8)
                 .withKI(0)
                 .withKD(0.01)
-                .withKS(.26)
-                .withKG(.2)
-                .withKV(0.134)
+                .withKS(WRIST_FF.getkS())
+                .withKG(WRIST_FF.getkG())
+                .withKV(WRIST_FF.getkV())
                 .withKA(0)
-
                 .withGravityType(GravityTypeValue.Arm_Cosine);
-
-
-        public static final double WRIST_FF_OFFSET = Units.degreesToRadians(0);
-        public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS = new TrapezoidProfile.Constraints(75, 500);
-
-        public static final FeedForward WRIST_FF = new FeedForward(.26, .2, .134);
 
         public static final double WRIST_LOWER_TOLERANCE = 5;
         public static final double WRIST_UPPER_TOLERANCE = 5;

@@ -57,11 +57,6 @@ public class IntakeSubsystem extends TemplateSubsystem {
         else isAboveSpeedCounter = 0;
 
         isAboveSpeed = isAboveSpeedCounter > 2;
-
-        if ((RobotContainer.getState() == State.ALGAE_LOW
-                || RobotContainer.getState() == State.ALGAE_HIGH
-                || RobotContainer.getState() == State.BARGE
-                || RobotContainer.getState() == State.PROCESSOR) && !isScoringAlgae) setVelocity(-50);
     }
 
     public static IntakeSubsystem getInstance() {
@@ -69,18 +64,6 @@ public class IntakeSubsystem extends TemplateSubsystem {
             intakeSubsystem = new IntakeSubsystem();
         }
         return intakeSubsystem;
-    }
-
-    public void intake() {
-        setVelocity(75);
-    }
-
-    public void stopIntake() {
-        setPercent(0);
-    }
-
-    public void outtake() {
-        setVelocity(-75);
     }
 
     public boolean hasCoral() {
