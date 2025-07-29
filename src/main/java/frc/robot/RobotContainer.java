@@ -84,8 +84,7 @@ public class RobotContainer {
     public static double yVelocity = 0;
     public static double rotationVelocity = 0;
 
-    //.04, .16
-    public static double autoAlignXOffset = 0.055;
+    public static double autoAlignXOffset = 0.04;
     public static double autoAlignYOffset = -.15;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
@@ -321,7 +320,7 @@ public class RobotContainer {
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
 //                .onTrue(ScoreCommands.Intake.reIntakeSequence());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_D_BLUE, 2d, 2d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_D_BLUE, 5d, 5d));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
                 .onTrue(ScoreCommands.Zeroing.zeroSubsystems());

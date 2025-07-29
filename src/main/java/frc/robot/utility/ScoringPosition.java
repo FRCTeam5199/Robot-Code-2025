@@ -4,7 +4,7 @@ public enum ScoringPosition {
     REEF_SIDE_A_BLUE(0, 0, 0, false),
     REEF_SIDE_B_BLUE(0, 0, 0, true),
     REEF_SIDE_C_BLUE(0, 0, 0, false),
-    REEF_SIDE_D_BLUE(3.877, 2.718, 48.139, true),
+    REEF_SIDE_D_BLUE(3.776, 2.592, 60, true),
     REEF_SIDE_E_BLUE(0, 0, 0, false),
     REEF_SIDE_F_BLUE(0, 0, 0, true),
     REEF_SIDE_G_BLUE(0, 0, 0, false),

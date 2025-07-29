@@ -139,7 +139,7 @@ public final class Autos {
     public static Command driveToPose(ScoringPosition scoringPosition) {
         return AutoBuilder.pathfindToPose(
                 new Pose2d(scoringPosition.getGoalX(), scoringPosition.getGoalY(), Rotation2d.fromDegrees(scoringPosition.getGoalDegrees())),
-                new PathConstraints(6d, 6d, Units.degreesToRadians(540d), Units.degreesToRadians(720d)),
+                new PathConstraints(6d, 6d, Units.degreesToRadians(360d), Units.degreesToRadians(360d)),
                 0d
         );
     }
@@ -147,7 +147,15 @@ public final class Autos {
     public static Command driveToPose(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration) {
         return AutoBuilder.pathfindToPose(
                 new Pose2d(scoringPosition.getGoalX(), scoringPosition.getGoalY(), Rotation2d.fromDegrees(scoringPosition.getGoalDegrees())),
-                new PathConstraints(maxVelocity, maxAcceleration, Units.degreesToRadians(540d), Units.degreesToRadians(720d)),
+                new PathConstraints(maxVelocity, maxAcceleration, Units.degreesToRadians(360d), Units.degreesToRadians(360d)),
+                0d
+        );
+    }
+
+    public static Command driveToPose(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration, double maxAngularVelocity, double maxAngularAcceleration) {
+        return AutoBuilder.pathfindToPose(
+                new Pose2d(scoringPosition.getGoalX(), scoringPosition.getGoalY(), Rotation2d.fromDegrees(scoringPosition.getGoalDegrees())),
+                new PathConstraints(maxVelocity, maxAcceleration, Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)),
                 0d
         );
     }
