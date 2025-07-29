@@ -45,6 +45,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
+import frc.robot.utility.ScoringPosition;
 import frc.robot.utility.State;
 
 /**
@@ -194,10 +195,10 @@ public class RobotContainer {
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
                         .alongWith(ScoreCommands.Drive.autoAlignTeleop())
                         .alongWith(new VelocityCommand(intakeSubsystem, -60)
-                        .onlyIf(() -> state == State.BARGE
-                                || state == State.PROCESSOR
-                                || state == State.ALGAE_LOW
-                                || state == State.ALGAE_HIGH)))
+                                .onlyIf(() -> state == State.BARGE
+                                        || state == State.PROCESSOR
+                                        || state == State.ALGAE_LOW
+                                        || state == State.ALGAE_HIGH)))
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(new VelocityCommand(intakeSubsystem, -60)
                                 .onlyIf(() -> state == State.ALGAE_LOW || state == State.ALGAE_HIGH))
@@ -316,8 +317,11 @@ public class RobotContainer {
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
                 .onTrue(new VelocityCommand(intakeSubsystem, 60))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0));
+
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
+//                .onTrue(ScoreCommands.Intake.reIntakeSequence());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-                .onTrue(ScoreCommands.Intake.reIntakeSequence());
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_D_BLUE, 2d, 2d));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
                 .onTrue(ScoreCommands.Zeroing.zeroSubsystems());

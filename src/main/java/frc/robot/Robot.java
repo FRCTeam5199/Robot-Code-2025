@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.Optional;
 
+import com.pathplanner.lib.commands.PathfindingCommand;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.commands.ScoreCommands;
@@ -64,6 +65,8 @@ public class Robot extends TimedRobot {
         robotContainer = new RobotContainer();
 
         commandSwerveDrivetrain.seedFieldCentric();
+
+        PathfindingCommand.warmupCommand().schedule();
     }
 
     /**

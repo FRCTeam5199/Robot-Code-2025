@@ -7,11 +7,22 @@ package frc.robot.commands;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import com.pathplanner.lib.path.PathConstraints;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.UserInterface;
+import frc.robot.constants.Constants;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.WristSubsystem;
+import frc.robot.utility.ScoringPosition;
 
 public final class Autos {
     private SendableChooser<Command> autoChooser;
@@ -47,6 +58,9 @@ public final class Autos {
 
     private static PathPlannerAuto helper2PieceTopBlue;
     private static PathPlannerAuto helper2PieceBottomRed;
+
+    private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+    private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
 
     /**
      * Gets or creates the AutoChooser (Singleton Method)
@@ -112,5 +126,59 @@ public final class Autos {
         autonChooserBlue.addOption("3 Piece Blue Left", threePieceBlueTopL4);
         autonChooserBlue.addOption("3 Piece Blue Right", threePieceBlueBottomL4);
         autonChooserBlue.addOption("2 Piece Blue Left Helper", helper2PieceTopBlue);
+    }
+
+    public static Command driveToPose(double goalX, double goalY, double goalDegrees) {
+        return AutoBuilder.pathfindToPose(
+                new Pose2d(goalX, goalY, Rotation2d.fromDegrees(goalDegrees)),
+                new PathConstraints(2d, 2d, Units.degreesToRadians(540d), Units.degreesToRadians(720d)),
+                0d
+        );
+    }
+
+    public static Command driveToPose(ScoringPosition scoringPosition) {
+        return AutoBuilder.pathfindToPose(
+                new Pose2d(scoringPosition.getGoalX(), scoringPosition.getGoalY(), Rotation2d.fromDegrees(scoringPosition.getGoalDegrees())),
+                new PathConstraints(6d, 6d, Units.degreesToRadians(540d), Units.degreesToRadians(720d)),
+                0d
+        );
+    }
+
+    public static Command driveToPose(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration) {
+        return AutoBuilder.pathfindToPose(
+                new Pose2d(scoringPosition.getGoalX(), scoringPosition.getGoalY(), Rotation2d.fromDegrees(scoringPosition.getGoalDegrees())),
+                new PathConstraints(maxVelocity, maxAcceleration, Units.degreesToRadians(540d), Units.degreesToRadians(720d)),
+                0d
+        );
+    }
+
+    public static Command autoScore(ScoringPosition scoringPosition) {
+        return new SequentialCommandGroup(
+                driveToPose(scoringPosition).alongWith(ScoreCommands.Arm.armStable()),
+                new ConditionalCommand(
+                        ScoreCommands.Drive.autoAlignRAuton(),
+                        ScoreCommands.Drive.autoAlignLAuton(),
+                        scoringPosition::isRightSide
+                ).alongWith(ScoreCommands.Score.score()),
+                ScoreCommands.Score.place()
+                        .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
+                        .withTimeout(2),
+                ScoreCommands.Intake.intakeHP()
+        );
+    }
+
+    public static Command autoScore(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration) {
+        return new SequentialCommandGroup(
+                driveToPose(scoringPosition, maxVelocity, maxAcceleration).alongWith(ScoreCommands.Arm.armStable()),
+                new ConditionalCommand(
+                        ScoreCommands.Drive.autoAlignRAuton(),
+                        ScoreCommands.Drive.autoAlignLAuton(),
+                        scoringPosition::isRightSide
+                ).alongWith(ScoreCommands.Score.score()),
+                ScoreCommands.Score.place()
+                        .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
+                        .withTimeout(2),
+                ScoreCommands.Intake.intakeHP()
+        );
     }
 }
