@@ -1,4 +1,4 @@
-package frc.robot.subsystems.template;
+package frc.robot.subsystems.templates;
 
 import java.util.function.DoubleSupplier;
 
@@ -66,12 +66,9 @@ public class TemplateSubsystem extends SubsystemBase {
     private double drumCircumference;
     private double ffOffset;
 
-    private double velocity;
-    private double acceleration;
     double zero = 0;
 
 
-    private Timer timer;
     private Type type;
     private String name;
 
@@ -118,8 +115,6 @@ public class TemplateSubsystem extends SubsystemBase {
         for (double[] ratio : gearRatios) {
             this.gearRatio *= (ratio[1] / ratio[0]);
         }
-
-        timer = new Timer();
 
         inst = NetworkTableInstance.getDefault();
 
@@ -198,7 +193,7 @@ public class TemplateSubsystem extends SubsystemBase {
         encoderConfig = new CANcoderConfiguration();
 
         encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
-        encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        encoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         encoderConfig.MagnetSensor.MagnetOffset = magnetOffset;
 
         encoder.getConfigurator().apply(encoderConfig);
@@ -212,7 +207,7 @@ public class TemplateSubsystem extends SubsystemBase {
         this.sensorToMechRatio = sensorToMechRatio;
 
         motor.getConfigurator().apply(motorConfig);
-        gearRatio = sensorToMechRatio;
+        gearRatio = motorToSensorRatio;
     }
 
     public void setPercent(double percent) {
@@ -231,54 +226,60 @@ public class TemplateSubsystem extends SubsystemBase {
         followLastMechProfile = false;
         if (rps == 0) setPercent(0);
         else motor.setControl(velocityVoltage.withVelocity(rps)
-                .withFeedForward(calculateFF(rps, 0)));
+                .withFeedForward(calculateFF(getMotorVelocity(), rps)));
     }
 
-    private double calculateFF(double rps, double acceleration) {
+//    private double calculateFF(double rps, double acceleration) {
+//        switch (type) {
+//            case LINEAR -> {
+//                return linearFF.calculate(rps, acceleration);
+//            }
+//            case PIVOT -> {
+//                if (encoder == null)
+//                    return pivotFF.calculate(Units.degreesToRadians(getDegrees()),
+//                            Units.degreesToRadians(getDegreesFromMotorRot(rps)), Units.degreesToRadians(getDegreesFromMotorRot(acceleration)));
+//                return pivotFF.calculate(Units.degreesToRadians(getEncoderDegrees()),
+//                    Units.degreesToRadians(getDegreesFromEncoderRot(rps)), Units.degreesToRadians(getDegreesFromEncoderRot(acceleration)));
+//            }
+//            default -> {
+//                return simpleMotorFF.calculate(rps, acceleration);
+//            }
+//        }
+//    }
+
+    private double calculateFF(double currentVelocity, double nextVelocity) {
         switch (type) {
             case LINEAR -> {
-                return linearFF.calculate(rps, acceleration);
+                return linearFF.calculateWithVelocities(currentVelocity, nextVelocity);
             }
             case PIVOT -> {
-                return pivotFF.calculate(Units.degreesToRadians(getDegrees() + Units.degreesToRotations(ffOffset)),
-                        Units.degreesToRadians(getDegreesFromMotorRot(rps)), Units.degreesToRadians(getDegreesFromMotorRot(acceleration)));
+                if (encoder == null)
+                    return pivotFF.calculateWithVelocities(Units.degreesToRadians(getDegrees()),
+                            Units.degreesToRadians(getDegreesFromMotorRot(currentVelocity)), Units.degreesToRadians(getDegreesFromMotorRot(nextVelocity)));
+                return pivotFF.calculateWithVelocities(Units.degreesToRadians(getEncoderDegrees()),
+                        Units.degreesToRadians(getDegreesFromEncoderRot(currentVelocity)), Units.degreesToRadians(getDegreesFromEncoderRot(nextVelocity)));
             }
             default -> {
-                return simpleMotorFF.calculate(rps, acceleration);
+                return simpleMotorFF.calculateWithVelocities(currentVelocity, nextVelocity);
             }
         }
     }
 
-//    private double calculateFF(double... velocities) {
-//        switch (type) {
-//            case LINEAR -> {
-//                return linearFF.calculateWithVelocities(getMechMFromMotorRot(velocities[0]),
-//                        getMechMFromMotorRot(velocities[1]));
-//            }
-//            case PIVOT -> {
-//                //return pivotFF.calculate(Math.toRadians(getDegrees() + ffOffset),
-//                //  rps * 2 * Math.PI, acceleration * 2 * Math.PI);
-//                //The feedforward calculation below is untested, use above if it doesn't work
-
-    /// /                return pivotFF.calculateWithVelocities(Math.toRadians(getDegrees() + ffOffset),
-    /// /                        velocities[0] * 2 * Math.PI, velocities[1] * 2 * Math.PI);
-//            }
-//            default -> {
-//                return simpleMotorFF.calculate(velocities[0]);
-//            }
-//        }
-//    }
     public void setPosition(double goal) {
         if (type == Type.ROLLER) return;
 
+        profile = new TrapezoidProfile(constraints);
+
         switch (type) {
             case LINEAR -> goalState.position = getMotorRotFromMechM(goal + offset);
-            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal + offset);
+            case PIVOT -> goalState.position = encoder == null ? getMotorRotFromDegrees(goal + offset)
+                    : getEncoderRotFromDegrees(goal + offset);
             default -> goalState.position = getMotorRotFromMechRot(goal);
         }
 
         goalState.velocity = 0;
         this.goal = goal;
+
         currentState = profile.calculate(0, currentState, goalState);
         if (encoder == null) currentState.position = getMotorRot();
         else currentState.position = getEncoderRot();
@@ -292,7 +293,8 @@ public class TemplateSubsystem extends SubsystemBase {
 
         switch (type) {
             case LINEAR -> goalState.position = getMotorRotFromMechM(goal + offset);
-            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal + offset);
+            case PIVOT -> goalState.position = encoder == null ? getMotorRotFromDegrees(goal + offset)
+                    : getEncoderRotFromDegrees(goal + offset);
             default -> goalState.position = getMotorRotFromMechRot(goal);
         }
 
@@ -301,6 +303,7 @@ public class TemplateSubsystem extends SubsystemBase {
         goalState.velocity = 0;
         this.goal = goal;
         currentState = profile.calculate(0, currentState, goalState);
+
         if (encoder == null) currentState.position = getMotorRot();
         else currentState.position = getEncoderRot();
 
@@ -314,7 +317,8 @@ public class TemplateSubsystem extends SubsystemBase {
 
         switch (type) {
             case LINEAR -> goalState.position = getMotorRotFromMechM(goal + offset);
-            case PIVOT -> goalState.position = getMotorRotFromDegrees(goal + offset);
+            case PIVOT -> goalState.position = encoder == null ? getMotorRotFromDegrees(goal + offset)
+                    : getEncoderRotFromDegrees(goal + offset);
             default -> goalState.position = getMotorRotFromMechRot(goal);
         }
 
@@ -331,14 +335,12 @@ public class TemplateSubsystem extends SubsystemBase {
     public void followLastMechProfile() {
         if (type == Type.ROLLER) return;
 
-        TrapezoidProfile.State nextState = profile.calculate(timer.get(), currentState, goalState);
+        TrapezoidProfile.State nextState = profile.calculate(.02, currentState, goalState);
         motor.setControl(
                 positionVoltage.withPosition(nextState.position)
-                        .withFeedForward(calculateFF(nextState.velocity,
-                                (nextState.velocity - currentState.velocity) / timer.get())));
+                        .withFeedForward(calculateFF(currentState.velocity, nextState.velocity)));
 
         currentState = nextState;
-        timer.restart();
     }
 
     public boolean isProfileFinished() {
@@ -352,12 +354,8 @@ public class TemplateSubsystem extends SubsystemBase {
                         getMechM() >= goal - lowerTolerance && getMechM() <= goal + upperTolerance;
             }
             case PIVOT -> {
-                if (encoder != null)
-                    return isProfileFinished() &&
-                            Units.rotationsToDegrees(getEncoderRot()) >= goal - lowerTolerance && Units.rotationsToDegrees(getEncoderRot()) <= goal + upperTolerance;
-                else
-                    return isProfileFinished() &&
-                            getDegrees() >= goal - lowerTolerance && getDegrees() <= goal + upperTolerance;
+                return isProfileFinished() &&
+                        getDegrees() >= goal - lowerTolerance && getDegrees() <= goal + upperTolerance;
             }
             default -> {
                 if (isVelocity) return getMechVelocity() >= goal - lowerTolerance
@@ -374,10 +372,7 @@ public class TemplateSubsystem extends SubsystemBase {
                 return getMechM() >= position;
             }
             case PIVOT -> {
-                if (encoder != null)
-                    return Units.rotationsToDegrees(getEncoderRot()) >= position;
-                else
-                    return getDegrees() >= position;
+                return getDegrees() >= position;
             }
             default -> {
                 return false;
@@ -387,7 +382,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     public boolean isAboveSpeed() {
         if (type != Type.ROLLER) return false;
-        return getMechVelocity() > goal - 20;
+        return getMechVelocity() > goal - 20; //TODO: fix
     }
 
 
@@ -416,7 +411,8 @@ public class TemplateSubsystem extends SubsystemBase {
 
     //Unit Conversions
     public double getDegrees() {
-        return motor.getRotorPosition().getValueAsDouble() * gearRatio * 360d;
+        return encoder == null ? motor.getRotorPosition().getValueAsDouble() * gearRatio * 360d
+                : getEncoderRot() * sensorToMechRatio * 360d;
     }
 
     /**
@@ -527,7 +523,17 @@ public class TemplateSubsystem extends SubsystemBase {
     }
 
     public double getEncoderRotFromDegrees(double degrees) {
+        if (encoder == null) return getMotorRotFromDegrees(degrees);
         return degrees / 360 * sensorToMechRatio;
+    }
+
+    public double getDegreesFromEncoderRot(double encoderRot) {
+        if (encoder == null) return getDegreesFromMotorRot(encoderRot);
+        return encoderRot * 360 * sensorToMechRatio;
+    }
+
+    public double getEncoderDegrees() {
+        return encoder.getAbsolutePosition().getValueAsDouble() * 360 * sensorToMechRatio;
     }
 
     @Override
@@ -541,11 +547,6 @@ public class TemplateSubsystem extends SubsystemBase {
         systemPose.set(getMotorRot());
         systemSpeeds.set(getMotorVelocity());
         systemTimestamp.set(Timer.getFPGATimestamp());
-    }
-
-    public void setConstraints(double vel, double accel) {
-        velocity = vel;
-        acceleration = accel;
     }
 
     public void setControl(ControlRequest control) {
