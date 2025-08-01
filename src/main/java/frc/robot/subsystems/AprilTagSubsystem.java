@@ -203,8 +203,8 @@ public class AprilTagSubsystem extends SubsystemBase {
         curStdDevs = stdDevs;
     }
 
-    public boolean 
-    cameraPresent(){
+    public boolean
+    cameraPresent() {
         return camera.isConnected();
     }
 
@@ -302,8 +302,8 @@ public class AprilTagSubsystem extends SubsystemBase {
                     closestTagY = -closestTagY;
                 }
 
-                System.out.println("Id: " + bestTarget.getFiducialId()
-                        + " X: " + closestTagX + " Y: " + closestTagY);
+//                System.out.println("Id: " + bestTarget.getFiducialId()
+//                        + " X: " + closestTagX + " Y: " + closestTagY);
             }
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};
