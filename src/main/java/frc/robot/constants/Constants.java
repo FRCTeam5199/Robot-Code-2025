@@ -95,7 +95,7 @@ public final class Constants {
 
         public static final TrapezoidProfile.Constraints ARM_CONSTRAINTS
                 = new TrapezoidProfile.Constraints(150, 300);
-        public static final FeedForward ARM_FF = new FeedForward(0.23, 0.07, 0.1218);
+        public static final FeedForward ARM_FF = new FeedForward(0.23, 0.07, .01938507206859285189665004237877);
 
         public static final double ARM_LOWER_TOLERANCE = 4;
         public static final double ARM_UPPER_TOLERANCE = 4;
@@ -218,7 +218,7 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS
                 = new TrapezoidProfile.Constraints(75, 150);
 
-        public static final FeedForward WRIST_FF = new FeedForward(.26, .2, .134);
+        public static final FeedForward WRIST_FF = new FeedForward(.26, .2, .02132676237431397499303042429192); //.134
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
                 .withKP(2.8)
                 .withKI(0)
