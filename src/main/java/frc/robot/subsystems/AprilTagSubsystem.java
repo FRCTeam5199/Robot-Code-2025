@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Optional;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.PoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -45,7 +48,8 @@ public class AprilTagSubsystem extends SubsystemBase {
 
     double[] tagAngles = {1, 1, 1, 1, 1, 1, 300, 0, 60, 120, 180, 240, 1, 1, 1, 1, 1, 240, 180, 120, 60, 0, 300};
 
-    private static ArrayList<Pair<Double, Double>> lookUpTable = new ArrayList<>() {
+    private LimelightHelpers.PoseEstimate limelightMeasurement;
+    private ArrayList<Pair<Double, Double>> lookUpTable = new ArrayList<>() {
         {
             //distance, stddev
             add(new Pair<>(.5842 + Vision.CAMERA_TO_FRONT_DISTANCE, .25));
@@ -54,7 +58,6 @@ public class AprilTagSubsystem extends SubsystemBase {
         }
     };
 
-    //4, 5, 14, 15
     public AprilTagSubsystem() {
         camera = new PhotonCamera(Constants.Vision.CAMERA_NAME);
 
@@ -68,6 +71,32 @@ public class AprilTagSubsystem extends SubsystemBase {
         photonEstimator =
                 new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.Vision.CAMERA_POSE);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+        //TODO: change offsets
+        LimelightHelpers.setCameraPose_RobotSpace("limelight",
+                0.5,    // Forward offset (meters)
+                0.0,    // Side offset (meters)
+                0.5,    // Height offset (meters)
+                0.0,    // Roll (degrees)
+                30.0,   // Pitch (degrees)
+                0.0     // Yaw (degrees)
+        );
+
+        // Configure AprilTag detection
+        LimelightHelpers.SetFiducialIDFiltersOverride("limelight", new int[]{6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22}); // Only track these tag IDs
+        //TODO: figure out if this is necessary
+        LimelightHelpers.SetFiducialDownscalingOverride("limelight", 2.0f); // Process at half resolution for improved framerate and reduced range
+
+        //Don't think this is necessary but idk what it does exactly
+//        // Set AprilTag offset tracking point (meters)
+//        LimelightHelpers.setFiducial3DOffset("",
+//                0.0,    // Forward offset
+//                0.0,    // Side offset
+//                0.5     // Height offset
+//        );
+
+
+        limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
     }
 
     @Override
@@ -203,8 +232,8 @@ public class AprilTagSubsystem extends SubsystemBase {
         curStdDevs = stdDevs;
     }
 
-    public boolean 
-    cameraPresent(){
+    public boolean
+    cameraPresent() {
         return camera.isConnected();
     }
 
@@ -315,5 +344,11 @@ public class AprilTagSubsystem extends SubsystemBase {
             aprilTagSubsystem = new AprilTagSubsystem();
         }
         return aprilTagSubsystem;
+    }
+
+    public LimelightHelpers.PoseEstimate getLimelightPose() {
+        double robotYaw = RobotContainer.commandSwerveDrivetrain.getPigeon2().getYaw().getValueAsDouble();
+        LimelightHelpers.SetRobotOrientation("limelight", robotYaw, 0.0, 0.0, 0.0, 0.0, 0.0);
+        return LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
     }
 }

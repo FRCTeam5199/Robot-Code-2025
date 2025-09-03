@@ -36,6 +36,7 @@ public class Robot extends TimedRobot {
     private RobotContainer robotContainer;
     private static final CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
     private static Pair<Optional<EstimatedRobotPose>, Double> estimatePose;
+    private static LimelightHelpers.PoseEstimate limelightPose;
     private static AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
 //  private IntakeSubsystem exampleSubsystem = IntakeSubsystem.getInstance();
@@ -90,6 +91,15 @@ public class Robot extends TimedRobot {
                     aprilTagSubsystem.getEstimationStdDevs());
         }
 
+        limelightPose = aprilTagSubsystem.getLimelightPose();
+        if (limelightPose.pose != null) {
+            Pose2d modify = new Pose2d(limelightPose.pose.getX(), limelightPose.pose.getY(),
+                    commandSwerveDrivetrain.getPose().getRotation());
+
+            commandSwerveDrivetrain.addVisionMeasurement(modify, limelightPose.timestampSeconds);
+            //unsure if the getEstimationStdDevs or something similar needs to be added
+        }
+
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -116,6 +126,15 @@ public class Robot extends TimedRobot {
 
             commandSwerveDrivetrain.addVisionMeasurement(modify, Utils.getCurrentTimeSeconds(),
                     aprilTagSubsystem.getEstimationStdDevs());
+        }
+
+        limelightPose = aprilTagSubsystem.getLimelightPose();
+        if (limelightPose.pose != null) {
+            Pose2d modify = new Pose2d(limelightPose.pose.getX(), limelightPose.pose.getY(),
+                    commandSwerveDrivetrain.getPose().getRotation());
+
+            commandSwerveDrivetrain.addVisionMeasurement(modify, limelightPose.timestampSeconds);
+            //unsure if the getEstimationStdDevs or something similar needs to be added
         }
     }
 
