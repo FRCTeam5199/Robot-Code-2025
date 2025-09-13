@@ -240,24 +240,10 @@ public class RobotContainer {
 
         commandXboxController.povLeft().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
         commandXboxController.povRight().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
-//        commandXboxController.povLeft().onTrue(new VelocityCommand(intakeSubsystem, -50));
-//        commandXboxController.povRight().onTrue(new VelocityCommand(intakeSubsystem, -50));
 
         commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
         commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
 
-        // commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(1)))
-        //         .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-        // commandXboxController.povDown().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(-1)))
-        //         .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
-
-//        commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP).onTrue(ScoreCommands.Intake.intakeHP())
-//                .onFalse(ScoreCommands.Stabling.intakeStable()
-//                        .alongWith(new ConditionalCommand(
-//                                ScoreCommands.Intake.intakeSequence(),
-//                                new VelocityCommand(intakeSubsystem, 0),
-//                                intakeSubsystem::hasCoral
-//                        )));
         //Intake when Coral is in front of HP
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L).
                 onTrue(new InstantCommand(RobotContainer::toggleCoralBlockingHP));
@@ -305,61 +291,69 @@ public class RobotContainer {
                         .andThen(new PositionCommand(armSubsystem, 0))
                         .andThen(new PositionCommand(wristSubsystem, 0)));
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(ScoreCommands.Arm.armBarge());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G).onTrue(ScoreCommands.Arm.armProcessor());
-
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
-                .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_A, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
-                .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
-
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_B, 5d, 5d));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_C)
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_C, 5d, 5d));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_D, 5d, 5d));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_E, 5d, 5d));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F)
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_F, 5d, 5d));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G)
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_G, 5d, 5d));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H)
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_H, 5d, 5d));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_I, 5d, 5d));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J)
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_J, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-                .onTrue(new VelocityCommand(intakeSubsystem, 60))
-                .onFalse(new VelocityCommand(intakeSubsystem, 0));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_K, 5d, 5d));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L)
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_L, 5d, 5d));
 
+
+        commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
+
+        if (Utils.isSimulation()) {
+            commandSwerveDrivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+        }
+
+
+        // Old Reef Controls
+
+
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(ScoreCommands.Arm.armBarge());
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G).onTrue(ScoreCommands.Arm.armProcessor());
+//
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
+//                .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
+//                .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
+//
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
+//                .onTrue(new VelocityCommand(intakeSubsystem, 60))
+//                .onFalse(new VelocityCommand(intakeSubsystem, 0));
+//
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
 //                .onTrue(ScoreCommands.Intake.reIntakeSequence());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_D_BLUE, 5d, 5d));
+//
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
+//                .onTrue(ScoreCommands.Zeroing.zeroSubsystems());
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F)
+//                .onTrue(new InstantCommand(() -> elevatorSubsystem.setPercent(0))
+//                        .andThen(new InstantCommand(() -> armSubsystem.setPercent(0)))
+//                        .andThen(new InstantCommand(() -> wristSubsystem.setPercent(0)))
+//                        .andThen(new InstantCommand(() -> elevatorSubsystem.setFollowLastMechProfile(false)))
+//                        .andThen(new InstantCommand(() -> armSubsystem.setFollowLastMechProfile(false)))
+//                        .andThen(new InstantCommand(() -> wristSubsystem.setFollowLastMechProfile(false))));
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
-                .onTrue(ScoreCommands.Zeroing.zeroSubsystems());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F)
-                .onTrue(new InstantCommand(() -> elevatorSubsystem.setPercent(0))
-                        .andThen(new InstantCommand(() -> armSubsystem.setPercent(0)))
-                        .andThen(new InstantCommand(() -> wristSubsystem.setPercent(0)))
-                        .andThen(new InstantCommand(() -> elevatorSubsystem.setFollowLastMechProfile(false)))
-                        .andThen(new InstantCommand(() -> armSubsystem.setFollowLastMechProfile(false)))
-                        .andThen(new InstantCommand(() -> wristSubsystem.setFollowLastMechProfile(false))));
 
-        // commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
-        //         .onTrue(new InstantCommand(() -> intakeSubsystem.toggleBreakBeam()));
-
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-//                .onTrue(ScoreCommands.Arm.armBarge());
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-//                .onTrue(ScoreCommands.Arm.armProcessor());
-
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(0)).andThen(() -> setAutoAlignOffsetLeft()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(0)).andThen(() -> setAutoAlignOffsetRight()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_C).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(1)).andThen(() -> setAutoAlignOffsetLeft()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(1)).andThen(() -> setAutoAlignOffsetRight()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(2)).andThen(() -> setAutoAlignOffsetLeft()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(2)).andThen(() -> setAutoAlignOffsetRight()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(3)).andThen(() -> setAutoAlignOffsetLeft()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(3)).andThen(() -> setAutoAlignOffsetRight()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(4)).andThen(() -> setAutoAlignOffsetLeft()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(4)).andThen(() -> setAutoAlignOffsetRight()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(5)).andThen(() -> setAutoAlignOffsetLeft())/*.andThen(GoToCommands.GoToCommand(reefTags.get(4)))*/);
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(5)).andThen(() -> setAutoAlignOffsetRight()));
-
-//        commandButtonPanel.button(ButtonPanelButtons.BUTTON2).toggleOnTrue(new InstantCommand(() -> {
-//            if (lockOnMode) {
-//                lockOnMode = false;
-//            } else {
-//                lockOnMode = true;
-//            }
-//        }));
+        //Old operator controls
 
 
 //        operatorXboxController.y().onTrue(new InstantCommand(()
@@ -389,12 +383,6 @@ public class RobotContainer {
 //
 //        operatorXboxController.rightTrigger().onTrue(new PositionCommand(elevatorSubsystem, .15)
 //                .andThen(new PositionCommand(armSubsystem, 0).andThen(new PositionCommand(wristSubsystem, 0))));
-
-        commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
-
-        if (Utils.isSimulation()) {
-            commandSwerveDrivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
-        }
     }
 
     /**

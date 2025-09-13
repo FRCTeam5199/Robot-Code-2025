@@ -11,6 +11,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -145,45 +146,87 @@ public final class Autos {
 
     public static Command driveToPose(ScoringPosition scoringPosition) {
         return new SequentialCommandGroup(
-                AutoBuilder.pathfindToPose(
-                        new Pose2d(scoringPosition.getGoalX(), scoringPosition.getGoalY(), Rotation2d.fromDegrees(scoringPosition.getGoalDegrees())),
-                        new PathConstraints(2d, 2d, Units.degreesToRadians(540d), Units.degreesToRadians(720d)),
-                        0d
+                new ConditionalCommand(
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getBluePose(),
+                                new PathConstraints(2d, 2d,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getRedPose(),
+                                new PathConstraints(2d, 2d,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                        () -> DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 ),
-                AutoBuilder.pathfindToPose(
-                        new Pose2d(scoringPosition.getGoalX(), scoringPosition.getGoalY(), Rotation2d.fromDegrees(scoringPosition.getGoalDegrees())),
-                        new PathConstraints(2d, 2d, Units.degreesToRadians(540d), Units.degreesToRadians(720d)),
-                        0d
+                new ConditionalCommand(
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getBluePose(),
+                                new PathConstraints(2d, 2d,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getRedPose(),
+                                new PathConstraints(2d, 2d,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                        () -> DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 )
         );
     }
 
     public static Command driveToPose(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration) {
         return new SequentialCommandGroup(
-                AutoBuilder.pathfindToPose(
-                        new Pose2d(scoringPosition.getGoalX(), scoringPosition.getGoalY(), Rotation2d.fromDegrees(scoringPosition.getGoalDegrees())),
-                        new PathConstraints(maxVelocity, maxAcceleration, Units.degreesToRadians(540d), Units.degreesToRadians(720d)),
-                        0d
+                new ConditionalCommand(
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getBluePose(),
+                                new PathConstraints(maxVelocity, maxAcceleration,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getRedPose(),
+                                new PathConstraints(maxVelocity, maxAcceleration,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                        () -> DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 ),
-                AutoBuilder.pathfindToPose(
-                        new Pose2d(scoringPosition.getGoalX(), scoringPosition.getGoalY(), Rotation2d.fromDegrees(scoringPosition.getGoalDegrees())),
-                        new PathConstraints(maxVelocity, maxAcceleration, Units.degreesToRadians(540d), Units.degreesToRadians(720d)),
-                        0d
+                new ConditionalCommand(
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getBluePose(),
+                                new PathConstraints(maxVelocity, maxAcceleration,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getRedPose(),
+                                new PathConstraints(maxVelocity, maxAcceleration,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                        () -> DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 )
         );
     }
 
     public static Command driveToPose(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration, double maxAngularVelocity, double maxAngularAcceleration) {
         return new SequentialCommandGroup(
-                AutoBuilder.pathfindToPose(
-                        new Pose2d(scoringPosition.getGoalX(), scoringPosition.getGoalY(), Rotation2d.fromDegrees(scoringPosition.getGoalDegrees())),
-                        new PathConstraints(maxVelocity, maxAcceleration, Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)),
-                        0d
+                new ConditionalCommand(
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getBluePose(),
+                                new PathConstraints(maxVelocity, maxAcceleration,
+                                        Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)), 0d),
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getRedPose(),
+                                new PathConstraints(maxVelocity, maxAcceleration,
+                                        Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)), 0d),
+                        () -> DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 ),
-                AutoBuilder.pathfindToPose(
-                        new Pose2d(scoringPosition.getGoalX(), scoringPosition.getGoalY(), Rotation2d.fromDegrees(scoringPosition.getGoalDegrees())),
-                        new PathConstraints(maxVelocity, maxAcceleration, Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)),
-                        0d
+                new ConditionalCommand(
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getBluePose(),
+                                new PathConstraints(maxVelocity, maxAcceleration,
+                                        Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)), 0d),
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getRedPose(),
+                                new PathConstraints(maxVelocity, maxAcceleration,
+                                        Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)), 0d),
+                        () -> DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 )
         );
     }
