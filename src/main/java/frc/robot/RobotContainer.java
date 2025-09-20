@@ -292,29 +292,54 @@ public class RobotContainer {
                         .andThen(new PositionCommand(wristSubsystem, 0)));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_A, 5d, 5d));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_A));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_B, 5d, 5d));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_B));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_C)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_C, 5d, 5d));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_C));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_D, 5d, 5d));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_D));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_E, 5d, 5d));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_E));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_F, 5d, 5d));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_F));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_G, 5d, 5d));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_G));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_H, 5d, 5d));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_H));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_I, 5d, 5d));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_I));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_J, 5d, 5d));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_J));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_K, 5d, 5d));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_K));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L)
-                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_L, 5d, 5d));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_L));
+
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
+//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_A, 5d, 5d));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
+//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_B, 5d, 5d));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_C)
+//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_C, 5d, 5d));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
+//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_D, 5d, 5d));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
+//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_E, 5d, 5d));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F)
+//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_F, 5d, 5d));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G)
+//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_G, 5d, 5d));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H)
+//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_H, 5d, 5d));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
+//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_I, 5d, 5d));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J)
+//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_J, 5d, 5d));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
+//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_K, 5d, 5d));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L)
+//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_L, 5d, 5d));
 
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
