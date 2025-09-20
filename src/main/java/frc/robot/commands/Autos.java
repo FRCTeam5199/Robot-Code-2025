@@ -19,12 +19,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotContainer;
 import frc.robot.UserInterface;
+import frc.robot.constants.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
-import frc.robot.utility.AutoPathGenerationPosition;
-import frc.robot.utility.DrivePID;
+import frc.robot.utility.ScoringPosition;
 
 public final class Autos {
     private SendableChooser<Command> autoChooser;
@@ -145,15 +144,15 @@ public final class Autos {
         );
     }
 
-    public static Command driveToPose(AutoPathGenerationPosition autoPathGenerationPosition) {
+    public static Command driveToPose(ScoringPosition scoringPosition) {
         return new SequentialCommandGroup(
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
-                                autoPathGenerationPosition.getBluePose(),
+                                scoringPosition.getBluePose(),
                                 new PathConstraints(2d, 2d,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         AutoBuilder.pathfindToPose(
-                                autoPathGenerationPosition.getRedPose(),
+                                scoringPosition.getRedPose(),
                                 new PathConstraints(2d, 2d,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         () -> DriverStation.getAlliance().isPresent()
@@ -161,11 +160,11 @@ public final class Autos {
                 ),
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
-                                autoPathGenerationPosition.getBluePose(),
+                                scoringPosition.getBluePose(),
                                 new PathConstraints(2d, 2d,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         AutoBuilder.pathfindToPose(
-                                autoPathGenerationPosition.getRedPose(),
+                                scoringPosition.getRedPose(),
                                 new PathConstraints(2d, 2d,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         () -> DriverStation.getAlliance().isPresent()
@@ -174,15 +173,15 @@ public final class Autos {
         );
     }
 
-    public static Command driveToPose(AutoPathGenerationPosition autoPathGenerationPosition, double maxVelocity, double maxAcceleration) {
+    public static Command driveToPose(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration) {
         return new SequentialCommandGroup(
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
-                                autoPathGenerationPosition.getBluePose(),
+                                scoringPosition.getBluePose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         AutoBuilder.pathfindToPose(
-                                autoPathGenerationPosition.getRedPose(),
+                                scoringPosition.getRedPose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         () -> DriverStation.getAlliance().isPresent()
@@ -190,11 +189,11 @@ public final class Autos {
                 ),
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
-                                autoPathGenerationPosition.getBluePose(),
+                                scoringPosition.getBluePose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         AutoBuilder.pathfindToPose(
-                                autoPathGenerationPosition.getRedPose(),
+                                scoringPosition.getRedPose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         () -> DriverStation.getAlliance().isPresent()
@@ -203,15 +202,15 @@ public final class Autos {
         );
     }
 
-    public static Command driveToPose(AutoPathGenerationPosition autoPathGenerationPosition, double maxVelocity, double maxAcceleration, double maxAngularVelocity, double maxAngularAcceleration) {
+    public static Command driveToPose(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration, double maxAngularVelocity, double maxAngularAcceleration) {
         return new SequentialCommandGroup(
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
-                                autoPathGenerationPosition.getBluePose(),
+                                scoringPosition.getBluePose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
                                         Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)), 0d),
                         AutoBuilder.pathfindToPose(
-                                autoPathGenerationPosition.getRedPose(),
+                                scoringPosition.getRedPose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
                                         Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)), 0d),
                         () -> DriverStation.getAlliance().isPresent()
@@ -219,11 +218,11 @@ public final class Autos {
                 ),
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
-                                autoPathGenerationPosition.getBluePose(),
+                                scoringPosition.getBluePose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
                                         Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)), 0d),
                         AutoBuilder.pathfindToPose(
-                                autoPathGenerationPosition.getRedPose(),
+                                scoringPosition.getRedPose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
                                         Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)), 0d),
                         () -> DriverStation.getAlliance().isPresent()
@@ -232,14 +231,13 @@ public final class Autos {
         );
     }
 
-    public static Command autoScore(AutoPathGenerationPosition autoPathGenerationPosition) {
+    public static Command autoScore(ScoringPosition scoringPosition) {
         return new SequentialCommandGroup(
-                new InstantCommand(() -> RobotContainer.setDrivePID(DrivePID.AUTO_ALIGNING)),
-                driveToPose(autoPathGenerationPosition).alongWith(ScoreCommands.Arm.armStable()),
+                driveToPose(scoringPosition).alongWith(ScoreCommands.Arm.armStable()),
                 new ConditionalCommand(
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),
-                        autoPathGenerationPosition::isRightSide
+                        scoringPosition::isRightSide
                 ).alongWith(ScoreCommands.Score.score()),
                 ScoreCommands.Score.place()
                         .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
@@ -248,37 +246,18 @@ public final class Autos {
         );
     }
 
-    public static Command autoScore(AutoPathGenerationPosition autoPathGenerationPosition, double maxVelocity, double maxAcceleration) {
+    public static Command autoScore(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration) {
         return new SequentialCommandGroup(
-                new InstantCommand(() -> RobotContainer.setDrivePID(DrivePID.AUTO_ALIGNING)),
-                driveToPose(autoPathGenerationPosition, maxVelocity, maxAcceleration).alongWith(ScoreCommands.Arm.armStable()),
+                driveToPose(scoringPosition, maxVelocity, maxAcceleration).alongWith(ScoreCommands.Arm.armStable()),
                 new ConditionalCommand(
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),
-                        autoPathGenerationPosition::isRightSide
+                        scoringPosition::isRightSide
                 ).alongWith(ScoreCommands.Score.score()),
                 ScoreCommands.Score.place()
                         .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
                         .withTimeout(2),
                 ScoreCommands.Intake.intakeHP()
-        );
-    }
-
-    public static Command autoIntake(AutoPathGenerationPosition autoPathGenerationPosition, DrivePID drivePID) {
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> RobotContainer.setDrivePID(drivePID)),
-                driveToPose(autoPathGenerationPosition)
-                        .alongWith(ScoreCommands.Intake.intakeHP()),
-                ScoreCommands.Drive.autoDriveIntake().alongWith(ScoreCommands.Intake.intakeSequence())
-        );
-    }
-
-    public static Command autoIntake(AutoPathGenerationPosition autoPathGenerationPosition, DrivePID drivePID, double maxVelocity, double maxAcceleration) {
-        return new SequentialCommandGroup(
-                new InstantCommand(() -> RobotContainer.setDrivePID(drivePID)),
-                driveToPose(autoPathGenerationPosition, maxVelocity, maxAcceleration)
-                        .alongWith(ScoreCommands.Intake.intakeHP()),
-                ScoreCommands.Drive.autoDriveIntake().alongWith(ScoreCommands.Intake.intakeSequence())
         );
     }
 }

@@ -3,7 +3,7 @@ package frc.robot.utility;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
-public enum AutoPathGenerationPosition {
+public enum ScoringPosition {
     REEF_SIDE_A(new Pose2d(2.882, 4.176, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), false),
     REEF_SIDE_B(new Pose2d(2.882, 3.834, new Rotation2d(0)), new Pose2d(0, 0, new Rotation2d(0)), true),
     REEF_SIDE_C(new Pose2d(3.511, 2.721, new Rotation2d(60)), new Pose2d(0, 0, new Rotation2d(0)), false),
@@ -15,16 +15,14 @@ public enum AutoPathGenerationPosition {
     REEF_SIDE_I(new Pose2d(5.422, 5.339, new Rotation2d(240)), new Pose2d(0, 0, new Rotation2d(0)), false),
     REEF_SIDE_J(new Pose2d(5.135, 5.503, new Rotation2d(240)), new Pose2d(0, 0, new Rotation2d(0)), true),
     REEF_SIDE_K(new Pose2d(3.802, 5.500, new Rotation2d(300)), new Pose2d(0, 0, new Rotation2d(0)), false),
-    REEF_SIDE_L(new Pose2d(3.571, 5.503, new Rotation2d(300)), new Pose2d(0, 0, new Rotation2d(0)), true),
+    REEF_SIDE_L(new Pose2d(3.571, 5.503, new Rotation2d(300)), new Pose2d(0, 0, new Rotation2d(0)), true);
 
-    HP_RIGHT_MIDDLE(new Pose2d(1.266, 1.205, new Rotation2d(55)), new Pose2d(0, 0, new Rotation2d(0)), true),
-    HP_LEFT_MIDDLE(new Pose2d(1.345, 6.888, new Rotation2d(-52.943)), new Pose2d(0, 0, new Rotation2d(0)), false);
-
-    final Pose2d bluePose, redPose;
+    final Pose2d bluePose;
+    final Pose2d redPose;
 
     final boolean isRightSide;
 
-    AutoPathGenerationPosition(Pose2d bluePose, Pose2d redPose, boolean isRightSide) {
+    ScoringPosition(Pose2d bluePose, Pose2d redPose, boolean isRightSide) {
         this.bluePose = bluePose;
         this.redPose = redPose;
 

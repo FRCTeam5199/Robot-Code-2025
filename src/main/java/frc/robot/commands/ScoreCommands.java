@@ -1,6 +1,11 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.*;
+import static frc.robot.RobotContainer.MaxAngularRate;
+import static frc.robot.RobotContainer.commandSwerveDrivetrain;
+import static frc.robot.RobotContainer.commandXboxController;
+import static frc.robot.RobotContainer.rotationVelocity;
+import static frc.robot.RobotContainer.xVelocity;
+import static frc.robot.RobotContainer.yVelocity;
 
 import java.util.Map;
 
@@ -32,8 +37,9 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
-import frc.robot.utility.DrivePID;
 import frc.robot.utility.State;
+
+import javax.swing.*;
 
 public class ScoreCommands {
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -50,24 +56,17 @@ public class ScoreCommands {
 
     private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
-    private final static SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDesaturateWheelSpeeds(true)
-            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
-            .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
-
 
     public static class Drive {
         public static Command autoAlignTeleop() {
             return new ConditionalCommand(
                     new FunctionalCommand(
-                            () -> {
-                                RobotContainer.setDrivePID(DrivePID.AUTO_ALIGNING);
-                                commandSwerveDrivetrain.resetPose(
-                                        new Pose2d(
-                                                new Translation2d(commandSwerveDrivetrain.getPose().getX(),
-                                                        commandSwerveDrivetrain.getPose().getY()),
-                                                new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-                                                        .getClosestTagID())))));
-                            },
+                            () -> commandSwerveDrivetrain.resetPose(
+                                    new Pose2d(
+                                            new Translation2d(commandSwerveDrivetrain.getPose().getX(),
+                                                    commandSwerveDrivetrain.getPose().getY()),
+                                            new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                                    .getClosestTagID()))))),
                             () -> {
                                 commandSwerveDrivetrain.setControl(
                                         drive.withVelocityX(xVelocity)
@@ -105,7 +104,6 @@ public class ScoreCommands {
             return new FunctionalCommand(
                     () -> {
                         RobotContainer.setAutoAlignOffsetLeft();
-                        RobotContainer.setDrivePID(DrivePID.AUTO_ALIGNING);
 
                         commandSwerveDrivetrain.resetPose(
                                 new Pose2d(
@@ -142,7 +140,6 @@ public class ScoreCommands {
             return new FunctionalCommand(
                     () -> {
                         RobotContainer.setAutoAlignOffsetRight();
-                        RobotContainer.setDrivePID(DrivePID.AUTO_ALIGNING);
 
                         commandSwerveDrivetrain.resetPose(
                                 new Pose2d(
@@ -153,7 +150,7 @@ public class ScoreCommands {
                     },
                     () ->
                             RobotContainer.commandSwerveDrivetrain.setControl(
-                                    drive.withVelocityX(xVelocity)
+                                    drive.withVelocityX(RobotContainer.xVelocity)
                                             .withVelocityY(yVelocity)
                                             .withRotationalRate(rotationVelocity)),
                     (interrupted) -> {
@@ -170,23 +167,6 @@ public class ScoreCommands {
                                         .withRotationalRate(0));
                     },
                     RobotContainer::aligned,
-                    RobotContainer.commandSwerveDrivetrain);
-        }
-
-        public static Command autoDriveIntake() {
-            return new FunctionalCommand(
-                    () -> {
-                    },
-                    () -> RobotContainer.commandSwerveDrivetrain.setControl(
-                            robotCentricDrive.withVelocityX(xVelocity)
-                                    .withVelocityY(yVelocity)
-                                    .withRotationalRate(rotationVelocity)),
-                    (interrupted) ->
-                            RobotContainer.commandSwerveDrivetrain.setControl(
-                                    drive.withVelocityX(0)
-                                            .withVelocityY(0)
-                                            .withRotationalRate(0)),
-                    RobotContainer::profileFinished,
                     RobotContainer.commandSwerveDrivetrain);
         }
 

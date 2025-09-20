@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -17,16 +18,20 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ScoreCommands.Score;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.controls.ButtonPanelButtons;
@@ -40,8 +45,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
-import frc.robot.utility.AutoPathGenerationPosition;
-import frc.robot.utility.DrivePID;
+import frc.robot.utility.ScoringPosition;
 import frc.robot.utility.State;
 
 /**
@@ -65,7 +69,6 @@ public class RobotContainer {
 
     // Robot Centric drive to use with auto-balancing
     public final static SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDesaturateWheelSpeeds(true)
-            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(4, 0, .1, new TrapezoidProfile.Constraints(100, 200));
@@ -119,9 +122,8 @@ public class RobotContainer {
     public static State state = State.L1;
     private static Timer timer = new Timer();
     private static boolean useAutoAlign = true;
-    private static boolean shouldFixTip = false;
+    private static boolean shouldFixTip = true;
     private static boolean isCoralBlockingHP = false;
-    private static DrivePID drivePID = DrivePID.AUTO_ALIGNING;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -290,29 +292,29 @@ public class RobotContainer {
                         .andThen(new PositionCommand(wristSubsystem, 0)));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
-                .onTrue(Autos.autoScore(AutoPathGenerationPosition.REEF_SIDE_A, 5d, 5d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_A, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
-                .onTrue(Autos.autoScore(AutoPathGenerationPosition.REEF_SIDE_B, 5d, 5d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_B, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_C)
-                .onTrue(Autos.autoScore(AutoPathGenerationPosition.REEF_SIDE_C, 5d, 5d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_C, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-                .onTrue(Autos.autoScore(AutoPathGenerationPosition.REEF_SIDE_D, 5d, 5d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_D, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
-                .onTrue(Autos.autoScore(AutoPathGenerationPosition.REEF_SIDE_E, 5d, 5d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_E, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F)
-                .onTrue(Autos.autoScore(AutoPathGenerationPosition.REEF_SIDE_F, 5d, 5d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_F, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G)
-                .onTrue(Autos.autoScore(AutoPathGenerationPosition.REEF_SIDE_G, 5d, 5d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_G, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H)
-                .onTrue(Autos.autoScore(AutoPathGenerationPosition.REEF_SIDE_H, 5d, 5d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_H, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
-                .onTrue(Autos.autoScore(AutoPathGenerationPosition.REEF_SIDE_I, 5d, 5d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_I, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J)
-                .onTrue(Autos.autoScore(AutoPathGenerationPosition.REEF_SIDE_J, 5d, 5d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_J, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-                .onTrue(Autos.autoScore(AutoPathGenerationPosition.REEF_SIDE_K, 5d, 5d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_K, 5d, 5d));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L)
-                .onTrue(Autos.autoScore(AutoPathGenerationPosition.REEF_SIDE_L, 5d, 5d));
+                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_L, 5d, 5d));
 
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);
@@ -406,34 +408,17 @@ public class RobotContainer {
 
         // System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0] + "Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
 
-        if (drivePID == DrivePID.AUTO_ALIGNING) {
-            currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
-            currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
-
-            goalStateX.position = autoAlignXOffset;
-            goalStateY.position = autoAlignYOffset;
-        } else {
-            //Use robot centric drive
-            currentStateX.position = commandSwerveDrivetrain.getPose().getX();
-            currentStateY.position = commandSwerveDrivetrain.getPose().getY();
-
-            if (DriverStation.getAlliance().isPresent()
-                    && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) {
-                goalStateX.position = drivePID.getBluePose().getX();
-                goalStateY.position = drivePID.getBluePose().getY();
-                goalStateRotation.position = drivePID.getBluePose().getRotation().getDegrees();
-            } else {
-                goalStateX.position = drivePID.getRedPose().getX();
-                goalStateY.position = drivePID.getRedPose().getY();
-                goalStateRotation.position = drivePID.getRedPose().getRotation().getDegrees();
-            }
-        }
+        currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
+        currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
         currentStateRotation.position = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
-        goalStateRotation.position = 0;
 
         currentStateX.velocity = commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond;
         currentStateY.velocity = commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond;
         currentStateRotation.velocity = commandSwerveDrivetrain.getState().Speeds.omegaRadiansPerSecond;
+
+        goalStateX.position = autoAlignXOffset;
+        goalStateY.position = autoAlignYOffset;
+        goalStateRotation.position = 0;
 
         TrapezoidProfile.State nextStateX = profileX.calculate(timer.get(), currentStateX, goalStateX);
         TrapezoidProfile.State nextStateY = profileY.calculate(timer.get(), currentStateY, goalStateY);
@@ -577,11 +562,6 @@ public class RobotContainer {
                 && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .02;
     }
 
-    public static boolean profileFinished() {
-        return Math.abs(currentStateX.position - goalStateX.position) <= .025 &&
-                Math.abs(currentStateY.position - goalStateY.position) <= .02;
-    }
-
     public static void setState(State state) {
         RobotContainer.state = state;
     }
@@ -604,13 +584,5 @@ public class RobotContainer {
 
     public static void toggleCoralBlockingHP() {
         isCoralBlockingHP = !isCoralBlockingHP;
-    }
-
-    public static DrivePID setDrivePID() {
-        return drivePID;
-    }
-
-    public static void setDrivePID(DrivePID drivePID) {
-        RobotContainer.drivePID = drivePID;
     }
 }
