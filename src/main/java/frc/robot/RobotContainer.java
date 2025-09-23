@@ -117,7 +117,6 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
     private static int selectedReefTag = 0;
-    private static List<Integer> reefTags = new ArrayList<>();
     private static boolean lockOnMode = false;
     public static State state = State.L1;
     private static Timer timer = new Timer();
@@ -160,12 +159,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
 
         Autos.initializeAutos();
-
-        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-            reefTags.addAll(List.of(7, 8, 9, 10, 11, 6));
-        } else {
-            reefTags.addAll(List.of(18, 17, 22, 21, 20, 19));
-        }
 
         configureBindings();
         SignalLogger.setPath("/media/BRAZIL/");
