@@ -11,7 +11,6 @@ import frc.robot.utility.Type;
 
 public class IntakeSubsystem extends TemplateSubsystem {
     public static IntakeSubsystem intakeSubsystem;
-    public TalonFX intake_motor = new TalonFX(IntakeConstants.INTAKE_ID);
     public AnalogInput intakeSensor;
     private boolean hasCoral;
     private boolean isAboveSpeed = false;
@@ -47,7 +46,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
         configureFollowerMotor(
                 IntakeConstants.INTAKE_FOLLOWER_ID,
-                IntakeConstants.INTAKE__FOLLOWER_INVERT
+                IntakeConstants.INTAKE_FOLLOWER_INVERT
         );
 
         intakeSensor = new AnalogInput(IntakeConstants.INTAKE_SENSOR_ID);

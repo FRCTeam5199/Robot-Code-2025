@@ -271,7 +271,7 @@ public class ScoreCommands {
                     ),
 //                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
-            ).alongWith(Intake.groundIntakeSequence());
+            )/*.alongWith(Intake.groundIntakeSequence())*/.alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
         }
 
         public static Command stableL4() {
@@ -478,7 +478,7 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() < ElevatorConstants.GROUND
-            ).alongWith(new InstantCommand(()->intakeSubsystem.setPercent(0.5)));
+            ).alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0.5)));
         }
 
         public static Command wristHP() {

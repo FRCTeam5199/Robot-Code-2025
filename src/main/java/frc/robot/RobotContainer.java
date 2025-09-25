@@ -185,7 +185,7 @@ public class RobotContainer {
         commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
-                        // .alongWith(ScoreCommands.Drive.autoAlignTeleop())
+                        .alongWith(ScoreCommands.Drive.autoAlignTeleop())
                         .alongWith(new VelocityCommand(intakeSubsystem, -60)
                                 .onlyIf(() -> state == State.BARGE
                                         || state == State.PROCESSOR
@@ -216,9 +216,9 @@ public class RobotContainer {
                                 () -> (state == State.BARGE || state == State.PROCESSOR)
                         ).alongWith(ScoreCommands.Intake.reIntakeSequence()));
 
-        commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround()
-                        .until(intakeSubsystem::hasCoral)
-                        .andThen(ScoreCommands.Stabling.groundIntakeStable()))
+        commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround())
+//                        .until(intakeSubsystem::hasCoral)
+//                        .andThen(ScoreCommands.Stabling.groundIntakeStable()))
                 .onFalse(ScoreCommands.Stabling.groundIntakeStable());
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
@@ -239,13 +239,7 @@ public class RobotContainer {
 //         commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
 //         commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
 
-
-        commandXboxController.povUp().onTrue(new InstantCommand(()-> System.out.println("Arm: " + armSubsystem.getGoal()+ "\nWrist: " + 
-        wristSubsystem.getGoal()+ "\nElevator: " + 
-        elevatorSubsystem.getGoal())));
-        commandXboxController.povDown().onTrue(new PositionCommand(wristSubsystem, 41));
-        commandXboxController.povRight().onTrue(new PositionCommand(wristSubsystem, (9 + 10)));
-
+        commandXboxController.povDown().onTrue(new InstantCommand(() -> intakeSubsystem.setPercent(.5)));
 
 
         // commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(1)))
@@ -420,7 +414,7 @@ public class RobotContainer {
                 DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
             autoAlignXOffset = -autoAlignXOffset;
 
-        // System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0] + "Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
+        System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0] + "Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
 
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
