@@ -33,7 +33,9 @@ public class TemplateSubsystem extends SubsystemBase {
 
     private TalonFX followerMotor;
     private Follower follower;
-    private TalonFXConfiguration followerConfig;
+
+    private TalonFX secondaryMotor;
+    private TalonFXConfiguration secondaryMotorConfig;
 
     private CANcoder encoder;
     private CANcoderConfiguration encoderConfig;
@@ -177,6 +179,25 @@ public class TemplateSubsystem extends SubsystemBase {
         followerMotor.setControl(follower);
     }
 
+    public void configureSecondaryMotor(int motorID, boolean isInverted, boolean isBrakeMode,
+                                        double supplyCurrentLimit, double statorCurrentLimit,
+                                        Slot0Configs slot0Configs) {
+        secondaryMotor = new TalonFX(motorID);
+        secondaryMotorConfig = new TalonFXConfiguration();
+
+        secondaryMotorConfig.MotorOutput.Inverted =
+                isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+        secondaryMotorConfig.MotorOutput.NeutralMode = isBrakeMode ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+        secondaryMotorConfig.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
+        secondaryMotorConfig.CurrentLimits.StatorCurrentLimit = statorCurrentLimit;
+        secondaryMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        secondaryMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        secondaryMotorConfig.Slot0 = slot0Configs;
+
+        secondaryMotor.getConfigurator().apply(motorConfig);
+        secondaryMotor.setPosition(0);
+    }
+
     public void configureEncoder(int encoderId, String canbus, double magnetOffset,
                                  double sensorToMechRatio, double motorToSensorRatio) {
         encoder = new CANcoder(encoderId, canbus);
@@ -206,9 +227,20 @@ public class TemplateSubsystem extends SubsystemBase {
         motor.set(percent);
     }
 
+    public void setSecondaryPercent(double percent) {
+        followLastMechProfile = false;
+        if (percent > 1) percent /= 100;
+        secondaryMotor.set(percent);
+    }
+
     public void setVoltage(double output) {
         followLastMechProfile = false;
         motor.setVoltage(output);
+    }
+
+    public void setSecondaryVoltage(double output) {
+        followLastMechProfile = false;
+        secondaryMotor.setVoltage(output);
     }
 
     public void setVelocity(double rps) {
@@ -217,6 +249,14 @@ public class TemplateSubsystem extends SubsystemBase {
         if (rps == 0) setPercent(0);
         else motor.setControl(velocityVoltage.withVelocity(rps)
                 .withFeedForward(calculateFF(getMotorVelocity(), rps)));
+    }
+
+    public void setSecondaryVelocity(double rps) {
+        this.goal = rps;
+        followLastMechProfile = false;
+        if (rps == 0) setPercent(0);
+        else followerMotor.setControl(velocityVoltage.withVelocity(rps)
+                .withFeedForward(calculateFF(getSecondaryMotorVelocity(), rps)));
     }
 
 //    private double calculateFF(double rps, double acceleration) {
@@ -473,6 +513,10 @@ public class TemplateSubsystem extends SubsystemBase {
     //Motor Values
     public double getMotorVelocity() {
         return motor.getVelocity().getValueAsDouble();
+    }
+
+    public double getSecondaryMotorVelocity() {
+        return secondaryMotor.getVelocity().getValueAsDouble();
     }
 
     public double getMotorVoltage() {
