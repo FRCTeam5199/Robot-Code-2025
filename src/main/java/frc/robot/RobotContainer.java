@@ -55,7 +55,7 @@ import frc.robot.utility.State;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    private static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
+    public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
     public static double MaxAngularRate = 2 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
@@ -292,29 +292,29 @@ public class RobotContainer {
                         .andThen(new PositionCommand(wristSubsystem, 0)));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_A));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_A, 5, 5));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_B));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_B, 5, 5));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_C)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_C));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_C, 5, 5));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_D));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_D, 5, 5));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_E));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_E, 5, 5));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_F));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_F, 5, 5));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_G));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_G, 5, 5));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_H));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_H, 5, 5));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_I));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_I, 5, 5));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_J));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_J, 5, 5));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_K));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_K, 5, 5));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_L));
+                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_L, 5, 5));
 
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
 //                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_A, 5d, 5d));

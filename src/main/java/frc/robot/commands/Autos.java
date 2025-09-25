@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -19,8 +20,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.UserInterface;
 import frc.robot.constants.Constants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.utility.ScoringPosition;
@@ -62,6 +66,11 @@ public final class Autos {
 
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
+    private static final CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
+    public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
+            .withDeadband(RobotContainer.MaxSpeed * .05).withRotationalDeadband(RobotContainer.MaxAngularRate * .05) // Add a 10% deadband
+            .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
+
 
     /**
      * Gets or creates the AutoChooser (Singleton Method)
@@ -131,6 +140,13 @@ public final class Autos {
 
     public static Command driveToPose(double goalX, double goalY, double goalDegrees) {
         return new SequentialCommandGroup(
+                new InstantCommand(() ->
+                        commandSwerveDrivetrain.applyRequest(() ->
+                                drive.withVelocityX(0).
+                                        withVelocityX(0).
+                                        withRotationalRate(0)
+                        )
+                ),
                 AutoBuilder.pathfindToPose(
                         new Pose2d(goalX, goalY, Rotation2d.fromDegrees(goalDegrees)),
                         new PathConstraints(2d, 2d, Units.degreesToRadians(540d), Units.degreesToRadians(720d)),
@@ -146,6 +162,13 @@ public final class Autos {
 
     public static Command driveToPose(ScoringPosition scoringPosition) {
         return new SequentialCommandGroup(
+                new InstantCommand(() ->
+                        commandSwerveDrivetrain.applyRequest(() ->
+                                drive.withVelocityX(0).
+                                        withVelocityX(0).
+                                        withRotationalRate(0)
+                        )
+                ),
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
@@ -175,6 +198,13 @@ public final class Autos {
 
     public static Command driveToPose(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration) {
         return new SequentialCommandGroup(
+                new InstantCommand(() ->
+                        commandSwerveDrivetrain.applyRequest(() ->
+                                drive.withVelocityX(0).
+                                        withVelocityX(0).
+                                        withRotationalRate(0)
+                        )
+                ),
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
@@ -204,6 +234,13 @@ public final class Autos {
 
     public static Command driveToPose(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration, double maxAngularVelocity, double maxAngularAcceleration) {
         return new SequentialCommandGroup(
+                new InstantCommand(() ->
+                        commandSwerveDrivetrain.applyRequest(() ->
+                                drive.withVelocityX(0).
+                                        withVelocityX(0).
+                                        withRotationalRate(0)
+                        )
+                ),
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
