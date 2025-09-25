@@ -68,15 +68,6 @@ public class ScoreCommands {
                                             new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
                                                     .getClosestTagID()))))),
                             () -> {
-                        /*if ((!elevatorSubsystem.isMechAtGoal(false)
-                                || !armSubsystem.isMechAtGoal(false)
-                                || !wristSubsystem.isMechAtGoal(false))
-                                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0]) < .3)
-                            commandSwerveDrivetrain.setControl(
-                                    drive.withVelocityX(0)
-                                            .withVelocityY(yVelocity)
-                                            .withRotationalRate(rotationVelocity));
-                        else*/
                                 commandSwerveDrivetrain.setControl(
                                         drive.withVelocityX(xVelocity)
                                                 .withVelocityY(yVelocity)
@@ -120,10 +111,6 @@ public class ScoreCommands {
                                                 commandSwerveDrivetrain.getPose().getY()),
                                         new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
                                                 .getClosestTagID())))));
-
-//                        RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
-//                                Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-//                                        .getClosestTagID()))));
                     },
                     () -> RobotContainer.commandSwerveDrivetrain.setControl(
                             drive.withVelocityX(RobotContainer.xVelocity)
@@ -160,10 +147,6 @@ public class ScoreCommands {
                                                 commandSwerveDrivetrain.getPose().getY()),
                                         new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
                                                 .getClosestTagID())))));
-
-                        // RobotContainer.commandSwerveDrivetrain.resetRotation(new Rotation2d(
-                        //     Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
-                        //             .getClosestTagID()))));
                     },
                     () ->
                             RobotContainer.commandSwerveDrivetrain.setControl(
@@ -333,18 +316,6 @@ public class ScoreCommands {
             );
         }
 
-        public static Command stableWithArm() {
-            return new SequentialCommandGroup( //Won't clip elevator
-                    new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, 60, 100)
-                            .until(() -> elevatorSubsystem.isAtBottom() && elevatorSubsystem.getMechM() < .1),
-                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
-                    new ParallelCommandGroup(
-                            new PositionCommand(wristSubsystem, WristConstants.STABLE),
-                            new PositionCommand(armSubsystem, ArmConstants.STABLE)
-                    )
-            );
-        }
-
         public static Command wristandElevatorStable() {
             return new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, 60, 100)
                     .alongWith(new PositionCommand(wristSubsystem, WristConstants.STABLE));
@@ -479,14 +450,6 @@ public class ScoreCommands {
                     ),
                     () -> elevatorSubsystem.getMechM() < ElevatorConstants.GROUND
             ).alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0.5)));
-        }
-
-        public static Command wristHP() {
-            return new PositionCommand(wristSubsystem, WristConstants.HP);
-        }
-
-        public static Command elevatorHP() {
-            return new PositionCommand(elevatorSubsystem, ElevatorConstants.HP);
         }
 
         public static Command intakeHP() {
