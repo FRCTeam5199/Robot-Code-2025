@@ -48,6 +48,8 @@ public class WristSubsystem extends TemplateSubsystem {
     public void periodic() {
         super.periodic();
 
+        
+
         if (getSupplyCurrent() > .75) currentSpike++;
         else noCurrentSpike++;
 

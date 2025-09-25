@@ -45,6 +45,11 @@ public class IntakeSubsystem extends TemplateSubsystem {
                 IntakeConstants.INTAKE_SLOT0_CONFIGS
         );
 
+        configureFollowerMotor(
+                IntakeConstants.INTAKE_FOLLOWER_ID,
+                IntakeConstants.INTAKE__FOLLOWER_INVERT
+        );
+
         intakeSensor = new AnalogInput(IntakeConstants.INTAKE_SENSOR_ID);
     }
 

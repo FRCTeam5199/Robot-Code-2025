@@ -66,7 +66,7 @@ public final class Constants {
 
         public static final double STABLE = 0;
         public static final double ALGAE_STABLE = .17;
-        public static final double GROUND = .12;
+        public static final double GROUND = .11;
         public static final double ALGAE_GROUND = .22;
 
         public static final double L1 = 0;
@@ -101,7 +101,7 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 4;
 
         public static final double STABLE = 0;
-        public static final double GROUND = 6;
+        public static final double GROUND = 1;
         public static final double ALGAE_GROUND = 15;
 
         public static final double L1 = 16;
@@ -137,6 +137,7 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final int INTAKE_ID = 20;
+        public static final int INTAKE_FOLLOWER_ID = 21;        
         public static final int INTAKE_SENSOR_ID = 0;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
         public static final FeedForward INTAKE_FF = new FeedForward(0.27, 0, .09090909090909090909090909090909);
@@ -145,6 +146,7 @@ public final class Constants {
         public static final double[][] INTAKE_GEAR_RATIO = {{1, 1}};
 
         public static final boolean INTAKE_INVERT = false;
+        public static final boolean INTAKE__FOLLOWER_INVERT = true;
         public static final boolean INTAKE_BRAKE = true;
         public static final double INTAKE_STATOR_CURRENT_LIMIT = 100;
         public static final double INTAKE_SUPPLY_CURRENT_LIMIT = 100;
@@ -189,12 +191,12 @@ public final class Constants {
 
     public static class WristConstants {
         public static final int WRIST_MOTOR_ID = 19;
-        public static final double WRIST_STATOR_CURRENT_LIMIT = 20;
-        public static final double WRIST_SUPPLY_CURRENT_LIMIT = 20;
+        public static final double WRIST_STATOR_CURRENT_LIMIT = 30;
+        public static final double WRIST_SUPPLY_CURRENT_LIMIT = 30;
         public static final boolean WRIST_INVERTED = false;
 
         public static final double STABLE = 10;
-        public static final double GROUND = 200;
+        public static final double GROUND = 181;
         public static final double ALGAE_GROUND = 224;
 
         public static final double L1 = 10;
@@ -218,7 +220,7 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS
                 = new TrapezoidProfile.Constraints(75, 150);
 
-        public static final FeedForward WRIST_FF = new FeedForward(.26, .2, .02132676237431397499303042429192); //.134
+        public static final FeedForward WRIST_FF = new FeedForward(.16, .3, .04405673165); //.134
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
                 .withKP(2.8)
                 .withKI(0)
@@ -229,8 +231,8 @@ public final class Constants {
                 .withKA(0)
                 .withGravityType(GravityTypeValue.Arm_Cosine);
 
-        public static final double WRIST_LOWER_TOLERANCE = 5;
-        public static final double WRIST_UPPER_TOLERANCE = 5;
+        public static final double WRIST_LOWER_TOLERANCE = 2;
+        public static final double WRIST_UPPER_TOLERANCE = 2;
 
         public static final double WRIST_MIN = 0.0;
         public static final double WRIST_MAX = 215; //unknown

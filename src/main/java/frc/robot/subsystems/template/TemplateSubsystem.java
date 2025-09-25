@@ -177,16 +177,6 @@ public class TemplateSubsystem extends SubsystemBase {
         followerMotor.setControl(follower);
     }
 
-
-    public void configureFollowerMotor(int followerMotorId, boolean invert, boolean brake, Slot0Configs slot0Configs) {
-        followerMotor = new TalonFX(followerMotorId);
-        followerConfig.MotorOutput.NeutralMode = brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
-        followerMotor.getConfigurator().apply(followerConfig);
-        follower = new Follower(motor.getDeviceID(), invert);
-
-        followerMotor.setControl(follower);
-    }
-
     public void configureEncoder(int encoderId, String canbus, double magnetOffset,
                                  double sensorToMechRatio, double motorToSensorRatio) {
         encoder = new CANcoder(encoderId, canbus);

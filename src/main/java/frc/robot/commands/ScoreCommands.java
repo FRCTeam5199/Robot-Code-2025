@@ -478,7 +478,7 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() < ElevatorConstants.GROUND
-            ).alongWith(new VelocityCommand(intakeSubsystem, 100));
+            ).alongWith(new InstantCommand(()->intakeSubsystem.setPercent(0.5)));
         }
 
         public static Command wristHP() {
