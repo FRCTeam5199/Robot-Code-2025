@@ -1,12 +1,9 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.AnalogInput;
 
-import frc.robot.RobotContainer;
 import frc.robot.constants.Constants.IntakeConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
-import frc.robot.utility.State;
 import frc.robot.utility.Type;
 
 public class IntakeSubsystem extends TemplateSubsystem {
@@ -44,9 +41,14 @@ public class IntakeSubsystem extends TemplateSubsystem {
                 IntakeConstants.INTAKE_SLOT0_CONFIGS
         );
 
-        configureFollowerMotor(
-                IntakeConstants.INTAKE_FOLLOWER_ID,
-                IntakeConstants.INTAKE_FOLLOWER_INVERT
+        configureSecondaryMotor(
+                IntakeConstants.INTAKE_SECONDARY_ID,
+                IntakeConstants.INTAKE_SECONDARY_FF,
+                IntakeConstants.INTAKE_SECONDARY_INVERT,
+                IntakeConstants.INTAKE_BRAKE,
+                IntakeConstants.INTAKE_SUPPLY_CURRENT_LIMIT,
+                IntakeConstants.INTAKE_STATOR_CURRENT_LIMIT,
+                IntakeConstants.INTAKE_SECONDARY_SLOT0_CONFIGS
         );
 
         intakeSensor = new AnalogInput(IntakeConstants.INTAKE_SENSOR_ID);
@@ -54,13 +56,6 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
     public void periodic() {
         super.periodic();
-
-        hasCoral = intakeSensor.getValue() > 100;
-
-        if (super.isAboveSpeed()) isAboveSpeedCounter++;
-        else isAboveSpeedCounter = 0;
-
-        isAboveSpeed = isAboveSpeedCounter > 2;
     }
 
     public static IntakeSubsystem getInstance() {
@@ -72,11 +67,6 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
     public boolean hasCoral() {
         return hasCoral;
-    }
-
-    @Override
-    public boolean isAboveSpeed() {
-        return isAboveSpeed;
     }
 
     public boolean isCurrentSpiked() {

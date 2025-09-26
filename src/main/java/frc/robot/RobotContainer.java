@@ -148,9 +148,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("DRIVETOP", ScoreCommands.Drive.autoMoveForwardTop()
                 .withTimeout(3));
 
-        NamedCommands.registerCommand("INTAKE", new VelocityCommand(intakeSubsystem, 40)
+        NamedCommands.registerCommand("INTAKE", new VelocityCommand(intakeSubsystem, 40, 40)
                 .until(intakeSubsystem::hasCoral));
-        NamedCommands.registerCommand("INTAKESEQUENCE", ScoreCommands.Intake.intakeSequence());
         NamedCommands.registerCommand("OUTTAKE", ScoreCommands.Score.place()
                 .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
                 .withTimeout(2)
@@ -186,13 +185,13 @@ public class RobotContainer {
 
         commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
                         .alongWith(ScoreCommands.Drive.autoAlignTeleop())
-                        .alongWith(new VelocityCommand(intakeSubsystem, -60)
+                        .alongWith(new VelocityCommand(intakeSubsystem, -60, -60)
                                 .onlyIf(() -> state == State.BARGE
                                         || state == State.PROCESSOR
                                         || state == State.ALGAE_LOW
                                         || state == State.ALGAE_HIGH)))
                 .onFalse(ScoreCommands.Stabling.stable()
-                        .alongWith(new VelocityCommand(intakeSubsystem, -60)
+                        .alongWith(new VelocityCommand(intakeSubsystem, -60, -60)
                                 .onlyIf(() -> state == State.ALGAE_LOW || state == State.ALGAE_HIGH))
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
@@ -208,13 +207,13 @@ public class RobotContainer {
                                         () -> (state == State.BARGE || state == State.PROCESSOR)
                                 ),
                                 () -> isCoralBlockingHP
-                        ).alongWith(ScoreCommands.Intake.intakeSequence()))
+                        ))
                 .onFalse(
                         new ConditionalCommand(
                                 ScoreCommands.Stabling.groundAlgaeStable(),
                                 ScoreCommands.Stabling.intakeStable(),
                                 () -> (state == State.BARGE || state == State.PROCESSOR)
-                        ).alongWith(ScoreCommands.Intake.reIntakeSequence()));
+                        ));
 
         commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround())
 //                        .until(intakeSubsystem::hasCoral)
@@ -224,8 +223,8 @@ public class RobotContainer {
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
                 .onFalse(
                         new ConditionalCommand(
-                                new VelocityCommand(intakeSubsystem, 50),
-                                new VelocityCommand(intakeSubsystem, 0),
+                                new VelocityCommand(intakeSubsystem, 50, 50),
+                                new VelocityCommand(intakeSubsystem, 0, 0),
                                 () -> RobotContainer.getState() == State.BARGE
                                         || RobotContainer.getState() == State.PROCESSOR
                         ).alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true))));
@@ -233,8 +232,8 @@ public class RobotContainer {
 
         commandXboxController.povLeft().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
         commandXboxController.povRight().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
-//        commandXboxController.povLeft().onTrue(new VelocityCommand(intakeSubsystem, -50));
-//        commandXboxController.povRight().onTrue(new VelocityCommand(intakeSubsystem, -50));
+//        commandXboxController.povLeft().onTrue(new VelocityCommand(intakeSubsystem, -50, -50));
+//        commandXboxController.povRight().onTrue(new VelocityCommand(intakeSubsystem, -50, -50));
 
         commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
         commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
@@ -248,7 +247,7 @@ public class RobotContainer {
 //                .onFalse(ScoreCommands.Stabling.intakeStable()
 //                        .alongWith(new ConditionalCommand(
 //                                ScoreCommands.Intake.intakeSequence(),
-//                                new VelocityCommand(intakeSubsystem, 0),
+//                                new VelocityCommand(intakeSubsystem, 0, 0),
 //                                intakeSubsystem::hasCoral
 //                        )));
         //Intake when Coral is in front of HP
@@ -257,8 +256,8 @@ public class RobotContainer {
 
         //Outtake
         commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP)
-                .onTrue(new VelocityCommand(intakeSubsystem, -50))
-                .onFalse(new VelocityCommand(intakeSubsystem, 0));
+                .onTrue(new VelocityCommand(intakeSubsystem, -50, -50))
+                .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1).onTrue(ScoreCommands.Arm.armL1());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armL1());
@@ -368,8 +367,8 @@ public class RobotContainer {
 //                .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
 //
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-//                .onTrue(new VelocityCommand(intakeSubsystem, 60))
-//                .onFalse(new VelocityCommand(intakeSubsystem, 0));
+//                .onTrue(new VelocityCommand(intakeSubsystem, 60. 60))
+//                .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
 //
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
 //                .onTrue(ScoreCommands.Intake.reIntakeSequence());

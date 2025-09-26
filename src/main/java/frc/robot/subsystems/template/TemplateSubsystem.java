@@ -56,6 +56,8 @@ public class TemplateSubsystem extends SubsystemBase {
     private ElevatorFeedforward linearFF;
     private ArmFeedforward pivotFF;
 
+    private SimpleMotorFeedforward secondarySimpleMotorFF;
+
     private double lowerTolerance;
     private double upperTolerance;
     private double mechMin;
@@ -179,11 +181,12 @@ public class TemplateSubsystem extends SubsystemBase {
         followerMotor.setControl(follower);
     }
 
-    public void configureSecondaryMotor(int motorID, boolean isInverted, boolean isBrakeMode,
-                                        double supplyCurrentLimit, double statorCurrentLimit,
+    public void configureSecondaryMotor(int motorID, FeedForward feedForward, boolean isInverted,
+                                        boolean isBrakeMode, double supplyCurrentLimit, double statorCurrentLimit,
                                         Slot0Configs slot0Configs) {
         secondaryMotor = new TalonFX(motorID);
         secondaryMotorConfig = new TalonFXConfiguration();
+        secondarySimpleMotorFF = new SimpleMotorFeedforward(feedForward.getkS(), feedForward.getkV());
 
         secondaryMotorConfig.MotorOutput.Inverted =
                 isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
@@ -256,7 +259,7 @@ public class TemplateSubsystem extends SubsystemBase {
         followLastMechProfile = false;
         if (rps == 0) setPercent(0);
         else followerMotor.setControl(velocityVoltage.withVelocity(rps)
-                .withFeedForward(calculateFF(getSecondaryMotorVelocity(), rps)));
+                .withFeedForward(calculateSecondaryFF(getSecondaryMotorVelocity(), rps)));
     }
 
 //    private double calculateFF(double rps, double acceleration) {
@@ -293,6 +296,10 @@ public class TemplateSubsystem extends SubsystemBase {
                 return simpleMotorFF.calculateWithVelocities(currentVelocity, nextVelocity);
             }
         }
+    }
+
+    private double calculateSecondaryFF(double currentVelocity, double nextVelocity) {
+        return secondarySimpleMotorFF.calculateWithVelocities(currentVelocity, nextVelocity);
     }
 
     public void setPosition(double goal) {
@@ -412,7 +419,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     public boolean isAboveSpeed() {
         if (type != Type.ROLLER) return false;
-        return getMechVelocity() > goal - 20; //TODO: fix
+        return getMechVelocity() > goal - lowerTolerance;
     }
 
 

@@ -137,16 +137,17 @@ public final class Constants {
 
     public static class IntakeConstants {
         public static final int INTAKE_ID = 20;
-        public static final int INTAKE_FOLLOWER_ID = 21;
+        public static final int INTAKE_SECONDARY_ID = 21;
         public static final int INTAKE_SENSOR_ID = 0;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
         public static final FeedForward INTAKE_FF = new FeedForward(0.27, 0, .09090909090909090909090909090909);
+        public static final FeedForward INTAKE_SECONDARY_FF = new FeedForward(0.27, 0, .09090909090909090909090909090909);
         public static final double INTAKE_LOWER_TOLERANCE = 5;
         public static final double INTAKE_UPPER_TOLERANCE = 5;
         public static final double[][] INTAKE_GEAR_RATIO = {{1, 1}};
 
         public static final boolean INTAKE_INVERT = false;
-        public static final boolean INTAKE_FOLLOWER_INVERT = true;
+        public static final boolean INTAKE_SECONDARY_INVERT = true;
         public static final boolean INTAKE_BRAKE = true;
         public static final double INTAKE_STATOR_CURRENT_LIMIT = 100;
         public static final double INTAKE_SUPPLY_CURRENT_LIMIT = 100;
@@ -159,6 +160,15 @@ public final class Constants {
                 .withKS(INTAKE_FF.getkS())
                 .withKG(INTAKE_FF.getkG())
                 .withKV(INTAKE_FF.getkV());
+
+        public static final Slot0Configs INTAKE_SECONDARY_SLOT0_CONFIGS = new Slot0Configs()
+                .withKP(.75)
+                .withKI(0)
+                .withKD(0)
+                .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
+                .withKS(INTAKE_SECONDARY_FF.getkS())
+                .withKG(INTAKE_SECONDARY_FF.getkG())
+                .withKV(INTAKE_SECONDARY_FF.getkV());
     }
 
     public static class ClimberConstants {

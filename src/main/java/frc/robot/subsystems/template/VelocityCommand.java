@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class VelocityCommand extends Command {
     private double goal;
+    private double secondaryGoal;
     private TemplateSubsystem templateSubsystem;
     private boolean updateVelocity;
 
@@ -15,15 +16,26 @@ public class VelocityCommand extends Command {
         addRequirements(templateSubsystem);
     }
 
+    public VelocityCommand(TemplateSubsystem templateSubsystem, double goal, double secondaryGoal) {
+        this.templateSubsystem = templateSubsystem;
+        this.goal = goal;
+        this.secondaryGoal = secondaryGoal;
+        updateVelocity = false;
+
+        addRequirements(templateSubsystem);
+    }
+
     @Override
     public void initialize() {
         templateSubsystem.setVelocity(goal);
+        if (secondaryGoal > 0) templateSubsystem.setSecondaryVelocity(secondaryGoal);
     }
 
     @Override
     public void execute() {
         if (updateVelocity) {
             templateSubsystem.setVelocity(goal);
+            if (secondaryGoal > 0) templateSubsystem.setSecondaryVelocity(secondaryGoal);
             updateVelocity = false;
         }
     }
@@ -40,6 +52,11 @@ public class VelocityCommand extends Command {
 
     public void setGoal(double goal) {
         this.goal = goal;
+        updateVelocity = true;
+    }
+
+    public void setSecondaryGoal(double secondaryGoal) {
+        this.secondaryGoal = secondaryGoal;
         updateVelocity = true;
     }
 }
