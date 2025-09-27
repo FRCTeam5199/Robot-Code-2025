@@ -28,14 +28,16 @@ public class VelocityCommand extends Command {
     @Override
     public void initialize() {
         templateSubsystem.setVelocity(goal);
-        if (secondaryGoal > 0) templateSubsystem.setSecondaryVelocity(secondaryGoal);
+        if (templateSubsystem.hasSecondaryMotor())
+            templateSubsystem.setSecondaryVelocity(secondaryGoal);
     }
 
     @Override
     public void execute() {
         if (updateVelocity) {
             templateSubsystem.setVelocity(goal);
-            if (secondaryGoal > 0) templateSubsystem.setSecondaryVelocity(secondaryGoal);
+            if (templateSubsystem.hasSecondaryMotor())
+                templateSubsystem.setSecondaryVelocity(secondaryGoal);
             updateVelocity = false;
         }
     }
@@ -48,6 +50,7 @@ public class VelocityCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         templateSubsystem.setPercent(0);
+        if (templateSubsystem.hasSecondaryMotor()) templateSubsystem.setSecondaryPercent(0);
     }
 
     public void setGoal(double goal) {

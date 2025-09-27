@@ -50,6 +50,7 @@ public class TemplateSubsystem extends SubsystemBase {
 
     private PositionVoltage positionVoltage;
     private VelocityVoltage velocityVoltage;
+    private VelocityVoltage secondaryVelocityVoltage;
     private MotionMagicVoltage magicMan;
 
     private SimpleMotorFeedforward simpleMotorFF;
@@ -187,6 +188,7 @@ public class TemplateSubsystem extends SubsystemBase {
         secondaryMotor = new TalonFX(motorID);
         secondaryMotorConfig = new TalonFXConfiguration();
         secondarySimpleMotorFF = new SimpleMotorFeedforward(feedForward.getkS(), feedForward.getkV());
+        secondaryVelocityVoltage = new VelocityVoltage(0).withVelocity(0).withSlot(0).withEnableFOC(true);
 
         secondaryMotorConfig.MotorOutput.Inverted =
                 isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
@@ -197,7 +199,7 @@ public class TemplateSubsystem extends SubsystemBase {
         secondaryMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         secondaryMotorConfig.Slot0 = slot0Configs;
 
-        secondaryMotor.getConfigurator().apply(motorConfig);
+        secondaryMotor.getConfigurator().apply(secondaryMotorConfig);
         secondaryMotor.setPosition(0);
     }
 
@@ -258,7 +260,7 @@ public class TemplateSubsystem extends SubsystemBase {
         this.goal = rps;
         followLastMechProfile = false;
         if (rps == 0) setPercent(0);
-        else followerMotor.setControl(velocityVoltage.withVelocity(rps)
+        else secondaryMotor.setControl(secondaryVelocityVoltage.withVelocity(rps)
                 .withFeedForward(calculateSecondaryFF(getSecondaryMotorVelocity(), rps)));
     }
 
@@ -592,5 +594,9 @@ public class TemplateSubsystem extends SubsystemBase {
 
     public void setControl(ControlRequest control) {
         motor.setControl(control);
+    }
+
+    public boolean hasSecondaryMotor() {
+        return !(secondaryMotor == null);
     }
 }

@@ -16,11 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Robot;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.UserInterface;
 import frc.robot.constants.Constants;
@@ -28,6 +24,10 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.utility.ScoringPosition;
+import frc.robot.utility.State;
+
+import java.awt.*;
+import java.util.Map;
 
 public final class Autos {
     private SendableChooser<Command> autoChooser;
@@ -275,6 +275,37 @@ public final class Autos {
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),
                         scoringPosition::isRightSide
+                ).alongWith(ScoreCommands.Score.score()),
+                ScoreCommands.Score.place()
+                        .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
+                        .withTimeout(2),
+                ScoreCommands.Intake.intakeHP()
+        );
+    }
+
+    public static Command autoScore() {
+        return new SequentialCommandGroup(
+                new SelectCommand<>(
+                        Map.ofEntries(
+                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPose(ScoringPosition.REEF_SIDE_A, 5d, 5d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPose(ScoringPosition.REEF_SIDE_B, 5d, 5d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPose(ScoringPosition.REEF_SIDE_C, 5d, 5d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPose(ScoringPosition.REEF_SIDE_D, 5d, 5d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPose(ScoringPosition.REEF_SIDE_E, 5d, 5d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPose(ScoringPosition.REEF_SIDE_F, 5d, 5d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPose(ScoringPosition.REEF_SIDE_G, 5d, 5d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPose(ScoringPosition.REEF_SIDE_H, 5d, 5d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPose(ScoringPosition.REEF_SIDE_I, 5d, 5d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPose(ScoringPosition.REEF_SIDE_J, 5d, 5d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPose(ScoringPosition.REEF_SIDE_K, 5d, 5d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L, 5d, 5d))
+                        ),
+                        RobotContainer::getCurrentScoringPosition
+                ),
+                new ConditionalCommand(
+                        ScoreCommands.Drive.autoAlignRAuton(),
+                        ScoreCommands.Drive.autoAlignLAuton(),
+                        () -> RobotContainer.getCurrentScoringPosition().isRightSide()
                 ).alongWith(ScoreCommands.Score.score()),
                 ScoreCommands.Score.place()
                         .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())

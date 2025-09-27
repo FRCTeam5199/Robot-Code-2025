@@ -76,7 +76,7 @@ public final class Constants {
         public static final double HP = 0;
 
         public static final double ALGAE_LOW = .13;
-        public static final double ALGAE_HIGH = .4175;
+        public static final double ALGAE_HIGH = .58;
         public static final double BARGE = 1.002;
         public static final double PROCESSOR = .22;
     }
@@ -101,7 +101,7 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 4;
 
         public static final double STABLE = 0;
-        public static final double GROUND = 1;
+        public static final double GROUND = 2;
         public static final double ALGAE_GROUND = 15;
 
         public static final double L1 = 16;
@@ -136,24 +136,24 @@ public final class Constants {
     }
 
     public static class IntakeConstants {
-        public static final int INTAKE_ID = 20;
-        public static final int INTAKE_SECONDARY_ID = 21;
+        public static final int INTAKE_ID = 21;
+        public static final int INTAKE_SECONDARY_ID = 20;
         public static final int INTAKE_SENSOR_ID = 0;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
-        public static final FeedForward INTAKE_FF = new FeedForward(0.27, 0, .09090909090909090909090909090909);
-        public static final FeedForward INTAKE_SECONDARY_FF = new FeedForward(0.27, 0, .09090909090909090909090909090909);
+        public static final FeedForward INTAKE_FF = new FeedForward(.55, 0, .1960784313725490196078431372549);
+        public static final FeedForward INTAKE_SECONDARY_FF = new FeedForward(.4, 0, .13333333333333333333333333333333);
         public static final double INTAKE_LOWER_TOLERANCE = 5;
         public static final double INTAKE_UPPER_TOLERANCE = 5;
         public static final double[][] INTAKE_GEAR_RATIO = {{1, 1}};
 
-        public static final boolean INTAKE_INVERT = false;
-        public static final boolean INTAKE_SECONDARY_INVERT = true;
+        public static final boolean INTAKE_INVERT = true;
+        public static final boolean INTAKE_SECONDARY_INVERT = false;
         public static final boolean INTAKE_BRAKE = true;
         public static final double INTAKE_STATOR_CURRENT_LIMIT = 100;
         public static final double INTAKE_SUPPLY_CURRENT_LIMIT = 100;
 
         public static final Slot0Configs INTAKE_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(.75)
+                .withKP(15)
                 .withKI(0)
                 .withKD(0)
                 .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
@@ -162,7 +162,7 @@ public final class Constants {
                 .withKV(INTAKE_FF.getkV());
 
         public static final Slot0Configs INTAKE_SECONDARY_SLOT0_CONFIGS = new Slot0Configs()
-                .withKP(.75)
+                .withKP(15)
                 .withKI(0)
                 .withKD(0)
                 .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseVelocitySign)
@@ -206,7 +206,7 @@ public final class Constants {
         public static final boolean WRIST_INVERTED = false;
 
         public static final double STABLE = 10;
-        public static final double GROUND = 181;
+        public static final double GROUND = 179;
         public static final double ALGAE_GROUND = 224;
 
         public static final double L1 = 10;
@@ -218,10 +218,9 @@ public final class Constants {
         public static final double HP = 61;
         public static final double HP_C = 67;
 
-
-        public static final double ALGAE_LOW = 200;
-        public static final double ALGAE_HIGH = 200;
-        public static final double BARGE = 215;
+        public static final double ALGAE_LOW = 220;
+        public static final double ALGAE_HIGH = 220;
+        public static final double BARGE = 135;
         public static final double PROCESSOR = 224;
 
         public static final boolean WRIST_BRAKE = true;

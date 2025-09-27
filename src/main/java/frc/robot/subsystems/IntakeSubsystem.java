@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.AnalogInput;
+import au.grapplerobotics.CanBridge;
+import au.grapplerobotics.ConfigurationFailedException;
+import au.grapplerobotics.LaserCan;
 
 import frc.robot.constants.Constants.IntakeConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
@@ -8,10 +10,8 @@ import frc.robot.utility.Type;
 
 public class IntakeSubsystem extends TemplateSubsystem {
     public static IntakeSubsystem intakeSubsystem;
-    public AnalogInput intakeSensor;
+    public LaserCan intakeSensor;
     private boolean hasCoral;
-    private boolean isAboveSpeed = false;
-    private int isAboveSpeedCounter = 0;
 
     public boolean isScoringAlgae() {
         return isScoringAlgae;
@@ -24,7 +24,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
     private boolean isScoringAlgae = false;
 
     public IntakeSubsystem() {
-        super(Type.ROLLER,
+        super(Type.ROLLER, //Left Motor
                 IntakeConstants.INTAKE_ID,
                 IntakeConstants.INTAKE_CONSTRAINTS,
                 IntakeConstants.INTAKE_FF,
@@ -41,7 +41,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
                 IntakeConstants.INTAKE_SLOT0_CONFIGS
         );
 
-        configureSecondaryMotor(
+        configureSecondaryMotor( //Right Motor
                 IntakeConstants.INTAKE_SECONDARY_ID,
                 IntakeConstants.INTAKE_SECONDARY_FF,
                 IntakeConstants.INTAKE_SECONDARY_INVERT,
@@ -51,7 +51,13 @@ public class IntakeSubsystem extends TemplateSubsystem {
                 IntakeConstants.INTAKE_SECONDARY_SLOT0_CONFIGS
         );
 
-        intakeSensor = new AnalogInput(IntakeConstants.INTAKE_SENSOR_ID);
+        intakeSensor = new LaserCan(IntakeConstants.INTAKE_SENSOR_ID);
+        try {
+            intakeSensor.setRangingMode(LaserCan.RangingMode.SHORT);
+            intakeSensor.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+            intakeSensor.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+        } catch (ConfigurationFailedException ignored) {
+        }
     }
 
     public void periodic() {
@@ -66,7 +72,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
     }
 
     public boolean hasCoral() {
-        return hasCoral;
+        return intakeSensor.getMeasurement().distance_mm < 5;
     }
 
     public boolean isCurrentSpiked() {

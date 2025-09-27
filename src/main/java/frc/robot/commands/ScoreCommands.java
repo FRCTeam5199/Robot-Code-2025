@@ -449,7 +449,7 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() < ElevatorConstants.GROUND
-            ).alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0.5)));
+            ).alongWith(new VelocityCommand(intakeSubsystem, 100, 100));
         }
 
         public static Command intakeHP() {
@@ -763,12 +763,12 @@ public class ScoreCommands {
             return new ConditionalCommand(
                     new VelocityCommand(intakeSubsystem, -60, -60),
                     new ConditionalCommand(
-                            new VelocityCommand(intakeSubsystem, 30, 30),
+                            new VelocityCommand(intakeSubsystem, 30, 20),
                             new ConditionalCommand(
                                     new VelocityCommand(intakeSubsystem, 100, 100),
                                     new ConditionalCommand(
                                             new VelocityCommand(intakeSubsystem, -100, -100),
-                                            new VelocityCommand(intakeSubsystem, 35, 35),
+                                            new VelocityCommand(intakeSubsystem, 20, 20),
                                             () -> RobotContainer.getState() == State.BARGE ||
                                                     RobotContainer.getState() == State.PROCESSOR
                                     ),

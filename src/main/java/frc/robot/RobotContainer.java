@@ -124,6 +124,12 @@ public class RobotContainer {
     private static boolean shouldFixTip = true;
     private static boolean isCoralBlockingHP = false;
 
+    public static ScoringPosition getCurrentScoringPosition() {
+        return currentScoringPosition;
+    }
+
+    private static ScoringPosition currentScoringPosition = ScoringPosition.REEF_SIDE_A;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -183,47 +189,38 @@ public class RobotContainer {
         commandXboxController.x().onTrue(ScoreCommands.Arm.armL3());
         commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
 
-        commandXboxController.leftTrigger().onTrue(ScoreCommands.Score.score()
+        commandXboxController.leftTrigger().onTrue(Autos.autoScore())
+                .onFalse(ScoreCommands.Stabling.stable()
+                        .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
+                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
+
+
+        commandXboxController.rightTrigger().onTrue(ScoreCommands.Score.score()
                         .alongWith(ScoreCommands.Drive.autoAlignTeleop())
-                        .alongWith(new VelocityCommand(intakeSubsystem, -60, -60)
+                        .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)
                                 .onlyIf(() -> state == State.BARGE
                                         || state == State.PROCESSOR
                                         || state == State.ALGAE_LOW
                                         || state == State.ALGAE_HIGH)))
                 .onFalse(ScoreCommands.Stabling.stable()
-                        .alongWith(new VelocityCommand(intakeSubsystem, -60, -60)
+                        .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)
                                 .onlyIf(() -> state == State.ALGAE_LOW || state == State.ALGAE_HIGH))
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
 
-        commandXboxController.rightTrigger().onTrue(
-                        new ConditionalCommand(
-                                ScoreCommands.Intake.intakeHPCoralStuck(),
-                                new ConditionalCommand(
-                                        ScoreCommands.Intake.intakeGroundAlgae(),
-                                        ScoreCommands.Intake.intakeHP(),
-                                        () -> (state == State.BARGE || state == State.PROCESSOR)
-                                ),
-                                () -> isCoralBlockingHP
-                        ))
-                .onFalse(
-                        new ConditionalCommand(
-                                ScoreCommands.Stabling.groundAlgaeStable(),
-                                ScoreCommands.Stabling.intakeStable(),
-                                () -> (state == State.BARGE || state == State.PROCESSOR)
-                        ));
-
-        commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround())
-//                        .until(intakeSubsystem::hasCoral)
-//                        .andThen(ScoreCommands.Stabling.groundIntakeStable()))
+        commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround()
+                        .until(intakeSubsystem::hasCoral)
+                        .andThen(ScoreCommands.Stabling.groundIntakeStable()))
                 .onFalse(ScoreCommands.Stabling.groundIntakeStable());
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
                 .onFalse(
                         new ConditionalCommand(
-                                new VelocityCommand(intakeSubsystem, 50, 50),
+                                new VelocityCommand(intakeSubsystem, 30, 30),
                                 new VelocityCommand(intakeSubsystem, 0, 0),
                                 () -> RobotContainer.getState() == State.BARGE
                                         || RobotContainer.getState() == State.PROCESSOR
@@ -232,8 +229,11 @@ public class RobotContainer {
 
         commandXboxController.povLeft().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
         commandXboxController.povRight().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
-//        commandXboxController.povLeft().onTrue(new VelocityCommand(intakeSubsystem, -50, -50));
-//        commandXboxController.povRight().onTrue(new VelocityCommand(intakeSubsystem, -50, -50));
+//        commandXboxController.povLeft().onTrue(new VelocityCommand(intakeSubsystem, -100, -100))
+//                .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
+//        commandXboxController.povRight().onTrue(new VelocityCommand(intakeSubsystem, 100, 100))
+//                .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
+
 
         commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
         commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
@@ -251,18 +251,20 @@ public class RobotContainer {
 //                                intakeSubsystem::hasCoral
 //                        )));
         //Intake when Coral is in front of HP
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L).
-                onTrue(new InstantCommand(RobotContainer::toggleCoralBlockingHP));
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L).
+//                onTrue(new InstantCommand(RobotContainer::toggleCoralBlockingHP));
 
         //Outtake
         commandButtonPanel.button(ButtonPanelButtons.SETPOINT_INTAKE_HP)
                 .onTrue(new VelocityCommand(intakeSubsystem, -50, -50))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1).onTrue(ScoreCommands.Arm.armL1());
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1).onTrue(ScoreCommands.Arm.armL1());
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armL1());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L3).onTrue(ScoreCommands.Arm.armL3());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armL4());
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L3).onTrue(ScoreCommands.Arm.armL3());
+//        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armL4());
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armBarge()
+                .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)));
 
         commandButtonPanel.button(ButtonPanelButtons.SETMODE_ALGAE)
                 .onTrue(ScoreCommands.Arm.armAlgaeHigh());
@@ -293,59 +295,59 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(RobotContainer::toggleUseAutoAlign));
         commandButtonPanel.button(ButtonPanelButtons.AUX_RIGHT)
                 .onTrue(new InstantCommand(RobotContainer::toggleShouldFixTip).alongWith(
-                                new PositionCommand(elevatorSubsystem, .025))
+                                new PositionCommand(elevatorSubsystem, .1))
                         .andThen(new PositionCommand(armSubsystem, 0))
-                        .andThen(new PositionCommand(wristSubsystem, 0)));
-
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_A, 5, 5));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_B, 5, 5));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_C)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_C, 5, 5));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_D, 5, 5));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_E, 5, 5));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_F, 5, 5));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_G, 5, 5));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_H, 5, 5));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_I, 5, 5));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_J, 5, 5));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_K, 5, 5));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L)
-                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_L, 5, 5));
+                        .andThen(new PositionCommand(wristSubsystem, 60)));
 
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
-//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_A, 5d, 5d));
+//                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_A, 5, 5));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
-//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_B, 5d, 5d));
+//                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_B, 5, 5));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_C)
-//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_C, 5d, 5d));
+//                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_C, 5, 5));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_D, 5d, 5d));
+//                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_D, 5, 5));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
-//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_E, 5d, 5d));
+//                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_E, 5, 5));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F)
-//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_F, 5d, 5d));
+//                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_F, 5, 5));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G)
-//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_G, 5d, 5d));
+//                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_G, 5, 5));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H)
-//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_H, 5d, 5d));
+//                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_H, 5, 5));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
-//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_I, 5d, 5d));
+//                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_I, 5, 5));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J)
-//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_J, 5d, 5d));
+//                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_J, 5, 5));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_K, 5d, 5d));
+//                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_K, 5, 5));
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L)
-//                .onTrue(Autos.autoScore(ScoringPosition.REEF_SIDE_L, 5d, 5d));
+//                .onTrue(Autos.driveToPose(ScoringPosition.REEF_SIDE_L, 5, 5));
+
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A)
+                .onTrue(new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_A));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B)
+                .onTrue(new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_B));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_C)
+                .onTrue(new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_C));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
+                .onTrue(new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_D));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E)
+                .onTrue(new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_E));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F)
+                .onTrue(new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_F));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G)
+                .onTrue(new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_G));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H)
+                .onTrue(new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_H));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
+                .onTrue(new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_I));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J)
+                .onTrue(new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_J));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
+                .onTrue(new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_K));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L)
+                .onTrue(new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_L));
 
 
         commandSwerveDrivetrain.registerTelemetry(logger::telemeterize);

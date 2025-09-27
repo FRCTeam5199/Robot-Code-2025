@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.Optional;
 
+import au.grapplerobotics.CanBridge;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -67,6 +68,7 @@ public class Robot extends TimedRobot {
         commandSwerveDrivetrain.seedFieldCentric();
 
         PathfindingCommand.warmupCommand().schedule();
+        CanBridge.runTCP();
     }
 
     /**
