@@ -17,10 +17,6 @@ public class IntakeSubsystem extends TemplateSubsystem {
         return isScoringAlgae;
     }
 
-    public void setScoringAlgae(boolean scoringAlgae) {
-        isScoringAlgae = scoringAlgae;
-    }
-
     private boolean isScoringAlgae = false;
 
     public IntakeSubsystem() {

@@ -66,7 +66,7 @@ public final class Constants {
 
         public static final double STABLE = 0;
         public static final double ALGAE_STABLE = .17;
-        public static final double GROUND = .11;
+        public static final double GROUND = .08;
         public static final double ALGAE_GROUND = .22;
 
         public static final double L1 = 0;
@@ -75,7 +75,7 @@ public final class Constants {
         public static final double L4 = 1.01;
         public static final double HP = 0;
 
-        public static final double ALGAE_LOW = .13;
+        public static final double ALGAE_LOW = .3;
         public static final double ALGAE_HIGH = .58;
         public static final double BARGE = 1.002;
         public static final double PROCESSOR = .22;
@@ -101,8 +101,8 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 4;
 
         public static final double STABLE = 0;
-        public static final double GROUND = 2;
-        public static final double ALGAE_GROUND = 15;
+        public static final double GROUND = 4;
+        public static final double ALGAE_GROUND = 11;
 
         public static final double L1 = 16;
         public static final double L2 = 41;
@@ -114,7 +114,7 @@ public final class Constants {
         public static final double ALGAE_LOW = 60;
         public static final double ALGAE_HIGH = 70;
         public static final double BARGE = 85;
-        public static final double PROCESSOR = 15;
+        public static final double PROCESSOR = 30;
 
         public static final double ARM_MIN = 0.61524;
         public static final double ARM_MAX = 180; //fix
@@ -207,7 +207,7 @@ public final class Constants {
 
         public static final double STABLE = 10;
         public static final double GROUND = 179;
-        public static final double ALGAE_GROUND = 224;
+        public static final double ALGAE_GROUND = 185;
 
         public static final double L1 = 10;
         public static final double L2 = 67;
@@ -221,7 +221,7 @@ public final class Constants {
         public static final double ALGAE_LOW = 220;
         public static final double ALGAE_HIGH = 220;
         public static final double BARGE = 135;
-        public static final double PROCESSOR = 224;
+        public static final double PROCESSOR = 185;
 
         public static final boolean WRIST_BRAKE = true;
 
@@ -256,6 +256,11 @@ public final class Constants {
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
         public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(3.5, 3.5, 999);
+
+
+        public static final String BACK_CAMERA_NAME = "BackCamera";
+        public static final Transform3d BACK_CAMERA_POSE =
+                new Transform3d(-.2794, -.3175, .19685, new Rotation3d(0, Math.toRadians(0), 180));
     }
 }
 

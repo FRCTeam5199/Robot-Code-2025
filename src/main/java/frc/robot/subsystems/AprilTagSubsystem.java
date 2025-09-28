@@ -29,6 +29,10 @@ import frc.robot.constants.Constants.Vision;
 public class AprilTagSubsystem extends SubsystemBase {
     public final PhotonCamera camera;
     private final PhotonPoseEstimator photonEstimator;
+
+    public final PhotonCamera backCamera;
+    private final PhotonPoseEstimator backPhotonEstimator;
+
     private Matrix<N3, N1> curStdDevs;
     private AprilTagFieldLayout kTagLayout;
     private double closestTagX = 0, closestTagY = 0, closestTagYaw = 0;
@@ -39,6 +43,7 @@ public class AprilTagSubsystem extends SubsystemBase {
 
     private int closestTagID = -1;
     private List<PhotonPipelineResult> results = new ArrayList<>();
+    private List<PhotonPipelineResult> backResults = new ArrayList<>();
 
     private static AprilTagSubsystem aprilTagSubsystem;
     private static CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
@@ -61,13 +66,25 @@ public class AprilTagSubsystem extends SubsystemBase {
         try {
             kTagLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory()
                     + "/apriltagLayout.json");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception ignored) {
         }
 
         photonEstimator =
                 new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.Vision.CAMERA_POSE);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+
+        backCamera = new PhotonCamera(Vision.BACK_CAMERA_NAME);
+
+        try {
+            kTagLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory()
+                    + "/apriltagLayout.json");
+        } catch (Exception ignored) {
+        }
+
+        backPhotonEstimator =
+                new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Vision.BACK_CAMERA_POSE);
+        backPhotonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
 
     @Override
@@ -76,6 +93,7 @@ public class AprilTagSubsystem extends SubsystemBase {
 //        System.out.println("Pigeon angle: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 //        System.out.println("Closest tag id: " + closestTagID);
         results = camera.getAllUnreadResults();
+        backResults = backCamera.getAllUnreadResults();
         updateClosestTagID();
     }
 
@@ -126,6 +144,81 @@ public class AprilTagSubsystem extends SubsystemBase {
             // Precalculation - see how many tags we found, and calculate an average-distance metric
             for (var tgt : targets) {
                 var tagPose = photonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+                if (tagPose.isEmpty()) continue;
+                numTags++;
+                avgDist +=
+                        tagPose
+                                .get()
+                                .toPose2d()
+                                .getTranslation()
+                                .getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
+            }
+
+            if (numTags == 0) {
+                // No tags visible. Default to single-tag std devs
+                curStdDevs = Constants.Vision.kTagStdDevs;
+            } else {
+                // One or more tags visible, run the full heuristic.
+                avgDist /= numTags;
+                // Decrease std devs if multiple targets are visible
+                if (numTags > 1) estStdDevs = Constants.Vision.kTagStdDevs;
+                    // Increase std devs based on (average) distance
+//                if (numTags == 1 && avgDist > 4)
+//                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+                curStdDevs = estStdDevs;
+            }
+        }
+    }
+
+
+    /**
+     * The latest estimated robot pose on the field from vision data. This may be empty. This should
+     * only be called once per loop.
+     *
+     * <p>Also includes updates for the standard deviations, which can (optionally) be retrieved with
+     *
+     * @return An {@link EstimatedRobotPose} with an estimated pose, estimate timestamp, and targets
+     * used for estimation.
+     */
+    public Pair<Optional<EstimatedRobotPose>, Double> getBackEstimatedGlobalPose() {
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        for (var change : backResults) {
+            boolean shouldContinue = false;
+            for (PhotonTrackedTarget target : change.getTargets())
+                if (target.getPoseAmbiguity() > .1) shouldContinue = true;
+            if (shouldContinue) continue;
+
+            visionEst = backPhotonEstimator.update(change);
+            updateBackEstimationStdDevs(visionEst, change.getTargets());
+        }
+        if (visionEst.isPresent())
+            return new Pair<>(visionEst, visionEst.get().timestampSeconds);
+        else return new Pair<>(Optional.empty(), 0.0);
+    }
+
+    /**
+     * Calculates new standard deviations This algorithm is a heuristic that creates dynamic standard
+     * deviations based on number of tags, estimation strategy, and distance from the tags.
+     *
+     * @param estimatedPose The estimated pose to guess standard deviations for.
+     * @param targets       All targets in this camera frame
+     */
+    private void updateBackEstimationStdDevs(
+            Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
+        if (estimatedPose.isEmpty()) {
+            // No pose input. Default to single-tag std devs
+            curStdDevs = Constants.Vision.kTagStdDevs;
+
+        } else {
+            // Pose present. Start running Heuristic
+            var estStdDevs = Constants.Vision.kTagStdDevs;
+            int numTags = 0;
+            double avgDist = 0;
+
+            // Precalculation - see how many tags we found, and calculate an average-distance metric
+            for (var tgt : targets) {
+                var tagPose = backPhotonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
                 if (tagPose.isEmpty()) continue;
                 numTags++;
                 avgDist +=

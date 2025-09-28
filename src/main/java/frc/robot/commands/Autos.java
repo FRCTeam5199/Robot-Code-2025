@@ -196,7 +196,8 @@ public final class Autos {
         );
     }
 
-    public static Command driveToPose(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration) {
+    public static Command driveToPose(ScoringPosition scoringPosition,
+                                      double maxVelocity, double maxAcceleration, double goalEndVelocity) {
         return new SequentialCommandGroup(
                 new InstantCommand(() ->
                         commandSwerveDrivetrain.applyRequest(() ->
@@ -209,11 +210,11 @@ public final class Autos {
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), goalEndVelocity),
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getRedPose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), goalEndVelocity),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 ),
@@ -221,11 +222,11 @@ public final class Autos {
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), goalEndVelocity),
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getRedPose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), goalEndVelocity),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 )
@@ -287,21 +288,21 @@ public final class Autos {
         return new SequentialCommandGroup(
                 new SelectCommand<>(
                         Map.ofEntries(
-                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPose(ScoringPosition.REEF_SIDE_A, 5d, 5d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPose(ScoringPosition.REEF_SIDE_B, 5d, 5d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPose(ScoringPosition.REEF_SIDE_C, 5d, 5d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPose(ScoringPosition.REEF_SIDE_D, 5d, 5d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPose(ScoringPosition.REEF_SIDE_E, 5d, 5d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPose(ScoringPosition.REEF_SIDE_F, 5d, 5d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPose(ScoringPosition.REEF_SIDE_G, 5d, 5d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPose(ScoringPosition.REEF_SIDE_H, 5d, 5d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPose(ScoringPosition.REEF_SIDE_I, 5d, 5d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPose(ScoringPosition.REEF_SIDE_J, 5d, 5d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPose(ScoringPosition.REEF_SIDE_K, 5d, 5d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L, 5d, 5d))
+                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPose(ScoringPosition.REEF_SIDE_A, 5d, 5d, 1d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPose(ScoringPosition.REEF_SIDE_B, 5d, 5d, 1d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPose(ScoringPosition.REEF_SIDE_C, 5d, 5d, 1d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPose(ScoringPosition.REEF_SIDE_D, 5d, 5d, 1d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPose(ScoringPosition.REEF_SIDE_E, 5d, 5d, 1d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPose(ScoringPosition.REEF_SIDE_F, 5d, 5d, 1d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPose(ScoringPosition.REEF_SIDE_G, 5d, 5d, 1d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPose(ScoringPosition.REEF_SIDE_H, 5d, 5d, 1d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPose(ScoringPosition.REEF_SIDE_I, 5d, 5d, 1d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPose(ScoringPosition.REEF_SIDE_J, 5d, 5d, 1d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPose(ScoringPosition.REEF_SIDE_K, 5d, 5d, 1d)),
+                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L, 5d, 5d, 1d))
                         ),
                         RobotContainer::getCurrentScoringPosition
-                ),
+                ).alongWith(ScoreCommands.Arm.armStable()),
                 new ConditionalCommand(
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),
@@ -316,7 +317,7 @@ public final class Autos {
 
     public static Command autoScore(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration) {
         return new SequentialCommandGroup(
-                driveToPose(scoringPosition, maxVelocity, maxAcceleration).alongWith(ScoreCommands.Arm.armStable()),
+                driveToPose(scoringPosition, maxVelocity, maxAcceleration, 1d).alongWith(ScoreCommands.Arm.armStable()),
                 new ConditionalCommand(
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),

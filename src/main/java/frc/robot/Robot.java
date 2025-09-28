@@ -37,6 +37,7 @@ public class Robot extends TimedRobot {
     private RobotContainer robotContainer;
     private static final CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
     private static Pair<Optional<EstimatedRobotPose>, Double> estimatePose;
+    private static Pair<Optional<EstimatedRobotPose>, Double> backEstimatePose;
     private static AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
 //  private IntakeSubsystem exampleSubsystem = IntakeSubsystem.getInstance();
@@ -83,8 +84,16 @@ public class Robot extends TimedRobot {
         UserInterface.update();
 
         estimatePose = aprilTagSubsystem.getEstimatedGlobalPose();
+        backEstimatePose = aprilTagSubsystem.getBackEstimatedGlobalPose();
         if (estimatePose.getFirst().isPresent()) {
             Pose2d robotPose2d = estimatePose.getFirst().get().estimatedPose.toPose2d();
+            Pose2d modify = new Pose2d(robotPose2d.getX(), robotPose2d.getY(),
+                    commandSwerveDrivetrain.getPose().getRotation());
+
+            commandSwerveDrivetrain.addVisionMeasurement(modify, Utils.getCurrentTimeSeconds(),
+                    aprilTagSubsystem.getEstimationStdDevs());
+        } else if (backEstimatePose.getFirst().isPresent()) {
+            Pose2d robotPose2d = backEstimatePose.getFirst().get().estimatedPose.toPose2d();
             Pose2d modify = new Pose2d(robotPose2d.getX(), robotPose2d.getY(),
                     commandSwerveDrivetrain.getPose().getRotation());
 
@@ -111,8 +120,16 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         estimatePose = aprilTagSubsystem.getEstimatedGlobalPose();
+        backEstimatePose = aprilTagSubsystem.getBackEstimatedGlobalPose();
         if (estimatePose.getFirst().isPresent()) {
             Pose2d robotPose2d = estimatePose.getFirst().get().estimatedPose.toPose2d();
+            Pose2d modify = new Pose2d(robotPose2d.getX(), robotPose2d.getY(),
+                    commandSwerveDrivetrain.getPose().getRotation());
+
+            commandSwerveDrivetrain.addVisionMeasurement(modify, Utils.getCurrentTimeSeconds(),
+                    aprilTagSubsystem.getEstimationStdDevs());
+        } else if (backEstimatePose.getFirst().isPresent()) {
+            Pose2d robotPose2d = backEstimatePose.getFirst().get().estimatedPose.toPose2d();
             Pose2d modify = new Pose2d(robotPose2d.getX(), robotPose2d.getY(),
                     commandSwerveDrivetrain.getPose().getRotation());
 

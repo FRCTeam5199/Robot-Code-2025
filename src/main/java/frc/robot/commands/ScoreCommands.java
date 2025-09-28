@@ -509,7 +509,7 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() < ElevatorConstants.ALGAE_GROUND
-            );
+            ).alongWith(new VelocityCommand(intakeSubsystem, 60, 60));
         }
     }
 
@@ -763,9 +763,9 @@ public class ScoreCommands {
             return new ConditionalCommand(
                     new VelocityCommand(intakeSubsystem, -60, -60),
                     new ConditionalCommand(
-                            new VelocityCommand(intakeSubsystem, 30, 20),
+                            new VelocityCommand(intakeSubsystem, 30, 5),
                             new ConditionalCommand(
-                                    new VelocityCommand(intakeSubsystem, 100, 100),
+                                    new VelocityCommand(intakeSubsystem, 75, 75),
                                     new ConditionalCommand(
                                             new VelocityCommand(intakeSubsystem, -100, -100),
                                             new VelocityCommand(intakeSubsystem, 20, 20),
@@ -775,7 +775,7 @@ public class ScoreCommands {
                                     () -> RobotContainer.getState() == State.L4
                             ),
                             () -> RobotContainer.getState() == State.L1
-                    ).alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true))),
+                    ),
                     () -> (RobotContainer.getState() == State.ALGAE_HIGH
                             || RobotContainer.getState() == State.ALGAE_LOW)
             );

@@ -21,11 +21,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
@@ -118,7 +114,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
     private static int selectedReefTag = 0;
     private static boolean lockOnMode = false;
-    public static State state = State.L1;
+    public static State state = State.L4;
     private static Timer timer = new Timer();
     private static boolean useAutoAlign = true;
     private static boolean shouldFixTip = true;
@@ -184,7 +180,7 @@ public class RobotContainer {
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
                 .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0))));
 
-        commandXboxController.a().onTrue(ScoreCommands.Arm.armL4());
+        commandXboxController.a().onTrue(ScoreCommands.Arm.armL1());
         commandXboxController.b().onTrue(ScoreCommands.Arm.armL2());
         commandXboxController.x().onTrue(ScoreCommands.Arm.armL3());
         commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
@@ -212,10 +208,20 @@ public class RobotContainer {
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
 
-        commandXboxController.leftBumper().onTrue(ScoreCommands.Intake.intakeGround()
-                        .until(intakeSubsystem::hasCoral)
-                        .andThen(ScoreCommands.Stabling.groundIntakeStable()))
-                .onFalse(ScoreCommands.Stabling.groundIntakeStable());
+        commandXboxController.leftBumper().onTrue(
+                        new ConditionalCommand(
+                                ScoreCommands.Intake.intakeGroundAlgae(),
+                                ScoreCommands.Intake.intakeGround()
+                                        .until(intakeSubsystem::hasCoral)
+                                        .andThen(ScoreCommands.Stabling.groundIntakeStable()),
+                                () -> state == State.BARGE || state == State.PROCESSOR
+                        ))
+                .onFalse(new ConditionalCommand(
+                        ScoreCommands.Arm.armStable()
+                                .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)),
+                        ScoreCommands.Stabling.groundIntakeStable(),
+                        () -> state == State.BARGE || state == State.PROCESSOR
+                ));
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
                 .onFalse(
@@ -224,7 +230,7 @@ public class RobotContainer {
                                 new VelocityCommand(intakeSubsystem, 0, 0),
                                 () -> RobotContainer.getState() == State.BARGE
                                         || RobotContainer.getState() == State.PROCESSOR
-                        ).alongWith(new InstantCommand(() -> intakeSubsystem.setScoringAlgae(true))));
+                        ));
         commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
 
         commandXboxController.povLeft().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
@@ -259,10 +265,8 @@ public class RobotContainer {
                 .onTrue(new VelocityCommand(intakeSubsystem, -50, -50))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
 
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L1).onTrue(ScoreCommands.Arm.armL1());
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armL1());
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L3).onTrue(ScoreCommands.Arm.armL3());
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armL4());
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armProcessor()
+                .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armBarge()
                 .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)));
 
