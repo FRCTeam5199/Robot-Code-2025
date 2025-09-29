@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.constants.Constants;
 import frc.robot.subsystems.AprilTagSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -96,6 +97,12 @@ public class Robot extends TimedRobot {
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
         RobotContainer.periodic();
+
+        // TODO-JYW: LEFT-OFF: This function call does not build (orginally suggested by CoPilot).
+        // Other alternatives exist in the Logger class. See the LoggedRobot class for reference.
+        //
+        // Add AdvantageKit periodic call
+        // AdvantageKit.getInstance().periodic();
     }
 
     /**
