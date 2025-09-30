@@ -13,6 +13,7 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -65,6 +66,7 @@ public class RobotContainer {
 
     // Robot Centric drive to use with auto-balancing
     public final static SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDesaturateWheelSpeeds(true)
+            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(4, 0, .1, new TrapezoidProfile.Constraints(100, 200));
@@ -76,9 +78,14 @@ public class RobotContainer {
 
     public static final ProfiledPIDController turnPIDController = new ProfiledPIDController(0.175, 0.0, 0.0, new TrapezoidProfile.Constraints(100, 200));
 
+    public static final PIDController turnToPiecePIdController = new PIDController(.05, 0.0, 0.0);
+    public static final PIDController turnToPiecePIdControllerClose = new PIDController(.1, 0.0, 0.0);
+    public static final PIDController turnToPiecePIdControllerVeryClose = new PIDController(.15, 0.0, 0.0);
+
     public static double xVelocity = 0;
     public static double yVelocity = 0;
     public static double rotationVelocity = 0;
+    public static double driveToPieceRotationVelocity;
 
     public static double autoAlignXOffset = 0.04;
     public static double autoAlignYOffset = -.15;
@@ -97,6 +104,11 @@ public class RobotContainer {
             new TrapezoidProfile.Constraints(1000, 1000));
     private static TrapezoidProfile.State currentStateRotation = new TrapezoidProfile.State(0, 0);
     private static TrapezoidProfile.State goalStateRotation = new TrapezoidProfile.State(0, 0);
+
+    private static TrapezoidProfile driveToPieceRotation = new TrapezoidProfile(
+            new TrapezoidProfile.Constraints(1000, 1000));
+    private static TrapezoidProfile.State driveToPieceCurrentState = new TrapezoidProfile.State(0, 0);
+    private static TrapezoidProfile.State driveToPieceGoalState = new TrapezoidProfile.State(0, 0);
 
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain();
     private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -241,8 +253,24 @@ public class RobotContainer {
 //                .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
 
 
-        commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
-        commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
+//        commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
+//        commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
+        commandXboxController.povUp().onTrue(ScoreCommands.Drive.driveToPiece())
+                .onFalse(commandSwerveDrivetrain.applyRequest(() -> drive
+                        .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+                        .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+                        .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate)));
+//        commandXboxController.povUp().onTrue(ScoreCommands.Drive.driveToPiece().alongWith(
+//                        ScoreCommands.Intake.intakeGround()
+//                                .until(intakeSubsystem::hasCoral)
+//                                .andThen(ScoreCommands.Stabling.groundIntakeStable())
+//                ))
+//                .onFalse(commandSwerveDrivetrain.applyRequest(() -> drive
+//                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+//                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+//                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))
+//                        .alongWith(ScoreCommands.Stabling.groundIntakeStable()
+//                        ));
 
         // commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(1)))
         //         .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
@@ -484,6 +512,46 @@ public class RobotContainer {
                     robotCentricDrive.withVelocityX(roll)
                             .withVelocityY(pitch));
         }
+
+        if (LimelightHelpers.getTV(Constants.Vision.LIMELIGHT_NAME)) {
+            if (driveToPieceCurrentState.position < 5) {
+                driveToPieceRotationVelocity = turnToPiecePIdControllerVeryClose
+                        .calculate(LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME), -15);
+            } else if (driveToPieceCurrentState.position < 20) {
+                driveToPieceRotationVelocity = turnToPiecePIdControllerClose
+                        .calculate(LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME), -15);
+            } else {
+                driveToPieceRotationVelocity = turnToPiecePIdController
+                        .calculate(LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME), -15);
+            }
+            driveToPieceRotationVelocity = turnToPiecePIdController
+                    .calculate(LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME), -10);
+        }
+
+//        driveToPieceCurrentState.velocity = commandSwerveDrivetrain.getState().Speeds.omegaRadiansPerSecond;
+//        if (LimelightHelpers.getTV(Constants.Vision.LIMELIGHT_NAME)) {
+//            driveToPieceCurrentState.position = LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME);
+//        }
+//
+//        driveToPieceGoalState.position = 0;
+//        driveToPieceGoalState.velocity = 0;
+//
+//        if (driveToPieceCurrentState.position < 5) {
+//            driveToPieceRotationVelocity = turnToPiecePIdControllerVeryClose
+//                    .calculate(driveToPieceCurrentState.position,
+//                            driveToPieceRotation.calculate(.02, driveToPieceCurrentState, driveToPieceGoalState).position);
+//        } else if (driveToPieceCurrentState.position < 20) {
+//            driveToPieceRotationVelocity = turnToPiecePIdControllerClose
+//                    .calculate(driveToPieceCurrentState.position,
+//                            driveToPieceRotation.calculate(.02, driveToPieceCurrentState, driveToPieceGoalState).position);
+//        } else {
+//            driveToPieceRotationVelocity = turnToPiecePIdController
+//                    .calculate(driveToPieceCurrentState.position,
+//                            driveToPieceRotation.calculate(.02, driveToPieceCurrentState, driveToPieceGoalState).position);
+//        }
+
+//        System.out.println("Rotation velocity: " + driveToPieceRotationVelocity);
+
 
         // if (UserInterface.getControlComponent("Reset All").getBoolean(false)) {
         //     CommandScheduler.getInstance().schedule(ScoreCommands.Zeroing.zeroSubsystems());

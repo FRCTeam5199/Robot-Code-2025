@@ -1,12 +1,5 @@
 package frc.robot.commands;
 
-import static frc.robot.RobotContainer.MaxAngularRate;
-import static frc.robot.RobotContainer.commandSwerveDrivetrain;
-import static frc.robot.RobotContainer.commandXboxController;
-import static frc.robot.RobotContainer.rotationVelocity;
-import static frc.robot.RobotContainer.xVelocity;
-import static frc.robot.RobotContainer.yVelocity;
-
 import java.util.Map;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -41,6 +34,8 @@ import frc.robot.utility.State;
 
 import javax.swing.*;
 
+import static frc.robot.RobotContainer.*;
+
 public class ScoreCommands {
     private static ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private static ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
@@ -55,6 +50,9 @@ public class ScoreCommands {
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
 
     private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true) // Add a 10% deadband
+            .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
+    public final static SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDesaturateWheelSpeeds(true)
+            .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     public static class Drive {
@@ -168,6 +166,23 @@ public class ScoreCommands {
                     },
                     RobotContainer::aligned,
                     RobotContainer.commandSwerveDrivetrain);
+        }
+
+        public static Command driveToPiece() {
+            return new FunctionalCommand(
+                    () -> {
+                    },
+                    () -> {
+                        System.out.println("drive to piece rotation velocity: " + driveToPieceRotationVelocity);
+                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(0)
+                                .withRotationalRate(driveToPieceRotationVelocity));
+                    },
+                    (interrupted) -> {
+                        commandSwerveDrivetrain.setControl(drive);
+                    },
+                    () -> (false),
+                    commandSwerveDrivetrain
+            );
         }
 
         public static Command autoMoveForwardBottom() {
