@@ -298,7 +298,7 @@ public class RobotContainer {
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armBarge()
                 .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)));
 
-        commandButtonPanel.button(ButtonPanelButtons.SETMODE_ALGAE)
+        commandXboxController.povDown()
                 .onTrue(ScoreCommands.Arm.armAlgaeHigh());
         commandButtonPanel.button(ButtonPanelButtons.SETMODE_CORAL)
                 .onTrue(ScoreCommands.Arm.armAlgaeLow());
@@ -505,13 +505,13 @@ public class RobotContainer {
         }
         rotationVelocity = turnPIDController.calculate(currentStateRotation.position, nextStateRotation);
 
-        // Code for if the bot starts tipping
-        if (((Math.abs(pitch) > 2 && Math.abs(pitch) < 90)
-                || (Math.abs(roll) > 2 && Math.abs(roll) < 90)) && shouldFixTip) {
-            commandSwerveDrivetrain.setControl(
-                    robotCentricDrive.withVelocityX(roll)
-                            .withVelocityY(pitch));
-        }
+        // // Code for if the bot starts tipping
+        // if (((Math.abs(pitch) > 2 && Math.abs(pitch) < 90)
+        //         || (Math.abs(roll) > 2 && Math.abs(roll) < 90)) && shouldFixTip) {
+        //     commandSwerveDrivetrain.setControl(
+        //             robotCentricDrive.withVelocityX(roll)
+        //                     .withVelocityY(pitch));
+        // }
 
         if (LimelightHelpers.getTV(Constants.Vision.LIMELIGHT_NAME)) {
             if (driveToPieceCurrentState.position < 5) {
