@@ -64,6 +64,8 @@ public final class Autos {
     private static PathPlannerAuto helper2PieceTopBlue;
     private static PathPlannerAuto helper2PieceBottomRed;
 
+    private static SequentialCommandGroup algaeRedHG;
+
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static final CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
@@ -110,6 +112,11 @@ public final class Autos {
 
         fourPieceBlueBottomL4 = new PathPlannerAuto("4 Piece Blue Bottom L4");
 
+        // algaeBlueHG = new SequentialCommandGroup(
+        //         new InstantCommand(() -> driveToPose(ScoringPosition.REEF_SIDE_GH)),
+        //         new InstantCommand(() -> driveForward());
+        // );
+
         testBlue = new PathPlannerAuto("Test Blue");
 
         Shuffleboard.getTab("Autons").add("Red Autons", autonChooserRed)
@@ -127,6 +134,8 @@ public final class Autos {
         autonChooserRed.addOption("3 Piece Red Left", threePieceRedBottomL4);
         autonChooserRed.addOption("3 Piece Red Right", threePieceRedTopL4);
         autonChooserRed.addOption("2 Piece Red Left Helper", helper2PieceBottomRed);
+
+        autonChooserRed.addOption("Algae", algaeRedHG);
 
         autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDropL1);
         autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueRightL4);

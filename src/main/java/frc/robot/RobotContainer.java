@@ -271,7 +271,7 @@ public class RobotContainer {
         commandXboxController.povUp().onTrue(new SequentialCommandGroup(
                         ScoreCommands.Drive.driveToPiece()
                                 .alongWith(ScoreCommands.Intake.intakeGroundPrep())
-                                .until(() -> LimelightHelpers.getTA(Constants.Vision.LIMELIGHT_NAME) > 1.5),
+                                .until(() -> LimelightHelpers.getTY(Constants.Vision.LIMELIGHT_NAME) < 13),
                         ScoreCommands.Drive.driveForward()
                                 .alongWith(ScoreCommands.Intake.intakeGround())
                                 .until(intakeSubsystem::hasCoral),
@@ -282,9 +282,10 @@ public class RobotContainer {
                                 .alongWith(ScoreCommands.Stabling.groundIntakeStable())
                 ))
                 .onFalse(commandSwerveDrivetrain.applyRequest(() -> drive
-                        .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
-                        .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
-                        .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate)));
+                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))
+                        .alongWith(ScoreCommands.Stabling.groundIntakeStable()));
 //        commandXboxController.povUp().onTrue(ScoreCommands.Drive.driveToPiece().alongWith(
 //                        ScoreCommands.Intake.intakeGround()
 //                                .until(intakeSubsystem::hasCoral)
@@ -491,6 +492,7 @@ public class RobotContainer {
     }
 
     public static void periodic() {
+        
         if (!timer.isRunning()) timer.start();
         if (autoAlignXOffset > 0 && DriverStation.getAlliance().isPresent() &&
                 DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))

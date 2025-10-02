@@ -174,7 +174,7 @@ public class ScoreCommands {
                     () -> {
                     },
                     () -> {
-                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(2)
+                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(1.2)
                                 .withRotationalRate(driveToPieceRotationVelocity));
                     },
                     (interrupted) -> {
@@ -193,7 +193,7 @@ public class ScoreCommands {
                     () -> {
                         double rotationRate = turnToPiecePIdController2
                                 .calculate(commandSwerveDrivetrain.getPose().getRotation().getDegrees(), goalRotation);
-                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(2)
+                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(0.9)
                                 .withRotationalRate(rotationRate));
                     },
                     (interrupted) -> {
@@ -203,6 +203,23 @@ public class ScoreCommands {
                     commandSwerveDrivetrain
             );
         }
+
+        public static Command driveForward(double goalRotation) {
+                return new FunctionalCommand(
+                        () -> {},
+                        () -> {
+                            double rotationRate = turnToPiecePIdController2
+                                    .calculate(commandSwerveDrivetrain.getPose().getRotation().getDegrees(), goalRotation);
+                            commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(1)
+                                    .withRotationalRate(rotationRate));
+                        },
+                        (interrupted) -> {
+                            commandSwerveDrivetrain.setControl(drive);
+                        },
+                        () -> (false),
+                        commandSwerveDrivetrain
+                );
+            }
 
         public static Command autoMoveForwardBottom() {
             return new FunctionalCommand(
@@ -490,11 +507,14 @@ public class ScoreCommands {
             return new ConditionalCommand(
                     new ParallelCommandGroup(
                             new PositionCommand(armSubsystem, ArmConstants.GROUND),
-                            new PositionCommand(elevatorSubsystem, ElevatorConstants.GROUND)
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.GROUND),
+                            new PositionCommand(wristSubsystem, 100)
                     ),
                     new SequentialCommandGroup(
                             new PositionCommand(elevatorSubsystem, ElevatorConstants.GROUND, 60, 100),
-                            new PositionCommand(armSubsystem, ArmConstants.GROUND)
+                            new PositionCommand(armSubsystem, ArmConstants.GROUND),
+                            new PositionCommand(wristSubsystem, 100)
+
                     ),
                     () -> elevatorSubsystem.getMechM() < ElevatorConstants.GROUND
             );
