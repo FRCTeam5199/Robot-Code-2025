@@ -238,13 +238,18 @@ public final class Constants {
         public static final double[][] WRIST_GEAR_RATIO = {{72, 10}, {72, 20}, {48, 24}};
     }
 
-
     public static class Vision {
-        public static final String CAMERA_NAME = "Camera";
-        public static final Transform3d CAMERA_POSE =
-                new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
-        public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
-        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(3.5, 3.5, 999);
+        public static class PhotonVision {
+                public static final String CAMERA_NAME = "Camera";
+                public static final Transform3d CAMERA_POSE =
+                        new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
+                public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
+                public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(3.5, 3.5, 999);
+        }
+
+        public static class Limelight {
+                public static final String LIMELIGHT_NAME = "limelight";
+        }
     }
 }
 

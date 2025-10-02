@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -18,20 +17,16 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ScoreCommands.Score;
 import frc.robot.constants.Constants;
-import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.controls.ButtonPanelButtons;
@@ -45,6 +40,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
+import frc.robot.subsystems.vision.ObjectDetectionSubsystem;
 import frc.robot.utility.ScoringPosition;
 import frc.robot.utility.State;
 
@@ -80,13 +76,22 @@ public class RobotContainer {
 
     public static final ProfiledPIDController turnPIDController = new ProfiledPIDController(0.175, 0.0, 0.0, new TrapezoidProfile.Constraints(100, 200));
 
+    public static final ProfiledPIDController turnToPiecePIDController = new ProfiledPIDController(0.03, 0.0, 0.0, new TrapezoidProfile.Constraints(100, 200));
+    public static final ProfiledPIDController turnToPiecePIDController2 = new ProfiledPIDController(0.05, 0.0, 0.0, new TrapezoidProfile.Constraints(100, 200));
+    public static final ProfiledPIDController turnToPiecePIDController3 = new ProfiledPIDController(0.1, 0.0, 0.0, new TrapezoidProfile.Constraints(100, 200));
+
     public static double xVelocity = 0;
     public static double yVelocity = 0;
     public static double rotationVelocity = 0;
 
+    public static double driveToPieceRotationVelocity = 0;
+    
+    public static String driveToPieceTarget = "coral";
+
     public static double autoAlignXOffset = 0.04;
     public static double autoAlignYOffset = -.15;
 
+    // Auto Align
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
     private static TrapezoidProfile.State currentStateX = new TrapezoidProfile.State(0, 0);
@@ -102,6 +107,11 @@ public class RobotContainer {
     private static TrapezoidProfile.State currentStateRotation = new TrapezoidProfile.State(0, 0);
     private static TrapezoidProfile.State goalStateRotation = new TrapezoidProfile.State(0, 0);
 
+    private static TrapezoidProfile driveToPieceRotationProfile = new TrapezoidProfile(
+            new TrapezoidProfile.Constraints(1000, 1000));
+    private static TrapezoidProfile.State driveToPieceCurrentRotation = new TrapezoidProfile.State(0, 0);
+    private static TrapezoidProfile.State driveToPieceGoalRotation = new TrapezoidProfile.State(0, 0);
+
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain();
     private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
@@ -111,7 +121,7 @@ public class RobotContainer {
 
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
-    // private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
+    public static final ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
 
     // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
 
@@ -158,6 +168,8 @@ public class RobotContainer {
                 .andThen(new InstantCommand(() -> wristSubsystem.setPosition(Constants.WristConstants.HP))));
 
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
+
+        NamedCommands.registerCommand("DRIVETOPIECE", ScoreCommands.Drive.driveToPieceCommand());
 
         Autos.initializeAutos();
 
@@ -243,8 +255,12 @@ public class RobotContainer {
 //        commandXboxController.povLeft().onTrue(new VelocityCommand(intakeSubsystem, -50));
 //        commandXboxController.povRight().onTrue(new VelocityCommand(intakeSubsystem, -50));
 
-        commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
-        commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
+        // commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
+        // commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
+        commandXboxController.povUp().onTrue(ScoreCommands.Drive.driveToPieceCommand()).onFalse(commandSwerveDrivetrain.applyRequest(() -> drive
+                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate)));
 
         // commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(1)))
         //         .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
@@ -332,36 +348,6 @@ public class RobotContainer {
                         .andThen(new InstantCommand(() -> armSubsystem.setFollowLastMechProfile(false)))
                         .andThen(new InstantCommand(() -> wristSubsystem.setFollowLastMechProfile(false))));
 
-        // commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I)
-        //         .onTrue(new InstantCommand(() -> intakeSubsystem.toggleBreakBeam()));
-
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-//                .onTrue(ScoreCommands.Arm.armBarge());
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
-//                .onTrue(ScoreCommands.Arm.armProcessor());
-
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_A).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(0)).andThen(() -> setAutoAlignOffsetLeft()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_B).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(0)).andThen(() -> setAutoAlignOffsetRight()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_C).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(1)).andThen(() -> setAutoAlignOffsetLeft()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(1)).andThen(() -> setAutoAlignOffsetRight()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_E).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(2)).andThen(() -> setAutoAlignOffsetLeft()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_F).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(2)).andThen(() -> setAutoAlignOffsetRight()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_G).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(3)).andThen(() -> setAutoAlignOffsetLeft()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_H).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(3)).andThen(() -> setAutoAlignOffsetRight()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_I).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(4)).andThen(() -> setAutoAlignOffsetLeft()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_J).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(4)).andThen(() -> setAutoAlignOffsetRight()));
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(5)).andThen(() -> setAutoAlignOffsetLeft())/*.andThen(GoToCommands.GoToCommand(reefTags.get(4)))*/);
-//        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_L).onTrue(new InstantCommand(() -> selectedReefTag = reefTags.get(5)).andThen(() -> setAutoAlignOffsetRight()));
-
-//        commandButtonPanel.button(ButtonPanelButtons.BUTTON2).toggleOnTrue(new InstantCommand(() -> {
-//            if (lockOnMode) {
-//                lockOnMode = false;
-//            } else {
-//                lockOnMode = true;
-//            }
-//        }));
-
-
 //        operatorXboxController.y().onTrue(new InstantCommand(()
 //                -> armSubsystem.setOffset(armSubsystem.getOffset() + 1)));
 //        operatorXboxController.x().onTrue(new InstantCommand(()
@@ -420,6 +406,7 @@ public class RobotContainer {
 
         // System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0] + "Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
 
+        // Auto Align
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
         currentStateRotation.position = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
@@ -450,6 +437,7 @@ public class RobotContainer {
             xVelocity = drivePIDControllerXClose.calculate(currentStateX.position, nextStateX);
             yVelocity = drivePIDControllerYVeryClose.calculate(currentStateY.position, nextStateY);
         }
+
         rotationVelocity = turnPIDController.calculate(currentStateRotation.position, nextStateRotation);
 
         // Code for if the bot starts tipping
@@ -458,6 +446,24 @@ public class RobotContainer {
             commandSwerveDrivetrain.setControl(
                     robotCentricDrive.withVelocityX(roll)
                             .withVelocityY(pitch));
+        }
+
+        // Drive To Piece 
+        driveToPieceCurrentRotation.velocity = commandSwerveDrivetrain.getState().Speeds.omegaRadiansPerSecond;
+
+        if (LimelightHelpers.getTV(Constants.Vision.Limelight.LIMELIGHT_NAME) /*&& LimelightHelpers.getDetectorClass(Constants.Vision.Limelight.LIMELIGHT_NAME) == driveToPieceTarget/* &&
+            Math.abs(LimelightHelpers.getTX(Constants.Vision.Limelight.LIMELIGHT_NAME) - driveToPieceGoalRotation.position) < 5*/) {
+                driveToPieceCurrentRotation.position = LimelightHelpers.getTX(Constants.Vision.Limelight.LIMELIGHT_NAME);
+        }
+
+        driveToPieceGoalRotation.position = -10;
+        driveToPieceGoalRotation.velocity = 0;
+        if (driveToPieceCurrentRotation.position < -5) {
+                driveToPieceRotationVelocity = turnToPiecePIDController3.calculate(driveToPieceCurrentRotation.position, driveToPieceRotationProfile.calculate(0.2, driveToPieceCurrentRotation, driveToPieceGoalRotation));
+        } else if (driveToPieceCurrentRotation.position < 10) {
+                driveToPieceRotationVelocity = turnToPiecePIDController2.calculate(driveToPieceCurrentRotation.position, driveToPieceRotationProfile.calculate(0.2, driveToPieceCurrentRotation, driveToPieceGoalRotation));
+        } else {
+                driveToPieceRotationVelocity = turnToPiecePIDController.calculate(driveToPieceCurrentRotation.position, driveToPieceRotationProfile.calculate(0.2, driveToPieceCurrentRotation, driveToPieceGoalRotation));
         }
 
         // if (UserInterface.getControlComponent("Reset All").getBoolean(false)) {

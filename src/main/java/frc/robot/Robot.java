@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
 
         DataLogManager.start();
 
-        commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.kTagStdDevs);
+        commandSwerveDrivetrain.setVisionMeasurementStdDevs(Constants.Vision.PhotonVision.kTagStdDevs);
 
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.

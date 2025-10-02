@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import static frc.robot.RobotContainer.MaxAngularRate;
+import static frc.robot.RobotContainer.driveToPieceRotationVelocity;
 import static frc.robot.RobotContainer.commandSwerveDrivetrain;
 import static frc.robot.RobotContainer.commandXboxController;
 import static frc.robot.RobotContainer.rotationVelocity;
@@ -54,7 +55,10 @@ public class ScoreCommands {
 
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude();
 
-    private final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true) // Add a 10% deadband
+    private final static SwerveRequest.FieldCentric fieldCentricDrive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true) // Add a 10% deadband
+            .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
+
+    public final static SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDesaturateWheelSpeeds(true)
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     public static class Drive {
@@ -78,7 +82,7 @@ public class ScoreCommands {
                                             .withRotationalRate(rotationVelocity));
                         else*/
                                 commandSwerveDrivetrain.setControl(
-                                        drive.withVelocityX(xVelocity)
+                                        fieldCentricDrive.withVelocityX(xVelocity)
                                                 .withVelocityY(yVelocity)
                                                 .withRotationalRate(rotationVelocity));
                             },
@@ -91,7 +95,7 @@ public class ScoreCommands {
                                                         .getPigeon2().getRotation2d().getDegrees() + (DriverStation.getAlliance().isPresent()
                                                         && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 0 : 180)))));
                                 commandSwerveDrivetrain.setControl(
-                                        drive.withVelocityX(0)
+                                        fieldCentricDrive.withVelocityX(0)
                                                 .withVelocityY(0)
                                                 .withRotationalRate(0));
                             },
@@ -99,7 +103,7 @@ public class ScoreCommands {
                                     && commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond < .01),
                             commandSwerveDrivetrain
                     ),
-                    commandSwerveDrivetrain.applyRequest(() -> drive
+                    commandSwerveDrivetrain.applyRequest(() -> fieldCentricDrive
                             .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                             .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                             .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate)),
@@ -126,7 +130,7 @@ public class ScoreCommands {
 //                                        .getClosestTagID()))));
                     },
                     () -> RobotContainer.commandSwerveDrivetrain.setControl(
-                            drive.withVelocityX(RobotContainer.xVelocity)
+                            fieldCentricDrive.withVelocityX(RobotContainer.xVelocity)
                                     .withVelocityY(yVelocity)
                                     .withRotationalRate(rotationVelocity)),
                     (interrupted) -> {
@@ -141,7 +145,7 @@ public class ScoreCommands {
                                                         ? 0 : 180)))));
 
                         RobotContainer.commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(0)
+                                fieldCentricDrive.withVelocityX(0)
                                         .withVelocityY(0)
                                         .withRotationalRate(0));
                     },
@@ -167,7 +171,7 @@ public class ScoreCommands {
                     },
                     () ->
                             RobotContainer.commandSwerveDrivetrain.setControl(
-                                    drive.withVelocityX(RobotContainer.xVelocity)
+                                    fieldCentricDrive.withVelocityX(RobotContainer.xVelocity)
                                             .withVelocityY(yVelocity)
                                             .withRotationalRate(rotationVelocity)),
                     (interrupted) -> {
@@ -179,7 +183,7 @@ public class ScoreCommands {
                                                 ? 0 : 180))));
 
                         RobotContainer.commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(0)
+                                fieldCentricDrive.withVelocityX(0)
                                         .withVelocityY(0)
                                         .withRotationalRate(0));
                     },
@@ -187,22 +191,34 @@ public class ScoreCommands {
                     RobotContainer.commandSwerveDrivetrain);
         }
 
+        public static Command driveToPieceCommand() {
+            return new FunctionalCommand(
+                () -> {},
+                () -> {
+                    commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(2).withRotationalRate(driveToPieceRotationVelocity));
+                },
+                (interrupted) -> {
+                        commandSwerveDrivetrain.setControl(fieldCentricDrive);
+                },
+                () -> (false),
+                commandSwerveDrivetrain);
+        }
+
         public static Command autoMoveForwardBottom() {
             return new FunctionalCommand(
-                    () -> {
-                    },
+                    () -> {},
                     () -> {
                         if (DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue))
                             RobotContainer.commandSwerveDrivetrain.setControl(
-                                    drive.withVelocityX(-.75)
+                                    fieldCentricDrive.withVelocityX(-.75)
                                             .withVelocityY(-.75));
                         else RobotContainer.commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(-.75)
+                                fieldCentricDrive.withVelocityX(-.75)
                                         .withVelocityY(.75));
                     },
                     (interrupted) -> RobotContainer.commandSwerveDrivetrain.setControl(
-                            drive.withVelocityX(0)
+                            fieldCentricDrive.withVelocityX(0)
                                     .withVelocityY(0)),
                     () -> false,
                     RobotContainer.commandSwerveDrivetrain);
@@ -217,15 +233,15 @@ public class ScoreCommands {
                         if (DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue))
                             RobotContainer.commandSwerveDrivetrain.setControl(
-                                    drive.withVelocityX(-0.75)
+                                    fieldCentricDrive.withVelocityX(-0.75)
                                             .withVelocityY(0.75));
                         else RobotContainer.commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(-0.75)
+                                fieldCentricDrive.withVelocityX(-0.75)
                                         .withVelocityY(-0.75));
                     },
                     (interrupted) -> {
                         RobotContainer.commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(0)
+                                fieldCentricDrive.withVelocityX(0)
                                         .withVelocityY(0));
                     },
                     () -> false,

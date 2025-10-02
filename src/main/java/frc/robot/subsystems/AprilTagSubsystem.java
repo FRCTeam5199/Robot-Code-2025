@@ -48,15 +48,15 @@ public class AprilTagSubsystem extends SubsystemBase {
     private static ArrayList<Pair<Double, Double>> lookUpTable = new ArrayList<>() {
         {
             //distance, stddev
-            add(new Pair<>(.5842 + Vision.CAMERA_TO_FRONT_DISTANCE, .25));
-            add(new Pair<>(1.3843 + Vision.CAMERA_TO_FRONT_DISTANCE, 1.25d));
-            add(new Pair<>(2.8194 + Vision.CAMERA_TO_FRONT_DISTANCE, 3d));
+            add(new Pair<>(.5842 + Vision.PhotonVision.CAMERA_TO_FRONT_DISTANCE, .25));
+            add(new Pair<>(1.3843 + Vision.PhotonVision.CAMERA_TO_FRONT_DISTANCE, 1.25d));
+            add(new Pair<>(2.8194 + Vision.PhotonVision.CAMERA_TO_FRONT_DISTANCE, 3d));
         }
     };
 
     //4, 5, 14, 15
     public AprilTagSubsystem() {
-        camera = new PhotonCamera(Constants.Vision.CAMERA_NAME);
+        camera = new PhotonCamera(Constants.Vision.PhotonVision.CAMERA_NAME);
 
         try {
             kTagLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory()
@@ -66,7 +66,7 @@ public class AprilTagSubsystem extends SubsystemBase {
         }
 
         photonEstimator =
-                new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.Vision.CAMERA_POSE);
+                new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.Vision.PhotonVision.CAMERA_POSE);
         photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
 
@@ -115,11 +115,11 @@ public class AprilTagSubsystem extends SubsystemBase {
             Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
         if (estimatedPose.isEmpty()) {
             // No pose input. Default to single-tag std devs
-            curStdDevs = Constants.Vision.kTagStdDevs;
+            curStdDevs = Constants.Vision.PhotonVision.kTagStdDevs;
 
         } else {
             // Pose present. Start running Heuristic
-            var estStdDevs = Constants.Vision.kTagStdDevs;
+            var estStdDevs = Constants.Vision.PhotonVision.kTagStdDevs;
             int numTags = 0;
             double avgDist = 0;
 
@@ -138,12 +138,12 @@ public class AprilTagSubsystem extends SubsystemBase {
 
             if (numTags == 0) {
                 // No tags visible. Default to single-tag std devs
-                curStdDevs = Constants.Vision.kTagStdDevs;
+                curStdDevs = Constants.Vision.PhotonVision.kTagStdDevs;
             } else {
                 // One or more tags visible, run the full heuristic.
                 avgDist /= numTags;
                 // Decrease std devs if multiple targets are visible
-                if (numTags > 1) estStdDevs = Constants.Vision.kTagStdDevs;
+                if (numTags > 1) estStdDevs = Constants.Vision.PhotonVision.kTagStdDevs;
                     // Increase std devs based on (average) distance
 //                if (numTags == 1 && avgDist > 4)
 //                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
@@ -285,14 +285,14 @@ public class AprilTagSubsystem extends SubsystemBase {
                 closestTagID = bestTarget.getFiducialId();
 
                 double smallestDistance = PhotonUtils.calculateDistanceToTargetMeters(
-                        Constants.Vision.CAMERA_POSE.getZ(), .31,
-                        Constants.Vision.CAMERA_POSE.getRotation().getY(),
+                        Constants.Vision.PhotonVision.CAMERA_POSE.getZ(), .31,
+                        Constants.Vision.PhotonVision.CAMERA_POSE.getRotation().getY(),
                         Units.degreesToRadians(bestTarget.getPitch()));
 
                 closestTagX = -(Math.cos(Math.toRadians(bestTarget.getYaw())) * smallestDistance);
                 closestTagY = Math.sin(Math.toRadians(bestTarget.getYaw())) * smallestDistance;
 
-                closestTagX += Vision.CAMERA_TO_FRONT_DISTANCE;
+                closestTagX += Vision.PhotonVision.CAMERA_TO_FRONT_DISTANCE;
 
                 closestTagYaw = bestTarget.getYaw();
 
