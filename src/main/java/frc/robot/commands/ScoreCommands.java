@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -32,8 +33,6 @@ import frc.robot.subsystems.template.PositionCommand;
 import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.State;
 
-import javax.swing.*;
-
 import static frc.robot.RobotContainer.*;
 
 public class ScoreCommands {
@@ -54,6 +53,8 @@ public class ScoreCommands {
     public final static SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
+    public static final PIDController turnToPiecePIdController2 = new PIDController(.1, 0.0, 0.02);
+    private static double goalRotation = 0;
 
     public static class Drive {
         public static Command autoAlignTeleop() {
@@ -173,9 +174,27 @@ public class ScoreCommands {
                     () -> {
                     },
                     () -> {
-                        System.out.println("drive to piece rotation velocity: " + driveToPieceRotationVelocity);
-                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(0)
+                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(2)
                                 .withRotationalRate(driveToPieceRotationVelocity));
+                    },
+                    (interrupted) -> {
+                        commandSwerveDrivetrain.setControl(drive);
+                    },
+                    () -> (false),
+                    commandSwerveDrivetrain
+            );
+        }
+
+        public static Command driveForward() {
+            return new FunctionalCommand(
+                    () -> {
+                        goalRotation = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
+                    },
+                    () -> {
+                        double rotationRate = turnToPiecePIdController2
+                                .calculate(commandSwerveDrivetrain.getPose().getRotation().getDegrees(), goalRotation);
+                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(2)
+                                .withRotationalRate(rotationRate));
                     },
                     (interrupted) -> {
                         commandSwerveDrivetrain.setControl(drive);
@@ -465,6 +484,20 @@ public class ScoreCommands {
                     ),
                     () -> elevatorSubsystem.getMechM() < ElevatorConstants.GROUND
             ).alongWith(new VelocityCommand(intakeSubsystem, 100, 100));
+        }
+
+        public static Command intakeGroundPrep() {
+            return new ConditionalCommand(
+                    new ParallelCommandGroup(
+                            new PositionCommand(armSubsystem, ArmConstants.GROUND),
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.GROUND)
+                    ),
+                    new SequentialCommandGroup(
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.GROUND, 60, 100),
+                            new PositionCommand(armSubsystem, ArmConstants.GROUND)
+                    ),
+                    () -> elevatorSubsystem.getMechM() < ElevatorConstants.GROUND
+            );
         }
 
         public static Command intakeHP() {

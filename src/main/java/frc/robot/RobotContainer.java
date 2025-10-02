@@ -78,9 +78,7 @@ public class RobotContainer {
 
     public static final ProfiledPIDController turnPIDController = new ProfiledPIDController(0.175, 0.0, 0.0, new TrapezoidProfile.Constraints(100, 200));
 
-    public static final PIDController turnToPiecePIdController = new PIDController(.05, 0.0, 0.0);
-    public static final PIDController turnToPiecePIdControllerClose = new PIDController(.1, 0.0, 0.0);
-    public static final PIDController turnToPiecePIdControllerVeryClose = new PIDController(.15, 0.0, 0.0);
+    public static final PIDController turnToPiecePIdController = new PIDController(.2, 0.0, 0.02);
 
     public static double xVelocity = 0;
     public static double yVelocity = 0;
@@ -255,7 +253,34 @@ public class RobotContainer {
 
 //        commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
 //        commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
-        commandXboxController.povUp().onTrue(ScoreCommands.Drive.driveToPiece())
+
+        new SequentialCommandGroup(
+                ScoreCommands.Drive.driveToPiece()
+                        .alongWith(ScoreCommands.Intake.intakeGroundPrep())
+                        .until(() -> LimelightHelpers.getTA(Constants.Vision.LIMELIGHT_NAME) > 8),
+                ScoreCommands.Drive.driveForward()
+                        .alongWith(ScoreCommands.Intake.intakeGround())
+                        .until(intakeSubsystem::hasCoral),
+                commandSwerveDrivetrain.applyRequest(() -> drive
+                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))
+                        .alongWith(ScoreCommands.Stabling.groundIntakeStable())
+        );
+
+        commandXboxController.povUp().onTrue(new SequentialCommandGroup(
+                        ScoreCommands.Drive.driveToPiece()
+                                .alongWith(ScoreCommands.Intake.intakeGroundPrep())
+                                .until(() -> LimelightHelpers.getTA(Constants.Vision.LIMELIGHT_NAME) > 1.5),
+                        ScoreCommands.Drive.driveForward()
+                                .alongWith(ScoreCommands.Intake.intakeGround())
+                                .until(intakeSubsystem::hasCoral),
+                        commandSwerveDrivetrain.applyRequest(() -> drive
+                                        .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+                                        .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+                                        .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))
+                                .alongWith(ScoreCommands.Stabling.groundIntakeStable())
+                ))
                 .onFalse(commandSwerveDrivetrain.applyRequest(() -> drive
                         .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                         .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
@@ -401,7 +426,7 @@ public class RobotContainer {
 //                .onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
 //
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_K)
-//                .onTrue(new VelocityCommand(intakeSubsystem, 60. 60))
+//                .onTrue(new VelocityCommand(intakeSubsystem, 60. 60)
 //                .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
 //
 //        commandButtonPanel.button(ButtonPanelButtons.REEF_SIDE_D)
@@ -514,18 +539,19 @@ public class RobotContainer {
         // }
 
         if (LimelightHelpers.getTV(Constants.Vision.LIMELIGHT_NAME)) {
-            if (driveToPieceCurrentState.position < 5) {
-                driveToPieceRotationVelocity = turnToPiecePIdControllerVeryClose
-                        .calculate(LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME), -15);
-            } else if (driveToPieceCurrentState.position < 20) {
-                driveToPieceRotationVelocity = turnToPiecePIdControllerClose
-                        .calculate(LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME), -15);
-            } else {
-                driveToPieceRotationVelocity = turnToPiecePIdController
-                        .calculate(LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME), -15);
-            }
+            double currentX = LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME);
+//            if (Math.abs(currentX - Constants.Vision.LIMELIGHT_X_AIM) < 5) {
+//                driveToPieceRotationVelocity = turnToPiecePIdControllerVeryClose
+//                        .calculate(currentX, Constants.Vision.LIMELIGHT_X_AIM);
+//            } else if (Math.abs(currentX - Constants.Vision.LIMELIGHT_X_AIM) < 15) {
+//                driveToPieceRotationVelocity = turnToPiecePIdControllerClose
+//                        .calculate(currentX, Constants.Vision.LIMELIGHT_X_AIM);
+//            } else {
+//                driveToPieceRotationVelocity = turnToPiecePIdController
+//                        .calculate(currentX, Constants.Vision.LIMELIGHT_X_AIM);
+//            }
             driveToPieceRotationVelocity = turnToPiecePIdController
-                    .calculate(LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME), -10);
+                    .calculate(currentX, Constants.Vision.LIMELIGHT_X_AIM);
         }
 
 //        driveToPieceCurrentState.velocity = commandSwerveDrivetrain.getState().Speeds.omegaRadiansPerSecond;

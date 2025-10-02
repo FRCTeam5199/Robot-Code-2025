@@ -66,7 +66,7 @@ public final class Constants {
 
         public static final double STABLE = 0;
         public static final double ALGAE_STABLE = .17;
-        public static final double GROUND = .08;
+        public static final double GROUND = .11;
         public static final double ALGAE_GROUND = .22;
 
         public static final double L1 = 0;
@@ -101,7 +101,7 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 4;
 
         public static final double STABLE = 0;
-        public static final double GROUND = 4;
+        public static final double GROUND = 3;
         public static final double ALGAE_GROUND = 11;
 
         public static final double L1 = 16;
@@ -227,7 +227,7 @@ public final class Constants {
 
         public static final double WRIST_FF_OFFSET = Units.degreesToRadians(0);
         public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS
-                = new TrapezoidProfile.Constraints(75, 150);
+                = new TrapezoidProfile.Constraints(100, 150);
 
         public static final FeedForward WRIST_FF = new FeedForward(.16, .3, .04405673165); //.134
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
@@ -263,6 +263,7 @@ public final class Constants {
                 new Transform3d(-.2794, -.3175, .19685, new Rotation3d(0, Math.toRadians(0), 180));
 
         public static final String LIMELIGHT_NAME = "limelight";
+        public static final double LIMELIGHT_X_AIM = -29;
     }
 }
 
