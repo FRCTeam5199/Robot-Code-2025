@@ -134,6 +134,7 @@ public class RobotContainer {
      */
     public RobotContainer() {
         NamedCommands.registerCommand("ARML4", ScoreCommands.Arm.armL4());
+        NamedCommands.registerCommand("ARML2", ScoreCommands.Arm.armL2());
         NamedCommands.registerCommand("PREPL4", ScoreCommands.Score.prepL4());
         NamedCommands.registerCommand("UNWIND", ScoreCommands.Climber.slightUnwindAuton()
                 .andThen(ScoreCommands.Arm.armL4()));
@@ -141,7 +142,9 @@ public class RobotContainer {
                 .andThen(ScoreCommands.Arm.armL4())
                 .andThen(ScoreCommands.Score.scoreL4()));
         NamedCommands.registerCommand("L4", Score.scoreL4().withTimeout(3));
+        NamedCommands.registerCommand("L2", Score.scoreL2().withTimeout(3));
         NamedCommands.registerCommand("HP", ScoreCommands.Intake.intakeHP());
+        NamedCommands.registerCommand("INTAKEGROUNDPREP", ScoreCommands.Intake.intakeGroundPrep());
 
 
         NamedCommands.registerCommand("ALIGNL", ScoreCommands.Drive.autoAlignLAuton()
@@ -161,6 +164,16 @@ public class RobotContainer {
                 .andThen(new InstantCommand(() -> wristSubsystem.setPosition(Constants.WristConstants.HP))));
 
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
+
+        NamedCommands.registerCommand("GROUNDINTAKESEQUENCE",
+                new ParallelCommandGroup(
+                        ScoreCommands.Drive.driveForward(),
+                        ScoreCommands.Intake.intakeGround()
+                )
+                        .until(intakeSubsystem::hasCoral)
+                        .andThen(ScoreCommands.Stabling.groundIntakeStable())
+                        .withTimeout(2.2)
+        );
 
         Autos.initializeAutos();
 

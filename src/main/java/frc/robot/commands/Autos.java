@@ -61,6 +61,8 @@ public final class Autos {
     private static PathPlannerAuto threePieceRedBottomL4;
     private static PathPlannerAuto threePieceRedTopL4;
 
+    private static PathPlannerAuto threePieceFrontRightBlue;
+
     private static PathPlannerAuto fourPieceBlueBottomL4;
 
     private static PathPlannerAuto helper2PieceTopBlue;
@@ -112,6 +114,8 @@ public final class Autos {
         threePieceRedBottomL4 = new PathPlannerAuto("3 Piece Red Bottom L4");
         threePieceRedTopL4 = new PathPlannerAuto("3 Piece Red Top L4");
 
+        threePieceFrontRightBlue = new PathPlannerAuto("3 Piece Front Right Blue");
+
         fourPieceBlueBottomL4 = new PathPlannerAuto("4 Piece Blue Bottom L4");
 
         testBlue = new PathPlannerAuto("Test Blue");
@@ -143,6 +147,7 @@ public final class Autos {
         autonChooserBlue.addOption("3 Piece Blue Right", threePieceBlueBottomL4);
         autonChooserBlue.addOption("2 Piece Blue Left Helper", helper2PieceTopBlue);
         autonChooserBlue.addOption("Algae Blue", algaeBlue);
+        autonChooserBlue.addOption("3 Piece Blue Floor Right", threePieceFrontRightBlue);
     }
 
     public static Command driveToPose(double goalX, double goalY, double goalDegrees) {

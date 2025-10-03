@@ -237,7 +237,7 @@ public class ScoreCommands {
                     RobotContainer.commandSwerveDrivetrain);
         }
 
-//        public static Command driveToPiece() {
+        //        public static Command driveToPiece() {
 //            return new FunctionalCommand(
 //                    () -> {
 //                    },
@@ -253,24 +253,24 @@ public class ScoreCommands {
 //            );
 //        }
 //
-//        public static Command driveForward() {
-//            return new FunctionalCommand(
-//                    () -> {
-//                        goalRotation = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
-//                    },
-//                    () -> {
-//                        double rotationRate = turnToPiecePIdController2
-//                                .calculate(commandSwerveDrivetrain.getPose().getRotation().getDegrees(), goalRotation);
-//                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(0.9)
-//                                .withRotationalRate(rotationRate));
-//                    },
-//                    (interrupted) -> {
-//                        commandSwerveDrivetrain.setControl(drive);
-//                    },
-//                    () -> (false),
-//                    commandSwerveDrivetrain
-//            );
-//        }
+        public static Command driveForward() {
+            return new FunctionalCommand(
+                    () -> {
+                        goalRotation = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
+                    },
+                    () -> {
+                        double rotationRate = turnToPiecePIdController2
+                                .calculate(commandSwerveDrivetrain.getPose().getRotation().getDegrees(), goalRotation);
+                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(1.1)
+                                .withRotationalRate(rotationRate));
+                    },
+                    (interrupted) -> {
+                        commandSwerveDrivetrain.setControl(drive);
+                    },
+                    () -> (false),
+                    commandSwerveDrivetrain
+            );
+        }
 //
 //        public static Command driveForward(double goalRotation) {
 //            return new FunctionalCommand(
