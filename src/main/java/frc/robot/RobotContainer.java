@@ -4,22 +4,16 @@
 
 package frc.robot;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
@@ -28,7 +22,6 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ScoreCommands;
 import frc.robot.commands.ScoreCommands.Score;
 import frc.robot.constants.Constants;
-import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.constants.Constants.OperatorConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.controls.ButtonPanelButtons;
@@ -250,6 +243,12 @@ public class RobotContainer {
 //        commandXboxController.povRight().onTrue(new VelocityCommand(intakeSubsystem, 100, 100))
 //                .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
 
+        commandXboxController.povUp().onTrue(ScoreCommands.Drive.autoAlignCenterBackAuton()
+                .alongWith(ScoreCommands.Score.removeAlgaeLow())
+                .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(60, 60)))
+                .andThen(ScoreCommands.Drive.autoAlignCenterAuton()
+                        .until(intakeSubsystem::hasAlgae)
+                        .andThen(ScoreCommands.Drive.autoAlignCenterBackAuton())));
 
 //        commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
 //        commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
@@ -299,7 +298,7 @@ public class RobotContainer {
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armBarge()
                 .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)));
 
-        commandXboxController.povDown()
+        commandButtonPanel.button(ButtonPanelButtons.SETMODE_ALGAE)
                 .onTrue(ScoreCommands.Arm.armAlgaeHigh());
         commandButtonPanel.button(ButtonPanelButtons.SETMODE_CORAL)
                 .onTrue(ScoreCommands.Arm.armAlgaeLow());
@@ -614,6 +613,7 @@ public class RobotContainer {
         } else {
             autoAlignYOffset = -Constants.Vision.AUTO_ALIGN_Y;
         }
+        autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
     }
 
     public static void setAutoAlignOffsetRight() {
@@ -623,10 +623,17 @@ public class RobotContainer {
         } else {
             autoAlignYOffset = Constants.Vision.AUTO_ALIGN_Y;
         }
+        autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
     }
 
     public static void setAutoAlignOffsetCenter() {
         autoAlignYOffset = 0;
+        autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
+    }
+
+    public static void setAutoAlignOffsetCenterBack() {
+        autoAlignYOffset = 0;
+        autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X_BACK;
     }
 
     public void toggleAutoAlignOffset() {

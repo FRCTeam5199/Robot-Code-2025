@@ -9,6 +9,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.JSONUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -65,6 +66,8 @@ public final class Autos {
     private static PathPlannerAuto helper2PieceTopBlue;
     private static PathPlannerAuto helper2PieceBottomRed;
 
+    private static Command algaeBlue;
+
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static final CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
@@ -113,6 +116,8 @@ public final class Autos {
 
         testBlue = new PathPlannerAuto("Test Blue");
 
+        algaeBlue = algaeBlue();
+
         Shuffleboard.getTab("Autons").add("Red Autons", autonChooserRed)
                 .withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0)
                 .withSize(2, 1);
@@ -129,8 +134,6 @@ public final class Autos {
         autonChooserRed.addOption("3 Piece Red Right", threePieceRedTopL4);
         autonChooserRed.addOption("2 Piece Red Left Helper", helper2PieceBottomRed);
 
-        autonChooserRed.addOption("Algae", algaeRedHG);
-
         autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDropL1);
         autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueRightL4);
         autonChooserBlue.addOption("1 Piece Blue Left", onePieceBlueLeftL4);
@@ -139,6 +142,7 @@ public final class Autos {
         autonChooserBlue.addOption("3 Piece Blue Left", threePieceBlueTopL4);
         autonChooserBlue.addOption("3 Piece Blue Right", threePieceBlueBottomL4);
         autonChooserBlue.addOption("2 Piece Blue Left Helper", helper2PieceTopBlue);
+        autonChooserBlue.addOption("Algae Blue", algaeBlue);
     }
 
     public static Command driveToPose(double goalX, double goalY, double goalDegrees) {
@@ -282,8 +286,7 @@ public final class Autos {
                 ).alongWith(ScoreCommands.Score.score()),
                 ScoreCommands.Score.place()
                         .until(() -> !intakeSubsystem.hasCoral())
-                        .withTimeout(2),
-                ScoreCommands.Intake.intakeGroundPrep()
+                        .withTimeout(2)
         );
     }
 
@@ -328,8 +331,7 @@ public final class Autos {
                 ).alongWith(ScoreCommands.Score.score()),
                 ScoreCommands.Score.place()
                         .until(() -> !intakeSubsystem.hasCoral())
-                        .withTimeout(2),
-                ScoreCommands.Intake.intakeGroundPrep()
+                        .withTimeout(2)
         );
     }
 
@@ -337,9 +339,9 @@ public final class Autos {
         return new SequentialCommandGroup(
                 driveToPose(ScoringPosition.BARGE, 3, 3, 0)
                         .alongWith(ScoreCommands.Arm.armBarge())
-                        .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)),
+                        .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(60, 60))),
                 ScoreCommands.Score.scoreBarge(),
-                ScoreCommands.Score.place()
+                new InstantCommand(() -> intakeSubsystem.setIntakeMotors(-100, -100))
         );
     }
 
@@ -347,13 +349,19 @@ public final class Autos {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> commandSwerveDrivetrain
                         .resetPose(Constants.Vision.ALGAE_BLUE_POSE)),
+                new InstantCommand(() -> RobotContainer.setState(State.L4)),
                 autoScore(ScoringPosition.REEF_SIDE_G),
+                ScoreCommands.Drive.autoAlignCenterBackAuton()
+                        .alongWith(ScoreCommands.Score.removeAlgaeLow())
+                        .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(60, 60))),
                 ScoreCommands.Drive.autoAlignCenterAuton()
-                        .alongWith(ScoreCommands.Score.removeAlgaeLow()),
+                        .until(intakeSubsystem::hasAlgae),
                 autoScoreBlueBarge(),
-                driveToPose(ScoringPosition.REEF_SIDE_IJ),
-                ScoreCommands.Drive.autoAlignCenterAuton()
+                driveToPose(ScoringPosition.REEF_SIDE_IJ)
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
+                ScoreCommands.Drive.autoAlignCenterAuton()
+                        .until(intakeSubsystem::hasAlgae)
+                        .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(60, 60))),
                 autoScoreBlueBarge()
 
         );

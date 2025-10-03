@@ -102,7 +102,41 @@ public class ScoreCommands {
         public static Command autoAlignCenterAuton() {
             return new FunctionalCommand(
                     () -> {
-                        RobotContainer.setAutoAlignOffsetRight();
+                        RobotContainer.setAutoAlignOffsetCenter();
+
+                        commandSwerveDrivetrain.resetPose(
+                                new Pose2d(
+                                        new Translation2d(commandSwerveDrivetrain.getPose().getX(),
+                                                commandSwerveDrivetrain.getPose().getY()),
+                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                                .getClosestTagID())))));
+                    },
+                    () ->
+                            RobotContainer.commandSwerveDrivetrain.setControl(
+                                    drive.withVelocityX(RobotContainer.xVelocity)
+                                            .withVelocityY(yVelocity)
+                                            .withRotationalRate(rotationVelocity)),
+                    (interrupted) -> {
+                        RobotContainer.commandSwerveDrivetrain
+                                .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
+                                        .getPigeon2().getRotation2d().getDegrees() +
+                                        (DriverStation.getAlliance().isPresent()
+                                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                                                ? 0 : 180))));
+
+                        RobotContainer.commandSwerveDrivetrain.setControl(
+                                drive.withVelocityX(0)
+                                        .withVelocityY(0)
+                                        .withRotationalRate(0));
+                    },
+                    RobotContainer::aligned,
+                    RobotContainer.commandSwerveDrivetrain);
+        }
+
+        public static Command autoAlignCenterBackAuton() {
+            return new FunctionalCommand(
+                    () -> {
+                        RobotContainer.setAutoAlignOffsetCenterBack();
 
                         commandSwerveDrivetrain.resetPose(
                                 new Pose2d(

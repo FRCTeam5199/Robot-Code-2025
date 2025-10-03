@@ -12,6 +12,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
     public static IntakeSubsystem intakeSubsystem;
     public LaserCan intakeSensor;
     private boolean hasCoral;
+    private double currentSpike = 0;
 
     public boolean isScoringAlgae() {
         return isScoringAlgae;
@@ -58,6 +59,9 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
     public void periodic() {
         super.periodic();
+
+        if (getStatorCurrent() < 0) currentSpike++;
+        else currentSpike = 0;
     }
 
     public static IntakeSubsystem getInstance() {
@@ -69,6 +73,15 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
     public boolean hasCoral() {
         return intakeSensor.getMeasurement().distance_mm < 5;
+    }
+
+    public boolean hasAlgae() {
+        return getMotorVelocity() < 0;
+    }
+
+    public void setIntakeMotors(double rps, double secondaryRPS) {
+        intakeSubsystem.setVelocity(rps);
+        intakeSubsystem.setSecondaryVelocity(secondaryRPS);
     }
 
     public boolean isCurrentSpiked() {
