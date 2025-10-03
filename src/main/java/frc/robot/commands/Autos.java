@@ -23,6 +23,7 @@ import frc.robot.constants.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.ScoringPosition;
 import frc.robot.utility.State;
 
@@ -63,8 +64,6 @@ public final class Autos {
 
     private static PathPlannerAuto helper2PieceTopBlue;
     private static PathPlannerAuto helper2PieceBottomRed;
-
-    private static SequentialCommandGroup algaeRedHG;
 
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
@@ -111,11 +110,6 @@ public final class Autos {
         threePieceRedTopL4 = new PathPlannerAuto("3 Piece Red Top L4");
 
         fourPieceBlueBottomL4 = new PathPlannerAuto("4 Piece Blue Bottom L4");
-
-        // algaeBlueHG = new SequentialCommandGroup(
-        //         new InstantCommand(() -> driveToPose(ScoringPosition.REEF_SIDE_GH)),
-        //         new InstantCommand(() -> driveForward());
-        // );
 
         testBlue = new PathPlannerAuto("Test Blue");
 
@@ -181,24 +175,24 @@ public final class Autos {
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
-                                new PathConstraints(2d, 2d,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                new PathConstraints(5d, 5d,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getRedPose(),
-                                new PathConstraints(2d, 2d,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                new PathConstraints(5d, 5d,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 ),
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
-                                new PathConstraints(2d, 2d,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                new PathConstraints(5d, 5d,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getRedPose(),
-                                new PathConstraints(2d, 2d,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                new PathConstraints(5d, 5d,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 )
@@ -287,9 +281,9 @@ public final class Autos {
                         scoringPosition::isRightSide
                 ).alongWith(ScoreCommands.Score.score()),
                 ScoreCommands.Score.place()
-                        .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
+                        .until(() -> !intakeSubsystem.hasCoral())
                         .withTimeout(2),
-                ScoreCommands.Intake.intakeHP()
+                ScoreCommands.Intake.intakeGroundPrep()
         );
     }
 
@@ -297,18 +291,18 @@ public final class Autos {
         return new SequentialCommandGroup(
                 new SelectCommand<>(
                         Map.ofEntries(
-                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPose(ScoringPosition.REEF_SIDE_A, 5d, 5d, 1d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPose(ScoringPosition.REEF_SIDE_B, 5d, 5d, 1d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPose(ScoringPosition.REEF_SIDE_C, 5d, 5d, 1d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPose(ScoringPosition.REEF_SIDE_D, 5d, 5d, 1d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPose(ScoringPosition.REEF_SIDE_E, 5d, 5d, 1d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPose(ScoringPosition.REEF_SIDE_F, 5d, 5d, 1d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPose(ScoringPosition.REEF_SIDE_G, 5d, 5d, 1d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPose(ScoringPosition.REEF_SIDE_H, 5d, 5d, 1d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPose(ScoringPosition.REEF_SIDE_I, 5d, 5d, 1d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPose(ScoringPosition.REEF_SIDE_J, 5d, 5d, 1d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPose(ScoringPosition.REEF_SIDE_K, 5d, 5d, 1d)),
-                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L, 5d, 5d, 1d))
+                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPose(ScoringPosition.REEF_SIDE_A)),
+                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPose(ScoringPosition.REEF_SIDE_B)),
+                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPose(ScoringPosition.REEF_SIDE_C)),
+                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPose(ScoringPosition.REEF_SIDE_D)),
+                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPose(ScoringPosition.REEF_SIDE_E)),
+                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPose(ScoringPosition.REEF_SIDE_F)),
+                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPose(ScoringPosition.REEF_SIDE_G)),
+                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPose(ScoringPosition.REEF_SIDE_H)),
+                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPose(ScoringPosition.REEF_SIDE_I)),
+                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPose(ScoringPosition.REEF_SIDE_J)),
+                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPose(ScoringPosition.REEF_SIDE_K)),
+                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L))
                         ),
                         RobotContainer::getCurrentScoringPosition
                 ).alongWith(ScoreCommands.Arm.armStable()),
@@ -318,9 +312,9 @@ public final class Autos {
                         () -> RobotContainer.getCurrentScoringPosition().isRightSide()
                 ).alongWith(ScoreCommands.Score.score()),
                 ScoreCommands.Score.place()
-                        .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
+                        .until(() -> !intakeSubsystem.hasCoral())
                         .withTimeout(2),
-                ScoreCommands.Intake.intakeHP()
+                ScoreCommands.Intake.intakeGroundPrep()
         );
     }
 
@@ -333,9 +327,35 @@ public final class Autos {
                         scoringPosition::isRightSide
                 ).alongWith(ScoreCommands.Score.score()),
                 ScoreCommands.Score.place()
-                        .until(() -> intakeSubsystem.isAboveSpeed() && !intakeSubsystem.hasCoral())
+                        .until(() -> !intakeSubsystem.hasCoral())
                         .withTimeout(2),
-                ScoreCommands.Intake.intakeHP()
+                ScoreCommands.Intake.intakeGroundPrep()
+        );
+    }
+
+    public static Command autoScoreBlueBarge() {
+        return new SequentialCommandGroup(
+                driveToPose(ScoringPosition.BARGE, 3, 3, 0)
+                        .alongWith(ScoreCommands.Arm.armBarge())
+                        .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)),
+                ScoreCommands.Score.scoreBarge(),
+                ScoreCommands.Score.place()
+        );
+    }
+
+    public static Command algaeBlue() {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> commandSwerveDrivetrain
+                        .resetPose(Constants.Vision.ALGAE_BLUE_POSE)),
+                autoScore(ScoringPosition.REEF_SIDE_G),
+                ScoreCommands.Drive.autoAlignCenterAuton()
+                        .alongWith(ScoreCommands.Score.removeAlgaeLow()),
+                autoScoreBlueBarge(),
+                driveToPose(ScoringPosition.REEF_SIDE_IJ),
+                ScoreCommands.Drive.autoAlignCenterAuton()
+                        .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
+                autoScoreBlueBarge()
+
         );
     }
 }

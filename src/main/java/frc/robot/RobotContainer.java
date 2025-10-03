@@ -78,15 +78,15 @@ public class RobotContainer {
 
     public static final ProfiledPIDController turnPIDController = new ProfiledPIDController(0.175, 0.0, 0.0, new TrapezoidProfile.Constraints(100, 200));
 
-    public static final PIDController turnToPiecePIdController = new PIDController(.2, 0.0, 0.02);
+//    public static final PIDController turnToPiecePIdController = new PIDController(.2, 0.0, 0.02);
 
     public static double xVelocity = 0;
     public static double yVelocity = 0;
     public static double rotationVelocity = 0;
     public static double driveToPieceRotationVelocity;
 
-    public static double autoAlignXOffset = 0.04;
-    public static double autoAlignYOffset = -.15;
+    public static double autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
+    public static double autoAlignYOffset = Constants.Vision.AUTO_ALIGN_Y;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -254,49 +254,24 @@ public class RobotContainer {
 //        commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
 //        commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
 
-        new SequentialCommandGroup(
-                ScoreCommands.Drive.driveToPiece()
-                        .alongWith(ScoreCommands.Intake.intakeGroundPrep())
-                        .until(() -> LimelightHelpers.getTA(Constants.Vision.LIMELIGHT_NAME) > 8),
-                ScoreCommands.Drive.driveForward()
-                        .alongWith(ScoreCommands.Intake.intakeGround())
-                        .until(intakeSubsystem::hasCoral),
-                commandSwerveDrivetrain.applyRequest(() -> drive
-                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
-                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
-                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))
-                        .alongWith(ScoreCommands.Stabling.groundIntakeStable())
-        );
-
-        commandXboxController.povUp().onTrue(new SequentialCommandGroup(
-                        ScoreCommands.Drive.driveToPiece()
-                                .alongWith(ScoreCommands.Intake.intakeGroundPrep())
-                                .until(() -> LimelightHelpers.getTY(Constants.Vision.LIMELIGHT_NAME) < 13),
-                        ScoreCommands.Drive.driveForward()
-                                .alongWith(ScoreCommands.Intake.intakeGround())
-                                .until(intakeSubsystem::hasCoral),
-                        commandSwerveDrivetrain.applyRequest(() -> drive
-                                        .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
-                                        .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
-                                        .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))
-                                .alongWith(ScoreCommands.Stabling.groundIntakeStable())
-                ))
-                .onFalse(commandSwerveDrivetrain.applyRequest(() -> drive
-                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
-                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
-                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))
-                        .alongWith(ScoreCommands.Stabling.groundIntakeStable()));
-//        commandXboxController.povUp().onTrue(ScoreCommands.Drive.driveToPiece().alongWith(
-//                        ScoreCommands.Intake.intakeGround()
-//                                .until(intakeSubsystem::hasCoral)
-//                                .andThen(ScoreCommands.Stabling.groundIntakeStable())
+//        commandXboxController.povUp().onTrue(new SequentialCommandGroup(
+//                        ScoreCommands.Drive.driveToPiece()
+//                                .alongWith(ScoreCommands.Intake.intakeGroundPrep())
+//                                .until(() -> LimelightHelpers.getTY(Constants.Vision.LIMELIGHT_NAME) < 13),
+//                        ScoreCommands.Drive.driveForward()
+//                                .alongWith(ScoreCommands.Intake.intakeGround())
+//                                .until(intakeSubsystem::hasCoral),
+//                        commandSwerveDrivetrain.applyRequest(() -> drive
+//                                        .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+//                                        .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+//                                        .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))
+//                                .alongWith(ScoreCommands.Stabling.groundIntakeStable())
 //                ))
 //                .onFalse(commandSwerveDrivetrain.applyRequest(() -> drive
 //                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
 //                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
 //                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))
-//                        .alongWith(ScoreCommands.Stabling.groundIntakeStable()
-//                        ));
+//                        .alongWith(ScoreCommands.Stabling.groundIntakeStable()));
 
         // commandXboxController.povUp().onTrue(new InstantCommand(() -> climberSubsystem.setPercent(1)))
         //         .onFalse(new InstantCommand(() -> climberSubsystem.setPercent(0)));
@@ -492,7 +467,7 @@ public class RobotContainer {
     }
 
     public static void periodic() {
-        
+
         if (!timer.isRunning()) timer.start();
         if (autoAlignXOffset > 0 && DriverStation.getAlliance().isPresent() &&
                 DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
@@ -540,42 +515,15 @@ public class RobotContainer {
         //                     .withVelocityY(pitch));
         // }
 
-        if (LimelightHelpers.getTV(Constants.Vision.LIMELIGHT_NAME)) {
-            double currentX = LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME);
-//            if (Math.abs(currentX - Constants.Vision.LIMELIGHT_X_AIM) < 5) {
-//                driveToPieceRotationVelocity = turnToPiecePIdControllerVeryClose
-//                        .calculate(currentX, Constants.Vision.LIMELIGHT_X_AIM);
-//            } else if (Math.abs(currentX - Constants.Vision.LIMELIGHT_X_AIM) < 15) {
-//                driveToPieceRotationVelocity = turnToPiecePIdControllerClose
-//                        .calculate(currentX, Constants.Vision.LIMELIGHT_X_AIM);
-//            } else {
-//                driveToPieceRotationVelocity = turnToPiecePIdController
-//                        .calculate(currentX, Constants.Vision.LIMELIGHT_X_AIM);
-//            }
-            driveToPieceRotationVelocity = turnToPiecePIdController
-                    .calculate(currentX, Constants.Vision.LIMELIGHT_X_AIM);
-        }
+//        if (LimelightHelpers.getTV(Constants.Vision.LIMELIGHT_NAME)) {
+//            double currentX = LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME);
+//            driveToPieceRotationVelocity = turnToPiecePIdController
+//                    .calculate(currentX, Constants.Vision.LIMELIGHT_X_AIM);
+//        }
 
 //        driveToPieceCurrentState.velocity = commandSwerveDrivetrain.getState().Speeds.omegaRadiansPerSecond;
 //        if (LimelightHelpers.getTV(Constants.Vision.LIMELIGHT_NAME)) {
 //            driveToPieceCurrentState.position = LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME);
-//        }
-//
-//        driveToPieceGoalState.position = 0;
-//        driveToPieceGoalState.velocity = 0;
-//
-//        if (driveToPieceCurrentState.position < 5) {
-//            driveToPieceRotationVelocity = turnToPiecePIdControllerVeryClose
-//                    .calculate(driveToPieceCurrentState.position,
-//                            driveToPieceRotation.calculate(.02, driveToPieceCurrentState, driveToPieceGoalState).position);
-//        } else if (driveToPieceCurrentState.position < 20) {
-//            driveToPieceRotationVelocity = turnToPiecePIdControllerClose
-//                    .calculate(driveToPieceCurrentState.position,
-//                            driveToPieceRotation.calculate(.02, driveToPieceCurrentState, driveToPieceGoalState).position);
-//        } else {
-//            driveToPieceRotationVelocity = turnToPiecePIdController
-//                    .calculate(driveToPieceCurrentState.position,
-//                            driveToPieceRotation.calculate(.02, driveToPieceCurrentState, driveToPieceGoalState).position);
 //        }
 
 //        System.out.println("Rotation velocity: " + driveToPieceRotationVelocity);
@@ -662,27 +610,23 @@ public class RobotContainer {
     public static void setAutoAlignOffsetLeft() {
         if (DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) {
-            if (autoAlignYOffset < 0) {
-                autoAlignYOffset = -autoAlignYOffset;
-            }
+            autoAlignYOffset = Constants.Vision.AUTO_ALIGN_Y;
         } else {
-            if (autoAlignYOffset > 0) {
-                autoAlignYOffset = -autoAlignYOffset;
-            }
+            autoAlignYOffset = -Constants.Vision.AUTO_ALIGN_Y;
         }
     }
 
     public static void setAutoAlignOffsetRight() {
         if (DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) {
-            if (autoAlignYOffset > 0) {
-                autoAlignYOffset = -autoAlignYOffset;
-            }
+            autoAlignYOffset = -Constants.Vision.AUTO_ALIGN_Y;
         } else {
-            if (autoAlignYOffset < 0) {
-                autoAlignYOffset = -autoAlignYOffset;
-            }
+            autoAlignYOffset = Constants.Vision.AUTO_ALIGN_Y;
         }
+    }
+
+    public static void setAutoAlignOffsetCenter() {
+        autoAlignYOffset = 0;
     }
 
     public void toggleAutoAlignOffset() {

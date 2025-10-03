@@ -99,6 +99,40 @@ public class ScoreCommands {
                             || RobotContainer.getState() == State.L4));
         }
 
+        public static Command autoAlignCenterAuton() {
+            return new FunctionalCommand(
+                    () -> {
+                        RobotContainer.setAutoAlignOffsetRight();
+
+                        commandSwerveDrivetrain.resetPose(
+                                new Pose2d(
+                                        new Translation2d(commandSwerveDrivetrain.getPose().getX(),
+                                                commandSwerveDrivetrain.getPose().getY()),
+                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                                .getClosestTagID())))));
+                    },
+                    () ->
+                            RobotContainer.commandSwerveDrivetrain.setControl(
+                                    drive.withVelocityX(RobotContainer.xVelocity)
+                                            .withVelocityY(yVelocity)
+                                            .withRotationalRate(rotationVelocity)),
+                    (interrupted) -> {
+                        RobotContainer.commandSwerveDrivetrain
+                                .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
+                                        .getPigeon2().getRotation2d().getDegrees() +
+                                        (DriverStation.getAlliance().isPresent()
+                                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                                                ? 0 : 180))));
+
+                        RobotContainer.commandSwerveDrivetrain.setControl(
+                                drive.withVelocityX(0)
+                                        .withVelocityY(0)
+                                        .withRotationalRate(0));
+                    },
+                    RobotContainer::aligned,
+                    RobotContainer.commandSwerveDrivetrain);
+        }
+
         public static Command autoAlignLAuton() {
             return new FunctionalCommand(
                     () -> {
@@ -169,57 +203,58 @@ public class ScoreCommands {
                     RobotContainer.commandSwerveDrivetrain);
         }
 
-        public static Command driveToPiece() {
-            return new FunctionalCommand(
-                    () -> {
-                    },
-                    () -> {
-                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(1.2)
-                                .withRotationalRate(driveToPieceRotationVelocity));
-                    },
-                    (interrupted) -> {
-                        commandSwerveDrivetrain.setControl(drive);
-                    },
-                    () -> (false),
-                    commandSwerveDrivetrain
-            );
-        }
-
-        public static Command driveForward() {
-            return new FunctionalCommand(
-                    () -> {
-                        goalRotation = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
-                    },
-                    () -> {
-                        double rotationRate = turnToPiecePIdController2
-                                .calculate(commandSwerveDrivetrain.getPose().getRotation().getDegrees(), goalRotation);
-                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(0.9)
-                                .withRotationalRate(rotationRate));
-                    },
-                    (interrupted) -> {
-                        commandSwerveDrivetrain.setControl(drive);
-                    },
-                    () -> (false),
-                    commandSwerveDrivetrain
-            );
-        }
-
-        public static Command driveForward(double goalRotation) {
-                return new FunctionalCommand(
-                        () -> {},
-                        () -> {
-                            double rotationRate = turnToPiecePIdController2
-                                    .calculate(commandSwerveDrivetrain.getPose().getRotation().getDegrees(), goalRotation);
-                            commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(1)
-                                    .withRotationalRate(rotationRate));
-                        },
-                        (interrupted) -> {
-                            commandSwerveDrivetrain.setControl(drive);
-                        },
-                        () -> (false),
-                        commandSwerveDrivetrain
-                );
-            }
+//        public static Command driveToPiece() {
+//            return new FunctionalCommand(
+//                    () -> {
+//                    },
+//                    () -> {
+//                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(1.2)
+//                                .withRotationalRate(driveToPieceRotationVelocity));
+//                    },
+//                    (interrupted) -> {
+//                        commandSwerveDrivetrain.setControl(drive);
+//                    },
+//                    () -> (false),
+//                    commandSwerveDrivetrain
+//            );
+//        }
+//
+//        public static Command driveForward() {
+//            return new FunctionalCommand(
+//                    () -> {
+//                        goalRotation = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
+//                    },
+//                    () -> {
+//                        double rotationRate = turnToPiecePIdController2
+//                                .calculate(commandSwerveDrivetrain.getPose().getRotation().getDegrees(), goalRotation);
+//                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(0.9)
+//                                .withRotationalRate(rotationRate));
+//                    },
+//                    (interrupted) -> {
+//                        commandSwerveDrivetrain.setControl(drive);
+//                    },
+//                    () -> (false),
+//                    commandSwerveDrivetrain
+//            );
+//        }
+//
+//        public static Command driveForward(double goalRotation) {
+//            return new FunctionalCommand(
+//                    () -> {
+//                    },
+//                    () -> {
+//                        double rotationRate = turnToPiecePIdController2
+//                                .calculate(commandSwerveDrivetrain.getPose().getRotation().getDegrees(), goalRotation);
+//                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(1)
+//                                .withRotationalRate(rotationRate));
+//                    },
+//                    (interrupted) -> {
+//                        commandSwerveDrivetrain.setControl(drive);
+//                    },
+//                    () -> (false),
+//                    commandSwerveDrivetrain
+//            );
+//        }
 
         public static Command autoMoveForwardBottom() {
             return new FunctionalCommand(

@@ -10,6 +10,8 @@ import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
@@ -264,6 +266,12 @@ public final class Constants {
 
         public static final String LIMELIGHT_NAME = "limelight";
         public static final double LIMELIGHT_X_AIM = -29;
+
+        public static final double AUTO_ALIGN_X = 0.04;
+        public static final double AUTO_ALIGN_Y = .15;
+
+        public static final Pose2d ALGAE_BLUE_POSE
+                = new Pose2d(7.265, 3.851, new Rotation2d(Math.toRadians(180)));
     }
 }
 

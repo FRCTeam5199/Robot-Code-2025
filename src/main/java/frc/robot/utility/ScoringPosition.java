@@ -24,7 +24,9 @@ public enum ScoringPosition {
     REEF_SIDE_EF(new Pose2d(5.258, 2.615, new Rotation2d(Math.toRadians(120))), new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)))),
     REEF_SIDE_GH(new Pose2d(6.101, 4.009, new Rotation2d(Math.toRadians(180))), new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)))),
     REEF_SIDE_IJ(new Pose2d(5.279, 5.421, new Rotation2d(Math.toRadians(240))), new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)))),
-    REEF_SIDE_KL(new Pose2d(3.687, 5.502, new Rotation2d(Math.toRadians(300))), new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
+    REEF_SIDE_KL(new Pose2d(3.687, 5.502, new Rotation2d(Math.toRadians(300))), new Pose2d(0, 0, new Rotation2d(Math.toRadians(0)))),
+
+    BARGE(new Pose2d(7.13, 5.6, new Rotation2d(Math.toRadians(0))), new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))));
 
     final Pose2d bluePose;
     final Pose2d redPose;
