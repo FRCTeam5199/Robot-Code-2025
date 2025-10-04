@@ -62,6 +62,7 @@ public final class Autos {
     private static PathPlannerAuto threePieceRedTopL4;
 
     private static PathPlannerAuto threePieceFrontRightBlue;
+    private static PathPlannerAuto threePieceFrontLeftBlue;
 
     private static PathPlannerAuto fourPieceBlueBottomL4;
 
@@ -115,6 +116,7 @@ public final class Autos {
         threePieceRedTopL4 = new PathPlannerAuto("3 Piece Red Top L4");
 
         threePieceFrontRightBlue = new PathPlannerAuto("3 Piece Front Right Blue");
+        threePieceFrontLeftBlue = new PathPlannerAuto("3 Piece Front Left Blue");
 
         fourPieceBlueBottomL4 = new PathPlannerAuto("4 Piece Blue Bottom L4");
 
@@ -148,6 +150,7 @@ public final class Autos {
         autonChooserBlue.addOption("2 Piece Blue Left Helper", helper2PieceTopBlue);
         autonChooserBlue.addOption("Algae Blue", algaeBlue);
         autonChooserBlue.addOption("3 Piece Blue Floor Right", threePieceFrontRightBlue);
+        autonChooserBlue.addOption("3 Piece Blue Floor Left", threePieceFrontLeftBlue);
     }
 
     public static Command driveToPose(double goalX, double goalY, double goalDegrees) {
@@ -394,6 +397,17 @@ public final class Autos {
                 new ConditionalCommand(
                         new PathPlannerAuto("3 Piece Front Right Blue Part 2"),
                         new PathPlannerAuto("3 Piece Front Right Blue Part 2 Fail"),
+                        intakeSubsystem::hasCoral
+                )
+        );
+    }
+
+    public static Command threePieceFrontLeftBlue() {
+        return new SequentialCommandGroup(
+                new PathPlannerAuto("3 Piece Front Left Blue Part 1"),
+                new ConditionalCommand(
+                        new PathPlannerAuto("3 Piece Front Left Blue Part 2"),
+                        new PathPlannerAuto("3 Piece Front Left Blue Part 2 Fail"),
                         intakeSubsystem::hasCoral
                 )
         );

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.13,
-        "y": 0.59
+        "x": 1.354610655737705,
+        "y": 3.9590676229508195
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4335040983606557,
-        "y": 0.5406454918032786
+        "x": 1.6010876344596736,
+        "y": 4.049512483652789
       },
       "isLocked": false,
       "linkedName": null
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 2.901024590163934,
-        "y": 3.635
+        "y": 3.9590676229508195
       },
       "prevControl": {
-        "x": 2.8778639154802947,
-        "y": 1.4351219162989506
+        "x": 1.9678084747601794,
+        "y": 4.088609940121518
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,13 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "UNWIND",
+      "name": "ARML4",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "UNWIND"
+          "name": "ARML4"
         }
       }
     }
@@ -59,8 +59,8 @@
   "reversed": false,
   "folder": "3 Piece Front Blue Paths",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 0.0,
+    "rotation": 90.0
   },
   "useDefaultConstraints": false
 }

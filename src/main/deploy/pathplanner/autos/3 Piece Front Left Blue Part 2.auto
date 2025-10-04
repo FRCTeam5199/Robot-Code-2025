@@ -1,0 +1,93 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Front Left Floor to B4"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNL"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Front B4 to Middle Floor"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GROUNDINTAKESEQUENCE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Front Middle Floor to B2"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "L2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNR"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OUTTAKE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "STABLE"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "3 Piece Front",
+  "choreoAuto": false
+}
