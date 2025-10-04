@@ -76,12 +76,6 @@ public class AprilTagSubsystem extends SubsystemBase {
 
         backCamera = new PhotonCamera(Vision.BACK_CAMERA_NAME);
 
-        try {
-            kTagLayout = new AprilTagFieldLayout(Filesystem.getDeployDirectory()
-                    + "/apriltagLayout.json");
-        } catch (Exception ignored) {
-        }
-
         backPhotonEstimator =
                 new PhotonPoseEstimator(kTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Vision.BACK_CAMERA_POSE);
         backPhotonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);

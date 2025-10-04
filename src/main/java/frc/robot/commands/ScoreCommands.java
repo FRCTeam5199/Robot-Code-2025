@@ -130,7 +130,8 @@ public class ScoreCommands {
                                         .withRotationalRate(0));
                     },
                     RobotContainer::aligned,
-                    RobotContainer.commandSwerveDrivetrain);
+                    RobotContainer.commandSwerveDrivetrain
+            ).onlyIf(RobotContainer::isUseAutoAlign);
         }
 
         public static Command autoAlignCenterBackAuton() {
@@ -164,7 +165,8 @@ public class ScoreCommands {
                                         .withRotationalRate(0));
                     },
                     RobotContainer::aligned,
-                    RobotContainer.commandSwerveDrivetrain);
+                    RobotContainer.commandSwerveDrivetrain
+            ).onlyIf(RobotContainer::isUseAutoAlign);
         }
 
         public static Command autoAlignLAuton() {
@@ -200,7 +202,8 @@ public class ScoreCommands {
                                         .withRotationalRate(0));
                     },
                     RobotContainer::aligned,
-                    RobotContainer.commandSwerveDrivetrain);
+                    RobotContainer.commandSwerveDrivetrain
+            ).onlyIf(RobotContainer::isUseAutoAlign);
         }
 
         public static Command autoAlignRAuton() {
@@ -234,7 +237,8 @@ public class ScoreCommands {
                                         .withRotationalRate(0));
                     },
                     RobotContainer::aligned,
-                    RobotContainer.commandSwerveDrivetrain);
+                    RobotContainer.commandSwerveDrivetrain
+            ).onlyIf(RobotContainer::isUseAutoAlign);
         }
 
         //        public static Command driveToPiece() {

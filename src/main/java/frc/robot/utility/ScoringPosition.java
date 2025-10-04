@@ -5,18 +5,19 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 public enum ScoringPosition {
     //Coral Setpoints
-    REEF_SIDE_A(new Pose2d(2.882, 4.176, new Rotation2d(Math.toRadians(0))), new Pose2d(14.650, 3.859, new Rotation2d(Math.toRadians(180))), false),
-    REEF_SIDE_B(new Pose2d(2.882, 3.834, new Rotation2d(Math.toRadians(0))), new Pose2d(14.650, 4.176, new Rotation2d(Math.toRadians(180))), true),
-    REEF_SIDE_C(new Pose2d(3.511, 2.721, new Rotation2d(Math.toRadians(60))), new Pose2d(13.976, 5.339, new Rotation2d(Math.toRadians(240))), false),
-    REEF_SIDE_D(new Pose2d(3.776, 2.592, new Rotation2d(Math.toRadians(60))), new Pose2d(13.699, 5.519, new Rotation2d(Math.toRadians(240))), true),
-    REEF_SIDE_E(new Pose2d(5.113, 2.525, new Rotation2d(Math.toRadians(120))), new Pose2d(12.440, 5.546, new Rotation2d(Math.toRadians(300))), false),
-    REEF_SIDE_F(new Pose2d(5.403, 2.704, new Rotation2d(Math.toRadians(120))), new Pose2d(12.108, 5.325, new Rotation2d(Math.toRadians(300))), true),
-    REEF_SIDE_G(new Pose2d(6.101, 3.850, new Rotation2d(Math.toRadians(180))), new Pose2d(11.450, 4.171, new Rotation2d(Math.toRadians(0))), false),
-    REEF_SIDE_H(new Pose2d(6.101, 4.168, new Rotation2d(Math.toRadians(180))), new Pose2d(11.450, 3.887, new Rotation2d(Math.toRadians(0))), true),
-    REEF_SIDE_I(new Pose2d(5.422, 5.339, new Rotation2d(Math.toRadians(240))), new Pose2d(12.136, 2.697, new Rotation2d(Math.toRadians(60))), false),
-    REEF_SIDE_J(new Pose2d(5.135, 5.503, new Rotation2d(Math.toRadians(240))), new Pose2d(12.413, 2.531, new Rotation2d(Math.toRadians(60))), true),
-    REEF_SIDE_K(new Pose2d(3.802, 5.500, new Rotation2d(Math.toRadians(300))), new Pose2d(13.685, 2.504, new Rotation2d(Math.toRadians(120))), false),
-    REEF_SIDE_L(new Pose2d(3.571, 5.503, new Rotation2d(Math.toRadians(300))), new Pose2d(13.990, 2.697, new Rotation2d(Math.toRadians(120))), true),
+    //TODO: change red side to middle
+    REEF_SIDE_A(new Pose2d(2.882, 4.005, new Rotation2d(Math.toRadians(0))), new Pose2d(14.650, 3.859, new Rotation2d(Math.toRadians(180))), false),
+    REEF_SIDE_B(new Pose2d(2.882, 4.005, new Rotation2d(Math.toRadians(0))), new Pose2d(14.650, 4.176, new Rotation2d(Math.toRadians(180))), true),
+    REEF_SIDE_C(new Pose2d(3.644, 2.657, new Rotation2d(Math.toRadians(60))), new Pose2d(13.976, 5.339, new Rotation2d(Math.toRadians(240))), false),
+    REEF_SIDE_D(new Pose2d(3.644, 2.657, new Rotation2d(Math.toRadians(60))), new Pose2d(13.699, 5.519, new Rotation2d(Math.toRadians(240))), true),
+    REEF_SIDE_E(new Pose2d(5.258, 2.615, new Rotation2d(Math.toRadians(120))), new Pose2d(12.440, 5.546, new Rotation2d(Math.toRadians(300))), false),
+    REEF_SIDE_F(new Pose2d(5.258, 2.615, new Rotation2d(Math.toRadians(120))), new Pose2d(12.108, 5.325, new Rotation2d(Math.toRadians(300))), true),
+    REEF_SIDE_G(new Pose2d(6.101, 4.009, new Rotation2d(Math.toRadians(180))), new Pose2d(11.450, 4.171, new Rotation2d(Math.toRadians(0))), false),
+    REEF_SIDE_H(new Pose2d(6.101, 4.009, new Rotation2d(Math.toRadians(180))), new Pose2d(11.450, 3.887, new Rotation2d(Math.toRadians(0))), true),
+    REEF_SIDE_I(new Pose2d(5.279, 5.421, new Rotation2d(Math.toRadians(240))), new Pose2d(12.136, 2.697, new Rotation2d(Math.toRadians(60))), false),
+    REEF_SIDE_J(new Pose2d(5.279, 5.421, new Rotation2d(Math.toRadians(240))), new Pose2d(12.413, 2.531, new Rotation2d(Math.toRadians(60))), true),
+    REEF_SIDE_K(new Pose2d(3.687, 5.502, new Rotation2d(Math.toRadians(300))), new Pose2d(13.685, 2.504, new Rotation2d(Math.toRadians(120))), false),
+    REEF_SIDE_L(new Pose2d(3.687, 5.502, new Rotation2d(Math.toRadians(300))), new Pose2d(13.990, 2.697, new Rotation2d(Math.toRadians(120))), true),
 
     //Algae Setpoints
     REEF_SIDE_AB(new Pose2d(2.882, 4.005, new Rotation2d(Math.toRadians(0))), new Pose2d(13.650, 4.075, new Rotation2d(Math.toRadians(180)))),

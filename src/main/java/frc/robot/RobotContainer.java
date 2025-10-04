@@ -208,14 +208,27 @@ public class RobotContainer {
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))));
 
-
-        commandXboxController.rightTrigger().onTrue(ScoreCommands.Score.score()
-                        .alongWith(ScoreCommands.Drive.autoAlignTeleop())
-                        .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)
-                                .onlyIf(() -> state == State.BARGE
-                                        || state == State.PROCESSOR
-                                        || state == State.ALGAE_LOW
-                                        || state == State.ALGAE_HIGH)))
+        commandXboxController.rightTrigger().onTrue(new ConditionalCommand(
+                        new ConditionalCommand(
+                                ScoreCommands.Score.score()
+                                        .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(60, 60)))
+                                        .alongWith(ScoreCommands.Drive.autoAlignCenterBackAuton())
+                                        .andThen(ScoreCommands.Drive.autoAlignCenterAuton()),
+                                ScoreCommands.Score.score()
+                                        .alongWith(new VelocityCommand(intakeSubsystem, 60, 60))
+                                        .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
+                                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+                                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+                                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))),
+                                () -> state == State.ALGAE_LOW || state == State.ALGAE_HIGH
+                        ),
+                        ScoreCommands.Score.score()
+                                .alongWith(ScoreCommands.Drive.autoAlignTeleop()),
+                        () -> (state == State.BARGE
+                                || state == State.PROCESSOR
+                                || state == State.ALGAE_LOW
+                                || state == State.ALGAE_HIGH)
+                ))
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)
                                 .onlyIf(() -> state == State.ALGAE_LOW || state == State.ALGAE_HIGH))
@@ -231,6 +244,7 @@ public class RobotContainer {
                                         .until(intakeSubsystem::hasCoral)
                                         .andThen(ScoreCommands.Stabling.groundIntakeStable()),
                                 () -> state == State.BARGE || state == State.PROCESSOR
+                                        || state == State.ALGAE_LOW || state == State.ALGAE_HIGH
                         ))
                 .onFalse(new ConditionalCommand(
                         ScoreCommands.Arm.armStable()
@@ -251,20 +265,14 @@ public class RobotContainer {
 
         commandXboxController.povLeft().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
         commandXboxController.povRight().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
-//        commandXboxController.povLeft().onTrue(new VelocityCommand(intakeSubsystem, -100, -100))
-//                .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
-//        commandXboxController.povRight().onTrue(new VelocityCommand(intakeSubsystem, 100, 100))
-//                .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
 
-        commandXboxController.povUp().onTrue(ScoreCommands.Drive.autoAlignCenterBackAuton()
-                .alongWith(ScoreCommands.Score.removeAlgaeLow())
-                .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(60, 60)))
-                .andThen(ScoreCommands.Drive.autoAlignCenterAuton()
-                        .until(intakeSubsystem::hasAlgae)
-                        .andThen(ScoreCommands.Drive.autoAlignCenterBackAuton())));
 
-//        commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh());
-//        commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeLow());
+        commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh()); //right top paddle
+        commandXboxController.button(10).onTrue(ScoreCommands.Arm.armAlgaeLow()); //right bottom paddle
+
+        commandXboxController.button(9).onTrue(ScoreCommands.Arm.armBarge()
+                .alongWith(new VelocityCommand(intakeSubsystem, 60, 60))); //left top paddle
+        commandXboxController.povDown().onTrue(ScoreCommands.Arm.armProcessor()); //left bottom paddle
 
 //        commandXboxController.povUp().onTrue(new SequentialCommandGroup(
 //                        ScoreCommands.Drive.driveToPiece()

@@ -295,6 +295,23 @@ public final class Autos {
         );
     }
 
+
+    public static Command autoScoreWithUnwind(ScoringPosition scoringPosition) {
+        return new SequentialCommandGroup(
+                driveToPose(scoringPosition)
+                        .alongWith(ScoreCommands.Climber.slightUnwindAuton()
+                                .andThen(ScoreCommands.Arm.armStable())),
+                new ConditionalCommand(
+                        ScoreCommands.Drive.autoAlignRAuton(),
+                        ScoreCommands.Drive.autoAlignLAuton(),
+                        scoringPosition::isRightSide
+                ).alongWith(ScoreCommands.Score.score()),
+                ScoreCommands.Score.place()
+                        .until(() -> !intakeSubsystem.hasCoral())
+                        .withTimeout(2)
+        );
+    }
+
     public static Command autoScore() {
         return new SequentialCommandGroup(
                 new SelectCommand<>(
@@ -321,8 +338,7 @@ public final class Autos {
                 ).alongWith(ScoreCommands.Score.score()),
                 ScoreCommands.Score.place()
                         .until(() -> !intakeSubsystem.hasCoral())
-                        .withTimeout(2),
-                ScoreCommands.Intake.intakeGroundPrep()
+                        .withTimeout(2)
         );
     }
 
@@ -355,7 +371,7 @@ public final class Autos {
                 new InstantCommand(() -> commandSwerveDrivetrain
                         .resetPose(Constants.Vision.ALGAE_BLUE_POSE)),
                 new InstantCommand(() -> RobotContainer.setState(State.L4)),
-                autoScore(ScoringPosition.REEF_SIDE_G),
+                autoScoreWithUnwind(ScoringPosition.REEF_SIDE_G),
                 ScoreCommands.Drive.autoAlignCenterBackAuton()
                         .alongWith(ScoreCommands.Score.removeAlgaeLow())
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(60, 60))),
@@ -369,6 +385,17 @@ public final class Autos {
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(60, 60))),
                 autoScoreBlueBarge()
 
+        );
+    }
+
+    public static Command threePieceFrontRightBlue() {
+        return new SequentialCommandGroup(
+                new PathPlannerAuto("3 Piece Front Right Blue Part 1"),
+                new ConditionalCommand(
+                        new PathPlannerAuto("3 Piece Front Right Blue Part 2"),
+                        new PathPlannerAuto("3 Piece Front Right Blue Part 2 Fail"),
+                        intakeSubsystem::hasCoral
+                )
         );
     }
 }
