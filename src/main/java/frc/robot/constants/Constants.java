@@ -52,8 +52,8 @@ public final class Constants {
         public static final boolean INVERT = true;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
         public static final boolean ELEVATOR_BRAKE = true;
-        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 75;
-        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 75;
+        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 90;
+        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 90;
         public static final double DRUM_CIRCUMFERENCE = .119694706;
 
         public static final Slot0Configs ELEVATOR_SLOT0_CONFIGS = new Slot0Configs()
@@ -69,7 +69,7 @@ public final class Constants {
         public static final double STABLE = 0;
         public static final double ALGAE_STABLE = .17;
         public static final double GROUND = .11;
-        public static final double ALGAE_GROUND = .22;
+        public static final double ALGAE_GROUND = .12;
 
         public static final double L1 = 0;
         public static final double L2 = .09;
@@ -77,8 +77,8 @@ public final class Constants {
         public static final double L4 = 1.01;
         public static final double HP = 0;
 
-        public static final double ALGAE_LOW = .3;
-        public static final double ALGAE_HIGH = .61;
+        public static final double ALGAE_LOW = .35;
+        public static final double ALGAE_HIGH = .63;
         public static final double BARGE = 1.002;
         public static final double PROCESSOR = .22;
     }
@@ -140,7 +140,8 @@ public final class Constants {
     public static class IntakeConstants {
         public static final int INTAKE_ID = 21;
         public static final int INTAKE_SECONDARY_ID = 20;
-        public static final int INTAKE_SENSOR_ID = 0;
+        public static final int CORAL_SENSOR_ID = 0;
+        public static final int ALGAE_SENSOR_ID = 1;
         public static final TrapezoidProfile.Constraints INTAKE_CONSTRAINTS = new TrapezoidProfile.Constraints(0, 0);
         public static final FeedForward INTAKE_FF = new FeedForward(.55, 0, .1960784313725490196078431372549);
         public static final FeedForward INTAKE_SECONDARY_FF = new FeedForward(.4, 0, .13333333333333333333333333333333);
@@ -151,8 +152,8 @@ public final class Constants {
         public static final boolean INTAKE_INVERT = true;
         public static final boolean INTAKE_SECONDARY_INVERT = false;
         public static final boolean INTAKE_BRAKE = true;
-        public static final double INTAKE_STATOR_CURRENT_LIMIT = 100;
-        public static final double INTAKE_SUPPLY_CURRENT_LIMIT = 100;
+        public static final double INTAKE_STATOR_CURRENT_LIMIT = 75;
+        public static final double INTAKE_SUPPLY_CURRENT_LIMIT = 75;
 
         public static final Slot0Configs INTAKE_SLOT0_CONFIGS = new Slot0Configs()
                 .withKP(15)
@@ -224,6 +225,7 @@ public final class Constants {
         public static final double ALGAE_HIGH = 230;
         public static final double BARGE = 140;
         public static final double PROCESSOR = 185;
+        public static final double ALGAE_STABLE = 160;
 
         public static final boolean WRIST_BRAKE = true;
 

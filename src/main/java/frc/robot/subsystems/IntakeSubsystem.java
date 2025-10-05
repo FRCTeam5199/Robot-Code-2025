@@ -1,16 +1,17 @@
 package frc.robot.subsystems;
 
-import au.grapplerobotics.CanBridge;
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 
+import frc.robot.RobotContainer;
 import frc.robot.constants.Constants.IntakeConstants;
 import frc.robot.subsystems.template.TemplateSubsystem;
 import frc.robot.utility.Type;
 
 public class IntakeSubsystem extends TemplateSubsystem {
     public static IntakeSubsystem intakeSubsystem;
-    public LaserCan intakeSensor;
+    public LaserCan coralSensor;
+    public LaserCan algaeSensor;
     private boolean hasCoral;
     private double currentSpike = 0;
 
@@ -48,11 +49,19 @@ public class IntakeSubsystem extends TemplateSubsystem {
                 IntakeConstants.INTAKE_SECONDARY_SLOT0_CONFIGS
         );
 
-        intakeSensor = new LaserCan(IntakeConstants.INTAKE_SENSOR_ID);
+        coralSensor = new LaserCan(IntakeConstants.CORAL_SENSOR_ID);
         try {
-            intakeSensor.setRangingMode(LaserCan.RangingMode.SHORT);
-            intakeSensor.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-            intakeSensor.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+            coralSensor.setRangingMode(LaserCan.RangingMode.SHORT);
+            coralSensor.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+            coralSensor.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+        } catch (ConfigurationFailedException ignored) {
+        }
+
+        algaeSensor = new LaserCan(IntakeConstants.ALGAE_SENSOR_ID);
+        try {
+            algaeSensor.setRangingMode(LaserCan.RangingMode.SHORT);
+            algaeSensor.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+            algaeSensor.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         } catch (ConfigurationFailedException ignored) {
         }
     }
@@ -62,6 +71,8 @@ public class IntakeSubsystem extends TemplateSubsystem {
 
         if (getStatorCurrent() < 0) currentSpike++;
         else currentSpike = 0;
+
+//        System.out.println("distance: " + algaeSensor.getMeasurement().distance_mm);
     }
 
     public static IntakeSubsystem getInstance() {
@@ -72,11 +83,11 @@ public class IntakeSubsystem extends TemplateSubsystem {
     }
 
     public boolean hasCoral() {
-        return intakeSensor.getMeasurement().distance_mm < 5;
+        return coralSensor.getMeasurement().distance_mm < 5;
     }
 
     public boolean hasAlgae() {
-        return getMotorVelocity() < 0;
+        return RobotContainer.aligned();
     }
 
     public void setIntakeMotors(double rps, double secondaryRPS) {

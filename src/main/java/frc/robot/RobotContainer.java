@@ -211,11 +211,11 @@ public class RobotContainer {
         commandXboxController.rightTrigger().onTrue(new ConditionalCommand(
                         new ConditionalCommand(
                                 ScoreCommands.Score.score()
-                                        .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(60, 60)))
+                                        .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120)))
                                         .alongWith(ScoreCommands.Drive.autoAlignCenterBackAuton())
                                         .andThen(ScoreCommands.Drive.autoAlignCenterAuton()),
                                 ScoreCommands.Score.score()
-                                        .alongWith(new VelocityCommand(intakeSubsystem, 60, 60))
+                                        .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
                                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
@@ -230,7 +230,7 @@ public class RobotContainer {
                                 || state == State.ALGAE_HIGH)
                 ))
                 .onFalse(ScoreCommands.Stabling.stable()
-                        .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)
+                        .alongWith(new VelocityCommand(intakeSubsystem, 120, 120)
                                 .onlyIf(() -> state == State.ALGAE_LOW || state == State.ALGAE_HIGH))
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
@@ -248,7 +248,7 @@ public class RobotContainer {
                         ))
                 .onFalse(new ConditionalCommand(
                         ScoreCommands.Arm.armStable()
-                                .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)),
+                                .alongWith(new VelocityCommand(intakeSubsystem, 120, 120)),
                         ScoreCommands.Stabling.groundIntakeStable(),
                         () -> state == State.BARGE || state == State.PROCESSOR
                 ));
@@ -271,7 +271,7 @@ public class RobotContainer {
         commandXboxController.button(10).onTrue(ScoreCommands.Arm.armAlgaeLow()); //right bottom paddle
 
         commandXboxController.button(9).onTrue(ScoreCommands.Arm.armBarge()
-                .alongWith(new VelocityCommand(intakeSubsystem, 60, 60))); //left top paddle
+                .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))); //left top paddle
         commandXboxController.povDown().onTrue(ScoreCommands.Arm.armProcessor()); //left bottom paddle
 
 //        commandXboxController.povUp().onTrue(new SequentialCommandGroup(
@@ -315,9 +315,9 @@ public class RobotContainer {
                 .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armProcessor()
-                .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)));
+                .alongWith(new VelocityCommand(intakeSubsystem, 120, 120)));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armBarge()
-                .alongWith(new VelocityCommand(intakeSubsystem, 60, 60)));
+                .alongWith(new VelocityCommand(intakeSubsystem, 120, 120)));
 
         commandButtonPanel.button(ButtonPanelButtons.SETMODE_ALGAE)
                 .onTrue(ScoreCommands.Arm.armAlgaeHigh());
