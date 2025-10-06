@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1756531345608385,
-        "y": 3.8010018360511597
+        "x": 2.6128355874531026,
+        "y": 4.30854628597107
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.9659836065573768,
-        "y": 2.8921618852459017
+        "x": 2.2656762295081965,
+        "y": 4.00701844262295
       },
       "prevControl": {
-        "x": 2.214644525893973,
-        "y": 3.261130200615312
+        "x": 2.8987856054836536,
+        "y": 3.7157128480932355
       },
       "nextControl": null,
       "isLocked": false,
@@ -54,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 127.14253795637072
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "3 Piece Front Blue Paths",

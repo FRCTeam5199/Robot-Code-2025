@@ -265,7 +265,7 @@ public class ScoreCommands {
                     () -> {
                         double rotationRate = turnToPiecePIdController2
                                 .calculate(commandSwerveDrivetrain.getPose().getRotation().getDegrees(), goalRotation);
-                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(1.1)
+                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(2.5)
                                 .withRotationalRate(rotationRate));
                     },
                     (interrupted) -> {

@@ -83,7 +83,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
     }
 
     public boolean hasCoral() {
-        return coralSensor.getMeasurement().distance_mm < 5;
+        return coralSensor.getMeasurement().distance_mm < 10;
     }
 
     public boolean hasAlgae() {

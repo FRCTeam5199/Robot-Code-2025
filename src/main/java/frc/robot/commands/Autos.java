@@ -61,8 +61,8 @@ public final class Autos {
     private static PathPlannerAuto threePieceRedBottomL4;
     private static PathPlannerAuto threePieceRedTopL4;
 
-    private static PathPlannerAuto threePieceFrontRightBlue;
-    private static PathPlannerAuto threePieceFrontLeftBlue;
+    private static Command threePieceFrontRightBlue;
+    private static Command threePieceFrontLeftBlue;
 
     private static PathPlannerAuto fourPieceBlueBottomL4;
 
@@ -114,6 +114,9 @@ public final class Autos {
         threePieceBlueTopL4 = new PathPlannerAuto("3 Piece Blue Top L4");
         threePieceRedBottomL4 = new PathPlannerAuto("3 Piece Red Bottom L4");
         threePieceRedTopL4 = new PathPlannerAuto("3 Piece Red Top L4");
+
+        threePieceFrontRightBlue = threePieceFrontRightBlue();
+        threePieceFrontLeftBlue = threePieceFrontLeftBlue();
 
         fourPieceBlueBottomL4 = new PathPlannerAuto("4 Piece Blue Bottom L4");
 
@@ -283,7 +286,7 @@ public final class Autos {
 
     public static Command autoScore(ScoringPosition scoringPosition) {
         return new SequentialCommandGroup(
-                driveToPose(scoringPosition).alongWith(ScoreCommands.Arm.armStable()),
+                driveToPose(scoringPosition),
                 new ConditionalCommand(
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),
@@ -330,7 +333,7 @@ public final class Autos {
                                 Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L))
                         ),
                         RobotContainer::getCurrentScoringPosition
-                ).alongWith(ScoreCommands.Arm.armStable()),
+                ),
                 new ConditionalCommand(
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),
@@ -344,7 +347,7 @@ public final class Autos {
 
     public static Command autoScore(ScoringPosition scoringPosition, double maxVelocity, double maxAcceleration) {
         return new SequentialCommandGroup(
-                driveToPose(scoringPosition, maxVelocity, maxAcceleration, 1d).alongWith(ScoreCommands.Arm.armStable()),
+                driveToPose(scoringPosition, maxVelocity, maxAcceleration, 1d),
                 new ConditionalCommand(
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),
@@ -356,9 +359,9 @@ public final class Autos {
         );
     }
 
-    public static Command autoScoreBlueBarge() {
+    public static Command autoScoreBlueBarge(ScoringPosition scoringPosition) {
         return new SequentialCommandGroup(
-                driveToPose(ScoringPosition.BARGE, 3, 3, 0)
+                driveToPose(scoringPosition, 4, 4, 0)
                         .alongWith(ScoreCommands.Arm.armBarge())
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
                 ScoreCommands.Score.scoreBarge(),
@@ -377,13 +380,15 @@ public final class Autos {
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
                 ScoreCommands.Drive.autoAlignCenterAuton()
                         .until(intakeSubsystem::hasAlgae),
-                autoScoreBlueBarge(),
-                driveToPose(ScoringPosition.REEF_SIDE_IJ)
+                ScoreCommands.Drive.autoAlignCenterBackAuton(),
+                autoScoreBlueBarge(ScoringPosition.BARGE),
+                driveToPose(ScoringPosition.REEF_SIDE_I)
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
                 ScoreCommands.Drive.autoAlignCenterAuton()
                         .until(intakeSubsystem::hasAlgae)
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
-                autoScoreBlueBarge(),
+                ScoreCommands.Drive.autoAlignCenterBackAuton(),
+                autoScoreBlueBarge(ScoringPosition.BARGE2),
                 driveToPose(ScoringPosition.REEF_SIDE_EF)
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
                 ScoreCommands.Drive.autoAlignCenterBackAuton()

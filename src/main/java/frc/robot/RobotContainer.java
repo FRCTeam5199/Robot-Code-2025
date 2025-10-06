@@ -166,13 +166,11 @@ public class RobotContainer {
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
 
         NamedCommands.registerCommand("GROUNDINTAKESEQUENCE",
-                new ParallelCommandGroup(
-                        ScoreCommands.Drive.driveForward(),
-                        ScoreCommands.Intake.intakeGround()
-                )
-                        .until(intakeSubsystem::hasCoral)
-                        .andThen(ScoreCommands.Stabling.groundIntakeStable())
-                        .withTimeout(2.2)
+                ScoreCommands.Intake.intakeGround()
+                        .andThen(ScoreCommands.Drive.driveForward()
+                                .until(intakeSubsystem::hasCoral)
+                                .andThen(ScoreCommands.Stabling.groundIntakeStable()))
+                        .withTimeout(1d)
         );
 
         Autos.initializeAutos();
@@ -239,8 +237,16 @@ public class RobotContainer {
 
         commandXboxController.leftBumper().onTrue(
                         new ConditionalCommand(
-                                ScoreCommands.Intake.intakeGroundAlgae(),
+                                ScoreCommands.Intake.intakeGroundAlgae()
+                                        .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
+                                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed * .75)
+                                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .75)
+                                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .75))),
                                 ScoreCommands.Intake.intakeGround()
+                                        .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
+                                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed * .75)
+                                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .75)
+                                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .75)))
                                         .until(intakeSubsystem::hasCoral)
                                         .andThen(ScoreCommands.Stabling.groundIntakeStable()),
                                 () -> state == State.BARGE || state == State.PROCESSOR

@@ -42,8 +42,8 @@ public final class Constants {
         public static final int ELEVATOR_RIGHT_ID = 18;
 
         public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS
-                = new TrapezoidProfile.Constraints(150, 150);
-        public static final FeedForward ELEVATOR_FF = new FeedForward(.4, .3, .178); // Old values ks: .42, kg: .18, kv: .1666
+                = new TrapezoidProfile.Constraints(150, 300);
+        public static final FeedForward ELEVATOR_FF = new FeedForward(.4, .3, .178);
         public static final double ELEVATOR_MIN = 0;
         public static final double ELEVATOR_MAX = 1.01;
         public static final double ELEVATOR_LOWER_TOLERANCE = 0.05;
@@ -52,8 +52,8 @@ public final class Constants {
         public static final boolean INVERT = true;
         public static final boolean FOLLOWER_OPPOSE_MASTER_DIRECTION = true;
         public static final boolean ELEVATOR_BRAKE = true;
-        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 90;
-        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 90;
+        public static final double ELEVATOR_SUPPLY_CURRENT_LIMIT = 100;
+        public static final double ELEVATOR_STATOR_CURRENT_LIMIT = 100;
         public static final double DRUM_CIRCUMFERENCE = .119694706;
 
         public static final Slot0Configs ELEVATOR_SLOT0_CONFIGS = new Slot0Configs()
@@ -270,7 +270,7 @@ public final class Constants {
         public static final double LIMELIGHT_X_AIM = -29;
 
         public static final double AUTO_ALIGN_X = 0.04;
-        public static final double AUTO_ALIGN_X_BACK = -.2;
+        public static final double AUTO_ALIGN_X_BACK = -.25;
         public static final double AUTO_ALIGN_Y = .15;
 
         public static final Pose2d ALGAE_BLUE_POSE

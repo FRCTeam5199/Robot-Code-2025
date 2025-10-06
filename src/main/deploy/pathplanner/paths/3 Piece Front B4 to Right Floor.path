@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.1817622950819673,
-        "y": 3.1199282786885245
+        "x": 2.19375,
+        "y": 2.7602971311475404
       },
       "prevControl": {
-        "x": 2.3158943824829556,
-        "y": 3.3640967090908847
+        "x": 2.3278820874009885,
+        "y": 3.0044655615499005
       },
       "nextControl": null,
       "isLocked": false,
@@ -54,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -133.95837332398992
+    "rotation": -144.63753811293105
   },
   "reversed": false,
   "folder": "3 Piece Front Blue Paths",
@@ -62,5 +62,5 @@
     "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
