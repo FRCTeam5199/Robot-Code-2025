@@ -48,6 +48,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "DRIVEINTAKE"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "3 Piece Front Middle Floor to B2"

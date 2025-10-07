@@ -263,6 +263,7 @@ public final class Constants {
 
 
         public static final String BACK_CAMERA_NAME = "BackCamera";
+        //-.2794, -.3175
         public static final Transform3d BACK_CAMERA_POSE =
                 new Transform3d(-.2794, -.3175, .19685, new Rotation3d(0, Math.toRadians(0), 180));
 

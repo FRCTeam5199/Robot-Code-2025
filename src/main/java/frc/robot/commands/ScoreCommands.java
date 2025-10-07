@@ -260,13 +260,9 @@ public class ScoreCommands {
         public static Command driveForward() {
             return new FunctionalCommand(
                     () -> {
-                        goalRotation = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
                     },
                     () -> {
-                        double rotationRate = turnToPiecePIdController2
-                                .calculate(commandSwerveDrivetrain.getPose().getRotation().getDegrees(), goalRotation);
-                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(2.5)
-                                .withRotationalRate(rotationRate));
+                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(2.5));
                     },
                     (interrupted) -> {
                         commandSwerveDrivetrain.setControl(drive);
@@ -573,7 +569,7 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() < ElevatorConstants.GROUND
-            ).alongWith(new VelocityCommand(intakeSubsystem, 120, 120));
+            );
         }
 
         public static Command intakeGroundPrep() {

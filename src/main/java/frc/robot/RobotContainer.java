@@ -166,12 +166,12 @@ public class RobotContainer {
         NamedCommands.registerCommand("DROP", ScoreCommands.Climber.drop());
 
         NamedCommands.registerCommand("GROUNDINTAKESEQUENCE",
-                ScoreCommands.Intake.intakeGround()
-                        .andThen(ScoreCommands.Drive.driveForward()
-                                .until(intakeSubsystem::hasCoral)
-                                .andThen(ScoreCommands.Stabling.groundIntakeStable()))
-                        .withTimeout(1d)
-        );
+                ScoreCommands.Intake.intakeGround());
+        NamedCommands.registerCommand("DRIVEINTAKE", ScoreCommands.Drive.driveForward()
+                .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
+                .until(intakeSubsystem::hasCoral)
+                .andThen(ScoreCommands.Stabling.groundIntakeStable())
+                .withTimeout(.7));
 
         Autos.initializeAutos();
 
@@ -243,6 +243,7 @@ public class RobotContainer {
                                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .75)
                                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .75))),
                                 ScoreCommands.Intake.intakeGround()
+                                        .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
                                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed * .75)
                                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .75)

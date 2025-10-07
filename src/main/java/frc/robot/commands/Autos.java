@@ -151,6 +151,7 @@ public final class Autos {
         autonChooserBlue.addOption("Algae Blue", algaeBlue);
         autonChooserBlue.addOption("3 Piece Blue Floor Right", threePieceFrontRightBlue);
         autonChooserBlue.addOption("3 Piece Blue Floor Left", threePieceFrontLeftBlue);
+        autonChooserBlue.addOption("Test", testBlue);
     }
 
     public static Command driveToPose(double goalX, double goalY, double goalDegrees) {
