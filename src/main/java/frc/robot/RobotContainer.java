@@ -171,7 +171,7 @@ public class RobotContainer {
                 .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
                 .until(intakeSubsystem::hasCoral)
                 .andThen(ScoreCommands.Stabling.groundIntakeStable())
-                .withTimeout(.7));
+                .withTimeout(.9));
 
         Autos.initializeAutos();
 

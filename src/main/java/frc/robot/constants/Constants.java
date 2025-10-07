@@ -102,7 +102,7 @@ public final class Constants {
         public static final double ARM_LOWER_TOLERANCE = 4;
         public static final double ARM_UPPER_TOLERANCE = 4;
 
-        public static final double STABLE = 0;
+        // public static final double STABLE = 0;
         public static final double GROUND = 3;
         public static final double ALGAE_GROUND = 11;
 

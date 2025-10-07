@@ -367,7 +367,7 @@ public class ScoreCommands {
         public static Command groundIntakeStable() {
             return new SequentialCommandGroup(
                     new ParallelCommandGroup(
-                            new PositionCommand(elevatorSubsystem, 0, 80, 120)
+                            new PositionCommand(elevatorSubsystem, 0.02, 80, 120)
                                     .until(() -> elevatorSubsystem.isAtBottom()
                                             && elevatorSubsystem.getMechM() < .05),
                             new PositionCommand(wristSubsystem, WristConstants.STABLE)
