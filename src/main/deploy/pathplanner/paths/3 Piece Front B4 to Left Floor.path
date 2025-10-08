@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 3.1407786885245907,
-        "y": 4.1748463114754095
+        "y": 3.8511782786885242
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0145359603473203,
-        "y": 3.9530811121370015
+        "x": 3.1270025524829617,
+        "y": 3.5927422711170314
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.8341188524590164,
-        "y": 5.001997950819672
+        "x": 1.8700819672131148,
+        "y": 4.882120901639344
       },
       "prevControl": {
-        "x": 3.2458707878157913,
-        "y": 4.980220090432902
+        "x": 1.7221204942042458,
+        "y": 5.08363368660607
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,12 +29,26 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.16201550387596858,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "INTAKEGROUNDPREP",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -59,8 +73,8 @@
   "reversed": false,
   "folder": "3 Piece Front Blue Paths",
   "idealStartingState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

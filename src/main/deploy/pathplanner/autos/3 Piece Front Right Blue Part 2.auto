@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Front A4 to Right Floor"
+            "pathName": "3 Piece Front A4 to Left Floor"
           }
         },
         {
@@ -56,7 +56,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Front Right Floor to B2"
+            "pathName": "3 Piece Front Left Floor to A2"
           }
         },
         {
@@ -72,7 +72,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "ALIGNL"
                 }
               }
             ]

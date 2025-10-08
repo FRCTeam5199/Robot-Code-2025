@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Front Left to Front Middle"
+            "pathName": "3 Piece Front Middle to Front Left"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Front Middle Fail to B4"
+            "pathName": "3 Piece Front Left Floor to B4"
           }
         },
         {
