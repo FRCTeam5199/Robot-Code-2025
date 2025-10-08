@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2706967213114755,
-        "y": 3.9590676229508195
+        "x": 1.6063524590163931,
+        "y": 2.449
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7409383818020527,
-        "y": 4.128466272582234
+        "x": 2.584311540367746,
+        "y": 3.10598432308978
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.2297131147540985,
-        "y": 3.9590676229508195
+        "x": 2.901024590163934,
+        "y": 4.1149077868852455
       },
       "prevControl": {
-        "x": 1.6342230340454926,
-        "y": 4.046611617265633
+        "x": 2.3971708515830996,
+        "y": 2.831441155180767
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,20 +33,20 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "ARML4",
+      "name": "ARML2",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "ARML4"
+          "name": "ARML2"
         }
       }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -60,7 +60,7 @@
   "folder": "3 Piece Front Blue Paths",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 90.0
+    "rotation": -140.0
   },
   "useDefaultConstraints": false
 }

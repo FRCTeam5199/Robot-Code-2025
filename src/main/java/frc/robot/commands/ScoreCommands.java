@@ -262,7 +262,7 @@ public class ScoreCommands {
                     () -> {
                     },
                     () -> {
-                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(2.8));
+                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(3));
                     },
                     (interrupted) -> {
                         commandSwerveDrivetrain.setControl(drive);

@@ -12,7 +12,6 @@ public class IntakeSubsystem extends TemplateSubsystem {
     public static IntakeSubsystem intakeSubsystem;
     public LaserCan coralSensor;
     public LaserCan algaeSensor;
-    private boolean hasCoral;
     private double currentSpike = 0;
 
     public boolean isScoringAlgae() {
@@ -72,6 +71,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
         if (getStatorCurrent() < 0) currentSpike++;
         else currentSpike = 0;
 
+//        System.out.println("has coral: " + hasCoral());
 //        System.out.println("distance: " + algaeSensor.getMeasurement().distance_mm);
     }
 
@@ -83,7 +83,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
     }
 
     public boolean hasCoral() {
-        return coralSensor.getMeasurement().distance_mm < 10;
+        return coralSensor.getMeasurement().distance_mm < 5;
     }
 
     public boolean hasAlgae() {
