@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "INTAKESEQUENCE"
+            "name": "GROUNDINTAKESEQUENCE"
           }
         },
         {
@@ -62,7 +62,7 @@
         {
           "type": "named",
           "data": {
-            "name": "INTAKESEQUENCE"
+            "name": "GROUNDINTAKESEQUENCE"
           }
         },
         {

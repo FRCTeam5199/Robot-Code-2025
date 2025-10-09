@@ -44,7 +44,7 @@
         {
           "type": "named",
           "data": {
-            "name": "INTAKESEQUENCE"
+            "name": "GROUNDINTAKESEQUENCE"
           }
         },
         {

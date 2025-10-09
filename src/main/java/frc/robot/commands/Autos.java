@@ -75,6 +75,7 @@ public final class Autos {
     private static PathPlannerAuto helper2PieceBottomRed;
 
     private static Command algaeBlue;
+    private static Command algaeRed;
 
     private static final IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
     private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
@@ -132,6 +133,7 @@ public final class Autos {
         testBlue = new PathPlannerAuto("Test Blue");
 
         algaeBlue = algaeBlue();
+        algaeRed = algaeRed();
 
         Shuffleboard.getTab("Autons").add("Red Autons", autonChooserRed)
                 .withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0)
@@ -148,6 +150,7 @@ public final class Autos {
         autonChooserRed.addOption("3 Piece Red Left", threePieceRedBottomL4);
         autonChooserRed.addOption("3 Piece Red Right", threePieceRedTopL4);
         autonChooserRed.addOption("2 Piece Red Left Helper", helper2PieceBottomRed);
+        autonChooserRed.addOption("Algae Red", algaeRed);
         autonChooserRed.addOption("3 Piece Red Floor Right", threePieceFrontRightRed);
         autonChooserRed.addOption("3 Piece Red Floor Left", threePieceFrontLeftRed);
 
