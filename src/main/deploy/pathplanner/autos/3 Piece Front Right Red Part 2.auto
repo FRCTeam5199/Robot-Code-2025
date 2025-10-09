@@ -7,25 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue Front Middle to Front Left"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GROUNDINTAKESEQUENCE"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DRIVEINTAKE"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Blue Front Left Floor to B4"
+            "pathName": "3 Piece Red Middle to A4"
           }
         },
         {
@@ -35,13 +17,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "L4"
+                  "name": "ALIGNL"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "L4"
                 }
               }
             ]
@@ -54,21 +36,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "STABLE"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue Front B4 to Right Floor"
+            "pathName": "3 Piece Red A4 to Right"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "GROUNDINTAKESEQUENCE"
+            "name": "INTAKESEQUENCE"
           }
         },
         {
@@ -80,7 +56,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue Front Right Floor to B2"
+            "pathName": "3 Piece Red Right to B2"
           }
         },
         {
@@ -90,13 +66,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "L2"
+                  "name": "ALIGNR"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "L2"
                 }
               }
             ]
@@ -118,6 +94,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "3 Piece Front Blue",
+  "folder": "3 Piece Front Red",
   "choreoAuto": false
 }

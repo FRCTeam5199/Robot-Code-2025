@@ -66,6 +66,9 @@ public final class Autos {
     private static Command threePieceFrontRightBlue;
     private static Command threePieceFrontLeftBlue;
 
+    private static Command threePieceFrontRightRed;
+    private static Command threePieceFrontLeftRed;
+
     private static PathPlannerAuto fourPieceBlueBottomL4;
 
     private static PathPlannerAuto helper2PieceTopBlue;
@@ -121,6 +124,9 @@ public final class Autos {
         threePieceFrontRightBlue = threePieceFrontRightBlue();
         threePieceFrontLeftBlue = threePieceFrontLeftBlue();
 
+        threePieceFrontRightRed = threePieceFrontRightRed();
+        threePieceFrontLeftRed = threePieceFrontLeftRed();
+
         fourPieceBlueBottomL4 = new PathPlannerAuto("4 Piece Blue Bottom L4");
 
         testBlue = new PathPlannerAuto("Test Blue");
@@ -142,6 +148,8 @@ public final class Autos {
         autonChooserRed.addOption("3 Piece Red Left", threePieceRedBottomL4);
         autonChooserRed.addOption("3 Piece Red Right", threePieceRedTopL4);
         autonChooserRed.addOption("2 Piece Red Left Helper", helper2PieceBottomRed);
+        autonChooserRed.addOption("3 Piece Red Floor Right", threePieceFrontRightRed);
+        autonChooserRed.addOption("3 Piece Red Floor Left", threePieceFrontLeftRed);
 
         autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDropL1);
         autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueRightL4);
@@ -399,6 +407,32 @@ public final class Autos {
         );
     }
 
+    public static Command algaeRed() {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> commandSwerveDrivetrain
+                        .resetPose(Constants.Vision.ALGAE_RED_POSE)),
+                new InstantCommand(() -> RobotContainer.setState(State.L4)),
+                autoScoreWithUnwind(ScoringPosition.REEF_SIDE_G),
+                ScoreCommands.Drive.autoAlignCenterBackAuton()
+                        .alongWith(ScoreCommands.Score.removeAlgaeLow())
+                        .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
+                ScoreCommands.Drive.autoAlignCenterAuton()
+                        .until(intakeSubsystem::hasAlgae),
+                ScoreCommands.Drive.autoAlignCenterBackAuton(),
+                autoScoreBlueBarge(ScoringPosition.BARGE),
+                driveToPose(ScoringPosition.REEF_SIDE_I)
+                        .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
+                ScoreCommands.Drive.autoAlignCenterAuton()
+                        .until(intakeSubsystem::hasAlgae)
+                        .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
+                ScoreCommands.Drive.autoAlignCenterBackAuton(),
+                autoScoreBlueBarge(ScoringPosition.BARGE2),
+                driveToPose(ScoringPosition.REEF_SIDE_EF)
+                        .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
+                ScoreCommands.Drive.autoAlignCenterBackAuton()
+        );
+    }
+
     public static Command threePieceFrontRightBlue() {
         return new SequentialCommandGroup(
                 new PathPlannerAuto("3 Piece Front Right Blue Part 1"),
@@ -416,6 +450,28 @@ public final class Autos {
                 new ConditionalCommand(
                         new PathPlannerAuto("3 Piece Front Left Blue Part 2"),
                         new PathPlannerAuto("3 Piece Front Left Blue Part 2 Fail"),
+                        intakeSubsystem::hasCoral
+                )
+        );
+    }
+
+    public static Command threePieceFrontRightRed() {
+        return new SequentialCommandGroup(
+                new PathPlannerAuto("3 Piece Front Right Red Part 1"),
+                new ConditionalCommand(
+                        new PathPlannerAuto("3 Piece Front Right Red Part 2"),
+                        new PathPlannerAuto("3 Piece Front Right Red Part 2 Fail"),
+                        intakeSubsystem::hasCoral
+                )
+        );
+    }
+
+    public static Command threePieceFrontLeftRed() {
+        return new SequentialCommandGroup(
+                new PathPlannerAuto("3 Piece Front Left Red Part 1"),
+                new ConditionalCommand(
+                        new PathPlannerAuto("3 Piece Front Left Red Part 2"),
+                        new PathPlannerAuto("3 Piece Front Left Red Part 2 Fail"),
                         intakeSubsystem::hasCoral
                 )
         );

@@ -6,19 +6,21 @@
     "2 Piece Blue Paths",
     "2 Piece Red Paths",
     "3 Piece Blue Paths",
+    "3 Piece Front Blue Paths",
     "3 Piece Red Paths",
     "4 Piece Blue Paths",
     "Climber Drop Paths",
-    "3 Piece Front Blue Paths",
+    "3 Piece Front Red Paths",
     "Tests"
   ],
   "autoFolders": [
     "1 Piece L4",
     "2 Piece L4",
+    "3 Piece Front Blue",
     "3 Piece L4",
     "4 Piece L4",
     "Climber Drop",
-    "3 Piece Front",
+    "3 Piece Front Red",
     "Tests"
   ],
   "defaultMaxVel": 3.0,

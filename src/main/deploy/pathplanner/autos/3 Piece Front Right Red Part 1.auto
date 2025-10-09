@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue Front Middle to B4"
+            "pathName": "3 Piece Red Front Right Start to B4"
           }
         },
         {
@@ -17,13 +17,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "L4"
+                  "name": "ALIGNR"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ALIGNR"
+                  "name": "L4"
                 }
               }
             ]
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue Front B4 to Left Floor"
+            "pathName": "3 Piece Red B4 to Middle"
           }
         },
         {
@@ -52,48 +52,11 @@
           "data": {
             "name": "DRIVEINTAKE"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Blue Front Left Floor to A2"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "L2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ALIGNR"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "OUTTAKE"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "STABLE"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "3 Piece Front Blue",
+  "folder": "3 Piece Front Red",
   "choreoAuto": false
 }

@@ -276,6 +276,8 @@ public final class Constants {
 
         public static final Pose2d ALGAE_BLUE_POSE
                 = new Pose2d(7.265, 3.851, new Rotation2d(Math.toRadians(180)));
+        public static final Pose2d ALGAE_RED_POSE
+                = new Pose2d(10.400, 3.851, new Rotation2d(0));
     }
 }
 

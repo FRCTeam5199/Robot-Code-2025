@@ -1,0 +1,66 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 16.255327868852458,
+        "y": 5.709272540983607
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 14.83460196526536,
+        "y": 4.917284823327235
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 14.648975409836064,
+        "y": 3.983043032786885
+      },
+      "prevControl": {
+        "x": 15.235362038253113,
+        "y": 4.455832709967893
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "ARML2",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ARML2"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "3 Piece Front Red Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 41.67
+  },
+  "useDefaultConstraints": false
+}

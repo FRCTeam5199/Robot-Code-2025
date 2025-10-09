@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Front Middle to Front Right"
+            "pathName": "3 Piece Blue Front Middle to Front Right"
           }
         },
         {
@@ -25,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Front Right Floor to A4"
+            "pathName": "3 Piece Blue Front Right Floor to A4"
           }
         },
         {
@@ -62,7 +62,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Front A4 to Left Floor"
+            "pathName": "3 Piece Blue Front A4 to Left Floor"
           }
         },
         {
@@ -80,7 +80,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Front Left Floor to A2"
+            "pathName": "3 Piece Blue Front Left Floor to A2"
           }
         },
         {
@@ -118,6 +118,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "3 Piece Front",
+  "folder": "3 Piece Front Blue",
   "choreoAuto": false
 }
