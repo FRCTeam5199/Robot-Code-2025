@@ -39,6 +39,7 @@ public class PositionCommand extends Command {
         } else {
             templateSubsystem.setPosition(goal, false);
         }
+        templateSubsystem.setCommandRunning(true);
     }
 
     @Override
@@ -60,6 +61,7 @@ public class PositionCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         templateSubsystem.setFollowLastMechProfile(true);
+        templateSubsystem.setCommandRunning(false);
     }
 
     public void setGoal(double goal) {

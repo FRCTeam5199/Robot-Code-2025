@@ -171,7 +171,7 @@ public class RobotContainer {
                 .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
                 .until(intakeSubsystem::hasCoral)
                 .andThen(ScoreCommands.Stabling.groundIntakeStable())
-                .withTimeout(.85));
+                .withTimeout(1.25));
 
         Autos.initializeAutos();
 
@@ -211,7 +211,8 @@ public class RobotContainer {
                                 ScoreCommands.Score.score()
                                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120)))
                                         .alongWith(ScoreCommands.Drive.autoAlignCenterBackAuton())
-                                        .andThen(ScoreCommands.Drive.autoAlignCenterAuton()),
+                                        .andThen(ScoreCommands.Drive.autoAlignCenterAuton())
+                                        .andThen(ScoreCommands.Drive.autoAlignCenterBackAuton()),
                                 ScoreCommands.Score.score()
                                         .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
                                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive

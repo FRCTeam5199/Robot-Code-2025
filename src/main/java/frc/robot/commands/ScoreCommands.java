@@ -262,7 +262,7 @@ public class ScoreCommands {
                     () -> {
                     },
                     () -> {
-                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(2.6));
+                        commandSwerveDrivetrain.setControl(robotCentricDrive.withVelocityX(1.5));
                     },
                     (interrupted) -> {
                         commandSwerveDrivetrain.setControl(drive);
@@ -900,7 +900,7 @@ public class ScoreCommands {
             return new ConditionalCommand(
                     new VelocityCommand(intakeSubsystem, -60, -60),
                     new ConditionalCommand(
-                            new VelocityCommand(intakeSubsystem, 30, 5),
+                            new VelocityCommand(intakeSubsystem, 20, 5),
                             new ConditionalCommand(
                                     new VelocityCommand(intakeSubsystem, 75, 75),
                                     new ConditionalCommand(

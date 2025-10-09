@@ -45,8 +45,7 @@ public class ArmSubsystem extends TemplateSubsystem {
 
         configurePivot(
                 ArmConstants.ARM_MIN,
-                ArmConstants.ARM_MAX,
-                ArmConstants.ARM_FF_OFFSET
+                ArmConstants.ARM_MAX
         );
 
 //        configureEncoder(

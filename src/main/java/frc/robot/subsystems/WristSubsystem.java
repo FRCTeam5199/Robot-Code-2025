@@ -40,8 +40,7 @@ public class WristSubsystem extends TemplateSubsystem {
 
         configurePivot(
                 WristConstants.WRIST_MIN,
-                WristConstants.WRIST_MAX,
-                WristConstants.WRIST_FF_OFFSET
+                WristConstants.WRIST_MAX
         );
     }
 

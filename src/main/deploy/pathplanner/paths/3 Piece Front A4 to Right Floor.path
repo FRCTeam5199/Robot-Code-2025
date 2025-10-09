@@ -56,6 +56,17 @@
           "name": "INTAKEGROUNDPREP"
         }
       }
+    },
+    {
+      "name": "GROUNDINTAKESEQUENCE",
+      "waypointRelativePos": 0.6429324894514786,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "GROUNDINTAKESEQUENCE"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -68,7 +79,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -144.638
+    "rotation": -140.0
   },
   "reversed": false,
   "folder": "3 Piece Front Blue Paths",

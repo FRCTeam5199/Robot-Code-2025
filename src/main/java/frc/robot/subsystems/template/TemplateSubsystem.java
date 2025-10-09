@@ -48,6 +48,8 @@ public class TemplateSubsystem extends SubsystemBase {
     private double goal;
     private boolean followLastMechProfile = false;
 
+    private boolean isCommandRunning = false;
+
     private PositionVoltage positionVoltage;
     private VelocityVoltage velocityVoltage;
     private VelocityVoltage secondaryVelocityVoltage;
@@ -69,11 +71,6 @@ public class TemplateSubsystem extends SubsystemBase {
 
     private double gearRatio = 1d;
     private double drumCircumference;
-    private double ffOffset;
-
-    double zero = 0;
-
-
     private Type type;
     private String name;
 
@@ -164,10 +161,9 @@ public class TemplateSubsystem extends SubsystemBase {
 
     }
 
-    public void configurePivot(double mechMinDegrees, double mechMaxDegrees, double ffOffset) {
+    public void configurePivot(double mechMinDegrees, double mechMaxDegrees) {
         this.mechMin = mechMinDegrees;
         this.mechMax = mechMaxDegrees;
-        this.ffOffset = ffOffset;
 
         motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = getMotorRotFromDegrees(mechMaxDegrees);
         motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = getMotorRotFromDegrees(mechMinDegrees);
@@ -598,5 +594,13 @@ public class TemplateSubsystem extends SubsystemBase {
 
     public boolean hasSecondaryMotor() {
         return !(secondaryMotor == null);
+    }
+
+    public boolean isCommandRunning() {
+        return isCommandRunning;
+    }
+
+    public void setCommandRunning(boolean commandRunning) {
+        isCommandRunning = commandRunning;
     }
 }

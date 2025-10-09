@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Front Middle Floor to B2"
+            "pathName": "3 Piece Front Middle to B4"
           }
         },
         {
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Front B4 to Right Floor"
+            "pathName": "3 Piece Front B4 to Left Floor"
           }
         },
         {
@@ -48,9 +48,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "DRIVEINTAKE"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Front Middle Floor to B2"
+            "pathName": "3 Piece Front Left Floor to A2"
           }
         },
         {

@@ -77,8 +77,8 @@ public final class Constants {
         public static final double L4 = 1.01;
         public static final double HP = 0;
 
-        public static final double ALGAE_LOW = .35;
-        public static final double ALGAE_HIGH = .63;
+        public static final double ALGAE_LOW = .34;
+        public static final double ALGAE_HIGH = .69;
         public static final double BARGE = 1.002;
         public static final double PROCESSOR = .22;
     }
@@ -222,7 +222,7 @@ public final class Constants {
         public static final double HP_C = 67;
 
         public static final double ALGAE_LOW = 230;
-        public static final double ALGAE_HIGH = 230;
+        public static final double ALGAE_HIGH = 234;
         public static final double BARGE = 140;
         public static final double PROCESSOR = 185;
         public static final double ALGAE_STABLE = 160;
@@ -271,7 +271,7 @@ public final class Constants {
         public static final double LIMELIGHT_X_AIM = -29;
 
         public static final double AUTO_ALIGN_X = 0.04;
-        public static final double AUTO_ALIGN_X_BACK = -.25;
+        public static final double AUTO_ALIGN_X_BACK = -.2;
         public static final double AUTO_ALIGN_Y = .15;
 
         public static final Pose2d ALGAE_BLUE_POSE

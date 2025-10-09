@@ -38,13 +38,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Front A4 to Left Floor"
+            "pathName": "3 Piece Front A4 to Middle Floor"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "GROUNDINTAKESEQUENCE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DRIVEINTAKE"
           }
         }
       ]

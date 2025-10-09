@@ -29,8 +29,7 @@ public class ClimberSubsystem extends TemplateSubsystem {
 
         configurePivot(
                 ClimberConstants.CLIMBER_LOW_LIMIT,
-                ClimberConstants.CLIMBER_HIGH_LIMIT,
-                0
+                ClimberConstants.CLIMBER_HIGH_LIMIT
         );
     }
 

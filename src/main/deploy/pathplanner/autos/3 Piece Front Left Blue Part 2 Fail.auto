@@ -17,6 +17,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "DRIVEINTAKE"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "3 Piece Front Left Floor to B4"
@@ -63,6 +69,12 @@
           "type": "named",
           "data": {
             "name": "GROUNDINTAKESEQUENCE"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DRIVEINTAKE"
           }
         },
         {
