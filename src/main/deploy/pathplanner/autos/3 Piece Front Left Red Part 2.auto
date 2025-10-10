@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red Middle to B4"
+            "pathName": "3 Piece Red Middle to A4"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "named",
           "data": {
-            "name": "INTAKESEQUENCE"
+            "name": "GROUNDINTAKESEQUENCE"
           }
         },
         {
@@ -56,7 +56,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Red Left to A2"
+            "pathName": "3 Piece Red Left to B2"
           }
         },
         {

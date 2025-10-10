@@ -103,7 +103,7 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 4;
 
         // public static final double STABLE = 0;
-        public static final double GROUND = 3;
+        public static final double GROUND = 5;
         public static final double ALGAE_GROUND = 11;
 
         public static final double L1 = 16;
@@ -209,7 +209,7 @@ public final class Constants {
         public static final boolean WRIST_INVERTED = false;
 
         public static final double STABLE = 10;
-        public static final double GROUND = 179;
+        public static final double GROUND = 184;
         public static final double ALGAE_GROUND = 185;
 
         public static final double L1 = 10;

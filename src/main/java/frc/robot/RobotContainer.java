@@ -495,13 +495,13 @@ public class RobotContainer {
     }
 
     public static void periodic() {
-
         if (!timer.isRunning()) timer.start();
-        if (autoAlignXOffset > 0 && DriverStation.getAlliance().isPresent() &&
-                DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
+        if (autoAlignXOffset > 0 && Math.abs(autoAlignXOffset) != Math.abs(Constants.Vision.AUTO_ALIGN_X_BACK)
+                && DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
             autoAlignXOffset = -autoAlignXOffset;
 
-        // System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0] + "Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
+//        System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0]
+//                + " Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
 
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
@@ -514,6 +514,8 @@ public class RobotContainer {
         goalStateX.position = autoAlignXOffset;
         goalStateY.position = autoAlignYOffset;
         goalStateRotation.position = 0;
+
+//        System.out.println("goal: " + goalStateX.position);
 
         TrapezoidProfile.State nextStateX = profileX.calculate(timer.get(), currentStateX, goalStateX);
         TrapezoidProfile.State nextStateY = profileY.calculate(timer.get(), currentStateY, goalStateY);
@@ -662,7 +664,9 @@ public class RobotContainer {
 
     public static void setAutoAlignOffsetCenterBack() {
         autoAlignYOffset = 0;
-        autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X_BACK;
+        autoAlignXOffset = (DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) ?
+                Constants.Vision.AUTO_ALIGN_X_BACK : -Constants.Vision.AUTO_ALIGN_X_BACK;
     }
 
     public void toggleAutoAlignOffset() {

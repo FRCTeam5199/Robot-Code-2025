@@ -60,7 +60,7 @@
   "folder": "3 Piece Front Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -38.85337434035323
+    "rotation": -39.472
   },
   "useDefaultConstraints": false
 }

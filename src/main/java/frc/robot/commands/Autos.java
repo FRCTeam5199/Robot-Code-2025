@@ -101,34 +101,34 @@ public final class Autos {
     //Blue - Top is Left, Bottom is Right
     //Red - Top is Right, Bottom is Left
     public static void initializeAutos() {
-        onePieceBlueDropL1 = new PathPlannerAuto("Blue Climber Drop");
-        onePieceRedDropL1 = new PathPlannerAuto("Red Climber Drop");
-
-        onePieceBlueRightL4 = new PathPlannerAuto("1 Piece Blue Right L4");
-        onePieceBlueLeftL4 = new PathPlannerAuto("1 Piece Blue Left L4");
-        onePieceRedRightL4 = new PathPlannerAuto("1 Piece Red Right L4");
-        onePieceRedLeftL4 = new PathPlannerAuto("1 Piece Red Left L4");
-
-        helper2PieceTopBlue = new PathPlannerAuto("2 Piece Blue Top L4 Helper");
-        helper2PieceBottomRed = new PathPlannerAuto("2 Piece Red Bottom L4 Helper");
-
-        twoPieceBlueBottomL4 = new PathPlannerAuto("2 Piece Blue Bottom L4");
-        twoPieceBlueTopL4 = new PathPlannerAuto("2 Piece Blue Top L4");
-        twoPieceRedBottomL4 = new PathPlannerAuto("2 Piece Red Bottom L4");
-        twoPieceRedTopL4 = new PathPlannerAuto("2 Piece Red Top L4");
-
-        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom L4");
-        threePieceBlueTopL4 = new PathPlannerAuto("3 Piece Blue Top L4");
-        threePieceRedBottomL4 = new PathPlannerAuto("3 Piece Red Bottom L4");
-        threePieceRedTopL4 = new PathPlannerAuto("3 Piece Red Top L4");
-
+//        onePieceBlueDropL1 = new PathPlannerAuto("Blue Climber Drop");
+//        onePieceRedDropL1 = new PathPlannerAuto("Red Climber Drop");
+//
+//        onePieceBlueRightL4 = new PathPlannerAuto("1 Piece Blue Right L4");
+//        onePieceBlueLeftL4 = new PathPlannerAuto("1 Piece Blue Left L4");
+//        onePieceRedRightL4 = new PathPlannerAuto("1 Piece Red Right L4");
+//        onePieceRedLeftL4 = new PathPlannerAuto("1 Piece Red Left L4");
+//
+//        helper2PieceTopBlue = new PathPlannerAuto("2 Piece Blue Top L4 Helper");
+//        helper2PieceBottomRed = new PathPlannerAuto("2 Piece Red Bottom L4 Helper");
+//
+//        twoPieceBlueBottomL4 = new PathPlannerAuto("2 Piece Blue Bottom L4");
+//        twoPieceBlueTopL4 = new PathPlannerAuto("2 Piece Blue Top L4");
+//        twoPieceRedBottomL4 = new PathPlannerAuto("2 Piece Red Bottom L4");
+//        twoPieceRedTopL4 = new PathPlannerAuto("2 Piece Red Top L4");
+//
+//        threePieceBlueBottomL4 = new PathPlannerAuto("3 Piece Blue Bottom L4");
+//        threePieceBlueTopL4 = new PathPlannerAuto("3 Piece Blue Top L4");
+//        threePieceRedBottomL4 = new PathPlannerAuto("3 Piece Red Bottom L4");
+//        threePieceRedTopL4 = new PathPlannerAuto("3 Piece Red Top L4");
+//
         threePieceFrontRightBlue = threePieceFrontRightBlue();
         threePieceFrontLeftBlue = threePieceFrontLeftBlue();
 
         threePieceFrontRightRed = threePieceFrontRightRed();
         threePieceFrontLeftRed = threePieceFrontLeftRed();
 
-        fourPieceBlueBottomL4 = new PathPlannerAuto("4 Piece Blue Bottom L4");
+//        fourPieceBlueBottomL4 = new PathPlannerAuto("4 Piece Blue Bottom L4");
 
         testBlue = new PathPlannerAuto("Test Blue");
 
@@ -142,30 +142,30 @@ public final class Autos {
                 .withWidget(BuiltInWidgets.kComboBoxChooser).withPosition(0, 0)
                 .withSize(2, 1);
 
-        autonChooserRed.addOption("1 Piece Red Climber Drop", onePieceRedDropL1);
-        autonChooserRed.addOption("1 Piece Red Right", onePieceRedRightL4);
-        autonChooserRed.addOption("1 Piece Red Left", onePieceRedLeftL4);
-        autonChooserRed.addOption("2 Piece Red Left", twoPieceRedBottomL4);
-        autonChooserRed.addOption("2 Piece Red Right", twoPieceRedTopL4);
-        autonChooserRed.addOption("3 Piece Red Left", threePieceRedBottomL4);
-        autonChooserRed.addOption("3 Piece Red Right", threePieceRedTopL4);
-        autonChooserRed.addOption("2 Piece Red Left Helper", helper2PieceBottomRed);
+//        autonChooserRed.addOption("1 Piece Red Climber Drop", onePieceRedDropL1);
+//        autonChooserRed.addOption("1 Piece Red Right", onePieceRedRightL4);
+//        autonChooserRed.addOption("1 Piece Red Left", onePieceRedLeftL4);
+//        autonChooserRed.addOption("2 Piece Red Left", twoPieceRedBottomL4);
+//        autonChooserRed.addOption("2 Piece Red Right", twoPieceRedTopL4);
+//        autonChooserRed.addOption("3 Piece Red Left", threePieceRedBottomL4);
+//        autonChooserRed.addOption("3 Piece Red Right", threePieceRedTopL4);
+//        autonChooserRed.addOption("2 Piece Red Left Helper", helper2PieceBottomRed);
         autonChooserRed.addOption("Algae Red", algaeRed);
         autonChooserRed.addOption("3 Piece Red Floor Right", threePieceFrontRightRed);
         autonChooserRed.addOption("3 Piece Red Floor Left", threePieceFrontLeftRed);
 
-        autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDropL1);
-        autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueRightL4);
-        autonChooserBlue.addOption("1 Piece Blue Left", onePieceBlueLeftL4);
-        autonChooserBlue.addOption("2 Piece Blue Left", twoPieceBlueTopL4);
-        autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueBottomL4);
-        autonChooserBlue.addOption("3 Piece Blue Left", threePieceBlueTopL4);
-        autonChooserBlue.addOption("3 Piece Blue Right", threePieceBlueBottomL4);
-        autonChooserBlue.addOption("2 Piece Blue Left Helper", helper2PieceTopBlue);
+//        autonChooserBlue.addOption("1 Piece Blue Climber Drop", onePieceBlueDropL1);
+//        autonChooserBlue.addOption("1 Piece Blue Right", onePieceBlueRightL4);
+//        autonChooserBlue.addOption("1 Piece Blue Left", onePieceBlueLeftL4);
+//        autonChooserBlue.addOption("2 Piece Blue Left", twoPieceBlueTopL4);
+//        autonChooserBlue.addOption("2 Piece Blue Right", twoPieceBlueBottomL4);
+//        autonChooserBlue.addOption("3 Piece Blue Left", threePieceBlueTopL4);
+//        autonChooserBlue.addOption("3 Piece Blue Right", threePieceBlueBottomL4);
+//        autonChooserBlue.addOption("2 Piece Blue Left Helper", helper2PieceTopBlue);
         autonChooserBlue.addOption("Algae Blue", algaeBlue);
         autonChooserBlue.addOption("3 Piece Blue Floor Right", threePieceFrontRightBlue);
         autonChooserBlue.addOption("3 Piece Blue Floor Left", threePieceFrontLeftBlue);
-        autonChooserBlue.addOption("Test", testBlue);
+//        autonChooserBlue.addOption("Test", testBlue);
     }
 
     public static Command driveToPose(double goalX, double goalY, double goalDegrees) {
@@ -202,11 +202,11 @@ public final class Autos {
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
-                                new PathConstraints(5d, 5d,
+                                new PathConstraints(5.5, 5.5,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getRedPose(),
-                                new PathConstraints(5d, 5d,
+                                new PathConstraints(5.5, 5.5,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
@@ -214,11 +214,11 @@ public final class Autos {
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
-                                new PathConstraints(5d, 5d,
+                                new PathConstraints(5.5, 5.5,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getRedPose(),
-                                new PathConstraints(5d, 5d,
+                                new PathConstraints(5.5, 5.5,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
