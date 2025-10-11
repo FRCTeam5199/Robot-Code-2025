@@ -109,7 +109,7 @@ public final class Constants {
         public static final double L1 = 16;
         public static final double L2 = 41;
         public static final double L3 = 61;
-        public static final double L4 = 75.25;
+        public static final double L4 = 75;
         public static final double HP = 63;
         public static final double HP_C = 75;
 
@@ -271,7 +271,7 @@ public final class Constants {
         public static final double LIMELIGHT_X_AIM = -29;
 
         public static final double AUTO_ALIGN_X = 0.07;
-        public static final double AUTO_ALIGN_X_BACK = -.2;
+        public static final double AUTO_ALIGN_X_BACK = -.3;
         public static final double AUTO_ALIGN_Y = .15;
 
         public static final Pose2d ALGAE_BLUE_POSE

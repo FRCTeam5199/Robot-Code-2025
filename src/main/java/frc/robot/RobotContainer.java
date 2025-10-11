@@ -211,8 +211,8 @@ public class RobotContainer {
                                 ScoreCommands.Score.score()
                                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120)))
                                         .alongWith(ScoreCommands.Drive.autoAlignCenterBackAuton())
-                                        .andThen(ScoreCommands.Drive.autoAlignCenterAuton())
-                                        .andThen(ScoreCommands.Drive.autoAlignCenterBackAuton()),
+                                        .andThen(ScoreCommands.Drive.autoAlignCenterAuton().withTimeout(1d))
+                                        .andThen(ScoreCommands.Drive.autoAlignCenterBackAuton().withTimeout(1d)),
                                 ScoreCommands.Score.score()
                                         .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
                                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive

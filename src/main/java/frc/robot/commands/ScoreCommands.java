@@ -900,7 +900,7 @@ public class ScoreCommands {
             return new ConditionalCommand(
                     new VelocityCommand(intakeSubsystem, -60, -60),
                     new ConditionalCommand(
-                            new VelocityCommand(intakeSubsystem, 20, 5),
+                            new VelocityCommand(intakeSubsystem, 10, 5),
                             new ConditionalCommand(
                                     new VelocityCommand(intakeSubsystem, 75, 75),
                                     new ConditionalCommand(
