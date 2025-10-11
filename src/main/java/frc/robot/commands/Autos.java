@@ -396,6 +396,7 @@ public final class Autos {
                 ScoreCommands.Drive.autoAlignCenterAuton()
                         .until(intakeSubsystem::hasAlgae),
                 ScoreCommands.Drive.autoAlignCenterBackAuton(),
+                new WaitCommand(.25),
                 autoScoreBlueBarge(ScoringPosition.BARGE),
                 driveToPose(ScoringPosition.REEF_SIDE_I)
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
@@ -403,6 +404,7 @@ public final class Autos {
                         .until(intakeSubsystem::hasAlgae)
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
                 ScoreCommands.Drive.autoAlignCenterBackAuton(),
+                new WaitCommand(.25),
                 autoScoreBlueBarge(ScoringPosition.BARGE2),
                 driveToPose(ScoringPosition.REEF_SIDE_EF)
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
@@ -422,6 +424,7 @@ public final class Autos {
                 ScoreCommands.Drive.autoAlignCenterAuton()
                         .until(intakeSubsystem::hasAlgae),
                 ScoreCommands.Drive.autoAlignCenterBackAuton(),
+                new WaitCommand(.25),
                 autoScoreBlueBarge(ScoringPosition.BARGE),
                 driveToPose(ScoringPosition.REEF_SIDE_I)
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
@@ -429,6 +432,7 @@ public final class Autos {
                         .until(intakeSubsystem::hasAlgae)
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
                 ScoreCommands.Drive.autoAlignCenterBackAuton(),
+                new WaitCommand(.25),
                 autoScoreBlueBarge(ScoringPosition.BARGE2),
                 driveToPose(ScoringPosition.REEF_SIDE_EF)
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),

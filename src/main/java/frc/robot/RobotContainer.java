@@ -171,7 +171,7 @@ public class RobotContainer {
                 .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
                 .until(intakeSubsystem::hasCoral)
                 .andThen(ScoreCommands.Stabling.groundIntakeStable())
-                .withTimeout(1.25));
+                .withTimeout(1.4));
 
         Autos.initializeAutos();
 
@@ -501,7 +501,9 @@ public class RobotContainer {
             autoAlignXOffset = -autoAlignXOffset;
 
 //        System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0]
-//                + " Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
+        //        + " Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
+        //.07, .13; .06, .16; .07, .14; .07, .165; .07, .15; .07, .145; .07, .16;
+        //.065, 16; .07, .15; .06, .15;
 
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
