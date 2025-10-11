@@ -77,8 +77,8 @@ public final class Constants {
         public static final double L4 = 1.01;
         public static final double HP = 0;
 
-        public static final double ALGAE_LOW = .34;
-        public static final double ALGAE_HIGH = .69;
+        public static final double ALGAE_LOW = .37;
+        public static final double ALGAE_HIGH = .75;
         public static final double BARGE = 1.002;
         public static final double PROCESSOR = .22;
     }
@@ -113,8 +113,8 @@ public final class Constants {
         public static final double HP = 63;
         public static final double HP_C = 75;
 
-        public static final double ALGAE_LOW = 60;
-        public static final double ALGAE_HIGH = 69;
+        public static final double ALGAE_LOW = 61;
+        public static final double ALGAE_HIGH = 67;
         public static final double BARGE = 85;
         public static final double PROCESSOR = 30;
 
@@ -222,7 +222,7 @@ public final class Constants {
         public static final double HP_C = 67;
 
         public static final double ALGAE_LOW = 230;
-        public static final double ALGAE_HIGH = 234;
+        public static final double ALGAE_HIGH = 238;
         public static final double BARGE = 140;
         public static final double PROCESSOR = 185;
         public static final double ALGAE_STABLE = 160;
