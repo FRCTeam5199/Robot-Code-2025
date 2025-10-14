@@ -396,6 +396,66 @@ public class AprilTagSubsystem extends SubsystemBase {
         return new double[]{closestTagX, closestTagY, closestTagYaw};
     }
 
+    public double[] getBackClosestTagXYYaw() {
+        if (!backResults.isEmpty()) {
+            PhotonPipelineResult result = backResults.get(backResults.size() - 1);
+            if (result.hasTargets()) {
+                double smallestAngleChange = 45;
+                PhotonTrackedTarget bestTarget = null;
+
+                for (PhotonTrackedTarget target : result.getTargets()) {
+                    if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11) //ignores tags not on the reef
+                            || (target.getFiducialId() >= 17 && target.getFiducialId() <= 22)) {
+                        double pigeonAngle = commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees();
+
+                        while (pigeonAngle > 360) pigeonAngle -= 360;
+                        while (pigeonAngle < -360) pigeonAngle += 360;
+
+                        if (pigeonAngle < 0) pigeonAngle = 360 + pigeonAngle;
+
+                        double angleChange = Math.abs((-180 - tagAngles[target.getFiducialId()]) + pigeonAngle);
+                        if (DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
+                            angleChange += 180;
+
+                        while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
+                        // System.out.println("Angle Change: " + angleChange);
+
+                        if (angleChange < smallestAngleChange) {
+                            smallestAngleChange = angleChange;
+                            bestTarget = target;
+                        }
+                    }
+                }
+                if (bestTarget == null) {
+                    return new double[]{0.0, 0.0, 0.0};
+                }
+                closestTagID = bestTarget.getFiducialId();
+
+                double smallestDistance = PhotonUtils.calculateDistanceToTargetMeters(
+                        Constants.Vision.BACK_CAMERA_POSE.getZ(), .31,
+                        Constants.Vision.BACK_CAMERA_POSE.getRotation().getY(),
+                        Units.degreesToRadians(bestTarget.getPitch()));
+
+                closestTagX = -(Math.cos(Math.toRadians(bestTarget.getYaw())) * smallestDistance);
+                closestTagY = Math.sin(Math.toRadians(bestTarget.getYaw())) * smallestDistance;
+
+                closestTagX += Vision.BACK_CAMERA_TO_BACK_DISTANCE;
+
+                closestTagYaw = bestTarget.getYaw();
+
+                if (DriverStation.getAlliance().isPresent()
+                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
+                    closestTagX = -closestTagX;
+                    closestTagY = -closestTagY;
+                }
+
+//                System.out.println("Id: " + bestTarget.getFiducialId()
+//                        + " X: " + closestTagX + " Y: " + closestTagY);
+            }
+        }
+        return new double[]{closestTagX, closestTagY, closestTagYaw};
+    }
 
     public static AprilTagSubsystem getInstance() {
         if (aprilTagSubsystem == null) {

@@ -266,6 +266,7 @@ public final class Constants {
         //-.2794, -.3175
         public static final Transform3d BACK_CAMERA_POSE =
                 new Transform3d(-.2794, .3175, .19685, new Rotation3d(0, Math.toRadians(0), Math.toRadians(180)));
+        public static final double BACK_CAMERA_TO_BACK_DISTANCE = .05;
 
         public static final String LIMELIGHT_NAME = "limelight";
         public static final double LIMELIGHT_X_AIM = -29;
