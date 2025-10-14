@@ -240,15 +240,15 @@ public class RobotContainer {
                         new ConditionalCommand(
                                 ScoreCommands.Intake.intakeGroundAlgae()
                                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
-                                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed * .75)
-                                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .75)
-                                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .75))),
+                                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed * .6)
+                                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .6)
+                                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .6))),
                                 ScoreCommands.Intake.intakeGround()
                                         .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
                                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
-                                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed * .75)
-                                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .75)
-                                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .75)))
+                                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed * .6)
+                                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .6)
+                                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .6)))
                                         .until(intakeSubsystem::hasCoral)
                                         .andThen(ScoreCommands.Stabling.groundIntakeStable()),
                                 () -> state == State.BARGE || state == State.PROCESSOR
