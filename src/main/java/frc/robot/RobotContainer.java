@@ -38,6 +38,8 @@ import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.ScoringPosition;
 import frc.robot.utility.State;
 
+import java.util.function.Supplier;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -46,7 +48,7 @@ import frc.robot.utility.State;
  */
 public class RobotContainer {
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
-    public static double MaxAngularRate = 2 * Math.PI; // 3/4 of a rotation per second max angular velocity
+    public static double MaxAngularRate = 3 * Math.PI; //Originally 2 * Math.PI
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     public static final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
@@ -122,6 +124,16 @@ public class RobotContainer {
     private static boolean useAutoAlign = true;
     private static boolean shouldFixTip = true;
     private static boolean isCoralBlockingHP = false;
+
+    private static ScoringPosition currentScoringPositionValue = ScoringPosition.REEF_SIDE_A;
+    private static Integer currentScoringSideIDValue = 18;
+    private static Integer closestTagIDValue = 0;
+    private static Double closestXValue = 0d;
+
+    private final static Supplier<ScoringPosition> currentScoringPositionSupplier = () -> currentScoringPositionValue;
+    private final static Supplier<Integer> currentScoringSideIDSupplier = () -> currentScoringSideIDValue;
+    private final static Supplier<Integer> closestTagIDSupplier = () -> closestTagIDValue;
+    private final static Supplier<Double> closestXSupplier = () -> closestXValue;
 
     public static ScoringPosition getCurrentScoringPosition() {
         return currentScoringPosition;
@@ -199,7 +211,8 @@ public class RobotContainer {
         commandXboxController.x().onTrue(ScoreCommands.Arm.armL3());
         commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
 
-        commandXboxController.leftTrigger().onTrue(Autos.autoScore())
+        commandXboxController.leftTrigger().onTrue(Autos.autoScore(currentScoringPositionSupplier,
+                        currentScoringSideIDSupplier, closestTagIDSupplier, closestXSupplier))
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
@@ -273,7 +286,6 @@ public class RobotContainer {
 
         commandXboxController.povLeft().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
         commandXboxController.povRight().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
-
 
         commandXboxController.povUp().onTrue(ScoreCommands.Arm.armAlgaeHigh()); //right top paddle
         commandXboxController.button(10).onTrue(ScoreCommands.Arm.armAlgaeLow()); //right bottom paddle
@@ -496,14 +508,20 @@ public class RobotContainer {
 
     public static void periodic() {
         if (!timer.isRunning()) timer.start();
-        if (autoAlignXOffset > 0 && Math.abs(autoAlignXOffset) != Math.abs(Constants.Vision.AUTO_ALIGN_X_BACK)
+        if (autoAlignXOffset < 0 && Math.abs(autoAlignXOffset) != Math.abs(Constants.Vision.AUTO_ALIGN_X_BACK)
                 && DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
             autoAlignXOffset = -autoAlignXOffset;
 
+        currentScoringPositionValue = currentScoringPosition;
+        currentScoringSideIDValue = DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                ? currentScoringPosition.getBlueAprilTagID()
+                : currentScoringPosition.getRedAprilTagID();
+        closestTagIDValue = aprilTagSubsystem.getClosestTagID();
+        closestXValue = aprilTagSubsystem.getClosestTagXYYaw()[0];
+
 //        System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0]
         //        + " Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
-        //.07, .13; .06, .16; .07, .14; .07, .165; .07, .15; .07, .145; .07, .16;
-        //.065, 16; .07, .15; .06, .15;
 
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];

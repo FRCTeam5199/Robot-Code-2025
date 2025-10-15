@@ -4,12 +4,12 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.util.JSONUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -21,17 +21,12 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.RobotContainer;
 import frc.robot.UserInterface;
 import frc.robot.constants.Constants;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.WristSubsystem;
-import frc.robot.subsystems.template.PositionCommand;
-import frc.robot.subsystems.template.VelocityCommand;
+import frc.robot.subsystems.*;
 import frc.robot.utility.ScoringPosition;
 import frc.robot.utility.State;
 
-import java.awt.*;
-import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
 
 public final class Autos {
     private SendableChooser<Command> autoChooser;
@@ -81,9 +76,12 @@ public final class Autos {
     private static final WristSubsystem wristSubsystem = WristSubsystem.getInstance();
     private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
     private static final CommandSwerveDrivetrain commandSwerveDrivetrain = RobotContainer.commandSwerveDrivetrain;
+    private static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
+    private static final ElevatorSubsystem elevatorSubsystem = ElevatorSubsystem.getInstance();
+
     public final static SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(RobotContainer.MaxSpeed * .05).withRotationalDeadband(RobotContainer.MaxAngularRate * .05) // Add a 10% deadband
-            .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
+            .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage);
 
 
     /**
@@ -181,11 +179,6 @@ public final class Autos {
                         new Pose2d(goalX, goalY, Rotation2d.fromDegrees(goalDegrees)),
                         new PathConstraints(2d, 2d, Units.degreesToRadians(540d), Units.degreesToRadians(720d)),
                         0d
-                ),
-                AutoBuilder.pathfindToPose(
-                        new Pose2d(goalX, goalY, Rotation2d.fromDegrees(goalDegrees)),
-                        new PathConstraints(2d, 2d, Units.degreesToRadians(540d), Units.degreesToRadians(720d)),
-                        0d
                 )
         );
     }
@@ -203,23 +196,37 @@ public final class Autos {
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
                                 new PathConstraints(5.5, 5.5,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getRedPose(),
                                 new PathConstraints(5.5, 5.5,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                )
+        );
+    }
+
+    public static Command driveToPose(Supplier<ScoringPosition> scoringPositionSupplier) {
+        return new SequentialCommandGroup(
+                new InstantCommand(() ->
+                        commandSwerveDrivetrain.applyRequest(() ->
+                                drive.withVelocityX(0).
+                                        withVelocityX(0).
+                                        withRotationalRate(0)
+                        )
                 ),
                 new ConditionalCommand(
-                        AutoBuilder.pathfindToPose(
-                                scoringPosition.getBluePose(),
-                                new PathConstraints(5.5, 5.5,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
-                        AutoBuilder.pathfindToPose(
-                                scoringPosition.getRedPose(),
-                                new PathConstraints(5.5, 5.5,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
+                        new InstantCommand().andThen(() ->
+                                AutoBuilder.pathfindToPose(
+                                        scoringPositionSupplier.get().getBluePose(),
+                                        new PathConstraints(5.5, 5.5,
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d).schedule()),
+                        new InstantCommand().andThen(() ->
+                                AutoBuilder.pathfindToPose(
+                                        scoringPositionSupplier.get().getRedPose(),
+                                        new PathConstraints(5.5, 5.5,
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d).schedule()),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 )
@@ -235,18 +242,6 @@ public final class Autos {
                                         withVelocityX(0).
                                         withRotationalRate(0)
                         )
-                ),
-                new ConditionalCommand(
-                        AutoBuilder.pathfindToPose(
-                                scoringPosition.getBluePose(),
-                                new PathConstraints(maxVelocity, maxAcceleration,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), goalEndVelocity),
-                        AutoBuilder.pathfindToPose(
-                                scoringPosition.getRedPose(),
-                                new PathConstraints(maxVelocity, maxAcceleration,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), goalEndVelocity),
-                        () -> DriverStation.getAlliance().isPresent()
-                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 ),
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
@@ -283,25 +278,13 @@ public final class Autos {
                                         Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)), 0d),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
-                ),
-                new ConditionalCommand(
-                        AutoBuilder.pathfindToPose(
-                                scoringPosition.getBluePose(),
-                                new PathConstraints(maxVelocity, maxAcceleration,
-                                        Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)), 0d),
-                        AutoBuilder.pathfindToPose(
-                                scoringPosition.getRedPose(),
-                                new PathConstraints(maxVelocity, maxAcceleration,
-                                        Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)), 0d),
-                        () -> DriverStation.getAlliance().isPresent()
-                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 )
         );
     }
 
     public static Command autoScore(ScoringPosition scoringPosition) {
         return new SequentialCommandGroup(
-                driveToPose(scoringPosition),
+                driveToPose(RobotContainer.getCurrentScoringPosition()),
                 new ConditionalCommand(
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),
@@ -330,29 +313,16 @@ public final class Autos {
         );
     }
 
-    public static Command autoScore() {
+    public static Command autoScore(Supplier<ScoringPosition> currentScoringPosition,
+                                    Supplier<Integer> currentScoringSideID,
+                                    Supplier<Integer> closestTagID,
+                                    Supplier<Double> closestX) {
         return new SequentialCommandGroup(
-                new SelectCommand<>(
-                        Map.ofEntries(
-                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPose(ScoringPosition.REEF_SIDE_A)),
-                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPose(ScoringPosition.REEF_SIDE_B)),
-                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPose(ScoringPosition.REEF_SIDE_C)),
-                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPose(ScoringPosition.REEF_SIDE_D)),
-                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPose(ScoringPosition.REEF_SIDE_E)),
-                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPose(ScoringPosition.REEF_SIDE_F)),
-                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPose(ScoringPosition.REEF_SIDE_G)),
-                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPose(ScoringPosition.REEF_SIDE_H)),
-                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPose(ScoringPosition.REEF_SIDE_I)),
-                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPose(ScoringPosition.REEF_SIDE_J)),
-                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPose(ScoringPosition.REEF_SIDE_K)),
-                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L))
-                        ),
-                        RobotContainer::getCurrentScoringPosition
-                ).alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
+                new DriveToPoseCommand().alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
                 new ConditionalCommand(
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),
-                        () -> RobotContainer.getCurrentScoringPosition().isRightSide()
+                        () -> currentScoringPosition.get().isRightSide()
                 ).alongWith(ScoreCommands.Score.score()),
                 ScoreCommands.Score.place()
                         .until(() -> !intakeSubsystem.hasCoral())
