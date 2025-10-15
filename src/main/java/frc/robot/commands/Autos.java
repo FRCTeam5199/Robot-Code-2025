@@ -25,6 +25,7 @@ import frc.robot.subsystems.*;
 import frc.robot.utility.ScoringPosition;
 import frc.robot.utility.State;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -313,16 +314,48 @@ public final class Autos {
         );
     }
 
-    public static Command autoScore(Supplier<ScoringPosition> currentScoringPosition,
-                                    Supplier<Integer> currentScoringSideID,
-                                    Supplier<Integer> closestTagID,
-                                    Supplier<Double> closestX) {
+    public static Command autoScoreNew(Supplier<ScoringPosition> currentScoringPosition,
+                                       Supplier<Integer> currentScoringSideID,
+                                       Supplier<Integer> closestTagID,
+                                       Supplier<Double> closestX) {
         return new SequentialCommandGroup(
-                new DriveToPoseCommand().alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
+                new DriveToPoseCommand().until(RobotContainer::readyToAlign)
+                        .alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
                 new ConditionalCommand(
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),
                         () -> currentScoringPosition.get().isRightSide()
+                ).alongWith(ScoreCommands.Score.score()),
+                ScoreCommands.Score.place()
+                        .until(() -> !intakeSubsystem.hasCoral())
+                        .withTimeout(2)
+        );
+    }
+
+    public static Command autoScore() {
+        return new SequentialCommandGroup(
+                new SelectCommand<>(
+                        Map.ofEntries(
+                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPose(ScoringPosition.REEF_SIDE_A)),
+                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPose(ScoringPosition.REEF_SIDE_B)),
+                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPose(ScoringPosition.REEF_SIDE_C)),
+                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPose(ScoringPosition.REEF_SIDE_D)),
+                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPose(ScoringPosition.REEF_SIDE_E)),
+                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPose(ScoringPosition.REEF_SIDE_F)),
+                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPose(ScoringPosition.REEF_SIDE_G)),
+                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPose(ScoringPosition.REEF_SIDE_H)),
+                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPose(ScoringPosition.REEF_SIDE_I)),
+                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPose(ScoringPosition.REEF_SIDE_J)),
+                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPose(ScoringPosition.REEF_SIDE_K)),
+                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L))
+                        ),
+                        RobotContainer::getCurrentScoringPosition
+                ).until(RobotContainer::readyToAlign)
+                        .alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
+                new ConditionalCommand(
+                        ScoreCommands.Drive.autoAlignRAuton(),
+                        ScoreCommands.Drive.autoAlignLAuton(),
+                        () -> RobotContainer.getCurrentScoringPosition().isRightSide()
                 ).alongWith(ScoreCommands.Score.score()),
                 ScoreCommands.Score.place()
                         .until(() -> !intakeSubsystem.hasCoral())

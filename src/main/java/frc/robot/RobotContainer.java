@@ -141,6 +141,10 @@ public class RobotContainer {
 
     private static ScoringPosition currentScoringPosition = ScoringPosition.REEF_SIDE_A;
 
+    private static int readyToAlignCheck = 0;
+
+    private static boolean readyToAlign = false;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -211,8 +215,7 @@ public class RobotContainer {
         commandXboxController.x().onTrue(ScoreCommands.Arm.armL3());
         commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
 
-        commandXboxController.leftTrigger().onTrue(Autos.autoScore(currentScoringPositionSupplier,
-                        currentScoringSideIDSupplier, closestTagIDSupplier, closestXSupplier))
+        commandXboxController.leftTrigger().onTrue(Autos.autoScore())
                 .onFalse(ScoreCommands.Stabling.stable()
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
@@ -520,6 +523,14 @@ public class RobotContainer {
         closestTagIDValue = aprilTagSubsystem.getClosestTagID();
         closestXValue = aprilTagSubsystem.getClosestTagXYYaw()[0];
 
+        if (readyToAlign()) {
+            readyToAlignCheck++;
+            readyToAlign = readyToAlignCheck > 5;
+        } else {
+            readyToAlignCheck = 0;
+            readyToAlign = false;
+        }
+
 //        System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0]
         //        + " Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
 
@@ -693,6 +704,18 @@ public class RobotContainer {
         autoAlignYOffset = -autoAlignYOffset;
     }
 
+    public static boolean readyToAlign() {
+        return aprilTagSubsystem.getClosestTagID() ==
+                (DriverStation.getAlliance().isPresent()
+                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                        ? currentScoringPosition.getBlueAprilTagID()
+                        : currentScoringPosition.getRedAprilTagID())
+                && aprilTagSubsystem.getClosestTagXYYaw()[0] != 0;
+    }
+
+    public static boolean isReadyToAlign() {
+        return readyToAlign;
+    }
 
     public static boolean aligned() {
         return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .025
