@@ -300,7 +300,7 @@ public class AprilTagSubsystem extends SubsystemBase {
         if (!results.isEmpty()) {
             PhotonPipelineResult result = results.get(results.size() - 1);
             if (result.hasTargets()) {
-                double smallestAngleChange = 45;
+                double smallestAngleChange = 20;
 
                 for (PhotonTrackedTarget target : result.getTargets()) {
                     if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11) //ignores tags not on the reef
@@ -339,7 +339,7 @@ public class AprilTagSubsystem extends SubsystemBase {
         if (!results.isEmpty()) {
             PhotonPipelineResult result = results.get(results.size() - 1);
             if (result.hasTargets()) {
-                double smallestAngleChange = 45;
+                double smallestAngleChange = 20;
                 PhotonTrackedTarget bestTarget = null;
 
                 for (PhotonTrackedTarget target : result.getTargets()) {
@@ -400,7 +400,7 @@ public class AprilTagSubsystem extends SubsystemBase {
         if (!backResults.isEmpty()) {
             PhotonPipelineResult result = backResults.get(backResults.size() - 1);
             if (result.hasTargets()) {
-                double smallestAngleChange = 45;
+                double smallestAngleChange = 20; //TODO: check how angle offset affects this
                 PhotonTrackedTarget bestTarget = null;
 
                 for (PhotonTrackedTarget target : result.getTargets()) {
@@ -462,5 +462,12 @@ public class AprilTagSubsystem extends SubsystemBase {
             aprilTagSubsystem = new AprilTagSubsystem();
         }
         return aprilTagSubsystem;
+    }
+
+    public void resetAutoAlignData() {
+        closestTagID = -1;
+        closestTagX = 0;
+        closestTagY = 0;
+        closestTagYaw = 0;
     }
 }

@@ -125,16 +125,6 @@ public class RobotContainer {
     private static boolean shouldFixTip = true;
     private static boolean isCoralBlockingHP = false;
 
-    private static ScoringPosition currentScoringPositionValue = ScoringPosition.REEF_SIDE_A;
-    private static Integer currentScoringSideIDValue = 18;
-    private static Integer closestTagIDValue = 0;
-    private static Double closestXValue = 0d;
-
-    private final static Supplier<ScoringPosition> currentScoringPositionSupplier = () -> currentScoringPositionValue;
-    private final static Supplier<Integer> currentScoringSideIDSupplier = () -> currentScoringSideIDValue;
-    private final static Supplier<Integer> closestTagIDSupplier = () -> closestTagIDValue;
-    private final static Supplier<Double> closestXSupplier = () -> closestXValue;
-
     public static ScoringPosition getCurrentScoringPosition() {
         return currentScoringPosition;
     }
@@ -515,24 +505,17 @@ public class RobotContainer {
                 && DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
             autoAlignXOffset = -autoAlignXOffset;
 
-        currentScoringPositionValue = currentScoringPosition;
-        currentScoringSideIDValue = DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
-                ? currentScoringPosition.getBlueAprilTagID()
-                : currentScoringPosition.getRedAprilTagID();
-        closestTagIDValue = aprilTagSubsystem.getClosestTagID();
-        closestXValue = aprilTagSubsystem.getClosestTagXYYaw()[0];
-
         if (readyToAlign()) {
             readyToAlignCheck++;
-            readyToAlign = readyToAlignCheck > 5;
+            readyToAlign = readyToAlignCheck >= 3;
         } else {
             readyToAlignCheck = 0;
             readyToAlign = false;
         }
 
-//        System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0]
-        //        + " Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
+        System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0]
+                + " Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
+        System.out.println("Closest Tag: " + aprilTagSubsystem.getClosestTagID());
 
         currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];

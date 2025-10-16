@@ -103,18 +103,18 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 4;
 
         // public static final double STABLE = 0;
-        public static final double GROUND = 3;
+        public static final double GROUND = 4;
         public static final double ALGAE_GROUND = 11;
 
         public static final double L1 = 16;
         public static final double L2 = 41;
         public static final double L3 = 61;
-        public static final double L4 = 75;
+        public static final double L4 = 72;
         public static final double HP = 63;
         public static final double HP_C = 75;
 
         public static final double ALGAE_LOW = 61;
-        public static final double ALGAE_HIGH = 67;
+        public static final double ALGAE_HIGH = 68;
         public static final double BARGE = 85;
         public static final double PROCESSOR = 30;
 
@@ -215,17 +215,17 @@ public final class Constants {
         public static final double L1 = 10;
         public static final double L2 = 67;
         public static final double L3 = 91;
-        public static final double PREVIOUS_L4 = 100;
-        public static final double L4 = 137.5;
+        public static final double L4 = 127.5;
 
         public static final double HP = 61;
         public static final double HP_C = 67;
 
         public static final double ALGAE_LOW = 230;
-        public static final double ALGAE_HIGH = 238;
+        public static final double ALGAE_HIGH = 243;
         public static final double BARGE = 140;
         public static final double PROCESSOR = 185;
         public static final double ALGAE_STABLE = 160;
+        public static final double ALGAE_PREP = 120;
 
         public static final boolean WRIST_BRAKE = true;
 
@@ -270,7 +270,7 @@ public final class Constants {
         public static final String LIMELIGHT_NAME = "limelight";
         public static final double LIMELIGHT_X_AIM = -29;
 
-        public static final double AUTO_ALIGN_X = 0.04;
+        public static final double AUTO_ALIGN_X = -0.05;
         public static final double AUTO_ALIGN_X_BACK = -.3;
         public static final double AUTO_ALIGN_Y = .15;
 

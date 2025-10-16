@@ -314,26 +314,9 @@ public final class Autos {
         );
     }
 
-    public static Command autoScoreNew(Supplier<ScoringPosition> currentScoringPosition,
-                                       Supplier<Integer> currentScoringSideID,
-                                       Supplier<Integer> closestTagID,
-                                       Supplier<Double> closestX) {
-        return new SequentialCommandGroup(
-                new DriveToPoseCommand().until(RobotContainer::readyToAlign)
-                        .alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
-                new ConditionalCommand(
-                        ScoreCommands.Drive.autoAlignRAuton(),
-                        ScoreCommands.Drive.autoAlignLAuton(),
-                        () -> currentScoringPosition.get().isRightSide()
-                ).alongWith(ScoreCommands.Score.score()),
-                ScoreCommands.Score.place()
-                        .until(() -> !intakeSubsystem.hasCoral())
-                        .withTimeout(2)
-        );
-    }
-
     public static Command autoScore() {
         return new SequentialCommandGroup(
+                new InstantCommand(aprilTagSubsystem::resetAutoAlignData),
                 new SelectCommand<>(
                         Map.ofEntries(
                                 Map.entry(ScoringPosition.REEF_SIDE_A, driveToPose(ScoringPosition.REEF_SIDE_A)),
@@ -350,7 +333,7 @@ public final class Autos {
                                 Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L))
                         ),
                         RobotContainer::getCurrentScoringPosition
-                ).until(RobotContainer::readyToAlign)
+                ).until(RobotContainer::isReadyToAlign)
                         .alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
                 new ConditionalCommand(
                         ScoreCommands.Drive.autoAlignRAuton(),

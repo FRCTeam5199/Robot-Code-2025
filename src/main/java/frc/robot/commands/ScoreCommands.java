@@ -340,12 +340,11 @@ public class ScoreCommands {
     public static class Stabling {
         public static Command regularStable() {
             return new SequentialCommandGroup(
-                    new ParallelCommandGroup(
-                            new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, 80, 120)
-                                    .until(() -> elevatorSubsystem.isAtBottom()
-                                            && elevatorSubsystem.getMechM() < .05),
-                            new PositionCommand(wristSubsystem, WristConstants.HP)
-                    ),
+                    new PositionCommand(wristSubsystem, WristConstants.L4_PREP)
+                            .onlyIf(() -> RobotContainer.getState() == State.L4),
+                    new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, 80, 120)
+                            .until(() -> elevatorSubsystem.isAtBottom()
+                                    && elevatorSubsystem.getMechM() < .05),
 //                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
             );
@@ -413,18 +412,14 @@ public class ScoreCommands {
 
         public static Command stable() {
             return new ConditionalCommand(
-                    stableL4(),
+                    algaeStable(),
                     new ConditionalCommand(
-                            algaeStable(),
-                            new ConditionalCommand(
-                                    bargeStable(),
-                                    regularStable(),
-                                    () -> RobotContainer.getState() == State.BARGE
-                            ),
-                            () -> (RobotContainer.getState() == State.ALGAE_LOW
-                                    || RobotContainer.getState() == State.ALGAE_HIGH)
+                            bargeStable(),
+                            regularStable(),
+                            () -> RobotContainer.getState() == State.BARGE
                     ),
-                    () -> (RobotContainer.getState() == State.L4)
+                    () -> (RobotContainer.getState() == State.ALGAE_LOW
+                            || RobotContainer.getState() == State.ALGAE_HIGH)
             );
         }
 
@@ -660,7 +655,7 @@ public class ScoreCommands {
             return new PositionCommand(armSubsystem, ArmConstants.L1)
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1)))
 //                    .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)))
-                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.HP))
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.L1))
                     .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
         }
 
@@ -668,7 +663,7 @@ public class ScoreCommands {
             return new PositionCommand(armSubsystem, ArmConstants.L2)
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L2)))
 //                    .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)))
-                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.HP))
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.L2))
                     .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
         }
 
@@ -676,7 +671,7 @@ public class ScoreCommands {
             return new PositionCommand(armSubsystem, ArmConstants.L3)
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)))
 //                    .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)))
-                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.HP))
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.L3))
                     .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
         }
 
@@ -684,17 +679,19 @@ public class ScoreCommands {
             return new PositionCommand(armSubsystem, ArmConstants.L4)
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)))
 //                    .alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)))
-                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.HP))
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.L4))
                     .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
         }
 
         public static Command armAlgaeLow() {
             return new PositionCommand(armSubsystem, ArmConstants.ALGAE_LOW)
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.ALGAE_PREP))
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.ALGAE_LOW)));
         }
 
         public static Command armAlgaeHigh() {
             return new PositionCommand(armSubsystem, ArmConstants.ALGAE_HIGH)
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.ALGAE_PREP))
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.ALGAE_HIGH)));
         }
 
