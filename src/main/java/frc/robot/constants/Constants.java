@@ -72,8 +72,8 @@ public final class Constants {
         public static final double ALGAE_GROUND = .12;
 
         public static final double L1 = 0;
-        public static final double L2 = .09;
-        public static final double L3 = .38;
+        public static final double L2 = .19;
+        public static final double L3 = .44;
         public static final double L4 = 1.01;
         public static final double HP = 0;
 
@@ -107,8 +107,8 @@ public final class Constants {
         public static final double ALGAE_GROUND = 11;
 
         public static final double L1 = 16;
-        public static final double L2 = 41;
-        public static final double L3 = 61;
+        public static final double L2 = 32;
+        public static final double L3 = 54;
         public static final double L4 = 72;
         public static final double HP = 63;
         public static final double HP_C = 75;
@@ -213,9 +213,9 @@ public final class Constants {
         public static final double ALGAE_GROUND = 185;
 
         public static final double L1 = 10;
-        public static final double L2 = 67;
-        public static final double L3 = 91;
-        public static final double L4 = 127.5;
+        public static final double L2 = 61;
+        public static final double L3 = 88;
+        public static final double L4 = 128.5;
 
         public static final double HP = 61;
         public static final double HP_C = 67;

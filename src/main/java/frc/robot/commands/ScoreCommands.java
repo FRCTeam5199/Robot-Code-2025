@@ -340,8 +340,8 @@ public class ScoreCommands {
     public static class Stabling {
         public static Command regularStable() {
             return new SequentialCommandGroup(
-                    new PositionCommand(wristSubsystem, WristConstants.L4_PREP)
-                            .onlyIf(() -> RobotContainer.getState() == State.L4),
+                //     new PositionCommand(wristSubsystem, WristConstants.L4)
+                //             .onlyIf(() -> RobotContainer.getState() == State.L4),
                     new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, 80, 120)
                             .until(() -> elevatorSubsystem.isAtBottom()
                                     && elevatorSubsystem.getMechM() < .05),
