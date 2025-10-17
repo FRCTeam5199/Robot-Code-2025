@@ -77,6 +77,10 @@ public final class Constants {
         public static final double L4 = 1.01;
         public static final double HP = 0;
 
+        public static final double L2_BACK = .19;
+        public static final double L3_BACK = .44;
+        public static final double L4_BACK = 1.01;
+
         public static final double ALGAE_LOW = .37;
         public static final double ALGAE_HIGH = .75;
         public static final double BARGE = 1.002;
@@ -103,15 +107,18 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 4;
 
         // public static final double STABLE = 0;
-        public static final double GROUND = 4;
+        public static final double GROUND = 4.5;
         public static final double ALGAE_GROUND = 11;
 
         public static final double L1 = 16;
-        public static final double L2 = 32;
+        public static final double L2 = 33;
         public static final double L3 = 54;
         public static final double L4 = 72;
         public static final double HP = 63;
-        public static final double HP_C = 75;
+
+        public static final double L2_BACK = 32;
+        public static final double L3_BACK = 54;
+        public static final double L4_BACK = 72;
 
         public static final double ALGAE_LOW = 61;
         public static final double ALGAE_HIGH = 68;
@@ -209,7 +216,7 @@ public final class Constants {
         public static final boolean WRIST_INVERTED = false;
 
         public static final double STABLE = 10;
-        public static final double GROUND = 179;
+        public static final double GROUND = 180;
         public static final double ALGAE_GROUND = 185;
 
         public static final double L1 = 10;
@@ -217,8 +224,11 @@ public final class Constants {
         public static final double L3 = 88;
         public static final double L4 = 128.5;
 
+        public static final double L2_BACK = 61;
+        public static final double L3_BACK = 88;
+        public static final double L4_BACK = 128.5;
+
         public static final double HP = 61;
-        public static final double HP_C = 67;
 
         public static final double ALGAE_LOW = 230;
         public static final double ALGAE_HIGH = 243;
@@ -264,15 +274,18 @@ public final class Constants {
 
         public static final String BACK_CAMERA_NAME = "BackCamera";
         public static final Transform3d BACK_CAMERA_POSE =
-                new Transform3d(-.2794, .3175, .19685, new Rotation3d(0, Math.toRadians(0), Math.toRadians(180)));
+                new Transform3d(-.2794, .3175, .19685, new Rotation3d(0, Math.toRadians(10), Math.toRadians(225)));
         public static final double BACK_CAMERA_TO_BACK_DISTANCE = .05;
 
         public static final String LIMELIGHT_NAME = "limelight";
         public static final double LIMELIGHT_X_AIM = -29;
 
         public static final double AUTO_ALIGN_X = -0.05;
-        public static final double AUTO_ALIGN_X_BACK = -.3;
+        public static final double AUTO_ALIGN_X_ALGAE_PREP = -.3;
         public static final double AUTO_ALIGN_Y = .15;
+
+        public static final double AUTO_ALIGN_X_BACK = 1.5;
+        public static final double AUTO_ALIGN_Y_BACK = 0;
 
         public static final Pose2d ALGAE_BLUE_POSE
                 = new Pose2d(7.265, 3.851, new Rotation2d(Math.toRadians(180)));

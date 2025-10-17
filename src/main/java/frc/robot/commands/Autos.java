@@ -12,6 +12,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -208,6 +209,45 @@ public final class Autos {
         );
     }
 
+    public static Command driveToPoseChoice(ScoringPosition scoringPosition) {
+        return new SequentialCommandGroup(
+                new InstantCommand(() ->
+                        commandSwerveDrivetrain.applyRequest(() ->
+                                drive.withVelocityX(0).
+                                        withVelocityX(0).
+                                        withRotationalRate(0)
+                        )
+                ),
+                new ConditionalCommand(
+                        new ConditionalCommand(
+                                AutoBuilder.pathfindToPose(
+                                        scoringPosition.getBluePose().plus(new Transform2d(0, 0, new Rotation2d(Math.toRadians(180)))),
+                                        new PathConstraints(5.5, 5.5,
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                AutoBuilder.pathfindToPose(
+                                        scoringPosition.getRedPose().plus(new Transform2d(0, 0, new Rotation2d(Math.toRadians(180)))),
+                                        new PathConstraints(5.5, 5.5,
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                () -> DriverStation.getAlliance().isPresent()
+                                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                        ),
+                        new ConditionalCommand(
+                                AutoBuilder.pathfindToPose(
+                                        scoringPosition.getBluePose(),
+                                        new PathConstraints(5.5, 5.5,
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                AutoBuilder.pathfindToPose(
+                                        scoringPosition.getRedPose(),
+                                        new PathConstraints(5.5, 5.5,
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                () -> DriverStation.getAlliance().isPresent()
+                                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                        ),
+                        RobotContainer::getShouldAlignBackwards
+                )
+        );
+    }
+
     public static Command driveToPose(Supplier<ScoringPosition> scoringPositionSupplier) {
         return new SequentialCommandGroup(
                 new InstantCommand(() ->
@@ -283,21 +323,6 @@ public final class Autos {
         );
     }
 
-    public static Command autoScore(ScoringPosition scoringPosition) {
-        return new SequentialCommandGroup(
-                driveToPose(RobotContainer.getCurrentScoringPosition()),
-                new ConditionalCommand(
-                        ScoreCommands.Drive.autoAlignRAuton(),
-                        ScoreCommands.Drive.autoAlignLAuton(),
-                        scoringPosition::isRightSide
-                ).alongWith(ScoreCommands.Score.score()),
-                ScoreCommands.Score.place()
-                        .until(() -> !intakeSubsystem.hasCoral())
-                        .withTimeout(2)
-        );
-    }
-
-
     public static Command autoScoreWithUnwind(ScoringPosition scoringPosition) {
         return new SequentialCommandGroup(
                 driveToPose(scoringPosition)
@@ -335,6 +360,40 @@ public final class Autos {
                         RobotContainer::getCurrentScoringPosition
                 ).until(RobotContainer::isReadyToAlign)
                         .alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
+                new InstantCommand(() -> aprilTagSubsystem.setDoneAutoDriving(true)),
+                new ConditionalCommand(
+                        ScoreCommands.Drive.autoAlignRAuton(),
+                        ScoreCommands.Drive.autoAlignLAuton(),
+                        () -> RobotContainer.getCurrentScoringPosition().isRightSide()
+                ).alongWith(ScoreCommands.Score.score()),
+                ScoreCommands.Score.place()
+                        .until(() -> !intakeSubsystem.hasCoral())
+                        .withTimeout(2)
+        );
+    }
+
+    public static Command autoScoreChoice() {
+        return new SequentialCommandGroup(
+                new InstantCommand(aprilTagSubsystem::resetAutoAlignData),
+                new SelectCommand<>(
+                        Map.ofEntries(
+                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPoseChoice(ScoringPosition.REEF_SIDE_A)),
+                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPoseChoice(ScoringPosition.REEF_SIDE_B)),
+                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPoseChoice(ScoringPosition.REEF_SIDE_C)),
+                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPoseChoice(ScoringPosition.REEF_SIDE_D)),
+                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPoseChoice(ScoringPosition.REEF_SIDE_E)),
+                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPoseChoice(ScoringPosition.REEF_SIDE_F)),
+                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPoseChoice(ScoringPosition.REEF_SIDE_G)),
+                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPoseChoice(ScoringPosition.REEF_SIDE_H)),
+                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPoseChoice(ScoringPosition.REEF_SIDE_I)),
+                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPoseChoice(ScoringPosition.REEF_SIDE_J)),
+                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPoseChoice(ScoringPosition.REEF_SIDE_K)),
+                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPoseChoice(ScoringPosition.REEF_SIDE_L))
+                        ),
+                        RobotContainer::getCurrentScoringPosition
+                ).until(RobotContainer::isReadyToAlign)
+                        .alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
+                new InstantCommand(() -> aprilTagSubsystem.setDoneAutoDriving(true)),
                 new ConditionalCommand(
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),
@@ -369,6 +428,8 @@ public final class Autos {
                 new InstantCommand(() -> intakeSubsystem.setIntakeMotors(-100, -100))
         );
     }
+
+    //TODO: add the canceling auto drive early to autons and make sure tolerance is increased for auto align
 
     public static Command algaeBlue() {
         return new SequentialCommandGroup(
