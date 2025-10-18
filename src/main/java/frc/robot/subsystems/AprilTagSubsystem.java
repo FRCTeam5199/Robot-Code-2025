@@ -300,7 +300,7 @@ public class AprilTagSubsystem extends SubsystemBase {
         if (!results.isEmpty()) {
             PhotonPipelineResult result = results.get(results.size() - 1);
             if (result.hasTargets()) {
-                double smallestAngleChange = doneAutoDriving ? 45 : 20;
+                double smallestAngleChange = doneAutoDriving ? 45 : 25;
 
                 for (PhotonTrackedTarget target : result.getTargets()) {
                     if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11) //ignores tags not on the reef
@@ -340,7 +340,7 @@ public class AprilTagSubsystem extends SubsystemBase {
         if (!results.isEmpty()) {
             PhotonPipelineResult result = results.get(results.size() - 1);
             if (result.hasTargets()) {
-                double smallestAngleChange = doneAutoDriving ? 45 : 20;
+                double smallestAngleChange = doneAutoDriving ? 45 : 25;
                 PhotonTrackedTarget bestTarget = null;
 
                 for (PhotonTrackedTarget target : result.getTargets()) {
@@ -402,8 +402,7 @@ public class AprilTagSubsystem extends SubsystemBase {
         if (!backResults.isEmpty()) {
             PhotonPipelineResult result = backResults.get(backResults.size() - 1);
             if (result.hasTargets()) {
-//                double smallestAngleChange = doneAutoDriving ? 45 : 20;
-                double smallestAngleChange = 9999d;
+                double smallestAngleChange = doneAutoDriving ? 45 : 25;
 
                 for (PhotonTrackedTarget target : result.getTargets()) {
                     if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11) //ignores tags not on the reef
@@ -436,8 +435,8 @@ public class AprilTagSubsystem extends SubsystemBase {
         if (!backResults.isEmpty()) {
             PhotonPipelineResult result = backResults.get(backResults.size() - 1);
             if (result.hasTargets()) {
-//                double smallestAngleChange = 20; //TODO: check how angle offset affects this
-                double smallestAngleChange = 9999d;
+//                double smallestAngleChange = 20;
+                double smallestAngleChange = 999;
                 PhotonTrackedTarget bestTarget = null;
 
                 for (PhotonTrackedTarget target : result.getTargets()) {
@@ -450,13 +449,12 @@ public class AprilTagSubsystem extends SubsystemBase {
 
                         if (pigeonAngle < 0) pigeonAngle = 360 + pigeonAngle;
 
-                        double angleChange = Math.abs((-180 - tagAngles[target.getFiducialId()]) + pigeonAngle);
+                        double angleChange = Math.abs((-180 - tagAngles[target.getFiducialId()]) + 180 + pigeonAngle);
                         if (DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
                             angleChange += 180;
 
                         while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
-                        // System.out.println("Angle Change: " + angleChange);
 
                         if (angleChange < smallestAngleChange) {
                             smallestAngleChange = angleChange;
@@ -475,12 +473,13 @@ public class AprilTagSubsystem extends SubsystemBase {
                         Units.degreesToRadians(bestTarget.getPitch()));
 
 //                System.out.println("Distance: " + smallestDistance);
+//                System.out.println("Yaw: " + bestTarget.getYaw());
 
-                closestTagXBack = (Math.cos(Math.toRadians(bestTarget.getYaw())) * smallestDistance);
-                closestTagYBack = -Math.sin(Math.toRadians(bestTarget.getYaw())) * smallestDistance;
+                closestTagXBack = (Math.cos(Math.toRadians(bestTarget.getYaw() - 40)) * smallestDistance);
+                closestTagYBack = -Math.sin(Math.toRadians(bestTarget.getYaw() - 40)) * smallestDistance;
 
-                System.out.println("Id: " + bestTarget.getFiducialId()
-                        + " X: " + closestTagXBack + " Y: " + closestTagYBack);
+//                System.out.println("Id: " + bestTarget.getFiducialId()
+//                        + " X: " + closestTagXBack + " Y: " + closestTagYBack);
 
                 closestTagXBack -= Vision.BACK_CAMERA_TO_BACK_DISTANCE;
 

@@ -274,8 +274,8 @@ public final class Constants {
 
         public static final String BACK_CAMERA_NAME = "BackCamera";
         public static final Transform3d BACK_CAMERA_POSE =
-                new Transform3d(-.2794, .3175, .19685, new Rotation3d(0, Math.toRadians(10), Math.toRadians(225)));
-        public static final double BACK_CAMERA_TO_BACK_DISTANCE = .05;
+                new Transform3d(-.2794, .3175, .19685, new Rotation3d(0, Math.toRadians(17), Math.toRadians(220)));
+        public static final double BACK_CAMERA_TO_BACK_DISTANCE = 0;
 
         public static final String LIMELIGHT_NAME = "limelight";
         public static final double LIMELIGHT_X_AIM = -29;
@@ -284,8 +284,10 @@ public final class Constants {
         public static final double AUTO_ALIGN_X_ALGAE_PREP = -.3;
         public static final double AUTO_ALIGN_Y = .15;
 
-        public static final double AUTO_ALIGN_X_BACK = 1.5;
-        public static final double AUTO_ALIGN_Y_BACK = 0;
+        public static final double AUTO_ALIGN_X_BACK_RIGHT = .7;
+        public static final double AUTO_ALIGN_X_BACK_LEFT = .7;
+        public static final double AUTO_ALIGN_Y_BACK_RIGHT = .7;
+        public static final double AUTO_ALIGN_Y_BACK_LEFT = .7;
 
         public static final Pose2d ALGAE_BLUE_POSE
                 = new Pose2d(7.265, 3.851, new Rotation2d(Math.toRadians(180)));

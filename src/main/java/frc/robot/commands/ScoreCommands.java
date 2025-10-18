@@ -73,7 +73,7 @@ public class ScoreCommands {
                                 commandSwerveDrivetrain.setControl(
                                         drive.withVelocityX(xVelocity)
                                                 .withVelocityY(yVelocity)
-                                                .withRotationalRate(0)); //rotationVelocity
+                                                .withRotationalRate(rotationVelocity));
                             },
                             (interrupted) -> {
                                 commandSwerveDrivetrain.resetPose(
