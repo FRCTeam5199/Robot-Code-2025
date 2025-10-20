@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.RobotContainer;
@@ -435,8 +436,7 @@ public class AprilTagSubsystem extends SubsystemBase {
         if (!backResults.isEmpty()) {
             PhotonPipelineResult result = backResults.get(backResults.size() - 1);
             if (result.hasTargets()) {
-//                double smallestAngleChange = 20;
-                double smallestAngleChange = 999;
+                double smallestAngleChange = 20;
                 PhotonTrackedTarget bestTarget = null;
 
                 for (PhotonTrackedTarget target : result.getTargets()) {
@@ -467,19 +467,17 @@ public class AprilTagSubsystem extends SubsystemBase {
                 }
                 backClosestTagID = bestTarget.getFiducialId();
 
-                double smallestDistance = PhotonUtils.calculateDistanceToTargetMeters(
-                        Constants.Vision.BACK_CAMERA_POSE.getZ(), .31,
-                        Constants.Vision.BACK_CAMERA_POSE.getRotation().getY(),
-                        Units.degreesToRadians(bestTarget.getPitch()));
+                Transform3d cameraToTag = bestTarget.getBestCameraToTarget();
 
-//                System.out.println("Distance: " + smallestDistance);
-//                System.out.println("Yaw: " + bestTarget.getYaw());
+                Pose3d robotToTag = new Pose3d().transformBy(Vision.BACK_CAMERA_POSE).transformBy(cameraToTag);
 
-                closestTagXBack = (Math.cos(Math.toRadians(bestTarget.getYaw() - 40)) * smallestDistance);
-                closestTagYBack = -Math.sin(Math.toRadians(bestTarget.getYaw() - 40)) * smallestDistance;
+                closestTagXBack = -robotToTag.getX();
+                closestTagYBack = -robotToTag.getY();
 
-//                System.out.println("Id: " + bestTarget.getFiducialId()
-//                        + " X: " + closestTagXBack + " Y: " + closestTagYBack);
+//                System.out.println("X: " + closestTagXBack + " Y: " + closestTagYBack);
+
+                System.out.println("Id: " + bestTarget.getFiducialId()
+                        + " X: " + closestTagXBack + " Y: " + closestTagYBack);
 
                 closestTagXBack -= Vision.BACK_CAMERA_TO_BACK_DISTANCE;
 

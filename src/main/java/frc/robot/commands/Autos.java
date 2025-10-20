@@ -27,7 +27,6 @@ import frc.robot.utility.ScoringPosition;
 import frc.robot.utility.State;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
 
 public final class Autos {
@@ -198,11 +197,11 @@ public final class Autos {
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
                                 new PathConstraints(5.5, 5.5,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0.5),
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getRedPose(),
                                 new PathConstraints(5.5, 5.5,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0.5),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 )
@@ -223,11 +222,11 @@ public final class Autos {
                                 AutoBuilder.pathfindToPose(
                                         scoringPosition.getBluePose().plus(new Transform2d(0, 0, new Rotation2d(Math.toRadians(180)))),
                                         new PathConstraints(5.5, 5.5,
-                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0.5),
                                 AutoBuilder.pathfindToPose(
                                         scoringPosition.getRedPose().plus(new Transform2d(0, 0, new Rotation2d(Math.toRadians(180)))),
                                         new PathConstraints(5.5, 5.5,
-                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0.5),
                                 () -> DriverStation.getAlliance().isPresent()
                                         && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                         ),
@@ -235,11 +234,11 @@ public final class Autos {
                                 AutoBuilder.pathfindToPose(
                                         scoringPosition.getBluePose(),
                                         new PathConstraints(5.5, 5.5,
-                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0.5),
                                 AutoBuilder.pathfindToPose(
                                         scoringPosition.getRedPose(),
                                         new PathConstraints(5.5, 5.5,
-                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0.5),
                                 () -> DriverStation.getAlliance().isPresent()
                                         && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                         ),
@@ -358,7 +357,7 @@ public final class Autos {
                                 Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L))
                         ),
                         RobotContainer::getCurrentScoringPosition
-                ).until(RobotContainer::isReadyToAlign)
+                )
                         .alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
                 new InstantCommand(() -> aprilTagSubsystem.setDoneAutoDriving(true)),
                 new ConditionalCommand(
@@ -391,7 +390,7 @@ public final class Autos {
                                 Map.entry(ScoringPosition.REEF_SIDE_L, driveToPoseChoice(ScoringPosition.REEF_SIDE_L))
                         ),
                         RobotContainer::getCurrentScoringPosition
-                ).until(RobotContainer::isReadyToAlign)
+                )
                         .alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
                 new InstantCommand(() -> aprilTagSubsystem.setDoneAutoDriving(true)),
                 new ConditionalCommand(
@@ -437,26 +436,26 @@ public final class Autos {
                         .resetPose(Constants.Vision.ALGAE_BLUE_POSE)),
                 new InstantCommand(() -> RobotContainer.setState(State.L4)),
                 autoScoreWithUnwind(ScoringPosition.REEF_SIDE_G),
-                ScoreCommands.Drive.autoAlignCenterBackAuton().withTimeout(1d)
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d)
                         .alongWith(ScoreCommands.Score.removeAlgaeLow())
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
                 ScoreCommands.Drive.autoAlignCenterAuton().withTimeout(1d)
                         .until(intakeSubsystem::hasAlgae),
-                ScoreCommands.Drive.autoAlignCenterBackAuton().withTimeout(1d),
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d),
                 new WaitCommand(.25),
                 autoScoreBlueBarge(ScoringPosition.BARGE),
-                driveToPose(ScoringPosition.REEF_SIDE_I)
+                driveToPose(ScoringPosition.REEF_SIDE_IJ)
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
-                ScoreCommands.Drive.autoAlignCenterBackAuton().withTimeout(1d),
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d),
                 ScoreCommands.Drive.autoAlignCenterAuton().withTimeout(1d)
                         .until(intakeSubsystem::hasAlgae)
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
-                ScoreCommands.Drive.autoAlignCenterBackAuton().withTimeout(1d),
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d),
                 new WaitCommand(.25),
                 autoScoreBlueBarge(ScoringPosition.BARGE2),
                 driveToPose(ScoringPosition.REEF_SIDE_EF)
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
-                ScoreCommands.Drive.autoAlignCenterBackAuton()
+                ScoreCommands.Drive.autoAlignCenterBack()
         );
     }
 
@@ -466,27 +465,27 @@ public final class Autos {
                         .resetPose(Constants.Vision.ALGAE_RED_POSE)),
                 new InstantCommand(() -> RobotContainer.setState(State.L4)),
                 autoScoreWithUnwind(ScoringPosition.REEF_SIDE_G),
-                ScoreCommands.Drive.autoAlignCenterBackAuton().withTimeout(1d)
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d)
                         .alongWith(ScoreCommands.Score.removeAlgaeLow())
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
                 ScoreCommands.Drive.autoAlignCenterAuton()
                         .until(intakeSubsystem::hasAlgae)
                         .withTimeout(1d),
-                ScoreCommands.Drive.autoAlignCenterBackAuton().withTimeout(1d),
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d),
                 new WaitCommand(.25),
                 autoScoreBlueBarge(ScoringPosition.BARGE),
                 driveToPose(ScoringPosition.REEF_SIDE_I)
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
-                ScoreCommands.Drive.autoAlignCenterBackAuton().withTimeout(1d),
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d),
                 ScoreCommands.Drive.autoAlignCenterAuton().withTimeout(1d)
                         .until(intakeSubsystem::hasAlgae)
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
-                ScoreCommands.Drive.autoAlignCenterBackAuton().withTimeout(1d),
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d),
                 new WaitCommand(.25),
                 autoScoreBlueBarge(ScoringPosition.BARGE2),
                 driveToPose(ScoringPosition.REEF_SIDE_EF)
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
-                ScoreCommands.Drive.autoAlignCenterBackAuton()
+                ScoreCommands.Drive.autoAlignCenterBack()
         );
     }
 

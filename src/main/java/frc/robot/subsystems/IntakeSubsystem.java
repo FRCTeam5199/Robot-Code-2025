@@ -51,7 +51,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
         coralSensor = new LaserCan(IntakeConstants.CORAL_SENSOR_ID);
         try {
             coralSensor.setRangingMode(LaserCan.RangingMode.SHORT);
-            coralSensor.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+            coralSensor.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 8, 8));
             coralSensor.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
         } catch (ConfigurationFailedException ignored) {
         }
