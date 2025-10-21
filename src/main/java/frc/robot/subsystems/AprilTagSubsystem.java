@@ -476,8 +476,8 @@ public class AprilTagSubsystem extends SubsystemBase {
 
 //                System.out.println("X: " + closestTagXBack + " Y: " + closestTagYBack);
 
-                System.out.println("Id: " + bestTarget.getFiducialId()
-                        + " X: " + closestTagXBack + " Y: " + closestTagYBack);
+//                System.out.println("Id: " + bestTarget.getFiducialId()
+//                        + " X: " + closestTagXBack + " Y: " + closestTagYBack);
 
                 closestTagXBack -= Vision.BACK_CAMERA_TO_BACK_DISTANCE;
 
@@ -512,6 +512,11 @@ public class AprilTagSubsystem extends SubsystemBase {
         closestTagYawBack = 0;
 
         doneAutoDriving = false;
+    }
+
+    public void resetClosestTagIDs() {
+        closestTagID = -1;
+        backClosestTagID = -1;
     }
 
     public void setDoneAutoDriving(boolean doneAutoDriving) {
