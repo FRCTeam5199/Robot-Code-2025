@@ -84,10 +84,15 @@ public class RobotContainer {
     public static double xVelocity = 0;
     public static double yVelocity = 0;
     public static double rotationVelocity = 0;
-    public static double driveToPieceRotationVelocity;
+
+    public static double xVelocityManual = 0;
+    public static double yVelocityManual = 0;
 
     public static double autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
     public static double autoAlignYOffset = Constants.Vision.AUTO_ALIGN_Y;
+
+    public static double autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X;
+    public static double autoAlignYOffsetManual = Constants.Vision.AUTO_ALIGN_Y;
 
     private static TrapezoidProfile profileX = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -103,6 +108,21 @@ public class RobotContainer {
             new TrapezoidProfile.Constraints(1000, 1000));
     private static TrapezoidProfile.State currentStateRotation = new TrapezoidProfile.State(0, 0);
     private static TrapezoidProfile.State goalStateRotation = new TrapezoidProfile.State(0, 0);
+
+    private static TrapezoidProfile profileXManual = new TrapezoidProfile(
+            new TrapezoidProfile.Constraints(1000, 1000));
+    private static TrapezoidProfile.State currentStateXManual = new TrapezoidProfile.State(0, 0);
+    private static TrapezoidProfile.State goalStateXManual = new TrapezoidProfile.State(0, 0);
+
+    private static TrapezoidProfile profileYManual = new TrapezoidProfile(
+            new TrapezoidProfile.Constraints(1000, 1000));
+    private static TrapezoidProfile.State currentStateYManual = new TrapezoidProfile.State(0, 0);
+    private static TrapezoidProfile.State goalStateYManual = new TrapezoidProfile.State(0, 0);
+
+    private static TrapezoidProfile profileRotationManual = new TrapezoidProfile(
+            new TrapezoidProfile.Constraints(1000, 1000));
+    private static TrapezoidProfile.State currentStateRotationManual = new TrapezoidProfile.State(0, 0);
+    private static TrapezoidProfile.State goalStateRotationManual = new TrapezoidProfile.State(0, 0);
 
     private static TrapezoidProfile driveToPieceRotation = new TrapezoidProfile(
             new TrapezoidProfile.Constraints(1000, 1000));
@@ -141,6 +161,7 @@ public class RobotContainer {
 
     private static boolean readyToAlign = false;
     private static boolean shouldAlignBackwards = false;
+    private static boolean shouldAlignBackwardsManual = false;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -509,16 +530,20 @@ public class RobotContainer {
 
     public static void periodic() {
         if (!timer.isRunning()) timer.start();
-        if (autoAlignXOffset < 0 && Math.abs(autoAlignXOffset) != Math.abs(Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP)
+
+        if (state != State.ALGAE_LOW && state != State.ALGAE_HIGH && state
+                != State.BARGE && state != State.PROCESSOR)
+            autoAlignXOffset = shouldAlignBackwards
+                    ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
+
+        if (autoAlignXOffset > 0 && Math.abs(autoAlignXOffset) != Math.abs(Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP)
                 && DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
             autoAlignXOffset = -autoAlignXOffset;
-        if (shouldAlignBackwards) {
-            autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X_BACK;
-        }
+
 
         if (readyToAlign()) {
             readyToAlignCheck++;
-            readyToAlign = readyToAlignCheck >= 3;
+            readyToAlign = readyToAlignCheck >= 2;
         } else {
             readyToAlignCheck = 0;
             readyToAlign = false;
@@ -553,26 +578,30 @@ public class RobotContainer {
             shouldAlignBackwards = Math.abs(difference) >= 90;
         }
 
-//        System.out.println("Back Closest Tag: " + aprilTagSubsystem.getBackClosestTagID());
-//        System.out.println("Forward Closest Tag: " + aprilTagSubsystem.getClosestTagID());
+        shouldAlignBackwardsManual = aprilTagSubsystem.getClosestTagIDManual() == -1;
+        autoAlignXOffsetManual = shouldAlignBackwardsManual ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
 
         currentStateX.position = shouldAlignBackwards ? aprilTagSubsystem.getBackClosestTagXYYaw()[0] : aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = shouldAlignBackwards ? aprilTagSubsystem.getBackClosestTagXYYaw()[1] : aprilTagSubsystem.getClosestTagXYYaw()[1];
         currentStateRotation.position = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
 
-//        currentStateX.velocity = commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond;
-//        currentStateY.velocity = commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond;
-//        currentStateRotation.velocity = commandSwerveDrivetrain.getState().Speeds.omegaRadiansPerSecond;
+        currentStateXManual.position = shouldAlignBackwardsManual ? aprilTagSubsystem.getBackClosestTagXYYaw()[0] : aprilTagSubsystem.getClosestTagXYYaw()[0];
+        currentStateYManual.position = shouldAlignBackwardsManual ? aprilTagSubsystem.getBackClosestTagXYYaw()[1] : aprilTagSubsystem.getClosestTagXYYaw()[1];
 
         goalStateX.position = autoAlignXOffset;
         goalStateY.position = autoAlignYOffset;
         goalStateRotation.position = 0;
 
-//        System.out.println("goal: " + goalStateX.position);
+        goalStateXManual.position = autoAlignXOffsetManual;
+        goalStateYManual.position = autoAlignYOffsetManual;
+        goalStateRotationManual.position = 0;
 
         TrapezoidProfile.State nextStateX = profileX.calculate(timer.get(), currentStateX, goalStateX);
         TrapezoidProfile.State nextStateY = profileY.calculate(timer.get(), currentStateY, goalStateY);
         TrapezoidProfile.State nextStateRotation = profileRotation.calculate(timer.get(), currentStateRotation, goalStateRotation);
+
+        TrapezoidProfile.State nextStateXManual = profileXManual.calculate(timer.get(), currentStateXManual, goalStateXManual);
+        TrapezoidProfile.State nextStateYManual = profileYManual.calculate(timer.get(), currentStateYManual, goalStateYManual);
 
 //        System.out.println("X Diff: " + Math.abs(currentStateX.position - autoAlignXOffset));
 //        System.out.println("Y Diff: " + Math.abs(currentStateY.position - autoAlignYOffset));
@@ -608,6 +637,38 @@ public class RobotContainer {
             }
         }
         rotationVelocity = turnPIDController.calculate(currentStateRotation.position, nextStateRotation);
+
+        if (shouldAlignBackwardsManual) {
+            if (Math.abs(currentStateXManual.position - autoAlignXOffsetManual) > .3) {
+                xVelocityManual = drivePIDControllerXBack.calculate(currentStateXManual.position, nextStateXManual);
+            } else if (Math.abs(currentStateXManual.position - autoAlignXOffsetManual) > .05) {
+                xVelocityManual = drivePIDControllerXCloseBack.calculate(currentStateXManual.position, nextStateXManual);
+            } else {
+                xVelocityManual = drivePIDControllerXVeryCloseBack.calculate(currentStateXManual.position, nextStateXManual);
+            }
+
+            if (Math.abs(currentStateYManual.position - autoAlignYOffsetManual) > .1) {
+                yVelocityManual = drivePIDControllerYBack.calculate(currentStateYManual.position, nextStateYManual);
+            } else if (Math.abs(currentStateXManual.position - autoAlignXOffsetManual) > .04) {
+                yVelocityManual = drivePIDControllerYCloseBack.calculate(currentStateYManual.position, nextStateYManual);
+            } else {
+                yVelocityManual = drivePIDControllerYVeryCloseBack.calculate(currentStateYManual.position, nextStateYManual);
+            }
+        } else {
+            if ((Math.abs(currentStateXManual.position - autoAlignXOffsetManual) > .15
+                    || Math.abs(currentStateYManual.position - autoAlignYOffsetManual) > .1)) {
+                xVelocityManual = drivePIDControllerX.calculate(currentStateXManual.position, nextStateXManual);
+                yVelocityManual = drivePIDControllerY.calculate(currentStateYManual.position, nextStateYManual);
+            } else if (Math.abs(currentStateYManual.position - autoAlignYOffsetManual) > .04) {
+                xVelocityManual = drivePIDControllerXClose.calculate(currentStateXManual.position, nextStateXManual);
+                yVelocityManual = drivePIDControllerYClose.calculate(currentStateYManual.position, nextStateYManual);
+            } else {
+                xVelocityManual = drivePIDControllerXClose.calculate(currentStateXManual.position, nextStateXManual);
+                yVelocityManual = drivePIDControllerYVeryClose.calculate(currentStateYManual.position, nextStateYManual);
+            }
+        }
+
+//        System.out.println("Rotation Vel Manual: " + rotationVelocityManual);
 
 //        System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0]
 //                + " Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
@@ -722,11 +783,17 @@ public class RobotContainer {
                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) {
             autoAlignYOffset = shouldAlignBackwards
                     ? Constants.Vision.AUTO_ALIGN_Y_BACK_LEFT : Constants.Vision.AUTO_ALIGN_Y;
+            autoAlignYOffsetManual = shouldAlignBackwardsManual
+                    ? Constants.Vision.AUTO_ALIGN_Y_BACK_LEFT : Constants.Vision.AUTO_ALIGN_Y;
         } else {
             autoAlignYOffset = shouldAlignBackwards
                     ? Constants.Vision.AUTO_ALIGN_Y_BACK_RIGHT : -Constants.Vision.AUTO_ALIGN_Y;
+            autoAlignYOffsetManual = shouldAlignBackwardsManual
+                    ? Constants.Vision.AUTO_ALIGN_Y_BACK_RIGHT : -Constants.Vision.AUTO_ALIGN_Y;
         }
         autoAlignXOffset = shouldAlignBackwards
+                ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
+        autoAlignXOffsetManual = shouldAlignBackwardsManual
                 ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
     }
 
@@ -735,11 +802,17 @@ public class RobotContainer {
                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) {
             autoAlignYOffset = shouldAlignBackwards
                     ? Constants.Vision.AUTO_ALIGN_Y_BACK_RIGHT : -Constants.Vision.AUTO_ALIGN_Y;
+            autoAlignYOffsetManual = shouldAlignBackwardsManual
+                    ? Constants.Vision.AUTO_ALIGN_Y_BACK_RIGHT : -Constants.Vision.AUTO_ALIGN_Y;
         } else {
             autoAlignYOffset = shouldAlignBackwards
                     ? Constants.Vision.AUTO_ALIGN_Y_BACK_LEFT : Constants.Vision.AUTO_ALIGN_Y;
+            autoAlignYOffsetManual = shouldAlignBackwardsManual
+                    ? Constants.Vision.AUTO_ALIGN_Y_BACK_LEFT : Constants.Vision.AUTO_ALIGN_Y;
         }
         autoAlignXOffset = shouldAlignBackwards
+                ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
+        autoAlignXOffsetManual = shouldAlignBackwardsManual
                 ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
     }
 
@@ -777,17 +850,29 @@ public class RobotContainer {
     }
 
     public static boolean isReadyToAlign() {
-        return readyToAlign;
+        return readyToAlign && (shouldAlignBackwards
+                ? Math.sqrt(Math.pow(aprilTagSubsystem.getBackClosestTagXYYaw()[0], 2)
+                + Math.pow(aprilTagSubsystem.getBackClosestTagXYYaw()[1], 2)) < 2d
+                : Math.sqrt(Math.pow(aprilTagSubsystem.getClosestTagXYYaw()[0], 2)
+                + Math.pow(aprilTagSubsystem.getClosestTagXYYaw()[1], 2)) < 1d);
     }
 
     public static boolean aligned() {
         return shouldAlignBackwards ?
                 Math.abs(aprilTagSubsystem.getBackClosestTagXYYaw()[0] - autoAlignXOffset) <= .025
-                        && Math.abs(aprilTagSubsystem.getBackClosestTagXYYaw()[1] - autoAlignYOffset) <= 2000 //.02
+                        && Math.abs(aprilTagSubsystem.getBackClosestTagXYYaw()[1] - autoAlignYOffset) <= .02
                 : Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .025
                 && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .02;
-
     }
+
+    public static boolean alignedManual() {
+        return shouldAlignBackwardsManual ?
+                Math.abs(aprilTagSubsystem.getBackClosestTagXYYaw()[0] - autoAlignXOffsetManual) <= .025
+                        && Math.abs(aprilTagSubsystem.getBackClosestTagXYYaw()[1] - autoAlignYOffsetManual) <= .02
+                : Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffsetManual) <= .025
+                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffsetManual) <= .02;
+    }
+
 
     public static void setState(State state) {
         RobotContainer.state = state;
@@ -815,5 +900,9 @@ public class RobotContainer {
 
     public static boolean getShouldAlignBackwards() {
         return shouldAlignBackwards;
+    }
+
+    public static boolean getShouldAlignBackwardsManual() {
+        return shouldAlignBackwardsManual;
     }
 }

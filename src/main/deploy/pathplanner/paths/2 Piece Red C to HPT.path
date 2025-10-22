@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.975687285223366,
-        "y": 5.3390034364261165
+        "x": 3.422,
+        "y": 5.858
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.99794493828459,
-        "y": 6.2194881303036675
+        "x": 4.444257653061223,
+        "y": 6.738484693877551
       },
       "isLocked": false,
       "linkedName": null
@@ -71,7 +71,7 @@
   "folder": "2 Piece Red Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -120.30268072048808
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }

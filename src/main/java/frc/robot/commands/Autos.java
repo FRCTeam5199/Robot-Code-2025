@@ -196,12 +196,12 @@ public final class Autos {
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
-                                new PathConstraints(5.5, 5.5,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0.5),
+                                new PathConstraints(5.5, 4.5,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getRedPose(),
-                                new PathConstraints(5.5, 5.5,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0.5),
+                                new PathConstraints(5.5, 4.5,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 )
@@ -220,25 +220,25 @@ public final class Autos {
                 new ConditionalCommand(
                         new ConditionalCommand(
                                 AutoBuilder.pathfindToPose(
-                                        scoringPosition.getBluePose().plus(new Transform2d(0, 0, new Rotation2d(Math.toRadians(180)))),
-                                        new PathConstraints(5.5, 5.5,
-                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0.5),
+                                        scoringPosition.getBluePose().plus(new Transform2d(Math.sin(scoringPosition.getBluePose().getRotation().getRadians()) * .5, -Math.cos(scoringPosition.getBluePose().getRotation().getRadians()) * .5, new Rotation2d(Math.toRadians(180)))),
+                                        new PathConstraints(5.5, 4.5,
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                                 AutoBuilder.pathfindToPose(
-                                        scoringPosition.getRedPose().plus(new Transform2d(0, 0, new Rotation2d(Math.toRadians(180)))),
-                                        new PathConstraints(5.5, 5.5,
-                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0.5),
+                                        scoringPosition.getRedPose().plus(new Transform2d(Math.sin(scoringPosition.getRedPose().getRotation().getRadians()) * .5, -Math.cos(scoringPosition.getRedPose().getRotation().getRadians()) * .5, new Rotation2d(Math.toRadians(180)))),
+                                        new PathConstraints(5.5, 4.5,
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                                 () -> DriverStation.getAlliance().isPresent()
                                         && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                         ),
                         new ConditionalCommand(
                                 AutoBuilder.pathfindToPose(
                                         scoringPosition.getBluePose(),
-                                        new PathConstraints(5.5, 5.5,
-                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0.5),
+                                        new PathConstraints(5.5, 4.5,
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                                 AutoBuilder.pathfindToPose(
                                         scoringPosition.getRedPose(),
-                                        new PathConstraints(5.5, 5.5,
-                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0.5),
+                                        new PathConstraints(5.5, 4.5,
+                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                                 () -> DriverStation.getAlliance().isPresent()
                                         && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                         ),
@@ -260,12 +260,12 @@ public final class Autos {
                         new InstantCommand().andThen(() ->
                                 AutoBuilder.pathfindToPose(
                                         scoringPositionSupplier.get().getBluePose(),
-                                        new PathConstraints(5.5, 5.5,
+                                        new PathConstraints(5.5, 4.5,
                                                 Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d).schedule()),
                         new InstantCommand().andThen(() ->
                                 AutoBuilder.pathfindToPose(
                                         scoringPositionSupplier.get().getRedPose(),
-                                        new PathConstraints(5.5, 5.5,
+                                        new PathConstraints(5.5, 4.5,
                                                 Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d).schedule()),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
@@ -357,7 +357,7 @@ public final class Autos {
                                 Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L))
                         ),
                         RobotContainer::getCurrentScoringPosition
-                )
+                ).until(RobotContainer::isReadyToAlign)
                         .alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
                 new InstantCommand(() -> aprilTagSubsystem.setDoneAutoDriving(true)),
                 new ConditionalCommand(
@@ -390,7 +390,7 @@ public final class Autos {
                                 Map.entry(ScoringPosition.REEF_SIDE_L, driveToPoseChoice(ScoringPosition.REEF_SIDE_L))
                         ),
                         RobotContainer::getCurrentScoringPosition
-                )
+                ).until(() -> RobotContainer.isReadyToAlign() && !RobotContainer.getShouldAlignBackwards())
                         .alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
                 new InstantCommand(() -> aprilTagSubsystem.setDoneAutoDriving(true)),
                 new ConditionalCommand(

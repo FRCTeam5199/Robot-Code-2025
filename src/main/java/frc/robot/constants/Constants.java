@@ -77,8 +77,8 @@ public final class Constants {
         public static final double L4 = 1.01;
         public static final double HP = 0;
 
-        public static final double L2_BACK = .07;
-        public static final double L3_BACK = .49;
+        public static final double L2_BACK = .08;
+        public static final double L3_BACK = .44;
         public static final double L4_BACK = 1.01;
 
         public static final double ALGAE_LOW = .37;
@@ -107,18 +107,19 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 4;
 
         // public static final double STABLE = 0;
-        public static final double GROUND = 5.5;
+        public static final double GROUND = 6.25;
         public static final double ALGAE_GROUND = 11;
 
         public static final double L1 = 16;
         public static final double L2 = 41;
         public static final double L3 = 61;
-        public static final double L4 = 75;
+        public static final double L4 = 80;
         public static final double HP = 63;
 
         public static final double L2_BACK = 80;
-        public static final double L3_BACK = 89;
+        public static final double L3_BACK = 85;
         public static final double L4_BACK = 88;
+        public static final double L4_BACK_AFTER = 83;
 
         public static final double ALGAE_LOW = 61;
         public static final double ALGAE_HIGH = 68;
@@ -216,18 +217,18 @@ public final class Constants {
         public static final boolean WRIST_INVERTED = false;
 
         public static final double STABLE = 10;
-        public static final double GROUND = 183;
+        public static final double GROUND = 182;
         public static final double ALGAE_GROUND = 185;
 
         public static final double L1 = 10;
         public static final double L2 = 67;
         public static final double L3 = 91;
         public static final double PREP_L4 = 100;
-        public static final double L4 = 127.5;
+        public static final double L4 = 137.5;
 
-        public static final double L2_BACK = 44;
-        public static final double L3_BACK = 46;
-        public static final double PREP_L4_BACK = 30;
+        public static final double L2_BACK = 45;
+        public static final double L3_BACK = 50;
+        public static final double PREP_L4_BACK = 3;
         public static final double L4_BACK = 56;
 
         public static final double HP = 61;
@@ -271,7 +272,7 @@ public final class Constants {
         public static final Transform3d CAMERA_POSE =
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
-        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(3.5, 3.5, 999);
+        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(1.5, 1.5, 999);
 
 
         public static final String BACK_CAMERA_NAME = "BackCamera";
@@ -288,7 +289,7 @@ public final class Constants {
 
         public static final double AUTO_ALIGN_X_BACK = .495;
         public static final double AUTO_ALIGN_Y_BACK_RIGHT = .145;
-        public static final double AUTO_ALIGN_Y_BACK_LEFT = -.165;
+        public static final double AUTO_ALIGN_Y_BACK_LEFT = -.175;
 
         public static final Pose2d ALGAE_BLUE_POSE
                 = new Pose2d(7.265, 3.851, new Rotation2d(Math.toRadians(180)));
