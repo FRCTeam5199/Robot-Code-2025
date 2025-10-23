@@ -951,17 +951,17 @@ public class ScoreCommands {
             return new ConditionalCommand(
                     new VelocityCommand(intakeSubsystem, -60, -60),
                     new ConditionalCommand(
-                            new VelocityCommand(intakeSubsystem, 15, 5),
+                            new VelocityCommand(intakeSubsystem, 15, 5), //L1
                             new ConditionalCommand(
                                     new ConditionalCommand(
-                                            new VelocityCommand(intakeSubsystem, -40, -40),
-                                            new VelocityCommand(intakeSubsystem, 120, 120),
+                                            new VelocityCommand(intakeSubsystem, -40, -40), //L4
+                                            new VelocityCommand(intakeSubsystem, 120, 120), //L4
                                             RobotContainer::getShouldAlignBackwards
                                     ),
                                     new ConditionalCommand(
                                             new VelocityCommand(intakeSubsystem, -100, -100),
                                             new ConditionalCommand(
-                                                    new VelocityCommand(intakeSubsystem, -120, -120),
+                                                    new VelocityCommand(intakeSubsystem, -80, -80), //L2 and L3
                                                     new VelocityCommand(intakeSubsystem, 120, 120),
                                                     RobotContainer::getShouldAlignBackwards
                                             ),
