@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8271516393442623,
-        "y": 1.8252561475409823
+        "x": 1.1508196721311474,
+        "y": 2.1848872950819667
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9550202336000444,
-        "y": 2.309133138996572
+        "x": 1.0849136936338866,
+        "y": 2.5766007592935747
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 2.748309426229507
       },
       "prevControl": {
-        "x": 1.2882642078570001,
-        "y": 2.4983717019120495
+        "x": 1.3177998538519051,
+        "y": 2.4114080626594503
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "SET_POLE_B",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -48,7 +55,7 @@
   "folder": "3 Piece Front Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -139.02295956158935
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

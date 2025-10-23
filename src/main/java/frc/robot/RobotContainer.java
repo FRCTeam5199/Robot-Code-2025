@@ -207,6 +207,30 @@ public class RobotContainer {
                 .andThen(ScoreCommands.Stabling.groundIntakeStable())
                 .withTimeout(1.4));
 
+        NamedCommands.registerCommand("AUTO_SCORE_A",
+                new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_A)
+                        .andThen(Autos.autoScoreChoice()));
+        NamedCommands.registerCommand("AUTO_SCORE_B",
+                new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_B)
+                        .andThen(Autos.autoScoreChoice()));
+        NamedCommands.registerCommand("AUTO_SCORE_C",
+                new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_C)
+                        .andThen(Autos.autoScoreWithUnwindBackwards(ScoringPosition.REEF_SIDE_C)));
+        NamedCommands.registerCommand("AUTO_SCORE_L",
+                new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_L)
+                        .andThen(Autos.autoScoreWithUnwindBackwards(ScoringPosition.REEF_SIDE_L)));
+
+        NamedCommands.registerCommand("SET_POLE_A", new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_A));
+        NamedCommands.registerCommand("SET_POLE_B", new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_B));
+        NamedCommands.registerCommand("SET_POLE_C", new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_C));
+        NamedCommands.registerCommand("SET_POLE_L", new InstantCommand(() -> currentScoringPosition = ScoringPosition.REEF_SIDE_L));
+
+        NamedCommands.registerCommand("L2_MODE", new InstantCommand(() -> state = State.L2));
+
+        NamedCommands.registerCommand("START_RIGHT_BLUE", new InstantCommand(() -> commandSwerveDrivetrain
+                .resetPose(Constants.Vision.RIGHT_BLUE_POSE)));
+        NamedCommands.registerCommand("START_LEFT_BLUE", new InstantCommand(() -> commandSwerveDrivetrain
+                .resetPose(Constants.Vision.LEFT_BLUE_POSE)));
         Autos.initializeAutos();
 
         configureBindings();

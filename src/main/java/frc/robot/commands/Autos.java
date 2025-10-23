@@ -247,6 +247,30 @@ public final class Autos {
         );
     }
 
+    public static Command driveToPoseBackwards(ScoringPosition scoringPosition) {
+        return new SequentialCommandGroup(
+                new InstantCommand(() ->
+                        commandSwerveDrivetrain.applyRequest(() ->
+                                drive.withVelocityX(0).
+                                        withVelocityX(0).
+                                        withRotationalRate(0)
+                        )
+                ),
+                new ConditionalCommand(
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getBluePose().plus(new Transform2d(Math.sin(scoringPosition.getBluePose().getRotation().getRadians()) * .5, -Math.cos(scoringPosition.getBluePose().getRotation().getRadians()) * .5, new Rotation2d(Math.toRadians(180)))),
+                                new PathConstraints(5.5, 4.5,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                        AutoBuilder.pathfindToPose(
+                                scoringPosition.getRedPose().plus(new Transform2d(Math.sin(scoringPosition.getRedPose().getRotation().getRadians()) * .5, -Math.cos(scoringPosition.getRedPose().getRotation().getRadians()) * .5, new Rotation2d(Math.toRadians(180)))),
+                                new PathConstraints(5.5, 4.5,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                        () -> DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                )
+        );
+    }
+
     public static Command driveToPose(Supplier<ScoringPosition> scoringPositionSupplier) {
         return new SequentialCommandGroup(
                 new InstantCommand(() ->
@@ -325,6 +349,22 @@ public final class Autos {
     public static Command autoScoreWithUnwind(ScoringPosition scoringPosition) {
         return new SequentialCommandGroup(
                 driveToPose(scoringPosition)
+                        .alongWith(ScoreCommands.Climber.slightUnwindAuton()
+                                .andThen(ScoreCommands.Arm.armStable())),
+                new ConditionalCommand(
+                        ScoreCommands.Drive.autoAlignRAuton(),
+                        ScoreCommands.Drive.autoAlignLAuton(),
+                        scoringPosition::isRightSide
+                ).alongWith(ScoreCommands.Score.score()),
+                ScoreCommands.Score.place()
+                        .until(() -> !intakeSubsystem.hasCoral())
+                        .withTimeout(2)
+        );
+    }
+
+    public static Command autoScoreWithUnwindBackwards(ScoringPosition scoringPosition) {
+        return new SequentialCommandGroup(
+                driveToPoseBackwards(scoringPosition)
                         .alongWith(ScoreCommands.Climber.slightUnwindAuton()
                                 .andThen(ScoreCommands.Arm.armStable())),
                 new ConditionalCommand(

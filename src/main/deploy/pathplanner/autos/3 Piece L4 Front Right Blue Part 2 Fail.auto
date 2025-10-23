@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue Front Middle to Front Left"
+            "pathName": "3 Piece Blue Front Right to Front Middle"
           }
         },
         {
@@ -26,18 +26,12 @@
           "type": "named",
           "data": {
             "name": "AUTO_SCORE_B"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "STABLE"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue Front B4 to Right Floor"
+            "pathName": "3 Piece Blue Front B4 to Left Floor"
           }
         },
         {
@@ -55,13 +49,7 @@
         {
           "type": "named",
           "data": {
-            "name": "L2_MODE"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AUTO_SCORE_B"
+            "name": "AUTO_SCORE_A"
           }
         },
         {
