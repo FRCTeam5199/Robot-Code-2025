@@ -5,9 +5,34 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "3 Piece Blue Front Middle to A4"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNL"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "AUTO_SCORE_A"
+            "name": "OUTTAKE"
           }
         },
         {
@@ -29,15 +54,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "L2_MODE"
+            "pathName": "3 Piece Blue Front Right Floor to B2"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "L2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNL"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AUTO_SCORE_B"
+            "name": "OUTTAKE"
           }
         },
         {

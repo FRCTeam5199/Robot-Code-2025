@@ -296,11 +296,6 @@ public final class Constants {
                 = new Pose2d(7.265, 3.851, new Rotation2d(Math.toRadians(180)));
         public static final Pose2d ALGAE_RED_POSE
                 = new Pose2d(10.400, 3.851, new Rotation2d(0));
-
-        public static final Pose2d RIGHT_BLUE_POSE
-                = new Pose2d(7.145, 0.794, new Rotation2d(Math.toRadians(180)));
-        public static final Pose2d LEFT_BLUE_POSE
-                = new Pose2d(7.145, 0.794, new Rotation2d(Math.toRadians(180)));
     }
 }
 

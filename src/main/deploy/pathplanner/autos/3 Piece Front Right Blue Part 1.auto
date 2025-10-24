@@ -11,15 +11,34 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "L4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ALIGNR"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "AUTO_SCORE_B"
+            "name": "OUTTAKE"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3 Piece Blue Front B4 to Middle Floor"
+            "pathName": "3 Piece Blue Front A4 to Middle Floor"
           }
         },
         {

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.818762239656619,
-        "y": 3.892857315331551
+        "x": 2.9968611200986635,
+        "y": 2.963634052074789
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.65,
-        "y": 4.030993852459016
+        "x": 2.1817622950819673,
+        "y": 3.1199282786885245
       },
       "prevControl": {
-        "x": 3.0093677170909965,
-        "y": 3.9513135600205453
+        "x": 2.4138814678032823,
+        "y": 3.2127759477770503
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,22 +42,11 @@
           "name": "INTAKEGROUNDPREP"
         }
       }
-    },
-    {
-      "name": "SET_POLE_A",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "SET_POLE_A"
-        }
-      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -65,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 136.80116051572236
   },
   "reversed": false,
   "folder": "3 Piece Front Blue Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

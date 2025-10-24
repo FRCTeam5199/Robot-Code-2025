@@ -58,17 +58,6 @@
       }
     },
     {
-      "name": "SET_POLE_B",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "SET_POLE_B"
-        }
-      }
-    },
-    {
       "name": "GROUNDINTAKESEQUENCE",
       "waypointRelativePos": 0.6429324894514786,
       "endWaypointRelativePos": null,

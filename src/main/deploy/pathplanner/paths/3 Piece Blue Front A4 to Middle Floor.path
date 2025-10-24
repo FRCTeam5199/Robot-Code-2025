@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.856054003122842,
-        "y": 4.190753581759453
+        "x": 2.9840422346619384,
+        "y": 4.406927135966736
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 4.078944672131147
       },
       "prevControl": {
-        "x": 2.9541458347577807,
-        "y": 4.1137003427057595
+        "x": 2.983609396772632,
+        "y": 4.246602486364546
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,17 +42,6 @@
           "name": "INTAKEGROUNDPREP"
         }
       }
-    },
-    {
-      "name": "SET_POLE_B",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "SET_POLE_B"
-        }
-      }
     }
   ],
   "globalConstraints": {
@@ -71,7 +60,7 @@
   "folder": "3 Piece Front Blue Paths",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }

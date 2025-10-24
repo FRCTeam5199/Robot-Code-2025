@@ -42,12 +42,6 @@
           "name": "INTAKEGROUNDPREP"
         }
       }
-    },
-    {
-      "name": "SET_POLE_A",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
     }
   ],
   "globalConstraints": {

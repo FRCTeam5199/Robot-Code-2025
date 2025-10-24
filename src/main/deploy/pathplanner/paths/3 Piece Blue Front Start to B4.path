@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.144672131147541,
-        "y": 0.7943135245901636
+        "x": 7.13,
+        "y": 0.59
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4481762295081966,
-        "y": 0.744959016393443
+        "x": 2.4335040983606557,
+        "y": 0.5406454918032794
       },
       "isLocked": false,
       "linkedName": null
@@ -56,22 +56,11 @@
           "name": "UNWIND"
         }
       }
-    },
-    {
-      "name": "SET_POLE_B",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "SET_POLE_B"
-        }
-      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -79,7 +68,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "3 Piece Front Blue Paths",
