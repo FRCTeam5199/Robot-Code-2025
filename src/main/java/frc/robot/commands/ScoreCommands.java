@@ -350,8 +350,8 @@ public class ScoreCommands {
         public static Command regularStable() {
             return new SequentialCommandGroup(
                     new ConditionalCommand(
-                            new PositionCommand(armSubsystem, ArmConstants.L4_BACK_AFTER),
-//                                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.PREP_L4_BACK)),
+                            new PositionCommand(armSubsystem, ArmConstants.L4_BACK_AFTER)
+                                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.PREP_L4_BACK)),
                             new PositionCommand(wristSubsystem, WristConstants.PREP_L4),
                             RobotContainer::getShouldAlignBackwards
                     ).onlyIf(() -> RobotContainer.getState() == State.L4),
@@ -652,7 +652,7 @@ public class ScoreCommands {
 
         public static Command armL2() {
             return new ConditionalCommand(
-                    new PositionCommand(armSubsystem, ArmConstants.L2_BACK, 150, 100)
+                    new PositionCommand(armSubsystem, ArmConstants.L2_BACK, 150, 125)
                             .alongWith(new PositionCommand(wristSubsystem, WristConstants.L2_BACK)),
                     new PositionCommand(armSubsystem, ArmConstants.L2)
                             .alongWith(new PositionCommand(wristSubsystem, WristConstants.L2)),
@@ -663,7 +663,7 @@ public class ScoreCommands {
 
         public static Command armL3() {
             return new ConditionalCommand(
-                    new PositionCommand(armSubsystem, ArmConstants.L3_BACK, 150, 100)
+                    new PositionCommand(armSubsystem, ArmConstants.L3_BACK, 150, 125)
                             .alongWith(new PositionCommand(wristSubsystem, WristConstants.L3_BACK)),
                     new PositionCommand(armSubsystem, ArmConstants.L3)
                             .alongWith(new PositionCommand(wristSubsystem, WristConstants.L3)),
@@ -674,8 +674,8 @@ public class ScoreCommands {
 
         public static Command armL4() {
             return new ConditionalCommand(
-                    new PositionCommand(armSubsystem, ArmConstants.L4_BACK, 150, 100)
-                            .alongWith(new PositionCommand(wristSubsystem, WristConstants.L4_BACK)),
+                    new PositionCommand(armSubsystem, ArmConstants.L4_BACK_AFTER, 150, 125)
+                            .alongWith(new PositionCommand(wristSubsystem, WristConstants.PREP_L4_BACK)),
                     new PositionCommand(armSubsystem, ArmConstants.L4)
                             .alongWith(new PositionCommand(wristSubsystem, WristConstants.L4)),
                     RobotContainer::getShouldAlignBackwards
@@ -900,14 +900,15 @@ public class ScoreCommands {
         public static Command scoreL4() {
             return new ConditionalCommand(
                     new SequentialCommandGroup(
-                            new PositionCommand(armSubsystem, ArmConstants.L4_BACK),
+                            new PositionCommand(armSubsystem, ArmConstants.L4_BACK_AFTER),
                             new ParallelCommandGroup(
                                     new PositionCommand(elevatorSubsystem, ElevatorConstants.L4_BACK),
                                     new PositionCommand(wristSubsystem, WristConstants.L4_BACK)
                                             .beforeStarting(new WaitCommand(Double.MAX_VALUE)
                                                     .until(() -> elevatorSubsystem.isMechGreaterThanPosition(.5)))
                             ).until(() -> elevatorSubsystem.isMechAtGoal(false)
-                                    && wristSubsystem.isMechAtGoal(false))
+                                    && wristSubsystem.isMechAtGoal(false)),
+                            new PositionCommand(armSubsystem, ArmConstants.L4_BACK)
                     ),
                     new SequentialCommandGroup(
                             new PositionCommand(armSubsystem, ArmConstants.L4),
@@ -954,7 +955,7 @@ public class ScoreCommands {
                             new VelocityCommand(intakeSubsystem, 15, 5), //L1
                             new ConditionalCommand(
                                     new ConditionalCommand(
-                                            new VelocityCommand(intakeSubsystem, -40, -40), //L4
+                                            new VelocityCommand(intakeSubsystem, -30, -30), //L4
                                             new VelocityCommand(intakeSubsystem, 120, 120), //L4
                                             RobotContainer::getShouldAlignBackwards
                                     ),

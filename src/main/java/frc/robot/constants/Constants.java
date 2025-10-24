@@ -43,7 +43,7 @@ public final class Constants {
 
         public static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS
                 = new TrapezoidProfile.Constraints(150, 300);
-        public static final FeedForward ELEVATOR_FF = new FeedForward(.4, .3, .178);
+        public static final FeedForward ELEVATOR_FF = new FeedForward(.37, .25, .141648019);
         public static final double ELEVATOR_MIN = 0;
         public static final double ELEVATOR_MAX = 1.01;
         public static final double ELEVATOR_LOWER_TOLERANCE = 0.05;
@@ -107,19 +107,19 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 4;
 
         // public static final double STABLE = 0;
-        public static final double GROUND = 6.25;
+        public static final double GROUND = 5.5;
         public static final double ALGAE_GROUND = 11;
 
         public static final double L1 = 16;
         public static final double L2 = 41;
         public static final double L3 = 61;
-        public static final double L4 = 80;
+        public static final double L4 = 76;
         public static final double HP = 63;
 
         public static final double L2_BACK = 80;
         public static final double L3_BACK = 85;
         public static final double L4_BACK = 88;
-        public static final double L4_BACK_AFTER = 83;
+        public static final double L4_BACK_AFTER = 80;
 
         public static final double ALGAE_LOW = 61;
         public static final double ALGAE_HIGH = 68;
@@ -224,12 +224,12 @@ public final class Constants {
         public static final double L2 = 67;
         public static final double L3 = 91;
         public static final double PREP_L4 = 100;
-        public static final double L4 = 137.5;
+        public static final double L4 = 134;
 
         public static final double L2_BACK = 45;
         public static final double L3_BACK = 50;
         public static final double PREP_L4_BACK = 3;
-        public static final double L4_BACK = 56;
+        public static final double L4_BACK = 52;
 
         public static final double HP = 61;
 
@@ -246,7 +246,7 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints WRIST_CONSTRAINTS
                 = new TrapezoidProfile.Constraints(100, 150);
 
-        public static final FeedForward WRIST_FF = new FeedForward(.16, .3, .04405673165); //.134
+        public static final FeedForward WRIST_FF = new FeedForward(.2, .27, .0674816936); //.134
         public static final Slot0Configs WRIST_SLOT0_CONFIGS = new Slot0Configs()
                 .withKP(2.8)
                 .withKI(0)
@@ -272,7 +272,8 @@ public final class Constants {
         public static final Transform3d CAMERA_POSE =
                 new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
-        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(1.5, 1.5, 999);
+        public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(.75, .75, 999);
+        public static final Matrix<N3, N1> kTagStdDevsAutoAlign = VecBuilder.fill(0, 0, 999);
 
 
         public static final String BACK_CAMERA_NAME = "BackCamera";
@@ -288,8 +289,8 @@ public final class Constants {
         public static final double AUTO_ALIGN_Y = .15;
 
         public static final double AUTO_ALIGN_X_BACK = .495;
-        public static final double AUTO_ALIGN_Y_BACK_RIGHT = .145;
-        public static final double AUTO_ALIGN_Y_BACK_LEFT = -.175;
+        public static final double AUTO_ALIGN_Y_BACK_RIGHT = .12;
+        public static final double AUTO_ALIGN_Y_BACK_LEFT = -.19;
 
         public static final Pose2d ALGAE_BLUE_POSE
                 = new Pose2d(7.265, 3.851, new Rotation2d(Math.toRadians(180)));
