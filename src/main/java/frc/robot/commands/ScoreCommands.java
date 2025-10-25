@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.ArmConstants;
@@ -112,13 +113,13 @@ public class ScoreCommands {
                                 new Pose2d(
                                         new Translation2d(commandSwerveDrivetrain.getPose().getX(),
                                                 commandSwerveDrivetrain.getPose().getY()),
-                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlignManual(aprilTagSubsystem
                                                 .getClosestTagID())))));
                     },
                     () ->
                             RobotContainer.commandSwerveDrivetrain.setControl(
-                                    drive.withVelocityX(RobotContainer.xVelocity)
-                                            .withVelocityY(yVelocity)
+                                    drive.withVelocityX(xVelocityManual)
+                                            .withVelocityY(yVelocityManual)
                                             .withRotationalRate(rotationVelocity)),
                     (interrupted) -> {
                         RobotContainer.commandSwerveDrivetrain
@@ -133,7 +134,7 @@ public class ScoreCommands {
                                         .withVelocityY(0)
                                         .withRotationalRate(0));
                     },
-                    RobotContainer::aligned,
+                    RobotContainer::alignedManual,
                     RobotContainer.commandSwerveDrivetrain
             ).onlyIf(RobotContainer::isUseAutoAlign);
         }
@@ -147,13 +148,13 @@ public class ScoreCommands {
                                 new Pose2d(
                                         new Translation2d(commandSwerveDrivetrain.getPose().getX(),
                                                 commandSwerveDrivetrain.getPose().getY()),
-                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
+                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlignManual(aprilTagSubsystem
                                                 .getClosestTagID())))));
                     },
                     () ->
                             RobotContainer.commandSwerveDrivetrain.setControl(
-                                    drive.withVelocityX(RobotContainer.xVelocity)
-                                            .withVelocityY(yVelocity)
+                                    drive.withVelocityX(xVelocityManual)
+                                            .withVelocityY(yVelocityManual)
                                             .withRotationalRate(rotationVelocity)),
                     (interrupted) -> {
                         RobotContainer.commandSwerveDrivetrain
@@ -168,7 +169,81 @@ public class ScoreCommands {
                                         .withVelocityY(0)
                                         .withRotationalRate(0));
                     },
-                    RobotContainer::aligned,
+                    RobotContainer::alignedManual,
+                    RobotContainer.commandSwerveDrivetrain
+            ).onlyIf(RobotContainer::isUseAutoAlign);
+        }
+
+        public static Command autoAlignCenterAutonBackwards() {
+            return new FunctionalCommand(
+                    () -> {
+                        RobotContainer.setBackwardsAlgae(true);
+                        RobotContainer.setAutoAlignOffsetCenterBackwards();
+
+                        commandSwerveDrivetrain.resetPose(
+                                new Pose2d(
+                                        new Translation2d(commandSwerveDrivetrain.getPose().getX(),
+                                                commandSwerveDrivetrain.getPose().getY()),
+                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlignManual(aprilTagSubsystem
+                                                .getClosestTagID())))));
+                    },
+                    () ->
+                            RobotContainer.commandSwerveDrivetrain.setControl(
+                                    drive.withVelocityX(xVelocityManual)
+                                            .withVelocityY(yVelocityManual)
+                                            .withRotationalRate(rotationVelocity)),
+                    (interrupted) -> {
+                        RobotContainer.commandSwerveDrivetrain
+                                .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
+                                        .getPigeon2().getRotation2d().getDegrees() +
+                                        (DriverStation.getAlliance().isPresent()
+                                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                                                ? 0 : 180))));
+                        RobotContainer.setBackwardsAlgae(false);
+
+                        RobotContainer.commandSwerveDrivetrain.setControl(
+                                drive.withVelocityX(0)
+                                        .withVelocityY(0)
+                                        .withRotationalRate(0));
+                    },
+                    RobotContainer::alignedManual,
+                    RobotContainer.commandSwerveDrivetrain
+            ).onlyIf(RobotContainer::isUseAutoAlign);
+        }
+
+        public static Command autoAlignCenterBackBackwards() {
+            return new FunctionalCommand(
+                    () -> {
+                        RobotContainer.setBackwardsAlgae(true);
+                        RobotContainer.setAutoAlignOffsetCenterBackBackwards();
+
+                        commandSwerveDrivetrain.resetPose(
+                                new Pose2d(
+                                        new Translation2d(commandSwerveDrivetrain.getPose().getX(),
+                                                commandSwerveDrivetrain.getPose().getY()),
+                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlignManual(aprilTagSubsystem
+                                                .getClosestTagID())))));
+                    },
+                    () ->
+                            RobotContainer.commandSwerveDrivetrain.setControl(
+                                    drive.withVelocityX(xVelocityManual)
+                                            .withVelocityY(yVelocityManual)
+                                            .withRotationalRate(rotationVelocity)),
+                    (interrupted) -> {
+                        RobotContainer.commandSwerveDrivetrain
+                                .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
+                                        .getPigeon2().getRotation2d().getDegrees() +
+                                        (DriverStation.getAlliance().isPresent()
+                                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                                                ? 0 : 180))));
+                        RobotContainer.setBackwardsAlgae(false);
+
+                        RobotContainer.commandSwerveDrivetrain.setControl(
+                                drive.withVelocityX(0)
+                                        .withVelocityY(0)
+                                        .withRotationalRate(0));
+                    },
+                    RobotContainer::alignedManual,
                     RobotContainer.commandSwerveDrivetrain
             ).onlyIf(RobotContainer::isUseAutoAlign);
         }
@@ -366,10 +441,10 @@ public class ScoreCommands {
         public static Command bargeStable() {
             return new SequentialCommandGroup(
                     new ParallelCommandGroup(
-                            new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, 80, 120)
+                            new PositionCommand(elevatorSubsystem, .2, 80, 120)
                                     .until(() -> elevatorSubsystem.isAtBottom()
                                             && elevatorSubsystem.getMechM() < .05),
-                            new PositionCommand(wristSubsystem, WristConstants.STABLE, 50, 50)
+                            new PositionCommand(wristSubsystem, WristConstants.BARGE, 50, 50)
                     ),
 //                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
@@ -407,7 +482,11 @@ public class ScoreCommands {
             return new SequentialCommandGroup(
                     new ParallelCommandGroup(
                             new PositionCommand(elevatorSubsystem, ElevatorConstants.ALGAE_STABLE, 80, 120),
-                            new PositionCommand(wristSubsystem, WristConstants.ALGAE_STABLE)
+                            new ConditionalCommand(
+                                    new PositionCommand(wristSubsystem, WristConstants.BARGE),
+                                    new PositionCommand(wristSubsystem, WristConstants.ALGAE_STABLE),
+                                    () -> RobotContainer.getState() == State.BARGE
+                            )
                     ),
                     Arm.armStable()
             );
@@ -697,7 +776,9 @@ public class ScoreCommands {
 
         public static Command armBarge() {
             return new PositionCommand(armSubsystem, ArmConstants.BARGE, 80, 120)
-                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.BARGE)));
+                    .alongWith(new PositionCommand(elevatorSubsystem, .2))
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.BARGE)))
+                    .andThen(new PositionCommand(wristSubsystem, WristConstants.BARGE, 100, 75));
         }
 
         public static Command armProcessor() {
@@ -740,7 +821,7 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() > ElevatorConstants.ALGAE_HIGH
-            );
+            ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.ALGAE_HIGH)));
         }
 
         public static Command removeAlgaeLow() {
@@ -760,7 +841,7 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() > ElevatorConstants.ALGAE_LOW
-            );
+            ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.ALGAE_LOW)));
         }
 
         public static Command scoreBarge() {
@@ -770,17 +851,37 @@ public class ScoreCommands {
                                     new PositionCommand(elevatorSubsystem, ElevatorConstants.BARGE, 80, 120),
                                     new PositionCommand(wristSubsystem, WristConstants.BARGE)
                             ),
-                            new PositionCommand(armSubsystem, ArmConstants.BARGE)
+                            new PositionCommand(armSubsystem, ArmConstants.BARGE, 80, 120)
                     ),
                     new SequentialCommandGroup( //Going up
-                            new PositionCommand(armSubsystem, ArmConstants.BARGE),
+                            new PositionCommand(armSubsystem, ArmConstants.BARGE, 80, 120),
                             new ParallelCommandGroup(
                                     new PositionCommand(elevatorSubsystem, ElevatorConstants.BARGE),
                                     new PositionCommand(wristSubsystem, WristConstants.BARGE)
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() > ElevatorConstants.BARGE
-            );
+            ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.BARGE)));
+        }
+
+        public static Command autoScoreBargeSlow() {
+            return new ConditionalCommand(
+                    new SequentialCommandGroup( //Going down
+                            new ParallelCommandGroup(
+                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.BARGE, 60, 100),
+                                    new PositionCommand(wristSubsystem, WristConstants.BARGE)
+                            ),
+                            new PositionCommand(armSubsystem, ArmConstants.BARGE)
+                    ),
+                    new SequentialCommandGroup( //Going up
+                            new PositionCommand(armSubsystem, ArmConstants.BARGE),
+                            new ParallelCommandGroup(
+                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.BARGE, 60, 75),
+                                    new PositionCommand(wristSubsystem, WristConstants.BARGE)
+                            )
+                    ),
+                    () -> elevatorSubsystem.getMechM() > ElevatorConstants.BARGE
+            ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.BARGE)));
         }
 
         public static Command scoreProcessor() {
@@ -800,7 +901,7 @@ public class ScoreCommands {
                             )
                     ),
                     () -> elevatorSubsystem.getMechM() > ElevatorConstants.PROCESSOR
-            );
+            ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.PROCESSOR)));
         }
 
         public static Command scoreL1() {
@@ -960,10 +1061,15 @@ public class ScoreCommands {
                                             RobotContainer::getShouldAlignBackwards
                                     ),
                                     new ConditionalCommand(
-                                            new VelocityCommand(intakeSubsystem, -100, -100),
                                             new ConditionalCommand(
-                                                    new VelocityCommand(intakeSubsystem, -80, -80), //L2 and L3
-                                                    new VelocityCommand(intakeSubsystem, 120, 120),
+                                                    new PositionCommand(wristSubsystem, WristConstants.BARGE_FINAL).withTimeout(.4)
+                                                            .andThen(new VelocityCommand(intakeSubsystem, -120, -120)),
+                                                    new VelocityCommand(intakeSubsystem, -100, -100),
+                                                    () -> RobotContainer.getState() == State.BARGE
+                                            ),
+                                            new ConditionalCommand(
+                                                    new VelocityCommand(intakeSubsystem, -40, -40), //L2 and L3
+                                                    new VelocityCommand(intakeSubsystem, 40, 40),
                                                     RobotContainer::getShouldAlignBackwards
                                             ),
                                             () -> RobotContainer.getState() == State.BARGE ||

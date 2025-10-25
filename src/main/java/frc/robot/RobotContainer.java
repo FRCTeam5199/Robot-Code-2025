@@ -150,6 +150,7 @@ public class RobotContainer {
     private static boolean useAutoAlign = true;
     private static boolean shouldFixTip = true;
     private static boolean isCoralBlockingHP = false;
+    private static boolean backwardsAlgae = false;
 
     public static ScoringPosition getCurrentScoringPosition() {
         return currentScoringPosition;
@@ -247,7 +248,7 @@ public class RobotContainer {
                                                 .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120)))
                                                 .alongWith(ScoreCommands.Drive.autoAlignCenterBack())
                                                 .andThen(ScoreCommands.Drive.autoAlignCenterAuton().withTimeout(1d))
-                                                .andThen(ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d)),
+                                                .andThen(ScoreCommands.Drive.autoAlignCenterBack().withTimeout(.75d)),
                                         ScoreCommands.Score.score()
                                                 .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
                                                 .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
@@ -536,14 +537,14 @@ public class RobotContainer {
             autoAlignXOffset = shouldAlignBackwards
                     ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
 
-        if (autoAlignXOffset > 0 && Math.abs(autoAlignXOffset) != Math.abs(Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP)
-                && DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
+        if (autoAlignXOffset > 0 && DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
             autoAlignXOffset = -autoAlignXOffset;
 
 
         if (readyToAlign()) {
             readyToAlignCheck++;
-            readyToAlign = readyToAlignCheck >= 2;
+            readyToAlign = readyToAlignCheck >= 4;
         } else {
             readyToAlignCheck = 0;
             readyToAlign = false;
@@ -579,7 +580,19 @@ public class RobotContainer {
         }
 
         shouldAlignBackwardsManual = aprilTagSubsystem.getClosestTagIDManual() == -1;
-        autoAlignXOffsetManual = shouldAlignBackwardsManual ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
+        if (state == State.L4) {
+            shouldAlignBackwards = false;
+            shouldAlignBackwardsManual = false;
+        }
+
+        if (state != State.ALGAE_LOW && state != State.ALGAE_HIGH
+                && state != State.BARGE && state != State.PROCESSOR)
+            autoAlignXOffsetManual = shouldAlignBackwardsManual
+                    ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
+
+        if (state == State.ALGAE_LOW || state == State.ALGAE_HIGH
+                || state == State.BARGE || state == State.PROCESSOR)
+            shouldAlignBackwardsManual = false;
 
         currentStateX.position = shouldAlignBackwards ? aprilTagSubsystem.getBackClosestTagXYYaw()[0] : aprilTagSubsystem.getClosestTagXYYaw()[0];
         currentStateY.position = shouldAlignBackwards ? aprilTagSubsystem.getBackClosestTagXYYaw()[1] : aprilTagSubsystem.getClosestTagXYYaw()[1];
@@ -667,24 +680,13 @@ public class RobotContainer {
                 yVelocityManual = drivePIDControllerYVeryClose.calculate(currentStateYManual.position, nextStateYManual);
             }
         }
-
-//        System.out.println("Rotation Vel Manual: " + rotationVelocityManual);
-
 //        System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0]
 //                + " Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
 //
-//        System.out.println("X velocity: " + xVelocity);
+//        System.out.println("X velocity: " + xVelocityManual);
 //        System.out.println("Y velocity: " + yVelocity);
-
-//        System.out.println("Aligned: " + aligned());
-
-        // // Code for if the bot starts tipping
-        // if (((Math.abs(pitch) > 2 && Math.abs(pitch) < 90)
-        //         || (Math.abs(roll) > 2 && Math.abs(roll) < 90)) && shouldFixTip) {
-        //     commandSwerveDrivetrain.setControl(
-        //             robotCentricDrive.withVelocityX(roll)
-        //                     .withVelocityY(pitch));
-        // }
+//        System.out.println("X Offset: " + autoAlignXOffsetManual);
+//        System.out.println("Y Offset: " + autoAlignYOffsetManual);
 
 //        if (LimelightHelpers.getTV(Constants.Vision.LIMELIGHT_NAME)) {
 //            double currentX = LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME);
@@ -696,8 +698,6 @@ public class RobotContainer {
 //        if (LimelightHelpers.getTV(Constants.Vision.LIMELIGHT_NAME)) {
 //            driveToPieceCurrentState.position = LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME);
 //        }
-
-//        System.out.println("Rotation velocity: " + driveToPieceRotationVelocity);
 
 
         // if (UserInterface.getControlComponent("Reset All").getBoolean(false)) {
@@ -749,16 +749,6 @@ public class RobotContainer {
 //         UserInterface.setControlComponent("Setpoint Algae High", ScoreCommands.Score.removeAlgaeHigh());
 //         UserInterface.setControlComponent("Setpoint Algae Low", ScoreCommands.Score.removeAlgaeLow());
 
-//        System.out.println("aligned: " + aligned());
-//        System.out.println("X speed: " + commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond
-//                + " Y: " + commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond);
-
-//        System.out.println("Pose: " + commandSwerveDrivetrain.getPose());
-//        System.out.println(selectedReefTag);
-//        System.out.println(lockOnMode);
-//
-//        System.out.println("Drive: " + commandSwerveDrivetrain.getPose().getRotation().getDegrees());
-//        System.out.println("Pigeon: " + commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees());
 
 //        System.out.println("Elevator: " + elevatorSubsystem.getMechM());
 //        System.out.println("Arm: " + armSubsystem.getDegrees());
@@ -817,15 +807,27 @@ public class RobotContainer {
     }
 
     public static void setAutoAlignOffsetCenter() {
-        autoAlignYOffset = 0;
-        autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
+        autoAlignYOffsetManual = 0;
+        autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X;
     }
 
     public static void setAutoAlignOffsetCenterBack() {
-        autoAlignYOffset = 0;
-        autoAlignXOffset = (DriverStation.getAlliance().isPresent()
+        autoAlignYOffsetManual = 0;
+        autoAlignXOffsetManual = (DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) ?
                 Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP : -Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP;
+    }
+
+    public static void setAutoAlignOffsetCenterBackwards() {
+        autoAlignYOffsetManual = 0;
+        autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X_BACK;
+    }
+
+    public static void setAutoAlignOffsetCenterBackBackwards() {
+        autoAlignYOffsetManual = 0;
+        autoAlignXOffsetManual = (DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) ?
+                Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP_BACKWARDS : -Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP_BACKWARDS;
     }
 
     public void toggleAutoAlignOffset() {
@@ -904,5 +906,13 @@ public class RobotContainer {
 
     public static boolean getShouldAlignBackwardsManual() {
         return shouldAlignBackwardsManual;
+    }
+
+    public static boolean getBackwardsAlgae() {
+        return backwardsAlgae;
+    }
+
+    public static void setBackwardsAlgae(boolean backwardsAlgae) {
+        RobotContainer.backwardsAlgae = backwardsAlgae;
     }
 }

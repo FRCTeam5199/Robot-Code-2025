@@ -23,7 +23,7 @@ public enum ScoringPosition {
     REEF_SIDE_CD(new Pose2d(3.644, 2.657, new Rotation2d(Math.toRadians(60))), new Pose2d(13.956, 5.603, new Rotation2d(Math.toRadians(240)))),
     REEF_SIDE_EF(new Pose2d(5.258, 2.615, new Rotation2d(Math.toRadians(120))), new Pose2d(12.168, 5.613, new Rotation2d(Math.toRadians(300)))),
     REEF_SIDE_GH(new Pose2d(6.101, 4.009, new Rotation2d(Math.toRadians(180))), new Pose2d(11.150, 4.029, new Rotation2d(Math.toRadians(0)))),
-    REEF_SIDE_IJ(new Pose2d(5.279, 5.421, new Rotation2d(Math.toRadians(240))), new Pose2d(12.133, 2.437, new Rotation2d(Math.toRadians(60)))),
+    REEF_SIDE_IJ(new Pose2d(5.790, 5.410, new Rotation2d(Math.toRadians(240))), new Pose2d(12.133, 2.437, new Rotation2d(Math.toRadians(60)))),
     REEF_SIDE_KL(new Pose2d(3.687, 5.502, new Rotation2d(Math.toRadians(300))), new Pose2d(13.973, 2.437, new Rotation2d(Math.toRadians(120)))),
     BARGE(new Pose2d(7.4, 4.80, new Rotation2d(Math.toRadians(200))), new Pose2d(10.15, 3.2, new Rotation2d(Math.toRadians(20)))),
     BARGE2(new Pose2d(7.4, 4.80, new Rotation2d(Math.toRadians(200))), new Pose2d(10.05, 3.2, new Rotation2d(Math.toRadians(20))));
