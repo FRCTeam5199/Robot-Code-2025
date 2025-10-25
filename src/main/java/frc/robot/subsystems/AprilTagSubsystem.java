@@ -320,6 +320,9 @@ public class AprilTagSubsystem extends SubsystemBase {
                         if (pigeonAngle < 0) pigeonAngle = 360 + pigeonAngle;
 
                         double angleChange = Math.abs((-180 - tagAngles[target.getFiducialId()]) + pigeonAngle);
+                        if (DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
+                            angleChange += 180;
 
                         while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
 
@@ -379,7 +382,6 @@ public class AprilTagSubsystem extends SubsystemBase {
                             angleChange += 180;
 
                         while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
-                        // System.out.println("Angle Change: " + angleChange);
 
                         if (angleChange < smallestAngleChange) {
                             smallestAngleChange = angleChange;
@@ -435,6 +437,9 @@ public class AprilTagSubsystem extends SubsystemBase {
                         if (pigeonAngle < 0) pigeonAngle = 360 + pigeonAngle;
 
                         double angleChange = Math.abs((-180 - tagAngles[target.getFiducialId()]) + 180 + pigeonAngle);
+                        if (DriverStation.getAlliance().isPresent()
+                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
+                            angleChange += 180;
 
                         while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
 

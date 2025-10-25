@@ -18,9 +18,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.constants.Constants;
 import frc.robot.constants.Constants.ArmConstants;
 import frc.robot.constants.Constants.ElevatorConstants;
 import frc.robot.constants.Constants.WristConstants;
@@ -104,7 +102,7 @@ public class ScoreCommands {
                             || RobotContainer.getState() == State.L4));
         }
 
-        public static Command autoAlignCenterAuton() {
+        public static Command autoAlignCenter() {
             return new FunctionalCommand(
                     () -> {
                         RobotContainer.setAutoAlignOffsetCenter();
@@ -174,80 +172,6 @@ public class ScoreCommands {
             ).onlyIf(RobotContainer::isUseAutoAlign);
         }
 
-        public static Command autoAlignCenterAutonBackwards() {
-            return new FunctionalCommand(
-                    () -> {
-                        RobotContainer.setBackwardsAlgae(true);
-                        RobotContainer.setAutoAlignOffsetCenterBackwards();
-
-                        commandSwerveDrivetrain.resetPose(
-                                new Pose2d(
-                                        new Translation2d(commandSwerveDrivetrain.getPose().getX(),
-                                                commandSwerveDrivetrain.getPose().getY()),
-                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlignManual(aprilTagSubsystem
-                                                .getClosestTagID())))));
-                    },
-                    () ->
-                            RobotContainer.commandSwerveDrivetrain.setControl(
-                                    drive.withVelocityX(xVelocityManual)
-                                            .withVelocityY(yVelocityManual)
-                                            .withRotationalRate(rotationVelocity)),
-                    (interrupted) -> {
-                        RobotContainer.commandSwerveDrivetrain
-                                .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
-                                        .getPigeon2().getRotation2d().getDegrees() +
-                                        (DriverStation.getAlliance().isPresent()
-                                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
-                                                ? 0 : 180))));
-                        RobotContainer.setBackwardsAlgae(false);
-
-                        RobotContainer.commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(0)
-                                        .withVelocityY(0)
-                                        .withRotationalRate(0));
-                    },
-                    RobotContainer::alignedManual,
-                    RobotContainer.commandSwerveDrivetrain
-            ).onlyIf(RobotContainer::isUseAutoAlign);
-        }
-
-        public static Command autoAlignCenterBackBackwards() {
-            return new FunctionalCommand(
-                    () -> {
-                        RobotContainer.setBackwardsAlgae(true);
-                        RobotContainer.setAutoAlignOffsetCenterBackBackwards();
-
-                        commandSwerveDrivetrain.resetPose(
-                                new Pose2d(
-                                        new Translation2d(commandSwerveDrivetrain.getPose().getX(),
-                                                commandSwerveDrivetrain.getPose().getY()),
-                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlignManual(aprilTagSubsystem
-                                                .getClosestTagID())))));
-                    },
-                    () ->
-                            RobotContainer.commandSwerveDrivetrain.setControl(
-                                    drive.withVelocityX(xVelocityManual)
-                                            .withVelocityY(yVelocityManual)
-                                            .withRotationalRate(rotationVelocity)),
-                    (interrupted) -> {
-                        RobotContainer.commandSwerveDrivetrain
-                                .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
-                                        .getPigeon2().getRotation2d().getDegrees() +
-                                        (DriverStation.getAlliance().isPresent()
-                                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
-                                                ? 0 : 180))));
-                        RobotContainer.setBackwardsAlgae(false);
-
-                        RobotContainer.commandSwerveDrivetrain.setControl(
-                                drive.withVelocityX(0)
-                                        .withVelocityY(0)
-                                        .withRotationalRate(0));
-                    },
-                    RobotContainer::alignedManual,
-                    RobotContainer.commandSwerveDrivetrain
-            ).onlyIf(RobotContainer::isUseAutoAlign);
-        }
-
         public static Command autoAlignLAuton() {
             return new FunctionalCommand(
                     () -> {
@@ -301,7 +225,6 @@ public class ScoreCommands {
                                         new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(id)))));
                     },
                     () -> {
-//                        System.out.println("Rotation: " + rotationVelocity);
                         commandSwerveDrivetrain.setControl(
                                 drive.withVelocityX(xVelocity)
                                         .withVelocityY(yVelocity)
@@ -729,6 +652,13 @@ public class ScoreCommands {
                     .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
         }
 
+        public static Command armL1Up() {
+            return new PositionCommand(armSubsystem, ArmConstants.L1UP)
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1_UP)))
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.L1UP))
+                    .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
+        }
+
         public static Command armL2() {
             return new ConditionalCommand(
                     new PositionCommand(armSubsystem, ArmConstants.L2_BACK, 150, 125)
@@ -776,7 +706,7 @@ public class ScoreCommands {
 
         public static Command armBarge() {
             return new PositionCommand(armSubsystem, ArmConstants.BARGE, 80, 120)
-                    .alongWith(new PositionCommand(elevatorSubsystem, .2))
+                    .alongWith(new PositionCommand(elevatorSubsystem, .2, 80, 100))
                     .alongWith(new InstantCommand(() -> RobotContainer.setState(State.BARGE)))
                     .andThen(new PositionCommand(wristSubsystem, WristConstants.BARGE, 100, 75));
         }
@@ -876,7 +806,7 @@ public class ScoreCommands {
                     new SequentialCommandGroup( //Going up
                             new PositionCommand(armSubsystem, ArmConstants.BARGE),
                             new ParallelCommandGroup(
-                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.BARGE, 60, 75),
+                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.BARGE, 60, 100),
                                     new PositionCommand(wristSubsystem, WristConstants.BARGE)
                             )
                     ),
@@ -912,6 +842,16 @@ public class ScoreCommands {
                             new PositionCommand(wristSubsystem, WristConstants.L1)
                     )
             ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1)));
+        }
+
+        public static Command scoreL1Up() {
+            return new SequentialCommandGroup(
+                    new PositionCommand(armSubsystem, ArmConstants.L1UP),
+                    new ParallelCommandGroup(
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L1UP),
+                            new PositionCommand(wristSubsystem, WristConstants.L1UP)
+                    )
+            ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L1_UP)));
         }
 
 
@@ -1037,6 +977,7 @@ public class ScoreCommands {
             return new SelectCommand<>(
                     Map.ofEntries(
                             Map.entry(State.L1, scoreL1()),
+                            Map.entry(State.L1_UP, scoreL1Up()),
                             Map.entry(State.L2, scoreL2()),
                             Map.entry(State.L3, scoreL3()),
                             Map.entry(State.L4, scoreL4()),
@@ -1053,7 +994,11 @@ public class ScoreCommands {
             return new ConditionalCommand(
                     new VelocityCommand(intakeSubsystem, -60, -60),
                     new ConditionalCommand(
-                            new VelocityCommand(intakeSubsystem, 15, 5), //L1
+                            new ConditionalCommand(
+                                    new VelocityCommand(intakeSubsystem, 15, 5), //L1
+                                    new VelocityCommand(intakeSubsystem, 20, 10), //L1 Up
+                                    () -> RobotContainer.getState() == State.L1
+                            ),
                             new ConditionalCommand(
                                     new ConditionalCommand(
                                             new VelocityCommand(intakeSubsystem, -30, -30), //L4
@@ -1077,7 +1022,7 @@ public class ScoreCommands {
                                     ),
                                     () -> RobotContainer.getState() == State.L4
                             ),
-                            () -> RobotContainer.getState() == State.L1
+                            () -> RobotContainer.getState() == State.L1 || RobotContainer.getState() == State.L1_UP
                     ),
                     () -> (RobotContainer.getState() == State.ALGAE_HIGH
                             || RobotContainer.getState() == State.ALGAE_LOW)

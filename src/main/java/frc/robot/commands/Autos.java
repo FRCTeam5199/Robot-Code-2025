@@ -220,11 +220,11 @@ public final class Autos {
                 new ConditionalCommand(
                         new ConditionalCommand(
                                 AutoBuilder.pathfindToPose(
-                                        scoringPosition.getBluePose().plus(new Transform2d(Math.sin(scoringPosition.getBluePose().getRotation().getRadians()) * .3, -Math.cos(scoringPosition.getBluePose().getRotation().getRadians()) * .3, new Rotation2d(Math.toRadians(180)))),
+                                        scoringPosition.getBluePoseBackwards(),
                                         new PathConstraints(5.5, 4.5,
                                                 Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                                 AutoBuilder.pathfindToPose(
-                                        scoringPosition.getRedPose().plus(new Transform2d(Math.sin(scoringPosition.getRedPose().getRotation().getRadians()) * .3, -Math.cos(scoringPosition.getRedPose().getRotation().getRadians()) * .3, new Rotation2d(Math.toRadians(180)))),
+                                        scoringPosition.getRedPoseBackwards(),
                                         new PathConstraints(5.5, 4.5,
                                                 Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                                 () -> DriverStation.getAlliance().isPresent()
@@ -431,9 +431,9 @@ public final class Autos {
 
     public static Command autoScoreBlueBargeSlow(ScoringPosition scoringPosition) {
         return new SequentialCommandGroup(
-                driveToPose(scoringPosition, 3.5, 3, 0)
+                driveToPose(scoringPosition, 4, 3.5, 0)
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
-                driveToPose(scoringPosition, 3.5, 3, 0)
+                driveToPose(scoringPosition, 4, 3.5, 0)
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120)))
         ).alongWith(new WaitCommand(.2).andThen(ScoreCommands.Score.autoScoreBargeSlow()))
                 .andThen(new WaitCommand(.25))
@@ -450,7 +450,7 @@ public final class Autos {
                 ScoreCommands.Drive.autoAlignCenterBack().withTimeout(.5)
                         .alongWith(ScoreCommands.Score.removeAlgaeLow())
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
-                ScoreCommands.Drive.autoAlignCenterAuton().withTimeout(.75),
+                ScoreCommands.Drive.autoAlignCenter().withTimeout(.75),
                 ScoreCommands.Drive.autoAlignCenterBack().withTimeout(.25),
                 autoScoreBlueBarge(ScoringPosition.BARGE),
                 driveToPose(ScoringPosition.REEF_SIDE_IJ)
@@ -459,13 +459,9 @@ public final class Autos {
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
                 new InstantCommand(() -> RobotContainer.setState(State.ALGAE_HIGH)),
                 ScoreCommands.Drive.autoAlignCenterBack().withTimeout(.75),
-                ScoreCommands.Drive.autoAlignCenterAuton().withTimeout(.75)
+                ScoreCommands.Drive.autoAlignCenter().withTimeout(.75)
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
-                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(.75),
-                autoScoreBlueBargeSlow(ScoringPosition.BARGE2),
-                driveToPose(ScoringPosition.REEF_SIDE_IJ)
-                        .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
-                driveToPose(ScoringPosition.REEF_SIDE_IJ)
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(.75)
         );
     }
 
@@ -475,27 +471,22 @@ public final class Autos {
                         .resetPose(Constants.Vision.ALGAE_RED_POSE)),
                 new InstantCommand(() -> RobotContainer.setState(State.L4)),
                 autoScoreWithUnwind(ScoringPosition.REEF_SIDE_G),
-                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d)
+                new InstantCommand(() -> RobotContainer.setState(State.ALGAE_LOW)),
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(.5)
                         .alongWith(ScoreCommands.Score.removeAlgaeLow())
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
-                ScoreCommands.Drive.autoAlignCenterAuton()
-                        .until(intakeSubsystem::hasAlgae)
-                        .withTimeout(1d),
-                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d),
-                new WaitCommand(.25),
+                ScoreCommands.Drive.autoAlignCenter().withTimeout(.75),
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(.25),
                 autoScoreBlueBarge(ScoringPosition.BARGE),
-                driveToPose(ScoringPosition.REEF_SIDE_I)
+                driveToPose(ScoringPosition.REEF_SIDE_IJ)
+                        .raceWith(ScoreCommands.Score.removeAlgaeHigh()),
+                driveToPose(ScoringPosition.REEF_SIDE_IJ)
                         .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
-                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d),
-                ScoreCommands.Drive.autoAlignCenterAuton().withTimeout(1d)
-                        .until(intakeSubsystem::hasAlgae)
+                new InstantCommand(() -> RobotContainer.setState(State.ALGAE_HIGH)),
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(.75),
+                ScoreCommands.Drive.autoAlignCenter().withTimeout(.75)
                         .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120))),
-                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(1d),
-                new WaitCommand(.25),
-                autoScoreBlueBarge(ScoringPosition.BARGE2),
-                driveToPose(ScoringPosition.REEF_SIDE_EF)
-                        .alongWith(ScoreCommands.Score.removeAlgaeHigh()),
-                ScoreCommands.Drive.autoAlignCenterBack()
+                ScoreCommands.Drive.autoAlignCenterBack().withTimeout(.75)
         );
     }
 

@@ -72,6 +72,7 @@ public final class Constants {
         public static final double ALGAE_GROUND = .12;
 
         public static final double L1 = 0;
+        public static final double L1UP = 0.05;
         public static final double L2 = .09;
         public static final double L3 = .38;
         public static final double L4 = 1.01;
@@ -83,6 +84,7 @@ public final class Constants {
 
         public static final double ALGAE_LOW = .37;
         public static final double ALGAE_HIGH = .75;
+        public static final double ALGAE_HIGH_BACKWARDS = .5;
         public static final double BARGE = 1.002;
         public static final double PROCESSOR = .22;
     }
@@ -111,6 +113,7 @@ public final class Constants {
         public static final double ALGAE_GROUND = 11;
 
         public static final double L1 = 16;
+        public static final double L1UP = 25;
         public static final double L2 = 41;
         public static final double L3 = 61;
         public static final double L4 = 77;
@@ -123,6 +126,7 @@ public final class Constants {
 
         public static final double ALGAE_LOW = 63;
         public static final double ALGAE_HIGH = 68;
+        public static final double ALGAE_HIGH_BACKWARDS = 83;
         public static final double BARGE = 85;
         public static final double PROCESSOR = 30;
 
@@ -221,6 +225,7 @@ public final class Constants {
         public static final double ALGAE_GROUND = 185;
 
         public static final double L1 = 10;
+        public static final double L1UP = 10;
         public static final double L2 = 67;
         public static final double L3 = 91;
         public static final double PREP_L4 = 100;
@@ -235,6 +240,7 @@ public final class Constants {
 
         public static final double ALGAE_LOW = 236;
         public static final double ALGAE_HIGH = 243;
+        public static final double ALGAE_HIGH_BACKWARDS = 65;
         public static final double BARGE = 200;
         public static final double BARGE_FINAL = 140;
         public static final double PROCESSOR = 185;

@@ -38,6 +38,8 @@ import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.ScoringPosition;
 import frc.robot.utility.State;
 
+import java.sql.SQLOutput;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -247,7 +249,7 @@ public class RobotContainer {
                                         ScoreCommands.Score.score()
                                                 .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120)))
                                                 .alongWith(ScoreCommands.Drive.autoAlignCenterBack())
-                                                .andThen(ScoreCommands.Drive.autoAlignCenterAuton().withTimeout(1d))
+                                                .andThen(ScoreCommands.Drive.autoAlignCenter().withTimeout(1d))
                                                 .andThen(ScoreCommands.Drive.autoAlignCenterBack().withTimeout(.75d)),
                                         ScoreCommands.Score.score()
                                                 .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
@@ -315,7 +317,7 @@ public class RobotContainer {
 
         commandXboxController.povUp().onTrue(ScoreCommands.Arm.armBarge()
                 .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))); //left top paddle
-        commandXboxController.button(9).onTrue(ScoreCommands.Arm.armProcessor()); //left bottom paddle
+        commandXboxController.button(9).onTrue(ScoreCommands.Arm.armL1Up());
 
 //        commandXboxController.povUp().onTrue(new SequentialCommandGroup(
 //                        ScoreCommands.Drive.driveToPiece()
@@ -357,13 +359,13 @@ public class RobotContainer {
                 .onTrue(new VelocityCommand(intakeSubsystem, -120, -120))
                 .onFalse(new VelocityCommand(intakeSubsystem, 0, 0));
 
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2).onTrue(ScoreCommands.Arm.armProcessor()
-                .alongWith(new VelocityCommand(intakeSubsystem, 120, 120)));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2)
+                .onTrue(new VelocityCommand(intakeSubsystem, 120, 120));
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armBarge()
                 .alongWith(new VelocityCommand(intakeSubsystem, 120, 120)));
 
         commandButtonPanel.button(ButtonPanelButtons.SETMODE_ALGAE)
-                .onTrue(ScoreCommands.Arm.armAlgaeHigh());
+                .onTrue(ScoreCommands.Arm.armAlgaeHigh().beforeStarting(new InstantCommand(() -> backwardsAlgae = true)));
         commandButtonPanel.button(ButtonPanelButtons.SETMODE_CORAL)
                 .onTrue(ScoreCommands.Arm.armAlgaeLow());
 
@@ -533,13 +535,13 @@ public class RobotContainer {
         if (!timer.isRunning()) timer.start();
 
         if (state != State.ALGAE_LOW && state != State.ALGAE_HIGH && state
-                != State.BARGE && state != State.PROCESSOR)
+                != State.BARGE && state != State.PROCESSOR) {
             autoAlignXOffset = shouldAlignBackwards
                     ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
-
-        if (autoAlignXOffset > 0 && DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
-            autoAlignXOffset = -autoAlignXOffset;
+            if (DriverStation.getAlliance().isPresent()
+                    && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
+                autoAlignXOffset = -autoAlignXOffset;
+        }
 
 
         if (readyToAlign()) {
@@ -568,7 +570,7 @@ public class RobotContainer {
 
             shouldAlignBackwards = Math.abs(difference) >= 90;
         } else {
-            double goalRotation = currentScoringPosition.getRedPose().getRotation().getDegrees();
+            double goalRotation = currentScoringPosition.getRedPose().getRotation().getDegrees() + 180;
             if (robotRotation < 0) {
                 robotRotation = 360 - Math.abs(robotRotation);
             }
@@ -586,9 +588,14 @@ public class RobotContainer {
         }
 
         if (state != State.ALGAE_LOW && state != State.ALGAE_HIGH
-                && state != State.BARGE && state != State.PROCESSOR)
+                && state != State.BARGE && state != State.PROCESSOR) {
             autoAlignXOffsetManual = shouldAlignBackwardsManual
                     ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
+            if (DriverStation.getAlliance().isPresent()
+                    && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
+                autoAlignXOffsetManual = -autoAlignXOffsetManual;
+        }
+
 
         if (state == State.ALGAE_LOW || state == State.ALGAE_HIGH
                 || state == State.BARGE || state == State.PROCESSOR)
@@ -680,13 +687,17 @@ public class RobotContainer {
                 yVelocityManual = drivePIDControllerYVeryClose.calculate(currentStateYManual.position, nextStateYManual);
             }
         }
+
 //        System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0]
 //                + " Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
 //
-//        System.out.println("X velocity: " + xVelocityManual);
+//        System.out.println("X velocity: " + xVelocity);
 //        System.out.println("Y velocity: " + yVelocity);
-//        System.out.println("X Offset: " + autoAlignXOffsetManual);
-//        System.out.println("Y Offset: " + autoAlignYOffsetManual);
+//        System.out.println("X Offset: " + autoAlignXOffset);
+//        System.out.println("X Offset Manual: " + autoAlignXOffsetManual);
+//        System.out.println("should align backwards manual: " + shouldAlignBackwardsManual);
+//        System.out.println("Closest Tag ID: " + aprilTagSubsystem.getClosestTagID());
+//        System.out.println("Closest Tag ID Manual: " + aprilTagSubsystem.getClosestTagIDManual());
 
 //        if (LimelightHelpers.getTV(Constants.Vision.LIMELIGHT_NAME)) {
 //            double currentX = LimelightHelpers.getTX(Constants.Vision.LIMELIGHT_NAME);
@@ -785,6 +796,11 @@ public class RobotContainer {
                 ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
         autoAlignXOffsetManual = shouldAlignBackwardsManual
                 ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
+        if (DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
+            autoAlignXOffset = -autoAlignXOffset;
+            autoAlignXOffsetManual = -autoAlignXOffsetManual;
+        }
     }
 
     public static void setAutoAlignOffsetRight() {
@@ -804,11 +820,20 @@ public class RobotContainer {
                 ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
         autoAlignXOffsetManual = shouldAlignBackwardsManual
                 ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
+        if (DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
+            autoAlignXOffset = -autoAlignXOffset;
+            autoAlignXOffsetManual = -autoAlignXOffsetManual;
+        }
     }
 
     public static void setAutoAlignOffsetCenter() {
         autoAlignYOffsetManual = 0;
         autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X;
+        if (DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
+            autoAlignXOffset = -autoAlignXOffset;
+        }
     }
 
     public static void setAutoAlignOffsetCenterBack() {
@@ -816,18 +841,6 @@ public class RobotContainer {
         autoAlignXOffsetManual = (DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) ?
                 Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP : -Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP;
-    }
-
-    public static void setAutoAlignOffsetCenterBackwards() {
-        autoAlignYOffsetManual = 0;
-        autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X_BACK;
-    }
-
-    public static void setAutoAlignOffsetCenterBackBackwards() {
-        autoAlignYOffsetManual = 0;
-        autoAlignXOffsetManual = (DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) ?
-                Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP_BACKWARDS : -Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP_BACKWARDS;
     }
 
     public void toggleAutoAlignOffset() {
@@ -906,13 +919,5 @@ public class RobotContainer {
 
     public static boolean getShouldAlignBackwardsManual() {
         return shouldAlignBackwardsManual;
-    }
-
-    public static boolean getBackwardsAlgae() {
-        return backwardsAlgae;
-    }
-
-    public static void setBackwardsAlgae(boolean backwardsAlgae) {
-        RobotContainer.backwardsAlgae = backwardsAlgae;
     }
 }

@@ -8,5 +8,6 @@ public enum State {
     ALGAE_HIGH,
     ALGAE_LOW,
     BARGE,
-    PROCESSOR
+    PROCESSOR,
+    L1_UP
 }
