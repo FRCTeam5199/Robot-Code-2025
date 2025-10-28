@@ -96,7 +96,7 @@ public class AprilTagSubsystem extends SubsystemBase {
         results = camera.getAllUnreadResults();
         backResults = backCamera.getAllUnreadResults();
         updateClosestTagID();
-        updateBackClosestTagID();
+//        updateBackClosestTagID();
     }
 
     /**
@@ -350,13 +350,13 @@ public class AprilTagSubsystem extends SubsystemBase {
     public double getRotationToAlign(int id) {
         if (id == -1) return 0;
         double rotation = -180 - tagAngles[id] + commandSwerveDrivetrain.getPose().getRotation().getDegrees();
-        return RobotContainer.getShouldAlignBackwards() ? rotation + 180 : rotation;
+        return rotation;
     }
 
     public double getRotationToAlignManual(int id) {
         if (id == -1) return 0;
         double rotation = -180 - tagAngles[id] + commandSwerveDrivetrain.getPose().getRotation().getDegrees();
-        return RobotContainer.getShouldAlignBackwardsManual() ? rotation + 180 : rotation;
+        return rotation;
     }
 
     public double[] getClosestTagXYYaw() {
@@ -418,112 +418,112 @@ public class AprilTagSubsystem extends SubsystemBase {
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};
     }
+//
+//    public int updateBackClosestTagID() {
+//        PhotonTrackedTarget bestTarget = null;
+//        if (!backResults.isEmpty()) {
+//            PhotonPipelineResult result = backResults.get(backResults.size() - 1);
+//            if (result.hasTargets()) {
+//                double smallestAngleChange = doneAutoDriving ? 45 : 20;
+//
+//                for (PhotonTrackedTarget target : result.getTargets()) {
+//                    if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11) //ignores tags not on the reef
+//                            || (target.getFiducialId() >= 17 && target.getFiducialId() <= 22)) {
+//                        double pigeonAngle = commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees();
+//
+//                        while (pigeonAngle > 360) pigeonAngle -= 360;
+//                        while (pigeonAngle < -360) pigeonAngle += 360;
+//
+//                        if (pigeonAngle < 0) pigeonAngle = 360 + pigeonAngle;
+//
+//                        double angleChange = Math.abs((-180 - tagAngles[target.getFiducialId()]) + 180 + pigeonAngle);
+//                        if (DriverStation.getAlliance().isPresent()
+//                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
+//                            angleChange += 180;
+//
+//                        while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
+//
+//                        if (angleChange < smallestAngleChange) {
+//                            smallestAngleChange = angleChange;
+//                            bestTarget = target;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        if (bestTarget != null) {
+//            backClosestTagID = bestTarget.getFiducialId();
+//            backClosestTagIDManual = bestTarget.getFiducialId();
+//            backClosestTagIDManualCounter = 0;
+//        } else {
+//            backClosestTagIDManualCounter++;
+//            if (backClosestTagIDManualCounter >= 3) backClosestTagIDManual = -1;
+//        }
+//        return backClosestTagID;
+//    }
 
-    public int updateBackClosestTagID() {
-        PhotonTrackedTarget bestTarget = null;
-        if (!backResults.isEmpty()) {
-            PhotonPipelineResult result = backResults.get(backResults.size() - 1);
-            if (result.hasTargets()) {
-                double smallestAngleChange = doneAutoDriving ? 45 : 20;
+//    public double[] getBackClosestTagXYYaw() {
+//        if (!backResults.isEmpty()) {
+//            PhotonPipelineResult result = backResults.get(backResults.size() - 1);
+//            if (result.hasTargets()) {
+//                double smallestAngleChange = doneAutoDriving ? 45 : 20;
+//                PhotonTrackedTarget bestTarget = null;
+//
+//                for (PhotonTrackedTarget target : result.getTargets()) {
+//                    if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11) //ignores tags not on the reef
+//                            || (target.getFiducialId() >= 17 && target.getFiducialId() <= 22)) {
+//                        double pigeonAngle = commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees();
+//
+//                        while (pigeonAngle > 360) pigeonAngle -= 360;
+//                        while (pigeonAngle < -360) pigeonAngle += 360;
+//
+//                        if (pigeonAngle < 0) pigeonAngle = 360 + pigeonAngle;
+//
+//                        double angleChange = Math.abs((-180 - tagAngles[target.getFiducialId()]) + 180 + pigeonAngle);
+//                        if (DriverStation.getAlliance().isPresent()
+//                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
+//                            angleChange += 180;
+//
+//                        while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
+//
+//                        if (angleChange < smallestAngleChange) {
+//                            smallestAngleChange = angleChange;
+//                            bestTarget = target;
+//                        }
+//                    }
+//                }
+//                if (bestTarget == null) {
+//                    return new double[]{0.0, 0.0, 0.0};
+//                }
+//                backClosestTagID = bestTarget.getFiducialId();
+//
+//                Transform3d cameraToTag = bestTarget.getBestCameraToTarget();
+//
+//                Pose3d robotToTag = new Pose3d().transformBy(Vision.BACK_CAMERA_POSE).transformBy(cameraToTag);
+//
+//                closestTagXBack = -robotToTag.getX();
+//                closestTagYBack = -robotToTag.getY();
+//
+////                System.out.println("X: " + closestTagXBack + " Y: " + closestTagYBack);
+//
 
-                for (PhotonTrackedTarget target : result.getTargets()) {
-                    if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11) //ignores tags not on the reef
-                            || (target.getFiducialId() >= 17 && target.getFiducialId() <= 22)) {
-                        double pigeonAngle = commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees();
-
-                        while (pigeonAngle > 360) pigeonAngle -= 360;
-                        while (pigeonAngle < -360) pigeonAngle += 360;
-
-                        if (pigeonAngle < 0) pigeonAngle = 360 + pigeonAngle;
-
-                        double angleChange = Math.abs((-180 - tagAngles[target.getFiducialId()]) + 180 + pigeonAngle);
-                        if (DriverStation.getAlliance().isPresent()
-                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
-                            angleChange += 180;
-
-                        while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
-
-                        if (angleChange < smallestAngleChange) {
-                            smallestAngleChange = angleChange;
-                            bestTarget = target;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (bestTarget != null) {
-            backClosestTagID = bestTarget.getFiducialId();
-            backClosestTagIDManual = bestTarget.getFiducialId();
-            backClosestTagIDManualCounter = 0;
-        } else {
-            backClosestTagIDManualCounter++;
-            if (backClosestTagIDManualCounter >= 3) backClosestTagIDManual = -1;
-        }
-        return backClosestTagID;
-    }
-
-    public double[] getBackClosestTagXYYaw() {
-        if (!backResults.isEmpty()) {
-            PhotonPipelineResult result = backResults.get(backResults.size() - 1);
-            if (result.hasTargets()) {
-                double smallestAngleChange = doneAutoDriving ? 45 : 20;
-                PhotonTrackedTarget bestTarget = null;
-
-                for (PhotonTrackedTarget target : result.getTargets()) {
-                    if ((target.getFiducialId() >= 6 && target.getFiducialId() <= 11) //ignores tags not on the reef
-                            || (target.getFiducialId() >= 17 && target.getFiducialId() <= 22)) {
-                        double pigeonAngle = commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees();
-
-                        while (pigeonAngle > 360) pigeonAngle -= 360;
-                        while (pigeonAngle < -360) pigeonAngle += 360;
-
-                        if (pigeonAngle < 0) pigeonAngle = 360 + pigeonAngle;
-
-                        double angleChange = Math.abs((-180 - tagAngles[target.getFiducialId()]) + 180 + pigeonAngle);
-                        if (DriverStation.getAlliance().isPresent()
-                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
-                            angleChange += 180;
-
-                        while (angleChange > 180) angleChange = Math.abs(angleChange - 360);
-
-                        if (angleChange < smallestAngleChange) {
-                            smallestAngleChange = angleChange;
-                            bestTarget = target;
-                        }
-                    }
-                }
-                if (bestTarget == null) {
-                    return new double[]{0.0, 0.0, 0.0};
-                }
-                backClosestTagID = bestTarget.getFiducialId();
-
-                Transform3d cameraToTag = bestTarget.getBestCameraToTarget();
-
-                Pose3d robotToTag = new Pose3d().transformBy(Vision.BACK_CAMERA_POSE).transformBy(cameraToTag);
-
-                closestTagXBack = -robotToTag.getX();
-                closestTagYBack = -robotToTag.getY();
-
-//                System.out.println("X: " + closestTagXBack + " Y: " + closestTagYBack);
-
-//                System.out.println("Id: " + bestTarget.getFiducialId()
-//                        + " X: " + closestTagXBack + " Y: " + closestTagYBack);
-
-                closestTagXBack -= Vision.BACK_CAMERA_TO_BACK_DISTANCE;
-
-                closestTagYawBack = bestTarget.getYaw();
-
-                if (DriverStation.getAlliance().isPresent()
-                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
-                    closestTagXBack = -closestTagXBack;
-                    closestTagYBack = -closestTagYBack;
-                }
-            }
-        }
-        return new double[]{closestTagXBack, closestTagYBack, closestTagYawBack};
-    }
-
+    /// /                System.out.println("Id: " + bestTarget.getFiducialId()
+    /// /                        + " X: " + closestTagXBack + " Y: " + closestTagYBack);
+//
+//                closestTagXBack -= Vision.BACK_CAMERA_TO_BACK_DISTANCE;
+//
+//                closestTagYawBack = bestTarget.getYaw();
+//
+//                if (DriverStation.getAlliance().isPresent()
+//                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
+//                    closestTagXBack = -closestTagXBack;
+//                    closestTagYBack = -closestTagYBack;
+//                }
+//            }
+//        }
+//        return new double[]{closestTagXBack, closestTagYBack, closestTagYawBack};
+//    }
     public static AprilTagSubsystem getInstance() {
         if (aprilTagSubsystem == null) {
             aprilTagSubsystem = new AprilTagSubsystem();

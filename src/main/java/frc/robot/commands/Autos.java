@@ -197,55 +197,55 @@ public final class Autos {
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
                                 new PathConstraints(5.5, 4.5,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getRedPose(),
                                 new PathConstraints(5.5, 4.5,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
                         () -> DriverStation.getAlliance().isPresent()
                                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
                 )
         );
     }
 
-    public static Command driveToPoseChoice(ScoringPosition scoringPosition) {
-        return new SequentialCommandGroup(
-                new InstantCommand(() ->
-                        commandSwerveDrivetrain.applyRequest(() ->
-                                drive.withVelocityX(0).
-                                        withVelocityX(0).
-                                        withRotationalRate(0)
-                        )
-                ),
-                new ConditionalCommand(
-                        new ConditionalCommand(
-                                AutoBuilder.pathfindToPose(
-                                        scoringPosition.getBluePoseBackwards(),
-                                        new PathConstraints(5.5, 4.5,
-                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
-                                AutoBuilder.pathfindToPose(
-                                        scoringPosition.getRedPoseBackwards(),
-                                        new PathConstraints(5.5, 4.5,
-                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
-                                () -> DriverStation.getAlliance().isPresent()
-                                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
-                        ),
-                        new ConditionalCommand(
-                                AutoBuilder.pathfindToPose(
-                                        scoringPosition.getBluePose(),
-                                        new PathConstraints(5.5, 4.5,
-                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
-                                AutoBuilder.pathfindToPose(
-                                        scoringPosition.getRedPose(),
-                                        new PathConstraints(5.5, 4.5,
-                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
-                                () -> DriverStation.getAlliance().isPresent()
-                                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
-                        ),
-                        RobotContainer::getShouldAlignBackwards
-                )
-        );
-    }
+//    public static Command driveToPoseChoice(ScoringPosition scoringPosition) {
+//        return new SequentialCommandGroup(
+//                new InstantCommand(() ->
+//                        commandSwerveDrivetrain.applyRequest(() ->
+//                                drive.withVelocityX(0).
+//                                        withVelocityX(0).
+//                                        withRotationalRate(0)
+//                        )
+//                ),
+//                new ConditionalCommand(
+//                        new ConditionalCommand(
+//                                AutoBuilder.pathfindToPose(
+//                                        scoringPosition.getBluePoseBackwards(),
+//                                        new PathConstraints(5.5, 4.5,
+//                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+//                                AutoBuilder.pathfindToPose(
+//                                        scoringPosition.getRedPoseBackwards(),
+//                                        new PathConstraints(5.5, 4.5,
+//                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+//                                () -> DriverStation.getAlliance().isPresent()
+//                                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+//                        ),
+//                        new ConditionalCommand(
+//                                AutoBuilder.pathfindToPose(
+//                                        scoringPosition.getBluePose(),
+//                                        new PathConstraints(5.5, 4.5,
+//                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+//                                AutoBuilder.pathfindToPose(
+//                                        scoringPosition.getRedPose(),
+//                                        new PathConstraints(5.5, 4.5,
+//                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+//                                () -> DriverStation.getAlliance().isPresent()
+//                                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+//                        ),
+//                        RobotContainer::getShouldAlignBackwards
+//                )
+//        );
+//    }
 
     public static Command driveToPose(Supplier<ScoringPosition> scoringPositionSupplier) {
         return new SequentialCommandGroup(
@@ -376,21 +376,39 @@ public final class Autos {
                 new InstantCommand(aprilTagSubsystem::resetAutoAlignData),
                 new SelectCommand<>(
                         Map.ofEntries(
-                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPoseChoice(ScoringPosition.REEF_SIDE_A)),
-                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPoseChoice(ScoringPosition.REEF_SIDE_B)),
-                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPoseChoice(ScoringPosition.REEF_SIDE_C)),
-                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPoseChoice(ScoringPosition.REEF_SIDE_D)),
-                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPoseChoice(ScoringPosition.REEF_SIDE_E)),
-                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPoseChoice(ScoringPosition.REEF_SIDE_F)),
-                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPoseChoice(ScoringPosition.REEF_SIDE_G)),
-                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPoseChoice(ScoringPosition.REEF_SIDE_H)),
-                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPoseChoice(ScoringPosition.REEF_SIDE_I)),
-                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPoseChoice(ScoringPosition.REEF_SIDE_J)),
-                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPoseChoice(ScoringPosition.REEF_SIDE_K)),
-                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPoseChoice(ScoringPosition.REEF_SIDE_L))
+                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPose(ScoringPosition.REEF_SIDE_A)),
+                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPose(ScoringPosition.REEF_SIDE_B)),
+                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPose(ScoringPosition.REEF_SIDE_C)),
+                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPose(ScoringPosition.REEF_SIDE_D)),
+                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPose(ScoringPosition.REEF_SIDE_E)),
+                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPose(ScoringPosition.REEF_SIDE_F)),
+                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPose(ScoringPosition.REEF_SIDE_G)),
+                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPose(ScoringPosition.REEF_SIDE_H)),
+                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPose(ScoringPosition.REEF_SIDE_I)),
+                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPose(ScoringPosition.REEF_SIDE_J)),
+                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPose(ScoringPosition.REEF_SIDE_K)),
+                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L))
                         ),
                         RobotContainer::getCurrentScoringPosition
-                ).until(() -> RobotContainer.isReadyToAlign() && !RobotContainer.getShouldAlignBackwards())
+                ).until(RobotContainer::isReadyToAlign)
+                        .raceWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
+                new SelectCommand<>(
+                        Map.ofEntries(
+                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPose(ScoringPosition.REEF_SIDE_A)),
+                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPose(ScoringPosition.REEF_SIDE_B)),
+                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPose(ScoringPosition.REEF_SIDE_C)),
+                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPose(ScoringPosition.REEF_SIDE_D)),
+                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPose(ScoringPosition.REEF_SIDE_E)),
+                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPose(ScoringPosition.REEF_SIDE_F)),
+                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPose(ScoringPosition.REEF_SIDE_G)),
+                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPose(ScoringPosition.REEF_SIDE_H)),
+                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPose(ScoringPosition.REEF_SIDE_I)),
+                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPose(ScoringPosition.REEF_SIDE_J)),
+                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPose(ScoringPosition.REEF_SIDE_K)),
+                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L))
+                        ),
+                        RobotContainer::getCurrentScoringPosition
+                ).until(RobotContainer::isReadyToAlign)
                         .alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
                 new InstantCommand(() -> aprilTagSubsystem.setDoneAutoDriving(true)),
                 new ConditionalCommand(

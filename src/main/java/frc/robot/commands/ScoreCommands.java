@@ -61,8 +61,7 @@ public class ScoreCommands {
             return new ConditionalCommand(
                     new FunctionalCommand(
                             () -> {
-                                int id = RobotContainer.getShouldAlignBackwardsManual()
-                                        ? aprilTagSubsystem.getBackClosestTagIDManual() : aprilTagSubsystem.getClosestTagIDManual();
+                                int id = aprilTagSubsystem.getClosestTagIDManual();
                                 commandSwerveDrivetrain.resetPose(
                                         new Pose2d(
                                                 new Translation2d(commandSwerveDrivetrain.getPose().getX(),
@@ -167,7 +166,7 @@ public class ScoreCommands {
                                         .withVelocityY(0)
                                         .withRotationalRate(0));
                     },
-                    RobotContainer::alignedManual,
+                    RobotContainer::alignedManualBack,
                     RobotContainer.commandSwerveDrivetrain
             ).onlyIf(RobotContainer::isUseAutoAlign);
         }
@@ -177,8 +176,7 @@ public class ScoreCommands {
                     () -> {
                         RobotContainer.setAutoAlignOffsetLeft();
 
-                        int id = RobotContainer.getShouldAlignBackwards()
-                                ? aprilTagSubsystem.getBackClosestTagID() : aprilTagSubsystem.getClosestTagID();
+                        int id = aprilTagSubsystem.getClosestTagID();
 
                         commandSwerveDrivetrain.resetPose(
                                 new Pose2d(
@@ -214,9 +212,8 @@ public class ScoreCommands {
         public static Command autoAlignRAuton() {
             return new FunctionalCommand(
                     () -> {
-                        setAutoAlignOffsetRight();
-                        int id = getShouldAlignBackwards()
-                                ? aprilTagSubsystem.getBackClosestTagID() : aprilTagSubsystem.getClosestTagID();
+                        RobotContainer.setAutoAlignOffsetRight();
+                        int id = aprilTagSubsystem.getClosestTagID();
 
                         commandSwerveDrivetrain.resetPose(
                                 new Pose2d(
@@ -347,16 +344,11 @@ public class ScoreCommands {
     public static class Stabling {
         public static Command regularStable() {
             return new SequentialCommandGroup(
-                    new ConditionalCommand(
-                            new PositionCommand(armSubsystem, ArmConstants.L4_BACK_AFTER)
-                                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.PREP_L4_BACK)),
-                            new PositionCommand(wristSubsystem, WristConstants.PREP_L4),
-                            RobotContainer::getShouldAlignBackwards
-                    ).onlyIf(() -> RobotContainer.getState() == State.L4),
+                    new PositionCommand(wristSubsystem, WristConstants.PREP_L4)
+                            .onlyIf(() -> RobotContainer.getState() == State.L4),
                     new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE, 80, 120)
                             .until(() -> elevatorSubsystem.isAtBottom()
                                     && elevatorSubsystem.getMechM() < .05),
-//                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
                     Arm.armStable()
             );
         }
@@ -375,16 +367,10 @@ public class ScoreCommands {
         }
 
         public static Command groundIntakeStable() {
-            return new SequentialCommandGroup(
-                    new ParallelCommandGroup(
-                            new PositionCommand(elevatorSubsystem, 0.02, 80, 120)
-                                    .until(() -> elevatorSubsystem.isAtBottom()
-                                            && elevatorSubsystem.getMechM() < .05),
-                            new PositionCommand(wristSubsystem, WristConstants.STABLE)
-                    ),
-//                    new InstantCommand(() -> elevatorSubsystem.getMotor().setPosition(0)),
-                    Arm.armStable()
-            )/*.alongWith(Intake.groundIntakeSequence())*/.alongWith(new InstantCommand(() -> intakeSubsystem.setPercent(0)));
+            return new ParallelCommandGroup(
+                    Arm.armStable(),
+                    new InstantCommand(() -> intakeSubsystem.setPercent(0))
+            );
         }
 
         public static Command stableL4() {
@@ -660,35 +646,23 @@ public class ScoreCommands {
         }
 
         public static Command armL2() {
-            return new ConditionalCommand(
-                    new PositionCommand(armSubsystem, ArmConstants.L2_BACK, 150, 125)
-                            .alongWith(new PositionCommand(wristSubsystem, WristConstants.L2_BACK)),
-                    new PositionCommand(armSubsystem, ArmConstants.L2)
-                            .alongWith(new PositionCommand(wristSubsystem, WristConstants.L2)),
-                    RobotContainer::getShouldAlignBackwards
-            ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L2)))
+            return new PositionCommand(armSubsystem, ArmConstants.L2)
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.L2))
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L2)))
                     .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
         }
 
         public static Command armL3() {
-            return new ConditionalCommand(
-                    new PositionCommand(armSubsystem, ArmConstants.L3_BACK, 150, 125)
-                            .alongWith(new PositionCommand(wristSubsystem, WristConstants.L3_BACK)),
-                    new PositionCommand(armSubsystem, ArmConstants.L3)
-                            .alongWith(new PositionCommand(wristSubsystem, WristConstants.L3)),
-                    RobotContainer::getShouldAlignBackwards
-            ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)))
+            return new PositionCommand(armSubsystem, ArmConstants.L3)
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.L3))
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)))
                     .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
         }
 
         public static Command armL4() {
-            return new ConditionalCommand(
-                    new PositionCommand(armSubsystem, ArmConstants.L4_BACK_AFTER, 150, 125)
-                            .alongWith(new PositionCommand(wristSubsystem, WristConstants.PREP_L4_BACK)),
-                    new PositionCommand(armSubsystem, ArmConstants.L4)
-                            .alongWith(new PositionCommand(wristSubsystem, WristConstants.L4)),
-                    RobotContainer::getShouldAlignBackwards
-            ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)))
+            return new PositionCommand(armSubsystem, ArmConstants.L4)
+                    .alongWith(new PositionCommand(wristSubsystem, WristConstants.PREP_L4))
+                    .alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)))
                     .andThen(new PositionCommand(elevatorSubsystem, ElevatorConstants.STABLE));
         }
 
@@ -857,111 +831,56 @@ public class ScoreCommands {
 
         public static Command scoreL2() {
             return new ConditionalCommand(
-                    new ConditionalCommand(
-                            new SequentialCommandGroup( //Going down
-                                    new ParallelCommandGroup(
-                                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L2_BACK, 80, 120),
-                                            new PositionCommand(wristSubsystem, WristConstants.L2_BACK)
-                                    ),
-                                    new PositionCommand(armSubsystem, ArmConstants.L2_BACK)
+                    new SequentialCommandGroup( //Going down
+                            new ParallelCommandGroup(
+                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.L2, 80, 120),
+                                    new PositionCommand(wristSubsystem, WristConstants.L2)
                             ),
-                            new SequentialCommandGroup( //Going up
-                                    new PositionCommand(armSubsystem, ArmConstants.L2_BACK),
-                                    new ParallelCommandGroup(
-                                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L2_BACK),
-                                            new PositionCommand(wristSubsystem, WristConstants.L2_BACK)
-                                    )
-
-                            ),
-                            () -> elevatorSubsystem.getMechM() > ElevatorConstants.L2
+                            new PositionCommand(armSubsystem, ArmConstants.L2)
                     ),
-                    new ConditionalCommand(
-                            new SequentialCommandGroup( //Going down
-                                    new ParallelCommandGroup(
-                                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L2, 80, 120),
-                                            new PositionCommand(wristSubsystem, WristConstants.L2)
-                                    ),
-                                    new PositionCommand(armSubsystem, ArmConstants.L2)
-                            ),
-                            new SequentialCommandGroup( //Going up
-                                    new PositionCommand(armSubsystem, ArmConstants.L2),
-                                    new ParallelCommandGroup(
-                                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L2),
-                                            new PositionCommand(wristSubsystem, WristConstants.L2)
-                                    )
+                    new SequentialCommandGroup( //Going up
+                            new PositionCommand(armSubsystem, ArmConstants.L2),
+                            new ParallelCommandGroup(
+                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.L2),
+                                    new PositionCommand(wristSubsystem, WristConstants.L2)
+                            )
 
-                            ),
-                            () -> elevatorSubsystem.getMechM() > ElevatorConstants.L2
                     ),
-                    RobotContainer::getShouldAlignBackwards
+                    () -> elevatorSubsystem.getMechM() > ElevatorConstants.L2
             ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L2)));
         }
 
         public static Command scoreL3() {
             return new ConditionalCommand(
-                    new ConditionalCommand(
-                            new SequentialCommandGroup( //Going down
-                                    new ParallelCommandGroup(
-                                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L3_BACK, 80, 120),
-                                            new PositionCommand(wristSubsystem, WristConstants.L3_BACK)
-                                    ),
-                                    new PositionCommand(armSubsystem, ArmConstants.L3_BACK)
+                    new SequentialCommandGroup( //Going down
+                            new ParallelCommandGroup(
+                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.L3, 80, 120),
+                                    new PositionCommand(wristSubsystem, WristConstants.L3)
                             ),
-                            new SequentialCommandGroup( //Going up
-                                    new PositionCommand(armSubsystem, ArmConstants.L3_BACK),
-                                    new ParallelCommandGroup(
-                                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L3_BACK),
-                                            new PositionCommand(wristSubsystem, WristConstants.L3_BACK)
-                                    )
-                            ),
-                            () -> elevatorSubsystem.getMechM() > ElevatorConstants.L3
+                            new PositionCommand(armSubsystem, ArmConstants.L3)
                     ),
-                    new ConditionalCommand(
-                            new SequentialCommandGroup( //Going down
-                                    new ParallelCommandGroup(
-                                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L3, 80, 120),
-                                            new PositionCommand(wristSubsystem, WristConstants.L3)
-                                    ),
-                                    new PositionCommand(armSubsystem, ArmConstants.L3)
-                            ),
-                            new SequentialCommandGroup( //Going up
-                                    new PositionCommand(armSubsystem, ArmConstants.L3),
-                                    new ParallelCommandGroup(
-                                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L3),
-                                            new PositionCommand(wristSubsystem, WristConstants.L3)
-                                    )
+                    new SequentialCommandGroup( //Going up
+                            new PositionCommand(armSubsystem, ArmConstants.L3),
+                            new ParallelCommandGroup(
+                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.L3),
+                                    new PositionCommand(wristSubsystem, WristConstants.L3)
+                            )
 
-                            ),
-                            () -> elevatorSubsystem.getMechM() > ElevatorConstants.L3
                     ),
-                    RobotContainer::getShouldAlignBackwards
+                    () -> elevatorSubsystem.getMechM() > ElevatorConstants.L3
             ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L3)));
         }
 
         public static Command scoreL4() {
-            return new ConditionalCommand(
-                    new SequentialCommandGroup(
-                            new PositionCommand(armSubsystem, ArmConstants.L4_BACK_AFTER),
-                            new ParallelCommandGroup(
-                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.L4_BACK),
-                                    new PositionCommand(wristSubsystem, WristConstants.L4_BACK)
-                                            .beforeStarting(new WaitCommand(Double.MAX_VALUE)
-                                                    .until(() -> elevatorSubsystem.isMechGreaterThanPosition(.5)))
-                            ).until(() -> elevatorSubsystem.isMechAtGoal(false)
-                                    && wristSubsystem.isMechAtGoal(false)),
-                            new PositionCommand(armSubsystem, ArmConstants.L4_BACK)
-                    ),
-                    new SequentialCommandGroup(
-                            new PositionCommand(armSubsystem, ArmConstants.L4),
-                            new ParallelCommandGroup(
-                                    new PositionCommand(elevatorSubsystem, ElevatorConstants.L4),
-                                    new PositionCommand(wristSubsystem, WristConstants.L4)
-                                            .beforeStarting(new WaitCommand(Double.MAX_VALUE)
-                                                    .until(() -> elevatorSubsystem.isMechGreaterThanPosition(.25)))
-                            ).until(() -> elevatorSubsystem.isMechAtGoal(false)
-                                    && wristSubsystem.isMechAtGoal(false))
-                    ),
-                    RobotContainer::getShouldAlignBackwards
+            return new SequentialCommandGroup(
+                    new PositionCommand(armSubsystem, ArmConstants.L4),
+                    new ParallelCommandGroup(
+                            new PositionCommand(elevatorSubsystem, ElevatorConstants.L4),
+                            new PositionCommand(wristSubsystem, WristConstants.L4)
+                                    .beforeStarting(new WaitCommand(Double.MAX_VALUE)
+                                            .until(() -> elevatorSubsystem.isMechGreaterThanPosition(.25)))
+                    ).until(() -> elevatorSubsystem.isMechAtGoal(false)
+                            && wristSubsystem.isMechAtGoal(false))
             ).alongWith(new InstantCommand(() -> RobotContainer.setState(State.L4)));
         }
 
@@ -1000,11 +919,7 @@ public class ScoreCommands {
                                     () -> RobotContainer.getState() == State.L1
                             ),
                             new ConditionalCommand(
-                                    new ConditionalCommand(
-                                            new VelocityCommand(intakeSubsystem, -30, -30), //L4
-                                            new VelocityCommand(intakeSubsystem, 120, 120), //L4
-                                            RobotContainer::getShouldAlignBackwards
-                                    ),
+                                    new VelocityCommand(intakeSubsystem, 120, 120), //L4
                                     new ConditionalCommand(
                                             new ConditionalCommand(
                                                     new PositionCommand(wristSubsystem, WristConstants.BARGE_FINAL).withTimeout(.4)
@@ -1012,11 +927,7 @@ public class ScoreCommands {
                                                     new VelocityCommand(intakeSubsystem, -100, -100),
                                                     () -> RobotContainer.getState() == State.BARGE
                                             ),
-                                            new ConditionalCommand(
-                                                    new VelocityCommand(intakeSubsystem, -40, -40), //L2 and L3
-                                                    new VelocityCommand(intakeSubsystem, 40, 40),
-                                                    RobotContainer::getShouldAlignBackwards
-                                            ),
+                                            new VelocityCommand(intakeSubsystem, 25, 25),
                                             () -> RobotContainer.getState() == State.BARGE ||
                                                     RobotContainer.getState() == State.PROCESSOR
                                     ),

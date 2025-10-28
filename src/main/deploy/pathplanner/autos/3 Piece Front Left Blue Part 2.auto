@@ -52,43 +52,6 @@
           "data": {
             "name": "DRIVEINTAKE"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "3 Piece Blue Front Left Floor to A2"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "L2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ALIGNR"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "OUTTAKE"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "STABLE"
-          }
         }
       ]
     }

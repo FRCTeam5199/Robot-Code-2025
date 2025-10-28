@@ -163,8 +163,6 @@ public class RobotContainer {
     private static int readyToAlignCheck = 0;
 
     private static boolean readyToAlign = false;
-    private static boolean shouldAlignBackwards = false;
-    private static boolean shouldAlignBackwardsManual = false;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -208,7 +206,7 @@ public class RobotContainer {
                 .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
                 .until(intakeSubsystem::hasCoral)
                 .andThen(ScoreCommands.Stabling.groundIntakeStable())
-                .withTimeout(1.4));
+                .withTimeout(1.6));
 
         Autos.initializeAutos();
 
@@ -227,6 +225,7 @@ public class RobotContainer {
                         .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
         // reset the field-centric heading on menu button press
+
         commandXboxController.button(8).onTrue(commandSwerveDrivetrain
                 .runOnce(commandSwerveDrivetrain::seedFieldCentric)
                 .alongWith(new InstantCommand(() -> commandSwerveDrivetrain.getPigeon2().setYaw(0))));
@@ -248,9 +247,10 @@ public class RobotContainer {
                                 new ConditionalCommand(
                                         ScoreCommands.Score.score()
                                                 .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120)))
-                                                .alongWith(ScoreCommands.Drive.autoAlignCenterBack())
-                                                .andThen(ScoreCommands.Drive.autoAlignCenter().withTimeout(1d))
-                                                .andThen(ScoreCommands.Drive.autoAlignCenterBack().withTimeout(.75d)),
+                                                .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
+                                                        .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+                                                        .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+                                                        .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))),
                                         ScoreCommands.Score.score()
                                                 .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
                                                 .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
@@ -278,15 +278,15 @@ public class RobotContainer {
                         new ConditionalCommand(
                                 ScoreCommands.Intake.intakeGroundAlgae()
                                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
-                                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed * .6)
-                                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .6)
-                                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .6))),
+                                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed * .7)
+                                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .7)
+                                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .7))),
                                 ScoreCommands.Intake.intakeGround()
                                         .alongWith(new VelocityCommand(intakeSubsystem, 90, 120))
                                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
-                                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed * .6)
-                                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .6)
-                                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .6)))
+                                                .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed * .7)
+                                                .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .7)
+                                                .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .7)))
                                         .until(intakeSubsystem::hasCoral)
                                         .andThen(ScoreCommands.Stabling.groundIntakeStable()),
                                 () -> state == State.BARGE || state == State.PROCESSOR
@@ -536,8 +536,7 @@ public class RobotContainer {
 
         if (state != State.ALGAE_LOW && state != State.ALGAE_HIGH && state
                 != State.BARGE && state != State.PROCESSOR) {
-            autoAlignXOffset = shouldAlignBackwards
-                    ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
+            autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
             if (DriverStation.getAlliance().isPresent()
                     && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
                 autoAlignXOffset = -autoAlignXOffset;
@@ -546,67 +545,26 @@ public class RobotContainer {
 
         if (readyToAlign()) {
             readyToAlignCheck++;
-            readyToAlign = readyToAlignCheck >= 4;
+            readyToAlign = readyToAlignCheck >= 2;
         } else {
             readyToAlignCheck = 0;
             readyToAlign = false;
         }
 
-        double robotRotation = commandSwerveDrivetrain.getPigeon2().getRotation2d().getDegrees();
-
-        while (robotRotation > 360) robotRotation -= 360;
-        while (robotRotation < -360) robotRotation += 360;
-
-        if (DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) {
-            double goalRotation = currentScoringPosition.getBluePose().getRotation().getDegrees();
-            if (robotRotation < 0) {
-                robotRotation = 360 - Math.abs(robotRotation);
-            }
-
-            double difference = robotRotation - goalRotation;
-            while (difference > 180) difference -= 360;
-            while (difference < -180) difference += 360;
-
-            shouldAlignBackwards = Math.abs(difference) >= 90;
-        } else {
-            double goalRotation = currentScoringPosition.getRedPose().getRotation().getDegrees() + 180;
-            if (robotRotation < 0) {
-                robotRotation = 360 - Math.abs(robotRotation);
-            }
-
-            double difference = robotRotation - goalRotation;
-            while (difference > 180) difference -= 360;
-            while (difference < -180) difference += 360;
-            shouldAlignBackwards = Math.abs(difference) >= 90;
-        }
-
-        shouldAlignBackwardsManual = aprilTagSubsystem.getClosestTagIDManual() == -1;
-        if (state == State.L4) {
-            shouldAlignBackwards = false;
-            shouldAlignBackwardsManual = false;
-        }
-
         if (state != State.ALGAE_LOW && state != State.ALGAE_HIGH
                 && state != State.BARGE && state != State.PROCESSOR) {
-            autoAlignXOffsetManual = shouldAlignBackwardsManual
-                    ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
+            autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X;
             if (DriverStation.getAlliance().isPresent()
                     && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
                 autoAlignXOffsetManual = -autoAlignXOffsetManual;
         }
 
-
-        if (state == State.ALGAE_LOW || state == State.ALGAE_HIGH
-                || state == State.BARGE || state == State.PROCESSOR)
-            shouldAlignBackwardsManual = false;
-
-        currentStateX.position = shouldAlignBackwards ? aprilTagSubsystem.getBackClosestTagXYYaw()[0] : aprilTagSubsystem.getClosestTagXYYaw()[0];
-        currentStateY.position = shouldAlignBackwards ? aprilTagSubsystem.getBackClosestTagXYYaw()[1] : aprilTagSubsystem.getClosestTagXYYaw()[1];
+        currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
+        currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
         currentStateRotation.position = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
 
-        currentStateXManual.position = shouldAlignBackwardsManual ? aprilTagSubsystem.getBackClosestTagXYYaw()[0] : aprilTagSubsystem.getClosestTagXYYaw()[0];
-        currentStateYManual.position = shouldAlignBackwardsManual ? aprilTagSubsystem.getBackClosestTagXYYaw()[1] : aprilTagSubsystem.getClosestTagXYYaw()[1];
+        currentStateXManual.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
+        currentStateYManual.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
 
         goalStateX.position = autoAlignXOffset;
         goalStateY.position = autoAlignYOffset;
@@ -627,69 +585,41 @@ public class RobotContainer {
 //        System.out.println("Y Diff: " + Math.abs(currentStateY.position - autoAlignYOffset));
 //        System.out.println("Rot Diff: " + Math.abs(currentStateRotation.position - goalStateRotation.position));
 
-        if (shouldAlignBackwards) {
-            if (Math.abs(currentStateX.position - autoAlignXOffset) > .3) {
-                xVelocity = drivePIDControllerXBack.calculate(currentStateX.position, nextStateX);
-            } else if (Math.abs(currentStateX.position - autoAlignXOffset) > .05) {
-                xVelocity = drivePIDControllerXCloseBack.calculate(currentStateX.position, nextStateX);
-            } else {
-                xVelocity = drivePIDControllerXVeryCloseBack.calculate(currentStateX.position, nextStateX);
-            }
 
-            if (Math.abs(currentStateY.position - autoAlignYOffset) > .1) {
-                yVelocity = drivePIDControllerYBack.calculate(currentStateY.position, nextStateY);
-            } else if (Math.abs(currentStateX.position - autoAlignXOffset) > .04) {
-                yVelocity = drivePIDControllerYCloseBack.calculate(currentStateY.position, nextStateY);
-            } else {
-                yVelocity = drivePIDControllerYVeryCloseBack.calculate(currentStateY.position, nextStateY);
-            }
+        if ((Math.abs(currentStateX.position - autoAlignXOffset) > .15
+                || Math.abs(currentStateY.position - autoAlignYOffset) > .1)) {
+            xVelocity = drivePIDControllerX.calculate(currentStateX.position, nextStateX);
+            yVelocity = drivePIDControllerY.calculate(currentStateY.position, nextStateY);
+        } else if (Math.abs(currentStateY.position - autoAlignYOffset) > .04) {
+            xVelocity = drivePIDControllerXClose.calculate(currentStateX.position, nextStateX);
+            yVelocity = drivePIDControllerYClose.calculate(currentStateY.position, nextStateY);
         } else {
-            if ((Math.abs(currentStateX.position - autoAlignXOffset) > .15
-                    || Math.abs(currentStateY.position - autoAlignYOffset) > .1)) {
-                xVelocity = drivePIDControllerX.calculate(currentStateX.position, nextStateX);
-                yVelocity = drivePIDControllerY.calculate(currentStateY.position, nextStateY);
-            } else if (Math.abs(currentStateY.position - autoAlignYOffset) > .04) {
-                xVelocity = drivePIDControllerXClose.calculate(currentStateX.position, nextStateX);
-                yVelocity = drivePIDControllerYClose.calculate(currentStateY.position, nextStateY);
-            } else {
-                xVelocity = drivePIDControllerXClose.calculate(currentStateX.position, nextStateX);
-                yVelocity = drivePIDControllerYVeryClose.calculate(currentStateY.position, nextStateY);
-            }
+            xVelocity = drivePIDControllerXClose.calculate(currentStateX.position, nextStateX);
+            yVelocity = drivePIDControllerYVeryClose.calculate(currentStateY.position, nextStateY);
         }
         rotationVelocity = turnPIDController.calculate(currentStateRotation.position, nextStateRotation);
 
-        if (shouldAlignBackwardsManual) {
-            if (Math.abs(currentStateXManual.position - autoAlignXOffsetManual) > .3) {
-                xVelocityManual = drivePIDControllerXBack.calculate(currentStateXManual.position, nextStateXManual);
-            } else if (Math.abs(currentStateXManual.position - autoAlignXOffsetManual) > .05) {
-                xVelocityManual = drivePIDControllerXCloseBack.calculate(currentStateXManual.position, nextStateXManual);
-            } else {
-                xVelocityManual = drivePIDControllerXVeryCloseBack.calculate(currentStateXManual.position, nextStateXManual);
-            }
 
-            if (Math.abs(currentStateYManual.position - autoAlignYOffsetManual) > .1) {
-                yVelocityManual = drivePIDControllerYBack.calculate(currentStateYManual.position, nextStateYManual);
-            } else if (Math.abs(currentStateXManual.position - autoAlignXOffsetManual) > .04) {
-                yVelocityManual = drivePIDControllerYCloseBack.calculate(currentStateYManual.position, nextStateYManual);
-            } else {
-                yVelocityManual = drivePIDControllerYVeryCloseBack.calculate(currentStateYManual.position, nextStateYManual);
-            }
+        if ((Math.abs(currentStateXManual.position - autoAlignXOffsetManual) > .15
+                || Math.abs(currentStateYManual.position - autoAlignYOffsetManual) > .1)) {
+            xVelocityManual = drivePIDControllerX.calculate(currentStateXManual.position, nextStateXManual);
+            yVelocityManual = drivePIDControllerY.calculate(currentStateYManual.position, nextStateYManual);
+        } else if (Math.abs(currentStateYManual.position - autoAlignYOffsetManual) > .04) {
+            xVelocityManual = drivePIDControllerXClose.calculate(currentStateXManual.position, nextStateXManual);
+            yVelocityManual = drivePIDControllerYClose.calculate(currentStateYManual.position, nextStateYManual);
         } else {
-            if ((Math.abs(currentStateXManual.position - autoAlignXOffsetManual) > .15
-                    || Math.abs(currentStateYManual.position - autoAlignYOffsetManual) > .1)) {
-                xVelocityManual = drivePIDControllerX.calculate(currentStateXManual.position, nextStateXManual);
-                yVelocityManual = drivePIDControllerY.calculate(currentStateYManual.position, nextStateYManual);
-            } else if (Math.abs(currentStateYManual.position - autoAlignYOffsetManual) > .04) {
-                xVelocityManual = drivePIDControllerXClose.calculate(currentStateXManual.position, nextStateXManual);
-                yVelocityManual = drivePIDControllerYClose.calculate(currentStateYManual.position, nextStateYManual);
-            } else {
-                xVelocityManual = drivePIDControllerXClose.calculate(currentStateXManual.position, nextStateXManual);
-                yVelocityManual = drivePIDControllerYVeryClose.calculate(currentStateYManual.position, nextStateYManual);
-            }
+            xVelocityManual = drivePIDControllerXClose.calculate(currentStateXManual.position, nextStateXManual);
+            yVelocityManual = drivePIDControllerYVeryClose.calculate(currentStateYManual.position, nextStateYManual);
         }
 
-//        System.out.println("X: " + aprilTagSubsystem.getClosestTagXYYaw()[0]
-//                + " Y: " + aprilTagSubsystem.getClosestTagXYYaw()[1]);
+//        System.out.println("Front X: " + aprilTagSubsystem.getClosestTagXYYaw()[0]
+//                + " Front Y: " + aprilTagSubsy==tem.getClosestTagXYYaw()[1]);
+        //Front: .06, .125; .055, .165, .05, .165; ,06, .145 .06, .175, .06, .17; .06, 16; .06, .14
+
+//        System.out.println("Back X: " + aprilTagSubsystem.getBackClosestTagXYYaw()[0]
+//                + " Back Y: " + aprilTagSubsystem.getBackClosestTagXYYaw()[1]);
+        //Back Right: .51, .145; .51, .14; .51, .135, .51, .14;, .5, .17
+        //Back Left: .51, .18; .51, .165; .52, .19; .50, .19, .52, .2
 //
 //        System.out.println("X velocity: " + xVelocity);
 //        System.out.println("Y velocity: " + yVelocity);
@@ -782,44 +712,38 @@ public class RobotContainer {
     public static void setAutoAlignOffsetLeft() {
         if (DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) {
-            autoAlignYOffset = shouldAlignBackwards
-                    ? Constants.Vision.AUTO_ALIGN_Y_BACK_LEFT : Constants.Vision.AUTO_ALIGN_Y;
-            autoAlignYOffsetManual = shouldAlignBackwardsManual
-                    ? Constants.Vision.AUTO_ALIGN_Y_BACK_LEFT : Constants.Vision.AUTO_ALIGN_Y;
+            autoAlignYOffset = Constants.Vision.AUTO_ALIGN_Y;
+            autoAlignYOffsetManual = Constants.Vision.AUTO_ALIGN_Y;
         } else {
-            autoAlignYOffset = shouldAlignBackwards
-                    ? Constants.Vision.AUTO_ALIGN_Y_BACK_RIGHT : -Constants.Vision.AUTO_ALIGN_Y;
-            autoAlignYOffsetManual = shouldAlignBackwardsManual
-                    ? Constants.Vision.AUTO_ALIGN_Y_BACK_RIGHT : -Constants.Vision.AUTO_ALIGN_Y;
+            autoAlignYOffset = -Constants.Vision.AUTO_ALIGN_Y;
+            autoAlignYOffsetManual = -Constants.Vision.AUTO_ALIGN_Y;
         }
-        autoAlignXOffset = shouldAlignBackwards
-                ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
-        autoAlignXOffsetManual = shouldAlignBackwardsManual
-                ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
+        autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
+        autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X;
         if (DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
             autoAlignXOffset = -autoAlignXOffset;
             autoAlignXOffsetManual = -autoAlignXOffsetManual;
+        }
+
+        if (DriverStation.getAlliance().isPresent()
+                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                && currentScoringPosition.equals(ScoringPosition.REEF_SIDE_K)) {
+            autoAlignYOffset -= .03;
         }
     }
 
     public static void setAutoAlignOffsetRight() {
         if (DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) {
-            autoAlignYOffset = shouldAlignBackwards
-                    ? Constants.Vision.AUTO_ALIGN_Y_BACK_RIGHT : -Constants.Vision.AUTO_ALIGN_Y;
-            autoAlignYOffsetManual = shouldAlignBackwardsManual
-                    ? Constants.Vision.AUTO_ALIGN_Y_BACK_RIGHT : -Constants.Vision.AUTO_ALIGN_Y;
+            autoAlignYOffset = -Constants.Vision.AUTO_ALIGN_Y;
+            autoAlignYOffsetManual = -Constants.Vision.AUTO_ALIGN_Y;
         } else {
-            autoAlignYOffset = shouldAlignBackwards
-                    ? Constants.Vision.AUTO_ALIGN_Y_BACK_LEFT : Constants.Vision.AUTO_ALIGN_Y;
-            autoAlignYOffsetManual = shouldAlignBackwardsManual
-                    ? Constants.Vision.AUTO_ALIGN_Y_BACK_LEFT : Constants.Vision.AUTO_ALIGN_Y;
+            autoAlignYOffset = Constants.Vision.AUTO_ALIGN_Y;
+            autoAlignYOffsetManual = Constants.Vision.AUTO_ALIGN_Y;
         }
-        autoAlignXOffset = shouldAlignBackwards
-                ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
-        autoAlignXOffsetManual = shouldAlignBackwardsManual
-                ? Constants.Vision.AUTO_ALIGN_X_BACK : Constants.Vision.AUTO_ALIGN_X;
+        autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
+        autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X;
         if (DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
             autoAlignXOffset = -autoAlignXOffset;
@@ -848,44 +772,32 @@ public class RobotContainer {
     }
 
     public static boolean readyToAlign() {
-        return shouldAlignBackwards ?
-                aprilTagSubsystem.getBackClosestTagID() ==
-                        (DriverStation.getAlliance().isPresent()
-                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
-                                ? currentScoringPosition.getBlueAprilTagID()
-                                : currentScoringPosition.getRedAprilTagID())
-                        && aprilTagSubsystem.getBackClosestTagXYYaw()[0] != 0
-                :
-                aprilTagSubsystem.getClosestTagID() ==
-                        (DriverStation.getAlliance().isPresent()
-                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
-                                ? currentScoringPosition.getBlueAprilTagID()
-                                : currentScoringPosition.getRedAprilTagID())
-                        && aprilTagSubsystem.getClosestTagXYYaw()[0] != 0;
+        return aprilTagSubsystem.getClosestTagID() ==
+                (DriverStation.getAlliance().isPresent()
+                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                        ? currentScoringPosition.getBlueAprilTagID()
+                        : currentScoringPosition.getRedAprilTagID())
+                && aprilTagSubsystem.getClosestTagXYYaw()[0] != 0;
     }
 
     public static boolean isReadyToAlign() {
-        return readyToAlign && (shouldAlignBackwards
-                ? Math.sqrt(Math.pow(aprilTagSubsystem.getBackClosestTagXYYaw()[0], 2)
-                + Math.pow(aprilTagSubsystem.getBackClosestTagXYYaw()[1], 2)) < 2d
-                : Math.sqrt(Math.pow(aprilTagSubsystem.getClosestTagXYYaw()[0], 2)
-                + Math.pow(aprilTagSubsystem.getClosestTagXYYaw()[1], 2)) < 1d);
+        return readyToAlign && Math.sqrt(Math.pow(aprilTagSubsystem.getClosestTagXYYaw()[0], 2)
+                + Math.pow(aprilTagSubsystem.getClosestTagXYYaw()[1], 2)) < 1d;
     }
 
     public static boolean aligned() {
-        return shouldAlignBackwards ?
-                Math.abs(aprilTagSubsystem.getBackClosestTagXYYaw()[0] - autoAlignXOffset) <= .025
-                        && Math.abs(aprilTagSubsystem.getBackClosestTagXYYaw()[1] - autoAlignYOffset) <= .02
-                : Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .025
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .025
                 && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .02;
     }
 
     public static boolean alignedManual() {
-        return shouldAlignBackwardsManual ?
-                Math.abs(aprilTagSubsystem.getBackClosestTagXYYaw()[0] - autoAlignXOffsetManual) <= .025
-                        && Math.abs(aprilTagSubsystem.getBackClosestTagXYYaw()[1] - autoAlignYOffsetManual) <= .02
-                : Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffsetManual) <= .025
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffsetManual) <= .025
                 && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffsetManual) <= .02;
+    }
+
+    public static boolean alignedManualBack() {
+        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffsetManual) <= .05
+                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffsetManual) <= .05;
     }
 
 
@@ -911,13 +823,5 @@ public class RobotContainer {
 
     public static void toggleCoralBlockingHP() {
         isCoralBlockingHP = !isCoralBlockingHP;
-    }
-
-    public static boolean getShouldAlignBackwards() {
-        return shouldAlignBackwards;
-    }
-
-    public static boolean getShouldAlignBackwardsManual() {
-        return shouldAlignBackwardsManual;
     }
 }

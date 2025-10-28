@@ -78,7 +78,7 @@ public final class Constants {
         public static final double L4 = 1.01;
         public static final double HP = 0;
 
-        public static final double L2_BACK = .06;
+        public static final double L2_BACK = .09;
         public static final double L3_BACK = .43;
         public static final double L4_BACK = 1.01;
 
@@ -97,6 +97,7 @@ public final class Constants {
         public static final boolean LEFT_ARM_INVERTED = true;
         public static final boolean ARM_FOLLOWER_INVERTED = true;
 
+
         public static final boolean ARM_BRAKE = true;
 
         public static final double ARM_FF_OFFSET = 0;
@@ -109,14 +110,14 @@ public final class Constants {
         public static final double ARM_UPPER_TOLERANCE = 4;
 
         // public static final double STABLE = 0;
-        public static final double GROUND = 5.5;
+        public static final double GROUND = 5.25;
         public static final double ALGAE_GROUND = 11;
 
         public static final double L1 = 16;
         public static final double L1UP = 25;
         public static final double L2 = 41;
         public static final double L3 = 61;
-        public static final double L4 = 77;
+        public static final double L4 = 75.5; //77
         public static final double HP = 63;
 
         public static final double L2_BACK = 73;
@@ -221,14 +222,14 @@ public final class Constants {
         public static final boolean WRIST_INVERTED = false;
 
         public static final double STABLE = 10;
-        public static final double GROUND = 182;
+        public static final double GROUND = 183; //182
         public static final double ALGAE_GROUND = 185;
 
         public static final double L1 = 10;
         public static final double L1UP = 10;
         public static final double L2 = 67;
         public static final double L3 = 91;
-        public static final double PREP_L4 = 100;
+        public static final double PREP_L4 = 135;
         public static final double L4 = 139;
 
         public static final double L2_BACK = 46;
@@ -291,13 +292,13 @@ public final class Constants {
         public static final String LIMELIGHT_NAME = "limelight";
         public static final double LIMELIGHT_X_AIM = -29;
 
-        public static final double AUTO_ALIGN_X = .04;
+        public static final double AUTO_ALIGN_X = .06; //.04
         public static final double AUTO_ALIGN_X_ALGAE_PREP = -.4;
-        public static final double AUTO_ALIGN_Y = .15;
+        public static final double AUTO_ALIGN_Y = .16; //.15
 
-        public static final double AUTO_ALIGN_X_BACK = .495;
-        public static final double AUTO_ALIGN_Y_BACK_RIGHT = .12;
-        public static final double AUTO_ALIGN_Y_BACK_LEFT = -.19;
+        public static final double AUTO_ALIGN_X_BACK = .52; //.495
+        public static final double AUTO_ALIGN_Y_BACK_RIGHT = .17; //.12
+        public static final double AUTO_ALIGN_Y_BACK_LEFT = -.195; //.19
 
         public static final double AUTO_ALIGN_X_ALGAE_PREP_BACKWARDS = -.45;
 
