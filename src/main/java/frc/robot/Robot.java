@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import au.grapplerobotics.CanBridge;
@@ -39,6 +40,7 @@ public class Robot extends TimedRobot {
     private static Pair<Optional<EstimatedRobotPose>, Double> estimatePose;
     private static Pair<Optional<EstimatedRobotPose>, Double> backEstimatePose;
     private static AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
+    private static DriverStation.Alliance alliance;
 
 //  private IntakeSubsystem exampleSubsystem = IntakeSubsystem.getInstance();
 
@@ -136,6 +138,8 @@ public class Robot extends TimedRobot {
             commandSwerveDrivetrain.addVisionMeasurement(modify, Utils.getCurrentTimeSeconds(),
                     aprilTagSubsystem.getEstimationStdDevs());
         }
+
+        if (DriverStation.getAlliance().isPresent()) alliance = DriverStation.getAlliance().get();
     }
 
     /**
@@ -143,14 +147,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        var alliance = DriverStation.getAlliance();
         SignalLogger.start();
 
 //        commandSwerveDrivetrain.getPigeon2().reset();
-
-        if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue) {
-            // commandSwerveDrivetrain.getPigeon2().setYaw(Math.toRadians(180));
-        }
 
 
         autonomousCommand = robotContainer.getAutonomousCommand();
@@ -227,5 +226,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void simulationPeriodic() {
+    }
+
+    public static DriverStation.Alliance getAlliance() {
+        return alliance;
     }
 }

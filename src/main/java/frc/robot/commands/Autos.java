@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.UserInterface;
 import frc.robot.constants.Constants;
@@ -196,14 +197,13 @@ public final class Autos {
                 new ConditionalCommand(
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getBluePose(),
-                                new PathConstraints(5.5, 4.5,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
+                                new PathConstraints(5.5, 3,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
                         AutoBuilder.pathfindToPose(
                                 scoringPosition.getRedPose(),
-                                new PathConstraints(5.5, 4.5,
-                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 1d),
-                        () -> DriverStation.getAlliance().isPresent()
-                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                                new PathConstraints(5.5, 3,
+                                        Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
+                        () -> Robot.getAlliance().equals(DriverStation.Alliance.Blue)
                 )
         );
     }
@@ -227,8 +227,7 @@ public final class Autos {
 //                                        scoringPosition.getRedPoseBackwards(),
 //                                        new PathConstraints(5.5, 4.5,
 //                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
-//                                () -> DriverStation.getAlliance().isPresent()
-//                                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+//                                () -> Robot.getAlliance()DriverStation.Alliance.Blue)
 //                        ),
 //                        new ConditionalCommand(
 //                                AutoBuilder.pathfindToPose(
@@ -239,8 +238,7 @@ public final class Autos {
 //                                        scoringPosition.getRedPose(),
 //                                        new PathConstraints(5.5, 4.5,
 //                                                Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d),
-//                                () -> DriverStation.getAlliance().isPresent()
-//                                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+//                                () -> Robot.getAlliance()DriverStation.Alliance.Blue)
 //                        ),
 //                        RobotContainer::getShouldAlignBackwards
 //                )
@@ -267,8 +265,7 @@ public final class Autos {
                                         scoringPositionSupplier.get().getRedPose(),
                                         new PathConstraints(5.5, 4.5,
                                                 Units.degreesToRadians(540d), Units.degreesToRadians(720d)), 0d).schedule()),
-                        () -> DriverStation.getAlliance().isPresent()
-                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                        () -> Robot.getAlliance().equals(DriverStation.Alliance.Blue)
                 )
         );
     }
@@ -292,8 +289,7 @@ public final class Autos {
                                 scoringPosition.getRedPose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
                                         Units.degreesToRadians(540d), Units.degreesToRadians(720d)), goalEndVelocity),
-                        () -> DriverStation.getAlliance().isPresent()
-                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                        () -> Robot.getAlliance().equals(DriverStation.Alliance.Blue)
                 )
         );
     }
@@ -316,8 +312,7 @@ public final class Autos {
                                 scoringPosition.getRedPose(),
                                 new PathConstraints(maxVelocity, maxAcceleration,
                                         Units.degreesToRadians(maxAngularVelocity), Units.degreesToRadians(maxAngularAcceleration)), 0d),
-                        () -> DriverStation.getAlliance().isPresent()
-                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                        () -> Robot.getAlliance().equals(DriverStation.Alliance.Blue)
                 )
         );
     }
@@ -364,58 +359,8 @@ public final class Autos {
                         ScoreCommands.Drive.autoAlignRAuton(),
                         ScoreCommands.Drive.autoAlignLAuton(),
                         () -> RobotContainer.getCurrentScoringPosition().isRightSide()
-                ).alongWith(ScoreCommands.Score.score()),
-                ScoreCommands.Score.place()
-                        .until(() -> !intakeSubsystem.hasCoral())
-                        .withTimeout(2)
-        );
-    }
-
-    public static Command autoScoreChoice() {
-        return new SequentialCommandGroup(
-                new InstantCommand(aprilTagSubsystem::resetAutoAlignData),
-                new SelectCommand<>(
-                        Map.ofEntries(
-                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPose(ScoringPosition.REEF_SIDE_A)),
-                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPose(ScoringPosition.REEF_SIDE_B)),
-                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPose(ScoringPosition.REEF_SIDE_C)),
-                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPose(ScoringPosition.REEF_SIDE_D)),
-                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPose(ScoringPosition.REEF_SIDE_E)),
-                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPose(ScoringPosition.REEF_SIDE_F)),
-                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPose(ScoringPosition.REEF_SIDE_G)),
-                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPose(ScoringPosition.REEF_SIDE_H)),
-                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPose(ScoringPosition.REEF_SIDE_I)),
-                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPose(ScoringPosition.REEF_SIDE_J)),
-                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPose(ScoringPosition.REEF_SIDE_K)),
-                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L))
-                        ),
-                        RobotContainer::getCurrentScoringPosition
-                ).until(RobotContainer::isReadyToAlign)
-                        .raceWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
-                new SelectCommand<>(
-                        Map.ofEntries(
-                                Map.entry(ScoringPosition.REEF_SIDE_A, driveToPose(ScoringPosition.REEF_SIDE_A)),
-                                Map.entry(ScoringPosition.REEF_SIDE_B, driveToPose(ScoringPosition.REEF_SIDE_B)),
-                                Map.entry(ScoringPosition.REEF_SIDE_C, driveToPose(ScoringPosition.REEF_SIDE_C)),
-                                Map.entry(ScoringPosition.REEF_SIDE_D, driveToPose(ScoringPosition.REEF_SIDE_D)),
-                                Map.entry(ScoringPosition.REEF_SIDE_E, driveToPose(ScoringPosition.REEF_SIDE_E)),
-                                Map.entry(ScoringPosition.REEF_SIDE_F, driveToPose(ScoringPosition.REEF_SIDE_F)),
-                                Map.entry(ScoringPosition.REEF_SIDE_G, driveToPose(ScoringPosition.REEF_SIDE_G)),
-                                Map.entry(ScoringPosition.REEF_SIDE_H, driveToPose(ScoringPosition.REEF_SIDE_H)),
-                                Map.entry(ScoringPosition.REEF_SIDE_I, driveToPose(ScoringPosition.REEF_SIDE_I)),
-                                Map.entry(ScoringPosition.REEF_SIDE_J, driveToPose(ScoringPosition.REEF_SIDE_J)),
-                                Map.entry(ScoringPosition.REEF_SIDE_K, driveToPose(ScoringPosition.REEF_SIDE_K)),
-                                Map.entry(ScoringPosition.REEF_SIDE_L, driveToPose(ScoringPosition.REEF_SIDE_L))
-                        ),
-                        RobotContainer::getCurrentScoringPosition
-                ).until(RobotContainer::isReadyToAlign)
-                        .alongWith(ScoreCommands.Arm.armStable().onlyIf(() -> !armSubsystem.isCommandRunning())),
-                new InstantCommand(() -> aprilTagSubsystem.setDoneAutoDriving(true)),
-                new ConditionalCommand(
-                        ScoreCommands.Drive.autoAlignRAuton(),
-                        ScoreCommands.Drive.autoAlignLAuton(),
-                        () -> RobotContainer.getCurrentScoringPosition().isRightSide()
-                ).alongWith(ScoreCommands.Score.score()),
+                ).alongWith(new WaitUntilCommand(RobotContainer::isReadyToScore)
+                        .andThen(ScoreCommands.Score.score())),
                 ScoreCommands.Score.place()
                         .until(() -> !intakeSubsystem.hasCoral())
                         .withTimeout(2)

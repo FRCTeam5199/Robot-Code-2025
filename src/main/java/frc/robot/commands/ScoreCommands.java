@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.constants.Constants.ArmConstants;
 import frc.robot.constants.Constants.ElevatorConstants;
@@ -53,25 +54,23 @@ public class ScoreCommands {
     public final static SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric().withDesaturateWheelSpeeds(true)
             .withDeadband(MaxSpeed * .05).withRotationalDeadband(MaxAngularRate * .05) // Add a 10% deadband
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
-    public static final PIDController turnToPiecePIdController2 = new PIDController(.1, 0.0, 0.02);
-    private static double goalRotation = 0;
 
     public static class Drive {
         public static Command autoAlignTeleop() {
             return new ConditionalCommand(
                     new FunctionalCommand(
                             () -> {
-                                int id = aprilTagSubsystem.getClosestTagIDManual();
+                                int id = aprilTagSubsystem.getClosestTagID();
                                 commandSwerveDrivetrain.resetPose(
                                         new Pose2d(
                                                 new Translation2d(commandSwerveDrivetrain.getPose().getX(),
                                                         commandSwerveDrivetrain.getPose().getY()),
-                                                new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlignManual(id)))));
+                                                new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(id)))));
                             },
                             () -> {
                                 commandSwerveDrivetrain.setControl(
-                                        drive.withVelocityX(xVelocityManual)
-                                                .withVelocityY(yVelocityManual)
+                                        drive.withVelocityX(xVelocity)
+                                                .withVelocityY(yVelocity)
                                                 .withRotationalRate(rotationVelocity));
                             },
                             (interrupted) -> {
@@ -80,14 +79,13 @@ public class ScoreCommands {
                                                 new Translation2d(commandSwerveDrivetrain.getPose().getX(),
                                                         commandSwerveDrivetrain.getPose().getY()),
                                                 new Rotation2d(Math.toRadians(commandSwerveDrivetrain
-                                                        .getPigeon2().getRotation2d().getDegrees() + (DriverStation.getAlliance().isPresent()
-                                                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue) ? 0 : 180)))));
+                                                        .getPigeon2().getRotation2d().getDegrees() + (Robot.getAlliance().equals(DriverStation.Alliance.Blue) ? 0 : 180)))));
                                 commandSwerveDrivetrain.setControl(
                                         drive.withVelocityX(0)
                                                 .withVelocityY(0)
                                                 .withRotationalRate(0));
                             },
-                            () -> (RobotContainer.alignedManual() && commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond < .01
+                            () -> (RobotContainer.aligned() && commandSwerveDrivetrain.getState().Speeds.vxMetersPerSecond < .01
                                     && commandSwerveDrivetrain.getState().Speeds.vyMetersPerSecond < .01),
                             commandSwerveDrivetrain
                     ),
@@ -110,28 +108,28 @@ public class ScoreCommands {
                                 new Pose2d(
                                         new Translation2d(commandSwerveDrivetrain.getPose().getX(),
                                                 commandSwerveDrivetrain.getPose().getY()),
-                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlignManual(aprilTagSubsystem
+                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
                                                 .getClosestTagID())))));
                     },
                     () ->
                             RobotContainer.commandSwerveDrivetrain.setControl(
-                                    drive.withVelocityX(xVelocityManual)
-                                            .withVelocityY(yVelocityManual)
+                                    drive.withVelocityX(xVelocity)
+                                            .withVelocityY(yVelocity)
                                             .withRotationalRate(rotationVelocity)),
                     (interrupted) -> {
                         RobotContainer.commandSwerveDrivetrain
                                 .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
                                         .getPigeon2().getRotation2d().getDegrees() +
-                                        (DriverStation.getAlliance().isPresent()
-                                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                                        (Robot.getAlliance().equals(DriverStation.Alliance.Blue)
                                                 ? 0 : 180))));
 
                         RobotContainer.commandSwerveDrivetrain.setControl(
                                 drive.withVelocityX(0)
                                         .withVelocityY(0)
                                         .withRotationalRate(0));
+                        RobotContainer.setAutoAlignOffsetRight();
                     },
-                    RobotContainer::alignedManual,
+                    RobotContainer::aligned,
                     RobotContainer.commandSwerveDrivetrain
             ).onlyIf(RobotContainer::isUseAutoAlign);
         }
@@ -145,28 +143,28 @@ public class ScoreCommands {
                                 new Pose2d(
                                         new Translation2d(commandSwerveDrivetrain.getPose().getX(),
                                                 commandSwerveDrivetrain.getPose().getY()),
-                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlignManual(aprilTagSubsystem
+                                        new Rotation2d(Math.toRadians(aprilTagSubsystem.getRotationToAlign(aprilTagSubsystem
                                                 .getClosestTagID())))));
                     },
                     () ->
                             RobotContainer.commandSwerveDrivetrain.setControl(
-                                    drive.withVelocityX(xVelocityManual)
-                                            .withVelocityY(yVelocityManual)
+                                    drive.withVelocityX(xVelocity)
+                                            .withVelocityY(yVelocity)
                                             .withRotationalRate(rotationVelocity)),
                     (interrupted) -> {
                         RobotContainer.commandSwerveDrivetrain
                                 .resetRotation(new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
                                         .getPigeon2().getRotation2d().getDegrees() +
-                                        (DriverStation.getAlliance().isPresent()
-                                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                                        (Robot.getAlliance().equals(DriverStation.Alliance.Blue)
                                                 ? 0 : 180))));
 
                         RobotContainer.commandSwerveDrivetrain.setControl(
                                 drive.withVelocityX(0)
                                         .withVelocityY(0)
                                         .withRotationalRate(0));
+                        RobotContainer.setAutoAlignOffsetRight();
                     },
-                    RobotContainer::alignedManualBack,
+                    RobotContainer::aligned,
                     RobotContainer.commandSwerveDrivetrain
             ).onlyIf(RobotContainer::isUseAutoAlign);
         }
@@ -195,8 +193,7 @@ public class ScoreCommands {
                                                 commandSwerveDrivetrain.getPose().getY()),
                                         new Rotation2d(Math.toRadians(RobotContainer.commandSwerveDrivetrain
                                                 .getPigeon2().getRotation2d().getDegrees() +
-                                                (DriverStation.getAlliance().isPresent()
-                                                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                                                (Robot.getAlliance().equals(DriverStation.Alliance.Blue)
                                                         ? 0 : 180)))));
 
                         RobotContainer.commandSwerveDrivetrain.setControl(
@@ -231,8 +228,7 @@ public class ScoreCommands {
                         commandSwerveDrivetrain
                                 .resetRotation(new Rotation2d(Math.toRadians(commandSwerveDrivetrain
                                         .getPigeon2().getRotation2d().getDegrees() +
-                                        (DriverStation.getAlliance().isPresent()
-                                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                                        (Robot.getAlliance().equals(DriverStation.Alliance.Blue)
                                                 ? 0 : 180))));
 
                         commandSwerveDrivetrain.setControl(
@@ -299,8 +295,7 @@ public class ScoreCommands {
                     () -> {
                     },
                     () -> {
-                        if (DriverStation.getAlliance().isPresent()
-                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue))
+                        if (Robot.getAlliance().equals(DriverStation.Alliance.Blue))
                             RobotContainer.commandSwerveDrivetrain.setControl(
                                     drive.withVelocityX(-.75)
                                             .withVelocityY(-.75));
@@ -321,8 +316,7 @@ public class ScoreCommands {
                     () -> {
                     },
                     () -> {
-                        if (DriverStation.getAlliance().isPresent()
-                                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue))
+                        if (Robot.getAlliance().equals(DriverStation.Alliance.Blue))
                             RobotContainer.commandSwerveDrivetrain.setControl(
                                     drive.withVelocityX(-0.75)
                                             .withVelocityY(0.75));
@@ -931,7 +925,7 @@ public class ScoreCommands {
                                             () -> RobotContainer.getState() == State.BARGE ||
                                                     RobotContainer.getState() == State.PROCESSOR
                                     ),
-                                    () -> RobotContainer.getState() == State.L4
+                                    () -> RobotContainer.getState() == State.L4 || RobotContainer.isIntaking()
                             ),
                             () -> RobotContainer.getState() == State.L1 || RobotContainer.getState() == State.L1_UP
                     ),

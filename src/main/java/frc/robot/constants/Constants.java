@@ -278,7 +278,7 @@ public final class Constants {
     public static class Vision {
         public static final String CAMERA_NAME = "Camera";
         public static final Transform3d CAMERA_POSE =
-                new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(6), 0));
+                new Transform3d(-.0318, 0, .174625, new Rotation3d(0, Math.toRadians(9), 0));
         public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
         public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(.75, .75, 999);
         public static final Matrix<N3, N1> kTagStdDevsAutoAlign = VecBuilder.fill(0, 0, 999);
@@ -292,9 +292,9 @@ public final class Constants {
         public static final String LIMELIGHT_NAME = "limelight";
         public static final double LIMELIGHT_X_AIM = -29;
 
-        public static final double AUTO_ALIGN_X = .06; //.04
-        public static final double AUTO_ALIGN_X_ALGAE_PREP = -.4;
-        public static final double AUTO_ALIGN_Y = .16; //.15
+        public static final double AUTO_ALIGN_X = -.05;
+        public static final double AUTO_ALIGN_X_ALGAE_PREP = -.3;
+        public static final double AUTO_ALIGN_Y = .18;
 
         public static final double AUTO_ALIGN_X_BACK = .52; //.495
         public static final double AUTO_ALIGN_Y_BACK_RIGHT = .17; //.12

@@ -38,8 +38,6 @@ import frc.robot.subsystems.template.VelocityCommand;
 import frc.robot.utility.ScoringPosition;
 import frc.robot.utility.State;
 
-import java.sql.SQLOutput;
-
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -65,71 +63,20 @@ public class RobotContainer {
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(4, 0, .1, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(10, 0, .15, new TrapezoidProfile.Constraints(100, 200));
-
-    private static final ProfiledPIDController drivePIDControllerXBack = new ProfiledPIDController(2, 0, .1, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXCloseBack = new ProfiledPIDController(3.5, 0, .15, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXVeryCloseBack = new ProfiledPIDController(8, 0, .15, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(8, 0, .15, new TrapezoidProfile.Constraints(100, 200));
 
     private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(3, 0, .05, new TrapezoidProfile.Constraints(100, 200));
     private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(8, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
     private static final ProfiledPIDController drivePIDControllerYVeryClose = new ProfiledPIDController(9, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
 
-    private static final ProfiledPIDController drivePIDControllerYBack = new ProfiledPIDController(3, 0, .05, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerYCloseBack = new ProfiledPIDController(5, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerYVeryCloseBack = new ProfiledPIDController(9, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
-
     public static final ProfiledPIDController turnPIDController = new ProfiledPIDController(0.175, 0.0, 0.0, new TrapezoidProfile.Constraints(100, 200));
-
-//    public static final PIDController turnToPiecePIdController = new PIDController(.2, 0.0, 0.02);
 
     public static double xVelocity = 0;
     public static double yVelocity = 0;
     public static double rotationVelocity = 0;
 
-    public static double xVelocityManual = 0;
-    public static double yVelocityManual = 0;
-
     public static double autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
     public static double autoAlignYOffset = Constants.Vision.AUTO_ALIGN_Y;
-
-    public static double autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X;
-    public static double autoAlignYOffsetManual = Constants.Vision.AUTO_ALIGN_Y;
-
-    private static TrapezoidProfile profileX = new TrapezoidProfile(
-            new TrapezoidProfile.Constraints(1000, 1000));
-    private static TrapezoidProfile.State currentStateX = new TrapezoidProfile.State(0, 0);
-    private static TrapezoidProfile.State goalStateX = new TrapezoidProfile.State(0, 0);
-
-    private static TrapezoidProfile profileY = new TrapezoidProfile(
-            new TrapezoidProfile.Constraints(1000, 1000));
-    private static TrapezoidProfile.State currentStateY = new TrapezoidProfile.State(0, 0);
-    private static TrapezoidProfile.State goalStateY = new TrapezoidProfile.State(0, 0);
-
-    private static TrapezoidProfile profileRotation = new TrapezoidProfile(
-            new TrapezoidProfile.Constraints(1000, 1000));
-    private static TrapezoidProfile.State currentStateRotation = new TrapezoidProfile.State(0, 0);
-    private static TrapezoidProfile.State goalStateRotation = new TrapezoidProfile.State(0, 0);
-
-    private static TrapezoidProfile profileXManual = new TrapezoidProfile(
-            new TrapezoidProfile.Constraints(1000, 1000));
-    private static TrapezoidProfile.State currentStateXManual = new TrapezoidProfile.State(0, 0);
-    private static TrapezoidProfile.State goalStateXManual = new TrapezoidProfile.State(0, 0);
-
-    private static TrapezoidProfile profileYManual = new TrapezoidProfile(
-            new TrapezoidProfile.Constraints(1000, 1000));
-    private static TrapezoidProfile.State currentStateYManual = new TrapezoidProfile.State(0, 0);
-    private static TrapezoidProfile.State goalStateYManual = new TrapezoidProfile.State(0, 0);
-
-    private static TrapezoidProfile profileRotationManual = new TrapezoidProfile(
-            new TrapezoidProfile.Constraints(1000, 1000));
-    private static TrapezoidProfile.State currentStateRotationManual = new TrapezoidProfile.State(0, 0);
-    private static TrapezoidProfile.State goalStateRotationManual = new TrapezoidProfile.State(0, 0);
-
-    private static TrapezoidProfile driveToPieceRotation = new TrapezoidProfile(
-            new TrapezoidProfile.Constraints(1000, 1000));
-    private static TrapezoidProfile.State driveToPieceCurrentState = new TrapezoidProfile.State(0, 0);
-    private static TrapezoidProfile.State driveToPieceGoalState = new TrapezoidProfile.State(0, 0);
 
     public static final CommandSwerveDrivetrain commandSwerveDrivetrain = TunerConstants.createDrivetrain();
     private static final ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
@@ -140,19 +87,14 @@ public class RobotContainer {
 
     public static final AprilTagSubsystem aprilTagSubsystem = AprilTagSubsystem.getInstance();
 
-    // private ObjectDetectionSubsystem objectDetectionSubsystem = ObjectDetectionSubsystem.getInstance();
-
-    // private static final SendableChooser<Command> autoChooser = Autos.getAutoChooser();
-
     private final Telemetry logger = new Telemetry(MaxSpeed);
-    private static int selectedReefTag = 0;
-    private static boolean lockOnMode = false;
     public static State state = State.L4;
     private static Timer timer = new Timer();
     private static boolean useAutoAlign = true;
     private static boolean shouldFixTip = true;
     private static boolean isCoralBlockingHP = false;
     private static boolean backwardsAlgae = false;
+    private static boolean isIntaking = false;
 
     public static ScoringPosition getCurrentScoringPosition() {
         return currentScoringPosition;
@@ -213,8 +155,8 @@ public class RobotContainer {
         configureBindings();
         SignalLogger.setPath("/media/BRAZIL/");
         SignalLogger.writeBoolean("Camera Present", aprilTagSubsystem.camera.isConnected());
-        SignalLogger.writeDouble("X Value", aprilTagSubsystem.getClosestTagXYYaw()[0]);
-        SignalLogger.writeDouble("Y Value", aprilTagSubsystem.getClosestTagXYYaw()[1]);
+        SignalLogger.writeDouble("X Value", aprilTagSubsystem.updateClosestTagXYYaw()[0]);
+        SignalLogger.writeDouble("Y Value", aprilTagSubsystem.updateClosestTagXYYaw()[1]);
 
     }
 
@@ -235,8 +177,34 @@ public class RobotContainer {
         commandXboxController.x().onTrue(ScoreCommands.Arm.armL3());
         commandXboxController.y().onTrue(ScoreCommands.Arm.armL4());
 
-        commandXboxController.leftTrigger().onTrue(Autos.autoScoreChoice())
+        commandXboxController.leftTrigger().onTrue(
+                        new ConditionalCommand(
+                                new ConditionalCommand(
+                                        ScoreCommands.Score.score()
+                                                .alongWith(new InstantCommand(() -> intakeSubsystem.setIntakeMotors(120, 120)))
+                                                .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
+                                                        .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+                                                        .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+                                                        .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))),
+                                        ScoreCommands.Score.score()
+                                                .alongWith(new VelocityCommand(intakeSubsystem, 120, 120))
+                                                .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
+                                                        .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
+                                                        .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
+                                                        .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate))),
+                                        () -> state == State.ALGAE_LOW || state == State.ALGAE_HIGH
+                                ),
+                                ScoreCommands.Score.score()
+                                        .alongWith(ScoreCommands.Drive.autoAlignLAuton())
+                                        .andThen(ScoreCommands.Score.place()),
+                                () -> (state == State.BARGE
+                                        || state == State.PROCESSOR
+                                        || state == State.ALGAE_LOW
+                                        || state == State.ALGAE_HIGH)
+                        ).alongWith(new InstantCommand(() -> aprilTagSubsystem.setDoneAutoDriving(true))))
                 .onFalse(ScoreCommands.Stabling.stable()
+                        .alongWith(new VelocityCommand(intakeSubsystem, 120, 120)
+                                .onlyIf(() -> state == State.ALGAE_LOW || state == State.ALGAE_HIGH))
                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed)
                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed)
@@ -260,7 +228,8 @@ public class RobotContainer {
                                         () -> state == State.ALGAE_LOW || state == State.ALGAE_HIGH
                                 ),
                                 ScoreCommands.Score.score()
-                                        .alongWith(ScoreCommands.Drive.autoAlignTeleop()),
+                                        .alongWith(ScoreCommands.Drive.autoAlignRAuton())
+                                        .andThen(ScoreCommands.Score.place()),
                                 () -> (state == State.BARGE
                                         || state == State.PROCESSOR
                                         || state == State.ALGAE_LOW
@@ -291,13 +260,13 @@ public class RobotContainer {
                                         .andThen(ScoreCommands.Stabling.groundIntakeStable()),
                                 () -> state == State.BARGE || state == State.PROCESSOR
                                         || state == State.ALGAE_LOW || state == State.ALGAE_HIGH
-                        ))
+                        ).alongWith(new InstantCommand(() -> isIntaking = true)))
                 .onFalse(new ConditionalCommand(
                         ScoreCommands.Arm.armStable()
                                 .alongWith(new VelocityCommand(intakeSubsystem, 120, 120)),
                         ScoreCommands.Stabling.groundIntakeStable(),
                         () -> state == State.BARGE || state == State.PROCESSOR
-                ));
+                ).alongWith(new InstantCommand(() -> isIntaking = false)));
 
         commandXboxController.rightBumper().onTrue(ScoreCommands.Score.place())
                 .onFalse(
@@ -309,8 +278,8 @@ public class RobotContainer {
                         ));
         commandXboxController.button(7).onTrue(ScoreCommands.Zeroing.zeroSubsystems());
 
-        commandXboxController.povLeft().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetLeft));
-        commandXboxController.povRight().onTrue(new InstantCommand(RobotContainer::setAutoAlignOffsetRight));
+        commandXboxController.povRight().onTrue(new VelocityCommand(intakeSubsystem, -120, -120))
+                .onFalse(new VelocityCommand(intakeSubsystem, 0, 0)); //top right button
 
         commandXboxController.povDown().onTrue(ScoreCommands.Arm.armAlgaeHigh()); //right top paddle
         commandXboxController.button(10).onTrue(ScoreCommands.Arm.armAlgaeLow()); //right bottom paddle
@@ -523,8 +492,7 @@ public class RobotContainer {
      */
 
     public Command getAutonomousCommand() {
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+        if (Robot.getAlliance().equals(DriverStation.Alliance.Red)) {
             return Autos.autonChooserRed.getSelected();
         } else {
             return Autos.autonChooserBlue.getSelected();
@@ -532,94 +500,41 @@ public class RobotContainer {
     }
 
     public static void periodic() {
-        if (!timer.isRunning()) timer.start();
-
-        if (state != State.ALGAE_LOW && state != State.ALGAE_HIGH && state
-                != State.BARGE && state != State.PROCESSOR) {
-            autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
-            if (DriverStation.getAlliance().isPresent()
-                    && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
-                autoAlignXOffset = -autoAlignXOffset;
-        }
-
-
         if (readyToAlign()) {
             readyToAlignCheck++;
-            readyToAlign = readyToAlignCheck >= 2;
+            readyToAlign = readyToAlignCheck >= 1;
         } else {
             readyToAlignCheck = 0;
             readyToAlign = false;
         }
 
-        if (state != State.ALGAE_LOW && state != State.ALGAE_HIGH
-                && state != State.BARGE && state != State.PROCESSOR) {
-            autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X;
-            if (DriverStation.getAlliance().isPresent()
-                    && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red))
-                autoAlignXOffsetManual = -autoAlignXOffsetManual;
-        }
+//        System.out.println("X: " + aprilTagSubsystem.updateClosestTagXYYaw()[0]);
+//        System.out.println("Id: " + aprilTagSubsystem.getClosestTagID());
+//        System.out.println("Ready to Align: " + isReadyToAlign());
 
-        currentStateX.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
-        currentStateY.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
-        currentStateRotation.position = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
+        double currentX = aprilTagSubsystem.getClosestTagX();
+        double currentY = aprilTagSubsystem.getClosestTagY();
+        double currentRotation = commandSwerveDrivetrain.getPose().getRotation().getDegrees();
 
-        currentStateXManual.position = aprilTagSubsystem.getClosestTagXYYaw()[0];
-        currentStateYManual.position = aprilTagSubsystem.getClosestTagXYYaw()[1];
-
-        goalStateX.position = autoAlignXOffset;
-        goalStateY.position = autoAlignYOffset;
-        goalStateRotation.position = 0;
-
-        goalStateXManual.position = autoAlignXOffsetManual;
-        goalStateYManual.position = autoAlignYOffsetManual;
-        goalStateRotationManual.position = 0;
-
-        TrapezoidProfile.State nextStateX = profileX.calculate(timer.get(), currentStateX, goalStateX);
-        TrapezoidProfile.State nextStateY = profileY.calculate(timer.get(), currentStateY, goalStateY);
-        TrapezoidProfile.State nextStateRotation = profileRotation.calculate(timer.get(), currentStateRotation, goalStateRotation);
-
-        TrapezoidProfile.State nextStateXManual = profileXManual.calculate(timer.get(), currentStateXManual, goalStateXManual);
-        TrapezoidProfile.State nextStateYManual = profileYManual.calculate(timer.get(), currentStateYManual, goalStateYManual);
-
-//        System.out.println("X Diff: " + Math.abs(currentStateX.position - autoAlignXOffset));
-//        System.out.println("Y Diff: " + Math.abs(currentStateY.position - autoAlignYOffset));
-//        System.out.println("Rot Diff: " + Math.abs(currentStateRotation.position - goalStateRotation.position));
-
-
-        if ((Math.abs(currentStateX.position - autoAlignXOffset) > .15
-                || Math.abs(currentStateY.position - autoAlignYOffset) > .1)) {
-            xVelocity = drivePIDControllerX.calculate(currentStateX.position, nextStateX);
-            yVelocity = drivePIDControllerY.calculate(currentStateY.position, nextStateY);
-        } else if (Math.abs(currentStateY.position - autoAlignYOffset) > .04) {
-            xVelocity = drivePIDControllerXClose.calculate(currentStateX.position, nextStateX);
-            yVelocity = drivePIDControllerYClose.calculate(currentStateY.position, nextStateY);
+        if ((Math.abs(currentX - autoAlignXOffset) > .15
+                || Math.abs(currentY - autoAlignYOffset) > .1)) {
+            xVelocity = drivePIDControllerX.calculate(currentX, autoAlignXOffset);
+            yVelocity = drivePIDControllerY.calculate(currentY, autoAlignYOffset);
+        } else if (Math.abs(currentY - autoAlignYOffset) > .04) {
+            xVelocity = drivePIDControllerXClose.calculate(currentX, autoAlignXOffset);
+            yVelocity = drivePIDControllerYClose.calculate(currentY, autoAlignYOffset);
         } else {
-            xVelocity = drivePIDControllerXClose.calculate(currentStateX.position, nextStateX);
-            yVelocity = drivePIDControllerYVeryClose.calculate(currentStateY.position, nextStateY);
+            xVelocity = drivePIDControllerXClose.calculate(currentX, autoAlignXOffset);
+            yVelocity = drivePIDControllerYVeryClose.calculate(currentY, autoAlignYOffset);
         }
-        rotationVelocity = turnPIDController.calculate(currentStateRotation.position, nextStateRotation);
+        rotationVelocity = turnPIDController.calculate(currentRotation, 0);
 
-
-        if ((Math.abs(currentStateXManual.position - autoAlignXOffsetManual) > .15
-                || Math.abs(currentStateYManual.position - autoAlignYOffsetManual) > .1)) {
-            xVelocityManual = drivePIDControllerX.calculate(currentStateXManual.position, nextStateXManual);
-            yVelocityManual = drivePIDControllerY.calculate(currentStateYManual.position, nextStateYManual);
-        } else if (Math.abs(currentStateYManual.position - autoAlignYOffsetManual) > .04) {
-            xVelocityManual = drivePIDControllerXClose.calculate(currentStateXManual.position, nextStateXManual);
-            yVelocityManual = drivePIDControllerYClose.calculate(currentStateYManual.position, nextStateYManual);
-        } else {
-            xVelocityManual = drivePIDControllerXClose.calculate(currentStateXManual.position, nextStateXManual);
-            yVelocityManual = drivePIDControllerYVeryClose.calculate(currentStateYManual.position, nextStateYManual);
-        }
-
-//        System.out.println("Front X: " + aprilTagSubsystem.getClosestTagXYYaw()[0]
-//                + " Front Y: " + aprilTagSubsy==tem.getClosestTagXYYaw()[1]);
-        //Front: .06, .125; .055, .165, .05, .165; ,06, .145 .06, .175, .06, .17; .06, 16; .06, .14
+//        System.out.println("Front X: " + aprilTagSubsystem.updateClosestTagXYYaw()[0]
+//                + " Front Y: " + aprilTagSubsystem.updateClosestTagXYYaw()[1]);
+//        System.out.println("X Offset: " + autoAlignXOffset + " Y Offset: " + autoAlignYOffset);
 
 //        System.out.println("Back X: " + aprilTagSubsystem.getBackClosestTagXYYaw()[0]
 //                + " Back Y: " + aprilTagSubsystem.getBackClosestTagXYYaw()[1]);
-        //Back Right: .51, .145; .51, .14; .51, .135, .51, .14;, .5, .17
-        //Back Left: .51, .18; .51, .165; .52, .19; .50, .19, .52, .2
 //
 //        System.out.println("X velocity: " + xVelocity);
 //        System.out.println("Y velocity: " + yVelocity);
@@ -710,60 +625,45 @@ public class RobotContainer {
     }
 
     public static void setAutoAlignOffsetLeft() {
-        if (DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) {
+        if (Robot.getAlliance().equals(DriverStation.Alliance.Blue)) {
             autoAlignYOffset = Constants.Vision.AUTO_ALIGN_Y;
-            autoAlignYOffsetManual = Constants.Vision.AUTO_ALIGN_Y;
         } else {
             autoAlignYOffset = -Constants.Vision.AUTO_ALIGN_Y;
-            autoAlignYOffsetManual = -Constants.Vision.AUTO_ALIGN_Y;
         }
         autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
-        autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X;
-        if (DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
+        if (Robot.getAlliance().equals(DriverStation.Alliance.Red)) {
             autoAlignXOffset = -autoAlignXOffset;
-            autoAlignXOffsetManual = -autoAlignXOffsetManual;
         }
 
-        if (DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+        if (Robot.getAlliance().equals(DriverStation.Alliance.Blue)
                 && currentScoringPosition.equals(ScoringPosition.REEF_SIDE_K)) {
             autoAlignYOffset -= .03;
         }
     }
 
     public static void setAutoAlignOffsetRight() {
-        if (DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) {
+        if (Robot.getAlliance().equals(DriverStation.Alliance.Blue)) {
             autoAlignYOffset = -Constants.Vision.AUTO_ALIGN_Y;
-            autoAlignYOffsetManual = -Constants.Vision.AUTO_ALIGN_Y;
         } else {
             autoAlignYOffset = Constants.Vision.AUTO_ALIGN_Y;
-            autoAlignYOffsetManual = Constants.Vision.AUTO_ALIGN_Y;
         }
         autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
-        autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X;
-        if (DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
+        if (Robot.getAlliance().equals(DriverStation.Alliance.Red)) {
             autoAlignXOffset = -autoAlignXOffset;
-            autoAlignXOffsetManual = -autoAlignXOffsetManual;
         }
     }
 
     public static void setAutoAlignOffsetCenter() {
-        autoAlignYOffsetManual = 0;
-        autoAlignXOffsetManual = Constants.Vision.AUTO_ALIGN_X;
-        if (DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red)) {
+        autoAlignYOffset = 0;
+        autoAlignXOffset = Constants.Vision.AUTO_ALIGN_X;
+        if (Robot.getAlliance().equals(DriverStation.Alliance.Red)) {
             autoAlignXOffset = -autoAlignXOffset;
         }
     }
 
     public static void setAutoAlignOffsetCenterBack() {
-        autoAlignYOffsetManual = 0;
-        autoAlignXOffsetManual = (DriverStation.getAlliance().isPresent()
-                && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)) ?
+        autoAlignYOffset = 0;
+        autoAlignXOffset = (Robot.getAlliance().equals(DriverStation.Alliance.Blue)) ?
                 Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP : -Constants.Vision.AUTO_ALIGN_X_ALGAE_PREP;
     }
 
@@ -773,33 +673,25 @@ public class RobotContainer {
 
     public static boolean readyToAlign() {
         return aprilTagSubsystem.getClosestTagID() ==
-                (DriverStation.getAlliance().isPresent()
-                        && DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue)
+                (Robot.getAlliance().equals(DriverStation.Alliance.Blue)
                         ? currentScoringPosition.getBlueAprilTagID()
                         : currentScoringPosition.getRedAprilTagID())
-                && aprilTagSubsystem.getClosestTagXYYaw()[0] != 0;
+                && aprilTagSubsystem.updateClosestTagXYYaw()[0] != 0;
     }
 
     public static boolean isReadyToAlign() {
-        return readyToAlign && Math.sqrt(Math.pow(aprilTagSubsystem.getClosestTagXYYaw()[0], 2)
-                + Math.pow(aprilTagSubsystem.getClosestTagXYYaw()[1], 2)) < 1d;
+        return readyToAlign;
+    }
+
+    public static boolean isReadyToScore() {
+        return Math.sqrt(Math.pow(aprilTagSubsystem.getClosestTagX(), 2)
+                + Math.pow(aprilTagSubsystem.getClosestTagY(), 2)) < 1d;
     }
 
     public static boolean aligned() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffset) <= .025
-                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffset) <= .02;
+        return Math.abs(aprilTagSubsystem.getClosestTagX() - autoAlignXOffset) <= .025
+                && Math.abs(aprilTagSubsystem.getClosestTagY() - autoAlignYOffset) <= .02;
     }
-
-    public static boolean alignedManual() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffsetManual) <= .025
-                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffsetManual) <= .02;
-    }
-
-    public static boolean alignedManualBack() {
-        return Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[0] - autoAlignXOffsetManual) <= .05
-                && Math.abs(aprilTagSubsystem.getClosestTagXYYaw()[1] - autoAlignYOffsetManual) <= .05;
-    }
-
 
     public static void setState(State state) {
         RobotContainer.state = state;
@@ -823,5 +715,9 @@ public class RobotContainer {
 
     public static void toggleCoralBlockingHP() {
         isCoralBlockingHP = !isCoralBlockingHP;
+    }
+
+    public static boolean isIntaking() {
+        return isIntaking;
     }
 }
