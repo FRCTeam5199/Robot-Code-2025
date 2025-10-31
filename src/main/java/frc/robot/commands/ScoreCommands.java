@@ -203,7 +203,10 @@ public class ScoreCommands {
                     },
                     RobotContainer::aligned,
                     RobotContainer.commandSwerveDrivetrain
-            ).onlyIf(RobotContainer::isUseAutoAlign);
+            ).onlyIf(() -> RobotContainer.isUseAutoAlign()
+                    && (RobotContainer.getState() == State.L2
+                    || RobotContainer.getState() == State.L3
+                    || RobotContainer.getState() == State.L4));
         }
 
         public static Command autoAlignRAuton() {
@@ -238,7 +241,10 @@ public class ScoreCommands {
                     },
                     RobotContainer::aligned,
                     commandSwerveDrivetrain
-            ).onlyIf(RobotContainer::isUseAutoAlign);
+            ).onlyIf(() -> RobotContainer.isUseAutoAlign()
+                    && (RobotContainer.getState() == State.L2
+                    || RobotContainer.getState() == State.L3
+                    || RobotContainer.getState() == State.L4));
         }
 
         //        public static Command driveToPiece() {
@@ -688,6 +694,7 @@ public class ScoreCommands {
             return new SelectCommand<>(
                     Map.ofEntries(
                             Map.entry(State.L1, armL1()),
+                            Map.entry(State.L1_UP, armL1Up()),
                             Map.entry(State.L2, armL2()),
                             Map.entry(State.L3, armL3()),
                             Map.entry(State.L4, armL4()),
@@ -913,7 +920,7 @@ public class ScoreCommands {
                                     () -> RobotContainer.getState() == State.L1
                             ),
                             new ConditionalCommand(
-                                    new VelocityCommand(intakeSubsystem, 120, 120), //L4
+                                    new VelocityCommand(intakeSubsystem, 90, 90), //L4
                                     new ConditionalCommand(
                                             new ConditionalCommand(
                                                     new PositionCommand(wristSubsystem, WristConstants.BARGE_FINAL).withTimeout(.4)

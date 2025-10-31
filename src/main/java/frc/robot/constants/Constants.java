@@ -72,7 +72,7 @@ public final class Constants {
         public static final double ALGAE_GROUND = .12;
 
         public static final double L1 = 0;
-        public static final double L1UP = 0.05;
+        public static final double L1UP = 0.07;
         public static final double L2 = .09;
         public static final double L3 = .38;
         public static final double L4 = 1.01;

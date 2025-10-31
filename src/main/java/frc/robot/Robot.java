@@ -12,6 +12,7 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.commands.ScoreCommands;
+import frc.robot.subsystems.ArmSubsystem;
 import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -180,8 +181,12 @@ public class Robot extends TimedRobot {
         SignalLogger.start();
 
         ScoreCommands.Stabling.wristandElevatorStable();
-
         CommandScheduler.getInstance().cancelAll();
+//        commandSwerveDrivetrain.setControl(RobotContainer.drive
+//                .withVelocityX(0)
+//                .withVelocityY(0)
+//                .withRotationalRate(0)
+//        );
     }
 
     /**
@@ -198,6 +203,7 @@ public class Robot extends TimedRobot {
 //            commandSwerveDrivetrain.addVisionMeasurement(modify, Utils.getCurrentTimeSeconds(),
 //                    aprilTagSubsystem.getEstimationStdDevs());
 //        }
+
     }
 
     @Override

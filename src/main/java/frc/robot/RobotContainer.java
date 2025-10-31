@@ -63,7 +63,7 @@ public class RobotContainer {
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(4, 0, .1, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(8, 0, .15, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(6, 0, .15, new TrapezoidProfile.Constraints(100, 200));
 
     private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(3, 0, .05, new TrapezoidProfile.Constraints(100, 200));
     private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(8, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
@@ -95,6 +95,7 @@ public class RobotContainer {
     private static boolean isCoralBlockingHP = false;
     private static boolean backwardsAlgae = false;
     private static boolean isIntaking = false;
+    private static boolean autoRetractIntake = true;
 
     public static ScoringPosition getCurrentScoringPosition() {
         return currentScoringPosition;
@@ -196,7 +197,7 @@ public class RobotContainer {
                                 ),
                                 ScoreCommands.Score.score()
                                         .alongWith(ScoreCommands.Drive.autoAlignLAuton())
-                                        .andThen(ScoreCommands.Score.place()),
+                                        .andThen(ScoreCommands.Score.place().unless(() -> state == State.L1 || state == State.L1_UP || !isUseAutoAlign())),
                                 () -> (state == State.BARGE
                                         || state == State.PROCESSOR
                                         || state == State.ALGAE_LOW
@@ -229,7 +230,7 @@ public class RobotContainer {
                                 ),
                                 ScoreCommands.Score.score()
                                         .alongWith(ScoreCommands.Drive.autoAlignRAuton())
-                                        .andThen(ScoreCommands.Score.place()),
+                                        .andThen(ScoreCommands.Score.place().unless(() -> state == State.L1 || state == State.L1_UP || !isUseAutoAlign())),
                                 () -> (state == State.BARGE
                                         || state == State.PROCESSOR
                                         || state == State.ALGAE_LOW
@@ -251,12 +252,12 @@ public class RobotContainer {
                                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .7)
                                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .7))),
                                 ScoreCommands.Intake.intakeGround()
-                                        .alongWith(new VelocityCommand(intakeSubsystem, 90, 120))
+                                        .alongWith(new VelocityCommand(intakeSubsystem, 120, 90))
                                         .alongWith(commandSwerveDrivetrain.applyRequest(() -> drive
                                                 .withVelocityX(-commandXboxController.getLeftY() * MaxSpeed * .7)
                                                 .withVelocityY(-commandXboxController.getLeftX() * MaxSpeed * .7)
                                                 .withRotationalRate(-commandXboxController.getRightX() * MaxAngularRate * .7)))
-                                        .until(intakeSubsystem::hasCoral)
+                                        .until(() -> intakeSubsystem.hasCoral() && autoRetractIntake)
                                         .andThen(ScoreCommands.Stabling.groundIntakeStable()),
                                 () -> state == State.BARGE || state == State.PROCESSOR
                                         || state == State.ALGAE_LOW || state == State.ALGAE_HIGH
@@ -330,8 +331,8 @@ public class RobotContainer {
 
         commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L2)
                 .onTrue(new VelocityCommand(intakeSubsystem, 120, 120));
-        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4).onTrue(ScoreCommands.Arm.armBarge()
-                .alongWith(new VelocityCommand(intakeSubsystem, 120, 120)));
+        commandButtonPanel.button(ButtonPanelButtons.REEF_SCORE_L4)
+                .onTrue(new InstantCommand(() -> autoRetractIntake = !autoRetractIntake));
 
         commandButtonPanel.button(ButtonPanelButtons.SETMODE_ALGAE)
                 .onTrue(ScoreCommands.Arm.armAlgaeHigh().beforeStarting(new InstantCommand(() -> backwardsAlgae = true)));
