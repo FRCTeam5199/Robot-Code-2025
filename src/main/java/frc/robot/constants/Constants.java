@@ -117,7 +117,7 @@ public final class Constants {
         public static final double L1UP = 25;
         public static final double L2 = 41;
         public static final double L3 = 61;
-        public static final double L4 = 75.5; //77
+        public static final double L4 = 76; //75.5
         public static final double HP = 63;
 
         public static final double L2_BACK = 73;
@@ -229,8 +229,8 @@ public final class Constants {
         public static final double L1UP = 10;
         public static final double L2 = 67;
         public static final double L3 = 91;
-        public static final double PREP_L4 = 135;
-        public static final double L4 = 139;
+        public static final double PREP_L4 = 128; //135
+        public static final double L4 = 128; //139
 
         public static final double L2_BACK = 46;
         public static final double L3_BACK = 58;
@@ -292,9 +292,9 @@ public final class Constants {
         public static final String LIMELIGHT_NAME = "limelight";
         public static final double LIMELIGHT_X_AIM = -29;
 
-        public static final double AUTO_ALIGN_X = -.05;
+        public static final double AUTO_ALIGN_X = 0; //-.05
         public static final double AUTO_ALIGN_X_ALGAE_PREP = -.3;
-        public static final double AUTO_ALIGN_Y = .18;
+        public static final double AUTO_ALIGN_Y = .17; //.18
 
         public static final double AUTO_ALIGN_X_BACK = .52; //.495
         public static final double AUTO_ALIGN_Y_BACK_RIGHT = .17; //.12

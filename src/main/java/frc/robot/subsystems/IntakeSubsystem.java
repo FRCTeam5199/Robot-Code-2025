@@ -72,7 +72,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
         else currentSpike = 0;
 
 //        System.out.println("has coral: " + hasCoral());
-//        System.out.println("distance: " + algaeSensor.getMeasurement().distance_mm);
+        System.out.println("distance: " + coralSensor.getMeasurement().distance_mm);
     }
 
     public static IntakeSubsystem getInstance() {
@@ -83,7 +83,7 @@ public class IntakeSubsystem extends TemplateSubsystem {
     }
 
     public boolean hasCoral() {
-        return coralSensor.getMeasurement().distance_mm < 5;
+        return coralSensor.getMeasurement().distance_mm < 40;
     }
 
     public boolean hasAlgae() {

@@ -46,7 +46,7 @@ import frc.robot.utility.State;
  */
 public class RobotContainer {
     public static double MaxSpeed = TunerConstants.kSpeedAt12Volts.baseUnitMagnitude(); // kSpeedAt12VoltsMps desired top speed
-    public static double MaxAngularRate = 3 * Math.PI; //Originally 2 * Math.PI
+    public static double MaxAngularRate = 2.5 * Math.PI; //Originally 2 * Math.PI
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     public static final CommandXboxController commandXboxController = new CommandXboxController(OperatorConstants.driverControllerPort); // My joystick
@@ -63,7 +63,7 @@ public class RobotContainer {
             .withDriveRequestType(com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType.OpenLoopVoltage);
 
     private static final ProfiledPIDController drivePIDControllerX = new ProfiledPIDController(4, 0, .1, new TrapezoidProfile.Constraints(100, 200));
-    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(6, 0, .15, new TrapezoidProfile.Constraints(100, 200));
+    private static final ProfiledPIDController drivePIDControllerXClose = new ProfiledPIDController(5, 0, .15, new TrapezoidProfile.Constraints(100, 200));
 
     private static final ProfiledPIDController drivePIDControllerY = new ProfiledPIDController(3, 0, .05, new TrapezoidProfile.Constraints(100, 200));
     private static final ProfiledPIDController drivePIDControllerYClose = new ProfiledPIDController(8, 0.0, .25, new TrapezoidProfile.Constraints(100, 200));
@@ -532,6 +532,8 @@ public class RobotContainer {
 
 //        System.out.println("Front X: " + aprilTagSubsystem.updateClosestTagXYYaw()[0]
 //                + " Front Y: " + aprilTagSubsystem.updateClosestTagXYYaw()[1]);
+        //0, .17; 0, .175; 0, .165, 0, .17; 0, .16;, 0, .17; 0, .17; 0, .175; 0, .165;
+        // 0, .175
 //        System.out.println("X Offset: " + autoAlignXOffset + " Y Offset: " + autoAlignYOffset);
 
 //        System.out.println("Back X: " + aprilTagSubsystem.getBackClosestTagXYYaw()[0]
@@ -637,8 +639,8 @@ public class RobotContainer {
         }
 
         if (Robot.getAlliance().equals(DriverStation.Alliance.Blue)
-                && currentScoringPosition.equals(ScoringPosition.REEF_SIDE_K)) {
-            autoAlignYOffset -= .03;
+                && aprilTagSubsystem.getClosestTagID() == 19) {
+            autoAlignYOffset -= .04;
         }
     }
 
