@@ -156,9 +156,7 @@ public class AprilTagSubsystem extends SubsystemBase {
                 avgDist /= numTags;
                 // Decrease std devs if multiple targets are visible
                 if (numTags > 1) estStdDevs = Constants.Vision.kTagStdDevs;
-                    // Increase std devs based on (average) distance
-//                if (numTags == 1 && avgDist > 4)
-//                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                // Increase std devs based on (average) distance
                 else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
                 curStdDevs = estStdDevs;
             }
@@ -395,7 +393,7 @@ public class AprilTagSubsystem extends SubsystemBase {
         }
         return new double[]{closestTagX, closestTagY, closestTagYaw};
     }
-
+    
 
     public static AprilTagSubsystem getInstance() {
         if (aprilTagSubsystem == null) {

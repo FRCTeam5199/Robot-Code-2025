@@ -8,6 +8,8 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -261,6 +263,8 @@ public final class Constants {
         public static final double CAMERA_TO_FRONT_DISTANCE = .46355;
         public static final Matrix<N3, N1> kTagStdDevs = VecBuilder.fill(3.5, 3.5, 999);
 
+        public static AprilTagFieldLayout aprilTagLayout =
+                AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
         public static final String BACK_CAMERA_NAME = "BackCamera";
         //-.2794, -.3175
