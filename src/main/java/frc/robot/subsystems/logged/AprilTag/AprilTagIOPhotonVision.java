@@ -19,17 +19,17 @@ import java.util.Set;
 import org.photonvision.PhotonCamera;
 
 /** IO implementation for real PhotonVision hardware. */
-public class VisionIOPhotonVision implements AprilTagIO {
+public class AprilTagIOPhotonVision implements AprilTagIO {
   protected final PhotonCamera camera;
   protected final Transform3d robotToCamera;
 
   /**
-   * Creates a new VisionIOPhotonVision.
+   * Creates a new AprilTagIOPhotonVision.
    *
    * @param name The configured name of the camera.
    * @param rotationSupplier The 3D position of the camera relative to the robot.
    */
-  public VisionIOPhotonVision(String name, Transform3d robotToCamera) {
+  public AprilTagIOPhotonVision(String name, Transform3d robotToCamera) {
     camera = new PhotonCamera(name);
     this.robotToCamera = robotToCamera;
   }

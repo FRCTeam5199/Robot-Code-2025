@@ -21,7 +21,7 @@ import frc.robot.subsystems.logged.AprilTag.AprilTagIO.PoseObservation;
 import org.littletonrobotics.junction.Logger;
 
 public class NewAprilTagSubsystem extends SubsystemBase {
-    private final VisionIOInputsAutoLogged[] inputs;
+    private final AprilTagIOInputsAutoLogged[] inputs;
     private static NewAprilTagSubsystem aprilTagSubsystem;
     private final Alert[] disconnectedAlerts;
     private final AprilTagIO[] io;
@@ -36,9 +36,9 @@ public class NewAprilTagSubsystem extends SubsystemBase {
         this.io = io;
 
         // Initialize inputs
-        this.inputs = new VisionIOInputsAutoLogged[io.length];
+        this.inputs = new AprilTagIOInputsAutoLogged[io.length];
         for (int i = 0; i < inputs.length; i++) {
-        inputs[i] = new VisionIOInputsAutoLogged();
+        inputs[i] = new AprilTagIOInputsAutoLogged();
         }
 
         // Initialize disconnected alerts
